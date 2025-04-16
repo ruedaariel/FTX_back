@@ -1,2 +1,20 @@
 # FTX-FitnessTrainingExperience
 Diseño de web para trabajo Final OFS
+
+Tareaas:
+
+Deben ser equipos de 3 o 4 personas
+Deben tener un repositorio creado para el trabajo
+Crear un board en github/trello/jira donde se van a generar las user stories
+Crear un documento el google drive donde estarán las especificaciones del proyecto
+El readme del proyecto tiene que tener un link a una carpeta de drive donde se encuentre toda la documentación (docs, diagramas, etc)
+
+Crear Documento que contenga la idea general del proyecto, hablando de funcionalidades, experiencias de usuario, etc.
+Junto al profesor revisar el trabajo y definir el alcance del proyecto.
+Lo que quede fuera de scope, dejarlo en el documento como trabajo a futuro
+
+
+Crear distintas épicas para trabajar en los flujos de la aplicación con sus respectivas stories (con detalles). Las stories no necesitan tener todos los detalles todavía.
+
+Crear una Épica de Design que va a contener las stories para trabajar en los layouts de la aplicación (primer épica a trabajar).
+Hacer refinamiento de la épica de diseño y luego planning.
