@@ -1,6 +1,15 @@
 # FTX-FitnessTrainingExperience
 Diseño de web para trabajo Final OFS
 
+***************************************************************************************
+link a drive del proyectoFTX
+
+https://drive.google.com/drive/folders/1gRBQRpgOXJlNu-QcXj1-HSOMC8tFN6AV?usp=drive_link
+***************************************************************************************
+
+
+
+
 Tareaas:
 
 Deben ser equipos de 3 o 4 personas
