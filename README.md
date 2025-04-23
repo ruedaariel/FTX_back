@@ -1,6 +1,13 @@
 # FTX-FitnessTrainingExperience
 Diseño de web para trabajo Final OFS
 
+Nuestro desarrollo se centra en la gestión de un emprendimiento de personal trainer. 
+Éste no sólo optimiza el trabajo, sino que también abre nuevas oportunidades para generar ingresos. 
+La plataforma permitiría ofrecer suscripciones premium con acceso exclusivo a rutinas avanzadas, 
+dietas personalizadas y reportes detallados de progreso. Además, se podrían implementar servicios adicionales, 
+como asesorías en línea o contenido educativo exclusivo, que serían monetizados.
+
+
 ***************************************************************************************
 link a drive del proyectoFTX
 
