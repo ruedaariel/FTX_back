@@ -1,6 +1,6 @@
 /* ==========================================================================
    Archivo: modificar_perfil_opt.css
-   Descripción: Estilos optimizados para la página de modificar perfil de usuario
+   Descripción: Estilos optimizados para la página de modificar perfil de usuario. DF
    ========================================================================== */
 
 body {
@@ -26,6 +26,10 @@ body {
     border-bottom: 3px solid var(--color-primario-naranja);
 }
 
+.logo {
+    padding-left: 20px;
+}
+
 .logo img {
     width: 40px;
     height: auto;
@@ -43,6 +47,7 @@ body {
     font-size: 1.8rem;
     cursor: pointer;
     color: white;
+    padding-right: 20px;
 }
 
 /* Contenedor Principal del Perfil */
@@ -203,16 +208,16 @@ body {
 }
 
 .input-group-text {
-    background-color: var(--color-fondo-gris-claro) ;
-    border: 1px solid var(--color-borde-input) ;
-    border-right: none ;
-    color: var(--color-texto-prefix) ;
-    padding: 12px 15px ;
-    border-radius: 5px 0 0 5px ;
+    background-color: var(--color-fondo-gris-claro);
+    border: 1px solid var(--color-borde-input);
+    border-right: none;
+    color: var(--color-texto-prefix);
+    padding: 12px 15px;
+    border-radius: 5px 0 0 5px;
 }
 
 .input-group .form-control {
-    border-radius: 0 5px 5px 0 ;
+    border-radius: 0 5px 5px 0;
 }
 
 /* Botón de Guardar Cambios */
@@ -279,6 +284,11 @@ body {
 
 /* Media Queries para Móvil */
 @media (max-width: 767.98px) {
+
+    .logo {
+        padding-left: 10px;
+    }
+
     .logo img {
         width: 30px;
         height: auto;
@@ -290,6 +300,7 @@ body {
 
     .close-app {
         font-size: 1.5rem;
+        padding-right: 10px;
     }
 
 
