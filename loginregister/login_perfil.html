@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<!-- ==========================================================================
+   Archivo: login_perfil.html
+   Descripción: Permite completar el registro de un nuevo usuario ingresando los datos fisicos. Se redirecciona a login_basico.html,
+   ya que recibirá una contraseña por mail para ingresar por primera ves
+   ========================================================================== */-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil FTX Fitness</title>
+
+    <!--bootstrap-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!--Estilos propios-->
+    <link rel="stylesheet" href="../css/colores.css">
+    <link rel="stylesheet" href="./css/style_login.css">
+
+</head>
+
+<body>
+
+    <header>
+        <nav class="navbar navbar-dark">
+            <a class="navbar-brand" href="../index.html"><img src="../Recursos/IconosLogos/logoSinLetrasNaranja.png"
+                    alt="logo FTX">FTX </a>
+        </nav>
+
+    </header>
+    <!--contenedor de 2 columnas-->
+    <div class="container">
+        <!--seccion del video (columna 1)-->
+        <div class="video-section">
+            <video autoplay muted loop playsinline>
+                <source src="../Recursos/Videos/competenciaNeuquen.mp4" type="video/mp4">
+                Tu navegador no soporta la etiqueta de video.
+            </video>
+        </div>
+        <!--seccion de ingreso de datos fisicos (columna2)-->
+        <div class="login-section">
+            <h1>¡Carga tu perfil FTX!</h1>
+            <form>
+                <label for="plan">Nivel Actividad Fisica:</label>
+                <select id="plan" name="plan" required>
+                    <option value="diaria">Actividad diaria</option>
+                    <option value="semanal"> Semanal 2 veces</option>
+                    <option value="semanal"> Semanal 3 veces</option>
+                </select>
+
+                <label for="peso">Tu peso:</label>
+                <input type="text" id="peso" name="peso" class="input-medium" placeholder="85" autocomplete="off">
+
+                <label for="estatura">Tu estatura:</label>
+                <input type="text" id="estatura" name="estatura" class="input-medium" placeholder="1.85"
+                    autocomplete="off" required>
+
+                <label for="metas">Tus metas:</label>
+                <select id="metas" name="metas" required>
+                    <option value="meta1">Perder Peso</option>
+                    <option value="meta2">Ganar musculatura</option>
+                    <option value="meta2"> Aerobics </option>
+                </select>
+
+
+                <label for="restric_med">Restricciones o Condiciones Medicas:</label>
+                <textarea rows="4" id="restric_med" name="restric_med" placeholder="Escribe aquí..."></textarea>
+
+                <button type="submit">Guardar Perfil</button>
+                <!--Graedar perfil, enviar correo y redireccionar a login_basico-->
+            </form>
+
+        </div>
+    </div>
+</body>
+
+</html>

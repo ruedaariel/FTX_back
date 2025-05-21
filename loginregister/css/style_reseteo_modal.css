@@ -1,0 +1,167 @@
+/* ==========================================================================
+   Archivo: style_reseteo_modal.css
+   Descripción: Estilos para el modal usado en reseteo_password.
+   Utilizado en: login_basico.html, login_suscripcion.html, login_perfil.html, reseteo-password.html
+   ========================================================================== */
+
+
+/* Estilo para el contenedor principal del modal */
+.modal {
+  display: none; /* Oculto por defecto, se mostrará con JS */
+  position: fixed; /* Se queda fijo en la pantalla */
+  z-index: 2000; /* Asegura que esté por encima de otros elementos */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Permite scroll si el contenido es muy grande */
+  background-color: rgba(0,0,0,0.6); /* Fondo oscuro semitransparente */
+  /* Las siguientes propiedades se activarán cuando JS establezca display: flex */
+  justify-content: center;
+  align-items: center;
+}
+
+:root {
+    /* Colores Complementarios para el Modal (Azules) */
+    --color-modal-fondo: #2a3f54; /* Azul oscuro para el fondo del modal */
+    --color-modal-texto: #e0e0e0; /* Mantenemos texto claro para contraste */
+    --color-modal-borde: #3a506b; /* Azul más oscuro para bordes */
+    
+    --color-modal-primario-azul: #4a90e2; /* Azul primario para botones o acentos */
+    --color-modal-primario-azul-claro: #6aa3e9;
+    --color-modal-primario-azul-oscuro: #357abd;
+
+    /* Sombras para el modal */
+    --color-sombra-modal: rgba(0, 0, 0, 0.5);
+}
+
+/* Estilos básicos para el overlay del modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* Asegurar que esté por encima de otros elementos */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Estilos para el contenido del modal */
+.modal-content {
+    background-color: var(--color-modal-fondo);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px var(--color-sombra-modal);
+    color: var(--color-modal-texto);
+    /* width: 90%; Eliminamos el width porcentual */
+    width: max-content; /* Hace que el contenedor se ajuste al contenido más ancho */
+    min-width: 280px; /* Un ancho mínimo para que no se colapse demasiado */
+    max-width: 90%; /* Un ancho máximo relativo a la ventana para responsividad, también podría ser un valor fijo como 500px */
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    box-sizing: border-box; /* Importante si se usa padding y se quiere controlar el ancho total */
+    position: relative; /* Para posicionar el botón de cierre relativo a este contenedor */
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1);
+}
+
+.modal-content h2 {
+    color: var(--color-modal-primario-azul-claro); /* Usando el azul claro para el título */
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.6rem;
+}
+
+.modal-content p {
+    margin-bottom: 25px;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.modal-content .modal-actions {
+    display: flex;
+    justify-content: center; /* Centrar botones si hay varios */
+    gap: 15px;
+}
+
+.modal-content button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.modal-content button.modal-confirm-button {
+    background-color: var(--color-modal-primario-azul); /* Botón de confirmación en azul */
+    color: white;
+}
+
+.modal-content button.modal-confirm-button:hover {
+    background-color: var(--color-modal-primario-azul-oscuro);
+    transform: translateY(-1px);
+}
+
+/* Si necesitas un botón de cerrar/cancelar */
+.modal-content button.modal-close-button {
+    background-color: var(--color-fondo-input); /* Usando un color de fondo de input del tema principal */
+    color: var(--color-texto-principal);
+    border: 1px solid var(--color-modal-borde);
+}
+
+.modal-content button.modal-close-button:hover {
+    background-color: #4f4f4f; /* Un poco más oscuro al pasar el mouse */
+}
+
+/* Estilos para el botón de cierre (X) */
+.modal .close-button {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--color-modal-texto);
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+    padding: 5px; /* Añade un poco de área clickeable */
+    line-height: 1; /* Asegura que no afecte la altura del contenedor */
+}
+
+.modal .close-button:hover,
+.modal .close-button:focus {
+    color: var(--color-modal-primario-azul-claro);
+    transform: scale(1.1); /* Ligero agrandamiento al pasar el mouse */
+    text-decoration: none;
+    outline: none; /* Quita el outline por defecto en focus */
+}
+
+/* Icono de cerrar (opcional) - Se mantiene por si se usa en otro lado, pero el actual es .close-button */
+.modal-close-icon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 1.5rem;
+    color: var(--color-modal-texto);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.modal-close-icon:hover {
+    color: var(--color-modal-primario-azul-claro); /* Hover del icono de cerrar en azul claro */
+}
