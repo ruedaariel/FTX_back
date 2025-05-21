@@ -1,6 +1,6 @@
 /* ==========================================================================
    Archivo: style_rutinas.css
-   Descripción: Estilos para la página Usuario/rutinas.
+   Descripción: Estilos para la página Usuario/rutinas. MF
    ========================================================================== */
 
 
@@ -29,6 +29,10 @@ body {
   z-index: 1000;
 }
 
+.logo {
+    padding-left: 10px;
+}
+
 .logo img {
   width: 30px;
   height: auto;
@@ -45,6 +49,7 @@ body {
   font-size: 1.5rem;
   cursor: pointer;
   color: white;
+  padding-right: 10px;
 }
 
 
@@ -444,6 +449,9 @@ main {
 @media (min-width: 769px) {
 
   /*menu*/
+  .logo {
+    padding-left: 20px;
+  }
   .logo img {
     width: 40px;
     height: auto;
@@ -455,6 +463,7 @@ main {
 
   .close-app {
     font-size: 1.8rem;
+    padding-right: 20px;
   }
 
   /*fin menu*/
@@ -552,6 +561,13 @@ main {
 
 
 @media (min-width: 1368px) {
+  .logo {
+    padding-left: 30px;
+}
+
+.close-app {
+  padding-right: 30px;
+}
   main {
     width: 90%;
     margin: auto
