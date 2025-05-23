@@ -1,18 +1,11 @@
-:root {
-    --color-fondo-body: #343434;
-    --color-fondo-mas-oscuro: #232323;
-    --color-fondo-mas-oscuro-con-transp: rgba(35, 35, 35, 0.9);
-    --color-fondo-claro: #F0F0F0;
-    --color-texto-claro: #ffffff;
-    --color-texto-gris-medio: #6c757d;
-    --color-texto-secundario: #b0b0b0;
-    --color-primario-naranja: #ff6f00;
-    --color-secundario-naranja: #E65100;
-}
+/*==========================================================================
+   Archivo: style_en_construccion.css usado en en_construccion.html
+   Descripción: Estilos para la página de mensionada.
+   ========================================================================== */
 
 body {
     margin: 0;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--color-fondo-body);
     color: var(--color-texto-claro);
     display: flex;
