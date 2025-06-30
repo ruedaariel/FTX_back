@@ -181,57 +181,18 @@ header nav {
     box-shadow: 0 0 8px var(--color-sombra-focus);
 }
 
-/* --------------------------------------------------------------------------
-  Sección del modal
-  Utilizado en: login
-  -------------------------------------------------------------------------- */
-
-#exampleModal .modal-dialog {
-    max-width: 90% !important;
-    width: 90vw;
-    margin: 1.75rem auto;
-}
-
-
-/* Desktop: modal más pequeño y centrado */
-@media (min-width: 769px) {
-    #exampleModal .modal-dialog {
-        max-width: 400px !important;
-        width: 400px;
-        margin: 2rem auto;
-    }
-}
-
-#exampleModal .modal-body {
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
- /* Opcional: asegura altura mínima para centrar */
-}
 
 /* --------------------------------------------------------------------------
- *  Estilos del Modal (extraídos de HTML)
- *   Utilizado en: login_basico.html
- *   -------------------------------------------------------------------------- */
-#exampleModal .modal-content {
-    min-height: 20vh;
-    height: 40vh;
-    max-height: 250px;
-    border-radius: 30px;
-    background-color: #f8f8f6;
-    box-shadow: 0 5px 20px var(--color-primario-naranja); 
-}
+ * Sección del modal
+ * Utilizado en: login
+ * -------------------------------------------------------------------------- */
 
-#exampleModal .h2{
 
-color:var(--color-fondo-mas-oscuro);
-}
 
 /* --------------------------------------------------------------------------
- Grupos de Inputs (Teléfono, Tarjeta, DNI, Peso, Altura)
-  Utilizado en: login_suscripcion.html, login_perfil.html
-  -------------------------------------------------------------------------- */
+ * Grupos de Inputs (Teléfono, Tarjeta, DNI, Peso, Altura)
+ * Utilizado en: login_suscripcion.html, login_perfil.html
+ * -------------------------------------------------------------------------- */
 .input-group {
     display: flex;
     margin-bottom: 15px;
@@ -262,7 +223,64 @@ color:var(--color-fondo-mas-oscuro);
     /* Ocupa espacio restante */
 }
 
+.input-icon-validate {
+    position: relative;
+}
 
+.input-icon-validate input {
+    padding-right: 2.2em !important;
+}
+
+.input-icon-validate .icon-validate {
+    position: absolute;
+    right: 0.6em;
+    top: 40%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
+    /* pointer-events: none; */ /* Permitir clics en el icono */
+    display: inline-block; /* Hacer visible el icono */
+    height: 1em;
+    line-height: 1;
+}
+.input-icon-validate .toggle-password {
+    color: var(--color-texto-negro-grafito); /* Asegurar que el icono tenga un color visible */
+}
+.input-icon-validate .icon-validate.valid {
+    color: #28a745;
+    display: inline;
+}
+.input-icon-validate .icon-validate.invalid {
+    color: #dc3545;
+    display: inline;
+}
+
+
+.input-warning {
+    color: #dc3545;
+    font-size: 0.85em;
+    margin-top: -10px;
+    margin-bottom: 10px;
+    min-height: 18px;
+    display: none;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+/*
+
+.input-group .input-small {
+    width: 70px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    text-align: center;
+}
+
+.input-group .input-medium {
+    width: 100px;
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+*/
 
 /* --------------------------------------------------------------------------
   Grupo de Radio Buttons (Género)
@@ -310,8 +328,9 @@ color:var(--color-fondo-mas-oscuro);
     margin-top: 10px;
     width: 100%;
 }
+
 #cerrar {
-    background: var(--gradiente-boton-blanco);
+  /*  background: var(--gradiente-boton-blanco);*/
     color:var(--color-texto-negro-grafito)
 }
 
@@ -456,3 +475,4 @@ color:var(--color-fondo-mas-oscuro);
         width: 100%;
     }
 }
+
