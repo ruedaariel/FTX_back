@@ -15,9 +15,23 @@ https://drive.google.com/drive/folders/1gRBQRpgOXJlNu-QcXj1-HSOMC8tFN6AV?usp=dri
 ***************************************************************************************
 
 ***************************************************************************************
+link a figma del proyectoFTX
+
+https://www.figma.com/design/zwNBf6TDoWaksKI3M2e3kZ/FTX?node-id=91-524&t=CgLWjRqYg9zsOKI2-0
+***************************************************************************************
+
+***************************************************************************************
 link a Trello del proyectoFTX
 
 https://trello.com/b/6YUu1pyr/ftx
+***************************************************************************************
+
+***************************************************************************************
+Para Testeo
+
+usuario generico    usuario: mauricio@ejemplo.com  clave: mauricio2025
+
+usuario admin        usuario: admin@ejemplo.com    clave: admin2025
 ***************************************************************************************
 
 
