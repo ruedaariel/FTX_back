@@ -29,9 +29,9 @@ https://trello.com/b/6YUu1pyr/ftx
 ***************************************************************************************
 Para Testeo
 
-usuario generico    usuario: mauricio@ejemplo.com  clave: mauricio2025
+usuario generico    usuario: mauricio@ejemplo.com  clave: Mauricio2025
 
-usuario admin        usuario: admin@ejemplo.com    clave: admin2025
+usuario admin        usuario: admin@ejemplo.com    clave: Admin2025
 ***************************************************************************************
 
 
