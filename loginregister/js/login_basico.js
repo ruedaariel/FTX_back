@@ -40,9 +40,9 @@ function validarSesion() {
   /* valido que sea un usuario existente y lo envio a home_usuario*/
   /* caso contrario muestro modal de error*/
 
-  if (emailValue === "mauricio@ejemplo.com" && password === "mauricio2025") {
+  if (emailValue === "mauricio@ejemplo.com" && password === "Mauricio2025") {
     window.location.href = "../Usuario/home_usuario.html"; // Redirige al home del usuario
-  } else if (emailValue === "admin@ejemplo.com" && password === "admin2025") {
+  } else if (emailValue === "admin@ejemplo.com" && password === "Admin2025") {
     window.location.href = "../Administrador/home_administrador.html"; // Redirige al home del administrador
   } else {
 
