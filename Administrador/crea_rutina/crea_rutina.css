@@ -6,7 +6,6 @@
 body {
     background-color: var(--color-fondo-body);
     color: var(--color-texto-claro);
-    /*font-family: 'Arial', sans-serif;*/
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 20px;
     margin-top: 70px;
@@ -61,7 +60,6 @@ body {
 
 h1 {
     color: var(--color-primario-naranja);
-    /* Título principal */
     text-align: center;
     margin-bottom: 20px;
 }
@@ -107,10 +105,8 @@ select,
 textarea {
     width: 100%;
     padding: 6px;
-    /*margin-bottom: 15px;*/
     border: 1px solid var(--color-borde);
     border-radius: 5px;
-    /* Bordes redondeados */
     background-color: var(--color-fondo-claro);
     /* Fondo claro para inputs */
     color: var(--color-primario-naranja);
@@ -124,37 +120,8 @@ textarea:focus {
     border-color: var(--color-borde-focus);
     box-shadow: 0 0 5px var(--color-sombra-focus);
 }
-/*
-.input-icon-validate {
-    position: relative;
-}
 
-.input-icon-validate input {
-    padding-right: 2.2em !important;
-}
 
-.input-icon-validate .icon-validate {
-    position: absolute;
-    right: 0.6em;
-    top: 40%;
-    transform: translateY(-50%);
-    font-size: 1.2em;
-    pointer-events: none;
-    display: none;
-    height: 1em;
-    line-height: 1;
-}
-
-.input-icon-validate .icon-validate.valid {
-    color: #28a745;
-    display: inline;
-}
-
-.input-icon-validate .icon-validate.invalid {
-    color: #dc3545;
-    display: inline;
-}
-*/
 textarea {
     resize: none;
     height: 80px;
@@ -162,7 +129,6 @@ textarea {
 
 .btn-primary {
     background: var(--gradiente-boton);
-    /* Gradiente para botón primario */
     color: var(--color-texto-claro);
     border: none;
     padding: 10px 20px;
@@ -176,30 +142,8 @@ textarea {
 
 .btn-primary:hover {
     background: var(--gradiente-boton-hover);
-    /* Gradiente hover */
     box-shadow: 0 2px 5px var(--color-sombra-boton-hover);
 }
-/*
-.btn-secondary {
-    background-color: var(--color-fondo-mas-oscuro);
-    /* Fondo oscuro para botón secundario */
-  /*  color: var(--color-texto-claro);
-    border: 1px solid var(--color-borde);
-    /* Borde claro */
-  /*  padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    width: 100%;
-    margin-top: 10px;
-    font-weight: bold;
-}
-
-.btn-secondary:hover {
-    background-color: var(--color-fondo-mas-oscuro-con-transp);
-    /* Fondo oscuro con transparencia en hover */
-  /*  box-shadow: 0 2px 5px var(--color-sombra-boton-hover);
-}*/
 
 .form-section {
     background-color: var(--color-fondo-gris-claro);
@@ -217,9 +161,6 @@ textarea {
 }
 
 
-
-/* Estilos para la tabla */
-/* Estilos para la nueva estructura de ejercicios */
 .ejercicio-item {
     margin-bottom: 20px;
     /* Espacio entre cada ejercicio */
@@ -227,7 +168,6 @@ textarea {
     border: 1px solid var(--color-borde);
     border-radius: 10px;
     background-color: var(--color-fondo-gris-claro);
-    /* Fondo similar al de la tabla anterior */
 }
 
 .ejercicio-item .form-group {
@@ -238,39 +178,28 @@ textarea {
 .acciones-ejercicio {
     display: flex;
     flex-direction: column;
-    /* Apilar elementos verticalmente */
     justify-content: center;
-    /* Centrar verticalmente el contenido */
     align-items: flex-end;
-    /* Alinear elementos a la derecha */
     gap: 5px;
     /* Espacio entre la etiqueta y los botones */
     margin-top: 0;
-    /* Eliminar margen superior si está dentro de un row */
     height: 100%;
-    /* Ocupar toda la altura disponible en la columna */
 }
 
 .acciones-ejercicio label {
     font-weight: bold;
     color: var(--color-primario-naranja);
     margin-bottom: 5px;
-    /* Espacio entre la etiqueta y los botones */
     display: block;
-    /* Asegurar que la etiqueta ocupe su propia línea */
     font-size: 0.9em;
-    /* Ajustar tamaño de fuente si es necesario */
 }
 
 .acciones-ejercicio div {
     /* Estilos para el contenedor de botones */
     display: flex;
     gap: 5px;
-    /* Espacio entre los botones */
 }
 
-/* Reutilizar estilos de input, select, textarea y botones ya definidos */
-/* Los estilos para .agregar-fila-btn y .eliminar-fila-btn ya fueron agregados */
 
 .botones_finales {
     display: flex;
@@ -280,12 +209,8 @@ textarea {
     margin-bottom: 10px;
 }
 
-/* class="text-center d-flex justify-content-center" */
-
 .boton_final {
-
     width: 45%;
-
 }
 
 /* Estilos para tablet */
@@ -294,7 +219,6 @@ textarea {
     .acciones-ejercicio div {
         flex-direction: column;
         align-items: flex-end;
-        /* opcional: alinear botones a la derecha en mobile */
         padding-right: 2px;
     }
 
@@ -304,7 +228,7 @@ textarea {
     }
 }
 
-/* Estilos para hácer la página responsive */
+/* Estilos para movil */
 @media (max-width: 768px) {
 
     /* menu */
@@ -325,8 +249,8 @@ textarea {
         font-size: 1.5rem;
         padding-right: 10px;
     }
-
     /* fin menu*/
+
     form {
         padding: 0px;
     }
@@ -335,108 +259,50 @@ textarea {
         margin-bottom: 20px;
     }
 
-    .btn-primary,
-   .btn-secondary { /*borrar btn-secondary*/
+    .btn-primary {
         width: 100%;
-
-
     }
 
     .boton_final {
-
         width: 45%;
-
     }
-
-   /* .table thead {
-        display: none;
-    }
-
-    .table tbody td {
-        display: block;
-        width: 100%;
-        box-sizing: border-box;
-        padding: 8px;
-        text-align: left;
-        border: none;
-    }
-
-    .table tbody td:before {
-        content: attr(data-label);
-        display: block;
-        font-weight: bold;
-        margin-bottom: 5px;
-        color: var(--color-primario-naranja);
-        /* Color para el label simulado en móvil */
-   /* }
-
-    .table tbody td select,
-    .table tbody td input[type="text"],
-    .table tbody td input[type="number"],
-    .table tbody td textarea {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    .table tbody td:last-child {
-        text-align: center;
-    }
-
-    .table .btn-guardar {
-        width: 100%;
-        margin-top: 10px;
-    }*/
 }
 
-/* Estilo para resaltar la fila guardada */
+/* Estilo para resaltar la fila guardada IMPLEMENTAR DESPUES*/
 .fila-guardada {
     background-color: var(--color-primario-naranja-claro) !important;
-    /* Usar color de la paleta */
     transition: background-color 0.5s ease;
 }
 
-/* Asegurar que el color de fondo de las celdas en la fila guardada también cambie */
-/*.fila-guardada td {
-    background-color: var(--color-primario-naranja-claro) !important;
-}*/
 
 /* Estilos para los nuevos botones de acción en la tabla */
 .agregar-fila-btn {
     background-color: var(--color-primario-naranja);
-    /* Color de fondo naranja */
     color: var(--color-texto-claro);
-    /* Color de texto claro */
     border: none;
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
     font-size: 1.2em;
-    /* Aumentar tamaño de fuente */
     margin-right: 5px;
-    /* Espacio entre botones */
 }
 
 .agregar-fila-btn:hover {
     background-color: var(--color-secundario-naranja);
-    /* Color de fondo naranja más oscuro en hover */
 }
 
 .eliminar-fila-btn {
     background-color: #dc3545;
-    /* Color rojo de Bootstrap danger */
     color: var(--color-texto-claro);
-    /* Color de texto claro */
     border: none;
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
     font-size: 1.2em;
-    /* Aumentar tamaño de fuente */
 }
 
 .eliminar-fila-btn:hover {
     background-color: #c82333;
-    /* Color rojo más oscuro en hover */
 }

@@ -39,7 +39,7 @@ document.getElementById("buscarRutina").addEventListener("change", function () {
 
 
 
-// cada vez que se cambia semana o dia se actaliza boton "Agregar Ejercicio Día x/Semana y" ---------------------------
+// cada vez que se cambia semana o dia se actaliza boton "Agregar Ejercicio Día x/Semana y" -----
 document
   .getElementById("semana")
   .addEventListener("change", function () {
@@ -55,21 +55,21 @@ document
 
 
 
-// agrega event listener a boton guardaDia (para GUARDAR LOS EJERCICIOS DE UN DIA) ------------------------------------
+// agrega event listener a boton guardaDia (para GUARDAR LOS EJERCICIOS DE UN DIA) -----------
 document.getElementById("guardaDia").addEventListener("click", function () {
   guardarDiaActual();
 });
 
 
 
-// agrega event listeners a los ejercicios cargados en la pagina (botones + y x) --------------------------------------
+// agrega event listeners a los ejercicios cargados en la pagina (botones + y x) -------
 document
   .querySelectorAll("#ejerciciosContainer .ejercicio-item")
   .forEach(addEventListenersToEjercicioItem);
 
 
 
-// toma el formulario total para procesar la rutina completa (GUARDAR RUTINA) -----------------------------------------
+// toma el formulario total para procesar la rutina completa (GUARDAR RUTINA) ----------
 document.getElementById("guardarRutina").addEventListener("click", () => {
   const form = document.getElementById("rutinaForm");
 
@@ -101,12 +101,12 @@ document.getElementById("guardarRutina").addEventListener("click", () => {
 });
 
 
-// evento boton ELIMINAR RUTINA -------------------------------------------------------------------------------------------
+// evento boton ELIMINAR RUTINA ----------------------------------------------------------
 document.getElementById("eliminarRutina").addEventListener("click", () => {
   const form = document.getElementById("rutinaForm");
 
-  //const confirmar = confirm("¿Estás seguro de que querés eliminar toda la rutina?");
-  mostrarModal("Confirmación", "¿Estás seguro de que querés eliminar toda la rutina?", "info", false);
+  const confirmar = confirm("¿Estás seguro de que querés eliminar toda la rutina?");
+  //mostrarModal("Confirmación", "¿Estás seguro de que querés eliminar toda la rutina?", "info", false);
   if (!confirmar) return;
 
 
@@ -135,7 +135,6 @@ function cargarRutinaDesdeMock(nombre) {
     rutinaCompleta = rutinaCargada;
     cargaEjerciciosDeUnDia();
   } else {
-    //alert("no se encuentra la rutina");
     mostrarModal("Aviso", "Rutina no encontrada", "error", true);
   }
 
