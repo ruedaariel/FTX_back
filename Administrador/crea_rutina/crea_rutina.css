@@ -313,3 +313,31 @@ textarea {
   color: #ffcc00 !important;        /* color del icono */
   border-color: #ffcc00 !important; /* color del borde del icono */
 }
+
+.swal2-icon {
+  width: 45px !important;
+ height: 45px !important;
+
+}
+.swal2-popup {
+  font-size: 0.9rem !important; /* Ajustá a gusto: 0.8rem, 14px, etc. */
+  border: 3px solid #ffcc00;
+}
+.swal2-title {
+  font-size: 1.1rem !important;
+}
+
+.swal2-html-container {
+  font-size: 0.8rem !important;
+}
+.swal2-popup {
+  width: 300px !important; /* o cualquier ancho que prefieras */
+  max-width: 90vw; /* para que sea responsive */
+}
+
+.swal2-confirm,
+.swal2-cancel {
+  font-size: 0.75rem !important;
+  padding: 6px 16px !important;
+  border-radius: 4px !important;
+}
