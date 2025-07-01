@@ -359,9 +359,9 @@ header nav {
 
     /* Ajuste del Contenedor Principal en Desktop */
     .container {
-        flex-direction: row; /* Layout horizontal */
+        flex-direction: row; 
         width: 90%;
-        height: 85vh; /* Altura fija */
+        height: 85vh; 
         max-height: 750px;
         min-height: auto;
         gap: 0;

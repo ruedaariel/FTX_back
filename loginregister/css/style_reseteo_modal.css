@@ -80,7 +80,7 @@
 }
 
 .modal-content h2 {
-    color: var(--color-modal-primario-azul-claro); /* Usando el azul claro para el título */
+    color: var(--color-modal-primario-azul-claro); 
     margin-top: 0;
     margin-bottom: 15px;
     font-size: 1.6rem;
@@ -94,7 +94,7 @@
 
 .modal-content .modal-actions {
     display: flex;
-    justify-content: center; /* Centrar botones si hay varios */
+    justify-content: center; 
     gap: 15px;
 }
 
@@ -109,7 +109,7 @@
 }
 
 .modal-content button.modal-confirm-button {
-    background-color: var(--color-modal-primario-azul); /* Botón de confirmación en azul */
+    background-color: var(--color-modal-primario-azul); 
     color: white;
 }
 
@@ -120,7 +120,7 @@
 
 /* Si necesitas un botón de cerrar/cancelar */
 .modal-content button.modal-close-button {
-    background-color: var(--color-fondo-input); /* Usando un color de fondo de input del tema principal */
+    background-color: var(--color-fondo-input); 
     color: var(--color-texto-principal);
     border: 1px solid var(--color-modal-borde);
 }
@@ -151,7 +151,7 @@
     outline: none; /* Quita el outline por defecto en focus */
 }
 
-/* Icono de cerrar (opcional) - Se mantiene por si se usa en otro lado, pero el actual es .close-button */
+/* Icono de cerrar Se mantiene por si se usa en otro lado, pero el actual es .close-button */
 .modal-close-icon {
     position: absolute;
     top: 15px;
@@ -163,5 +163,5 @@
 }
 
 .modal-close-icon:hover {
-    color: var(--color-modal-primario-azul-claro); /* Hover del icono de cerrar en azul claro */
+    color: var(--color-modal-primario-azul-claro); 
 }
