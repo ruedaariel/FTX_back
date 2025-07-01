@@ -9,6 +9,13 @@ como asesorías en línea o contenido educativo exclusivo, que serían monetizad
 
 
 ***************************************************************************************
+Integrantes:
+
+Leandro Rueda  --  Gladys Herrera  --  Ariel Rueda
+
+***************************************************************************************
+
+***************************************************************************************
 link a drive del proyectoFTX
 
 https://drive.google.com/drive/folders/1gRBQRpgOXJlNu-QcXj1-HSOMC8tFN6AV?usp=drive_link
