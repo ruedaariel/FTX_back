@@ -89,9 +89,15 @@ document.getElementById("guardarRutina").addEventListener("click", () => {
     //manda a crear a la b/D
   }
 
+  mostrarModal("Informacion", "Rutina guardada", "success", true)
   // resetea formulario una vez enviada la rutina a la b/D
-  form.reset();
-  resetearForm();
+
+  setTimeout(function () {
+
+    form.reset();
+    resetearForm();
+  }, 2000);
+
 });
 
 
@@ -100,10 +106,10 @@ document.getElementById("eliminarRutina").addEventListener("click", () => {
   const form = document.getElementById("rutinaForm");
 
   //const confirmar = confirm("¿Estás seguro de que querés eliminar toda la rutina?");
-  mostrarModal("Confirmación","¿Estás seguro de que querés eliminar toda la rutina?","info",false);
+  mostrarModal("Confirmación", "¿Estás seguro de que querés eliminar toda la rutina?", "info", false);
   if (!confirmar) return;
 
- 
+
   form.reset();
   resetearForm(); //en resetearForm esta  rutinaCompleta = rutinaVacia;
 
@@ -111,7 +117,7 @@ document.getElementById("eliminarRutina").addEventListener("click", () => {
     //borrar en el BE
   }
   //alert("Rutina eliminada");
-  mostrarModal("Informacion","Rutina eliminada","success",true);
+  mostrarModal("Informacion", "Rutina eliminada", "success", true);
 
   console.log("Rutina completa a enviar:", rutinaCompleta);
 
@@ -130,7 +136,7 @@ function cargarRutinaDesdeMock(nombre) {
     cargaEjerciciosDeUnDia();
   } else {
     //alert("no se encuentra la rutina");
-    mostrarModal("Aviso","Rutina no encontrada","error",true);
+    mostrarModal("Aviso", "Rutina no encontrada", "error", true);
   }
 
 }
@@ -285,7 +291,7 @@ function guardarDiaActual() {
 
   //alert(`Ejercicios para ${semanaSeleccionada} / ${diaSeleccionado} guardados.`);
 
-  mostrarModal("Informacion",`Ejercicios para ${semanaSeleccionada} / ${diaSeleccionado} guardados.`,"success",true)
+  mostrarModal("Informacion", `Ejercicios para ${semanaSeleccionada} / ${diaSeleccionado} guardados.`, "success", false)
 
   //alert(`Ejercicios para ${semanaSeleccionada} / ${diaSeleccionado} guardados.`);
 }
@@ -293,24 +299,24 @@ function guardarDiaActual() {
 // inicializa el contener de ejercicios con un ejercicio en blanco y su correspondiente lietener
 function resetearForm() {
   location.reload();
-/*
-  const ejerciciosContainer = document.getElementById("ejerciciosContainer");
-  ejerciciosContainer.innerHTML = `
-    <div class="ejercicio-item form-section">
-      ${agregarEjEnBlanco()}
-    </div>
-  `;
-
-  actualizarTextoBotonAgregar();
-
-  addEventListenersToEjercicioItem(
-    document.querySelector("#ejerciciosContainer .ejercicio-item")
-  );
-  // pone rutina en blanco para un nuevo ingreso
-  rutinaCompleta = rutinaVacia;
-
-  //********************************VER SI ANTES SE GUARDÖ UNA RUTINA NUEVA ¿NO DEBERIA VOLVERSE A CARGAR EL SELECT DE RUTINAS??????
-  // OJO PUEDE SER MUY COSTOSO */
+  /*
+    const ejerciciosContainer = document.getElementById("ejerciciosContainer");
+    ejerciciosContainer.innerHTML = `
+      <div class="ejercicio-item form-section">
+        ${agregarEjEnBlanco()}
+      </div>
+    `;
+  
+    actualizarTextoBotonAgregar();
+  
+    addEventListenersToEjercicioItem(
+      document.querySelector("#ejerciciosContainer .ejercicio-item")
+    );
+    // pone rutina en blanco para un nuevo ingreso
+    rutinaCompleta = rutinaVacia;
+  
+    //********************************VER SI ANTES SE GUARDÖ UNA RUTINA NUEVA ¿NO DEBERIA VOLVERSE A CARGAR EL SELECT DE RUTINAS??????
+    // OJO PUEDE SER MUY COSTOSO */
 }
 
 function agregarEjEnBlanco() {

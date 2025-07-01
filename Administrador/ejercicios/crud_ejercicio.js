@@ -128,7 +128,7 @@ document.getElementById('ejercicioForm').addEventListener('submit', function (e)
         }
         mockEjercicios.push(nuevoEjercicio);
         //alert(`Ejercicio "${nuevoEjercicio.nombre}" creado con éxito.`);
-        mostrarModal("Informacion:",`Ejercicio "${nuevoEjercicio.nombre}" creado con éxito.`,"success");
+        mostrarModal("Informacion:",`Ejercicio "${nuevoEjercicio.nombre}" creado con éxito.`,"success",true);
 
     } else {
         const index = mockEjercicios.findIndex(ej => ej.nombre === selectedName);
