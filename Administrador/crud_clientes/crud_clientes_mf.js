@@ -45,6 +45,144 @@ const telefonoError = document.getElementById('telefono-error'); // Nuevo mensaj
 const planError = document.getElementById('plan-error');
 const estadoError = document.getElementById('estado-error');
 
+
+/* ---------------------------- LISTENERS -----------------------------------------*/
+// Función para abrir el modal en modo "nuevo cliente"
+btnNuevoCliente.addEventListener('click', () => {
+    tipoModalActivo = 'agregar';
+    tituloModal.textContent = 'Nuevo Cliente';
+    btnPpalModal.textContent = 'Guardar';
+    btnEliminarCliente.style.display = 'none'; // Ocultar botón eliminar para nuevos clientes
+    clienteForm.reset();
+    resetearErrores();
+    clienteIdActual = null;
+    nroInput.disabled = false; // Habilitar Nro para nuevos clientes //OJO ESTO LO VEMOS BIEN CUANDO CONECTEMOS CON BACKEND
+    // Establecer todos los campos como requeridos para el modo 'agregar'
+    setearComoRequerido(true);
+    modalCliente.style.display = 'flex';
+});
+
+
+// Función para abrir el modal en modo "buscar"
+btnDeBusqueda.addEventListener('click', () => {
+    tipoModalActivo = 'buscar';
+    tituloModal.textContent = 'Buscar Clientes';
+    btnPpalModal.textContent = 'Buscar';
+    btnEliminarCliente.style.display = 'none'; // Ocultar botón eliminar en modo búsqueda
+    clienteForm.reset(); // Limpiar campos para nueva búsqueda
+    resetearErrores();
+    clienteIdActual = null; 
+    nroInput.disabled = false; // Habilitar Nro para búsqueda
+    // Establecer todos los campos como NO requeridos para el modo 'buscar'
+    setearComoRequerido(false);
+    modalCliente.style.display = 'flex';
+});
+
+
+// Cierra el modal
+closeButton.addEventListener('click', () => {
+    modalCliente.style.display = 'none';
+    clienteForm.reset();
+    resetearErrores();
+    clienteIdActual = null;
+    // No resetear tipoModalActivo aquí, se establecerá al abrir el modal de nuevo
+});
+
+
+// Cierra el modal si se hace clic fuera de él
+window.addEventListener('click', (event) => {
+    if (event.target === modalCliente) {
+        modalCliente.style.display = 'none';
+        clienteForm.reset();
+        resetearErrores();
+        clienteIdActual = null;
+    }
+});
+
+
+// Manejar el envío del formulario (Guardar/Actualizar/Buscar)
+clienteForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    if (tipoModalActivo === 'buscar') {
+        RealizarBusqueda();
+        return; // Salir de la función después de la búsqueda
+    }
+
+    // Si no es modo búsqueda, validar el formulario
+    if (!validarForm()) {
+        return;
+    }
+
+    const datosCliente = {
+        DNI: parseInt(nroInput.value), // Usar DNI en lugar de nro
+        nombre: nombreInput.value.trim(),
+        apellido: apellidoInput.value.trim(),
+        correo: correoInput.value.trim(),
+        telefono: telefonoInput.value.trim(), // Incluir teléfono
+        plan: planInput.value,
+        estado: estadoInput.value
+    };
+
+    if (tipoModalActivo === 'editar') {
+        // Actualizar cliente existente
+        const index = clientes.findIndex(c => c.DNI === clienteIdActual); // Buscar por DNI
+        if (index !== -1) {
+            clientes[index] = datosCliente;
+            showmensaje('Cliente actualizado exitosamente.', 'exito');
+        }
+    } else if (tipoModalActivo === 'agregar') {
+        // Agregar nuevo cliente
+        clientes.push(datosCliente);
+        showmensaje('Cliente agregado exitosamente.', 'exito');
+    }
+
+    renderizarClientes();
+    modalCliente.style.display = 'none';
+    clienteForm.reset();
+    clienteIdActual = null;
+});
+
+// Manejar la eliminación de cliente desde el modal
+btnEliminarCliente.addEventListener('click', () => {
+    if (clienteIdActual !== null) {
+        borrarCliente(clienteIdActual);
+    }
+});
+
+// Borra el filtro
+btnResetFiltro.addEventListener('click', () => {
+    // Renderizar clientes al cargar la página
+    renderizarClientes();
+});
+
+
+/* ------------------------------------ FUNCIONES --------------------------------------*/
+// Función para eliminar un cliente
+function borrarCliente(dni) { // Cambiado nro a dni
+     //if (confirm('¿Estás seguro de que deseas eliminar este cliente?')) {
+     // HACER MODAL PARA LA CONFIRMACION
+        clientes = clientes.filter(cliente => cliente.DNI !== dni); // Filtrar por DNI
+        renderizarClientes();
+        showmensaje('Cliente eliminado exitosamente.', 'exito');
+        modalCliente.style.display = 'none';
+        clienteForm.reset();
+        clienteIdActual = null;
+      //  mostrarModal("Aviso", "Cliente eliminado exitosamente","success", false)
+      //borrar el otro aviso y dejar este modal (agregar modal.html, css y js)
+    
+}
+
+// Función para mostrar mensajes
+function showmensaje(msg, tipo) {
+    mensajeDiv.textContent = msg;
+    mensajeDiv.className = `mensaje ${tipo}`;
+    mensajeDiv.style.display = 'block';
+    setTimeout(() => {
+        mensajeDiv.style.display = 'none';
+    }, 3000);
+}
+
 // Función para renderizar la lista de clientes (cards para mobile, tabla para desktop)
 function renderizarClientes(clientesFiltrados = clientes) {
     //Crea las cards para Mobile (Cards)
@@ -86,21 +224,6 @@ function renderizarClientes(clientesFiltrados = clientes) {
     });
 }
 
-// Función para abrir el modal en modo "nuevo cliente"
-btnNuevoCliente.addEventListener('click', () => {
-    tipoModalActivo = 'agregar';
-    tituloModal.textContent = 'Nuevo Cliente';
-    btnPpalModal.textContent = 'Guardar';
-    btnEliminarCliente.style.display = 'none'; // Ocultar botón eliminar para nuevos clientes
-    clienteForm.reset();
-    resetearErrores();
-    clienteIdActual = null;
-    nroInput.disabled = false; // Habilitar Nro para nuevos clientes //OJO ESTO LO VEMOS BIEN CUANDO CONECTEMOS CON BACKEND
-    // Establecer todos los campos como requeridos para el modo 'agregar'
-    setearComoRequerido(true);
-    modalCliente.style.display = 'flex';
-});
-
 // Función para abrir el modal en modo "editar cliente"
 function abrirModalParaEditar(dni) {
     tipoModalActivo = 'editar';
@@ -114,7 +237,7 @@ function abrirModalParaEditar(dni) {
         nombreInput.value = cliente.nombre;
         apellidoInput.value = cliente.apellido;
         correoInput.value = cliente.correo;
-        telefonoInput.value = cliente.telefono; // Cargar valor del teléfono
+        telefonoInput.value = cliente.telefono; 
         planInput.value = cliente.plan;
         estadoInput.value = cliente.estado;
 
@@ -127,50 +250,15 @@ function abrirModalParaEditar(dni) {
     }
 }
 
-// Función para abrir el modal en modo "buscar"
-btnDeBusqueda.addEventListener('click', () => {
-    tipoModalActivo = 'buscar';
-    tituloModal.textContent = 'Buscar Clientes';
-    btnPpalModal.textContent = 'Buscar';
-    btnEliminarCliente.style.display = 'none'; // Ocultar botón eliminar en modo búsqueda
-    clienteForm.reset(); // Limpiar campos para nueva búsqueda
-    resetearErrores();
-    clienteIdActual = null; // No hay cliente específico editando
-    nroInput.disabled = false; // Habilitar Nro para búsqueda
-    // Establecer todos los campos como NO requeridos para el modo 'buscar'
-    setearComoRequerido(false);
-    modalCliente.style.display = 'flex';
-});
-
 // Función para establecer si los campos del formulario son requeridos
 function setearComoRequerido(esRequerido) {
     nroInput.required = esRequerido;
     nombreInput.required = esRequerido;
     apellidoInput.required = esRequerido;
     correoInput.required = esRequerido;
-    // telefonoInput.required = esRequerido; // El teléfono no es requerido por defecto
     planInput.required = esRequerido;
     estadoInput.required = esRequerido;
 }
-
-// Cierra el modal
-closeButton.addEventListener('click', () => {
-    modalCliente.style.display = 'none';
-    clienteForm.reset();
-    resetearErrores();
-    clienteIdActual = null;
-    // No resetear tipoModalActivo aquí, se establecerá al abrir el modal de nuevo
-});
-
-// Cierra el modal si se hace clic fuera de él
-window.addEventListener('click', (event) => {
-    if (event.target === modalCliente) {
-        modalCliente.style.display = 'none';
-        clienteForm.reset();
-        resetearErrores();
-        clienteIdActual = null;
-    }
-});
 
 // Función para validar el formulario (solo para agregar/editar)
 function validarForm() {
@@ -291,89 +379,5 @@ function RealizarBusqueda() {
     modalCliente.style.display = 'none'; // Cerrar modal después de buscar
     clienteForm.reset(); // Limpiar campos del modal
 }
-
-
-// Manejar el envío del formulario (Guardar/Actualizar/Buscar)
-clienteForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-
-    if (tipoModalActivo === 'buscar') {
-        RealizarBusqueda();
-        return; // Salir de la función después de la búsqueda
-    }
-
-    // Si no es modo búsqueda, validar el formulario
-    if (!validarForm()) {
-        return;
-    }
-
-    const datosCliente = {
-        DNI: parseInt(nroInput.value), // Usar DNI en lugar de nro
-        nombre: nombreInput.value.trim(),
-        apellido: apellidoInput.value.trim(),
-        correo: correoInput.value.trim(),
-        telefono: telefonoInput.value.trim(), // Incluir teléfono
-        plan: planInput.value,
-        estado: estadoInput.value
-    };
-
-    if (tipoModalActivo === 'editar') {
-        // Actualizar cliente existente
-        const index = clientes.findIndex(c => c.DNI === clienteIdActual); // Buscar por DNI
-        if (index !== -1) {
-            clientes[index] = datosCliente;
-            showmensaje('Cliente actualizado exitosamente.', 'exito');
-        }
-    } else if (tipoModalActivo === 'agregar') {
-        // Agregar nuevo cliente
-        clientes.push(datosCliente);
-        showmensaje('Cliente agregado exitosamente.', 'exito');
-    }
-
-    renderizarClientes();
-    modalCliente.style.display = 'none';
-    clienteForm.reset();
-    clienteIdActual = null;
-});
-
-// Manejar la eliminación de cliente desde el modal
-btnEliminarCliente.addEventListener('click', () => {
-    if (clienteIdActual !== null) {
-        borrarCliente(clienteIdActual);
-    }
-});
-
-// Borra el filtro
-btnResetFiltro.addEventListener('click', () => {
-    // Renderizar clientes al cargar la página
-    renderizarClientes();
-});
-
-
-// Función para eliminar un cliente
-function borrarCliente(dni) { // Cambiado nro a dni
-     //if (confirm('¿Estás seguro de que deseas eliminar este cliente?')) {
-     // HACER MODAL PARA LA CONFIRMACION
-        clientes = clientes.filter(cliente => cliente.DNI !== dni); // Filtrar por DNI
-        renderizarClientes();
-        showmensaje('Cliente eliminado exitosamente.', 'exito');
-        modalCliente.style.display = 'none';
-        clienteForm.reset();
-        clienteIdActual = null;
-      //  mostrarModal("Aviso", "Cliente eliminado exitosamente","success", false)
-      //borrar el otro aviso y dejar este modal (agregar modal.html, css y js)
-    
-}
-
-// Función para mostrar mensajes
-function showmensaje(msg, tipo) {
-    mensajeDiv.textContent = msg;
-    mensajeDiv.className = `mensaje ${tipo}`;
-    mensajeDiv.style.display = 'block';
-    setTimeout(() => {
-        mensajeDiv.style.display = 'none';
-    }, 3000);
-}
-
 // Renderizar clientes al cargar la página
 renderizarClientes();

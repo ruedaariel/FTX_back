@@ -63,7 +63,6 @@ header nav {
 .container {
     display: flex;
     flex-direction: column;
-    /* Apilado vertical en móvil */
     width: 100%;
     max-width: 1200px;
     min-height: calc(100vh - 70px);
@@ -71,7 +70,7 @@ header nav {
     box-shadow: 0 5px 20px var(--color-sombra-container);
     overflow: hidden;
     margin-top: -20px;
-    /* Ajuste para compensar padding-top del body si es necesario */
+    /* Ajuste para compensar padding-top del body  */
     padding-left: 0;
     padding-right: 0;
 }
@@ -84,7 +83,6 @@ header nav {
 .video-section {
     display: none;
     width: 100%;
-    /* height: 40vh;  Altura en móvil */
     position: relative;
     overflow: hidden;
     background-color: var(--color-fondo-mas-oscuro);
@@ -109,13 +107,13 @@ header nav {
   -------------------------------------------------------------------------- */
 .login-basico {
     height: 100vh;
-    /*para login-basico.html y reseteo-password, necesito que tome todo el alto de la pantalla mobile*/
+   
 }
 
 .login-section {
     width: 100%;
     padding: 30px 20px;
-    /* Padding móvil */
+ 
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -237,7 +235,6 @@ header nav {
     top: 40%;
     transform: translateY(-50%);
     font-size: 1.2em;
-    /* pointer-events: none; */ /* Permitir clics en el icono */
     display: inline-block; /* Hacer visible el icono */
     height: 1em;
     line-height: 1;
@@ -266,21 +263,7 @@ header nav {
     letter-spacing: 0.01em;
 }
 
-/*
 
-.input-group .input-small {
-    width: 70px;
-    flex-grow: 0;
-    flex-shrink: 0;
-    text-align: center;
-}
-
-.input-group .input-medium {
-    width: 100px;
-    flex-grow: 0;
-    flex-shrink: 0;
-}
-*/
 
 /* --------------------------------------------------------------------------
   Grupo de Radio Buttons (Género)
@@ -330,7 +313,7 @@ header nav {
 }
 
 #cerrar {
-  /*  background: var(--gradiente-boton-blanco);*/
+ 
     color:var(--color-texto-negro-grafito)
 }
 
@@ -443,8 +426,7 @@ header nav {
 
     .login-section .input-group input {
         margin-bottom: 0;
-        /* Asegurar sin margen dentro del grupo */
-        /* Hereda padding y border-radius de la regla anterior */
+      
     }
 
     /* Ajustar bordes para inputs con prefijo en desktop */

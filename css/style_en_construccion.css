@@ -103,9 +103,9 @@ main p {
 }
 
 .social-icons img {
-    width: 40px; /* Reducido para un look más moderno */
+    width: 40px;
     height: 40px;
-    filter: grayscale(50%) brightness(1.2); /* Efecto sutil */
+    filter: grayscale(50%) brightness(1.2); 
 }
 
 .social-icons a:hover img {

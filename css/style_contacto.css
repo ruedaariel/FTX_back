@@ -146,14 +146,14 @@ header nav {
 
 .contact-form-card .form-control::placeholder {
     color: var(--color-texto-gris-medio);
-    opacity: 1; /* Firefox */
+    opacity: 1; 
 }
 
 .contact-form-card .form-control:focus {
     border-color: var(--color-primario-naranja);
     box-shadow: 0 0 8px var(--color-sombra-focus);
     outline: none;
-    background-color: #fff; /* Fondo blanco al hacer focus para mejor contraste */
+    background-color: #fff; 
 }
 
 .contact-form-card textarea.form-control {
@@ -179,7 +179,7 @@ header nav {
 }
 
 /* --------------------------------------------------------------------------
- Media Queries para Escritorio (Ajustes si es necesario)
+ Media Queries para Escritorio 
  -------------------------------------------------------------------------- */
 @media (min-width: 992px) { 
     .contact-info-card,

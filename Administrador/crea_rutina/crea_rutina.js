@@ -119,7 +119,7 @@ document.getElementById("eliminarRutina").addEventListener("click", () => {
   swalWithBootstrapButtons.fire({
     title: "Estas seguro?",
     text: "No lo podrás revertir",
-    background: '#343434',
+    background: '#4a4a4a',
     color: '#F0F0F0',
     icon: "warning",
     showCancelButton: true,
@@ -130,7 +130,9 @@ document.getElementById("eliminarRutina").addEventListener("click", () => {
     if (result.isConfirmed) {
       swalWithBootstrapButtons.fire({
         title: "Borrado!",
-        text: "La rutina fue eliminada.",
+        text: "El ejercicio fue eliminado.",
+         color: '#F0F0F0',
+         color: '#F0F0F0',
         icon: "success"
       });
       form.reset();

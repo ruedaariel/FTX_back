@@ -3,7 +3,43 @@
    Descripción: (DF) Estilos para la página crud_ejercicio (se accede desde el home_administrador)
    ========================================================================== */
 
+/* BORRAR swal2 (es del sweet alert) CUANDO SE IMPLEMENTE MODAL*/
 
+.swal2-icon.swal2-warning {
+  color: #ffcc00 !important;        /* color del icono */
+  border-color: #ffcc00 !important; /* color del borde del icono */
+}
+
+.swal2-icon {
+  width: 45px !important;
+ height: 45px !important;
+
+}
+.swal2-popup {
+    background-color: #2b2b2b !important;
+  font-size: 0.9rem !important; /* Ajustá a gusto: 0.8rem, 14px, etc. */
+  border: 3px solid #ffcc00;
+}
+.swal2-title {
+  font-size: 1.1rem !important;
+}
+
+.swal2-html-container {
+  font-size: 0.8rem !important;
+}
+.swal2-popup {
+  width: 300px !important; /* o cualquier ancho que prefieras */
+  max-width: 90vw; /* para que sea responsive */
+}
+
+.swal2-confirm,
+.swal2-cancel {
+  font-size: 0.75rem !important;
+  padding: 6px 16px !important;
+  border-radius: 4px !important;
+}
+
+/* fin sweet alert*/
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -118,7 +154,6 @@ textarea {
     border-radius: 4px;
     border: 1px solid var(--color-borde-input);
     background-color: var(--color-fondo-claro);
-    /* Cambiado a un color más claro */
     color: var(--color-texto-negro-grafito);
     width: 100%;
     box-sizing: border-box;
@@ -147,20 +182,13 @@ button[type="button"] {
     text-align: center;
 }
 
-/*
-.btn-upload {
-    padding: 5px 10px;
-    width: auto;
-    font-size: 0.8em;
-}
-*/
+
 .etiqueta-carga {
     color: var(--color-primario-naranja);
     cursor: pointer;
     text-decoration: underline;
     font-size: 0.8em;
     float: right;
-    /*mueve el texto a la derecha*/
 }
 
 .etiqueta-carga:hover {
@@ -210,11 +238,6 @@ button[type="submit"]:hover {
     margin-bottom: 20px;
 }
 
-/*
-.video-preview {
-    text-align: center;
-}*/
-
 .columna-der h4 {
     margin-bottom: 10px;
 }
@@ -224,12 +247,6 @@ button[type="submit"]:hover {
     max-height: 500px;
 }
 
-/*
-.video-preview video {
-    width: auto;
-    max-width: 100%;
-    height: 300px;
-}*/
 
 /* Estilos para hacer la página responsive mobile*/
 @media (max-width: 768px) {
@@ -277,19 +294,7 @@ button[type="submit"]:hover {
         margin-bottom: 20px;
         padding: 5px;
     }
-/*
-    .col-md-6 {
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
 
-    .navbar-nav {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .nav-link {
-        margin-left: 0;
-        margin-bottom: 5px;
-    }*/
 }
+
+
