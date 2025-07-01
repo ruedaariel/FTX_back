@@ -315,7 +315,7 @@
  }
 
  .mensaje-error {
-     color: white; /* Cambiado a blanco */
+     color: rgb(241, 113, 113); /* Cambiado a blanco */
      font-size: 0.85rem;
      margin-top: 5px;
  }

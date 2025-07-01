@@ -192,6 +192,9 @@ function validarForm() {
     } else if (nroInput.value.trim().length > 8) {
         nroError.textContent = 'El DNI no puede tener más de 8 números.';
         esValido = false;
+    } else if (nroInput.value.trim().length < 7) {
+        nroError.textContent = 'El DNI tiene que tener al menos 7 números.';
+        esValido = false;
     } else if (tipoModalActivo === 'agregar' && clientes.some(c => c.DNI === parseInt(nroInput.value.trim()))) {
         nroError.textContent = 'Ya existe un cliente con este DNI.';
         esValido = false;
@@ -225,7 +228,7 @@ function validarForm() {
     }
 
     // Validar Teléfono (telefonoInput) - No es requerido
-    if (telefonoInput.value.trim() && !/^[0-9\-]+$/.test(telefonoInput.value.trim())) {
+    if (telefonoInput.value.trim() && !/^\d{10}$/.test(telefonoInput.value.trim())) {
         telefonoError.textContent = 'El Teléfono solo puede contener números y guiones.';
         esValido = false;
     } else {
@@ -343,20 +346,23 @@ btnEliminarCliente.addEventListener('click', () => {
 // Borra el filtro
 btnResetFiltro.addEventListener('click', () => {
     // Renderizar clientes al cargar la página
-renderizarClientes();
+    renderizarClientes();
 });
 
 
 // Función para eliminar un cliente
 function borrarCliente(dni) { // Cambiado nro a dni
-    if (confirm('¿Estás seguro de que deseas eliminar este cliente?')) {
+     //if (confirm('¿Estás seguro de que deseas eliminar este cliente?')) {
+     // HACER MODAL PARA LA CONFIRMACION
         clientes = clientes.filter(cliente => cliente.DNI !== dni); // Filtrar por DNI
         renderizarClientes();
         showmensaje('Cliente eliminado exitosamente.', 'exito');
         modalCliente.style.display = 'none';
         clienteForm.reset();
         clienteIdActual = null;
-    }
+      //  mostrarModal("Aviso", "Cliente eliminado exitosamente","success", false)
+      //borrar el otro aviso y dejar este modal (agregar modal.html, css y js)
+    
 }
 
 // Función para mostrar mensajes

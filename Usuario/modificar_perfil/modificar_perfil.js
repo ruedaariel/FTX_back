@@ -249,7 +249,7 @@ document.getElementById("perfilForm").addEventListener("submit", function (event
   // enviar datos al backend
   
 
-  mostrarModal("Éxito", "Datos guardados exitosamente (simulado).", "exito", false);
+  mostrarModal("Éxito", "Datos guardados exitosamente.", "success", false);
 });
 
 
