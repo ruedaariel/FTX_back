@@ -138,11 +138,13 @@ function grabarPerfil() {
         mostrarModal("Formulario inválido", mensajeHTML, "warning", false);
     } else {
         //generar la contraseña y guardar todo en el BE
-        //mandar al BE y rogar que sea success
-
-       
+        //mandar al BE y rogar que sea success 
         mostrarModal("Perfil guardado", "Todos los campos han sido validados correctamente.", "success", false);
         mostrarModal("Importante!", "Por cuestiones de seguridad, se enviará la contraseña via mail. Por favor verificá tu casilla de correo. Cuando ingreses, puedes cambiar la contraseña en tu perfil", "info", true);
+        setTimeout(() => {
+            window.location.href = "./login_basico.html";
+        }, 4000); // Espera 3 segundos
+
     }
 }
 
