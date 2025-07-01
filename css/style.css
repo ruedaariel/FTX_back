@@ -27,7 +27,7 @@ body {
 }
 
 .navbar-brand img {
-    width: 50px; /* Cambia el ancho */
+    width: 50px; 
     height: auto; /* Mantiene la proporción */
 }
 
@@ -68,13 +68,13 @@ body {
 
 .carousel-inner,
 .carousel-item {
-  /*  height: 100%;*/
+ 
     max-height:var(--altura-carousel);
     overflow: hidden;
 }
 
 .carousel-item img {
-   /* height: 100%;*/
+ 
    height: auto;
    clip-path: inset(0 0 7% 0); /* Recorta la parte inferior */
     max-height: var(--altura-carousel);
