@@ -27,11 +27,11 @@ document.getElementById('contactForm').addEventListener('submit', function (even
     const mailtoLink = `mailto:${emailDestino}?subject=${encodeURIComponent(asuntoCorreo)}&body=${encodeURIComponent(cuerpoCorreo)}`;
     
     // Abrir el cliente de correo
-
-    mostrarModal("Contacto",`Recibiste una consulta desde el contacto ${email} en la web`,"info",false)
+    window.location.href = mailtoLink; /*para darle tiempo a que lea el mensaje anterior*/
+    mostrarModal("Contacto",`Mail enviado`,"info",false);
 
     setTimeout(function () {
-        //window.location.href = mailtoLink; /*para darle tiempo a que lea el mensaje anterior*/
+  
         window.location.href = "../index.html";
     }, 4000);
 });
