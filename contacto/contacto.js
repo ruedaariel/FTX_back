@@ -28,7 +28,7 @@ document.getElementById('contactForm').addEventListener('submit', function (even
     
     // Abrir el cliente de correo
 
-    mostrarModal("Contacto",`Recibiste una consulta desde el contacto ${email} en la web`,"info")
+    mostrarModal("Contacto",`Recibiste una consulta desde el contacto ${email} en la web`,"info",false)
 
     setTimeout(function () {
         //window.location.href = mailtoLink; /*para darle tiempo a que lea el mensaje anterior*/
