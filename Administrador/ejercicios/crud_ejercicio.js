@@ -64,41 +64,83 @@ document.querySelector('.btn-danger').addEventListener('click', function () {
     const selectElement = document.getElementById('nombreEjercicio');
     const selectedExerciseName = selectElement.value;
 
-    if (selectedExerciseName === 'Nuevo') {
-        //no se guarda, automaticamente se elimina
-        //alert('Ejercicio eliminado');
-        mostrarModal("Informacion:","Ejercicio eliminado","info",true);
-        return;
-    }
 
-    //se elimina del arreglo  - LUEGO ELIMINAR DEL BE
-    const indexToRemove = mockEjercicios.findIndex(ej => ej.nombre === selectedExerciseName);
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger"
+        },
+        buttonsStyling: false
+    });
+    swalWithBootstrapButtons.fire({
+        title: "Estas seguro?",
+        text: "No lo podrás revertir",
+        background: '#4a4a4a',
+        color: '#F0F0F0',
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Sí, bórralo",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            swalWithBootstrapButtons.fire({
+                title: "Borrado!",
+                text: "La rutina fue eliminada.",
+               // icon: "success",
+                background: '#4a4a4a',
+                 color: '#F0F0F0',
+               // claseParaSweetAlert: {}
+            });
 
-    if (indexToRemove !== -1) {
-        mockEjercicios.splice(indexToRemove, 1);
-        cargaSelectEjercicios(); // Actualizar el select
+            if (selectedExerciseName === 'Nuevo') {
+                //no se guarda, automaticamente se elimina
+            } else {
+                // codigo sweet alert
+                //se elimina del arreglo  - LUEGO ELIMINAR DEL BE
+                const indexToRemove = mockEjercicios.findIndex(ej => ej.nombre === selectedExerciseName);
 
-        // Seleccionar el primer ejercicio o "Nuevo" si no hay ejercicios
-        if (mockEjercicios.length > 0) {
-            selectElement.value = mockEjercicios[0].nombre;
-            selectElement.dispatchEvent(new Event('change')); // Cargar datos del nuevo ejercicio seleccionado
-        } else {
-            selectElement.value = 'Nuevo';
-            document.getElementById('ejercicioForm').reset(); // Limpiar formulario
-            document.getElementById('nombre_ejercicio').value = '';
-            document.getElementById('imagenPreview').src = '../Recursos/Imagenes/FTX (2).jpg';
-            document.getElementById('videoPreview').src = '';
+                if (indexToRemove !== -1) {
+                    mockEjercicios.splice(indexToRemove, 1);
+                    cargaSelectEjercicios(); // Actualizar el select
+
+                    // Seleccionar el primer ejercicio o "Nuevo" si no hay ejercicios
+                    if (mockEjercicios.length > 0) {
+                        selectElement.value = mockEjercicios[0].nombre;
+                        selectElement.dispatchEvent(new Event('change')); // Cargar datos del nuevo ejercicio seleccionado
+                    } else {
+                        selectElement.value = 'Nuevo';
+                        document.getElementById('ejercicioForm').reset(); // Limpiar formulario
+                        document.getElementById('nombre_ejercicio').value = '';
+                        document.getElementById('imagenPreview').src = '../Recursos/Imagenes/FTX (2).jpg';
+                        document.getElementById('videoPreview').src = '';
+                    }
+                    //alert(`Ejercicio "${selectedExerciseName}" eliminado.`);
+                    //  mostrarModal("Informacion:", `Ejercicio "${selectedExerciseName}" eliminado.`, "info", true);
+                } else {
+                    //alert(`No se encontró el ejercicio "${selectedExerciseName}".`);
+                    mostrarModal("Error:", `No se encontró el ejercicio "${selectedExerciseName}".`, "warning", true);
+                }
+                //si bien la logica anterior anda bien, si tiene check (validacion) permanecen tanto si se carga un ejercicio vacio  como un ejercicio del arreglo
+                //location.reload();
+                //form.reset();
+            }
+        } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            return
         }
-        //alert(`Ejercicio "${selectedExerciseName}" eliminado.`);
-        mostrarModal("Informacion:",`Ejercicio "${selectedExerciseName}" eliminado.`,"info",true);
-    } else {
-        //alert(`No se encontró el ejercicio "${selectedExerciseName}".`);
-        mostrarModal("Error:",`No se encontró el ejercicio "${selectedExerciseName}".`,"warning",true);
-    }
-    //si bien la logica anterior anda bien, si tiene check (validacion) permanecen tanto si se carga un ejercicio vacio  como un ejercicio del arreglo
-   //location.reload();
+    });
+   // location.reload();
+    // fin codigo sweet alert
+    //     mostrarModal("Informacion:","Ejercicio eliminado","info",true);
+    //   return;
+}
 
-});
+   
+
+);
 
 
 // GUARDA ejercicio
@@ -123,12 +165,12 @@ document.getElementById('ejercicioForm').addEventListener('submit', function (e)
 
         if (existe) {
             //alert('Ya existe un ejercicio con ese nombre.');
-            mostrarModal("Aviso:","Ya existe un ejercicio con ese nombre.","info",true);
+            mostrarModal("Aviso:", "Ya existe un ejercicio con ese nombre.", "info", true);
             return;
         }
         mockEjercicios.push(nuevoEjercicio);
         //alert(`Ejercicio "${nuevoEjercicio.nombre}" creado con éxito.`);
-        mostrarModal("Informacion:",`Ejercicio "${nuevoEjercicio.nombre}" creado con éxito.`,"success",true);
+        mostrarModal("Informacion:", `Ejercicio "${nuevoEjercicio.nombre}" creado con éxito.`, "success", true);
 
     } else {
         const index = mockEjercicios.findIndex(ej => ej.nombre === selectedName);
@@ -137,10 +179,10 @@ document.getElementById('ejercicioForm').addEventListener('submit', function (e)
             mockEjercicios[index] = nuevoEjercicio;
             console.log(mockEjercicios[index]);
             //alert(`Ejercicio "${nuevoEjercicio.nombre}" actualizado correctamente.`);
-            mostrarModal("Informacion:",`Ejercicio "${nuevoEjercicio.nombre}" actualizado correctamente.`,"success",true);
+            mostrarModal("Informacion:", `Ejercicio "${nuevoEjercicio.nombre}" actualizado correctamente.`, "success", true);
         } else {
             //alert('No se pudo actualizar: ejercicio no encontrado.');
-            mostrarModal("Error:","No se pudo actualizar: ejercicio no encontrado.","warning",true);
+            mostrarModal("Error:", "No se pudo actualizar: ejercicio no encontrado.", "warning", true);
         }
     }
 
@@ -230,7 +272,7 @@ function previsualizarVideo() {
         iframe.src = '';
         iframe.style.display = 'none';
         //alert('El enlace ingresado no es válido para previsualización.');
-        mostrarModal("Error:","El enlace ingresado no es válido para previsualización.","warning",true);
+        mostrarModal("Error:", "El enlace ingresado no es válido para previsualización.", "warning", true);
     }
 }
 
