@@ -1,5 +1,9 @@
+//esta variable se obtendrá del usuario segun su plan (como parametro o localstorage)
+const esPremiun = true;
+
+//listener para cargar la rutina
 document.addEventListener('DOMContentLoaded', function () {
-  // Suponiendo que rutinaData está disponible globalmente
+  
   const main = document.querySelector('main');
   main.innerHTML = ''; // Limpia el contenido actual
 
@@ -83,12 +87,18 @@ document.addEventListener('DOMContentLoaded', function () {
       <label>Observaciones:</label>
       <input type="text" class="detalle-link" value="${ej.observaciones || ''}" readonly>
     </div>
-    ${ej.video ? `
+   ${ej.video ? `
   <div class="contenedor-detalle-ejercicio">
     <label>Video:</label>
-    <a href="${ej.video}" target="_blank" class="detalle-link-video">
-      Ver explicación <i class="fab fa-youtube"></i>
-    </a>
+    ${esPremiun ? `
+      <a href="${ej.video}" target="_blank" class="detalle-link-video">
+        Ver explicación <i class="fab fa-youtube"></i>
+      </a>
+    ` : `
+      <span class="detalle-link-video no-premium">
+        Hazte <strong>PREMIUM</strong> para ver el video 
+      </span>
+    `}
   </div>
 ` : ''}
   </div>
@@ -118,21 +128,8 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-function abrirSemana(event, semanaId) {
-  document.querySelectorAll('.btn-semana').forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
-  document.querySelectorAll('.semana-container').forEach(div => div.classList.remove('active'));
-  document.getElementById(semanaId).classList.add('active');
-}
 
-function abrirEjDelDia(event, diaId, semanaId) {
-  const semanaDiv = document.getElementById(semanaId);
-  semanaDiv.querySelectorAll('.btn-dia').forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
-  semanaDiv.querySelectorAll('.ejercicios-por-dia').forEach(div => div.classList.remove('active'));
-  semanaDiv.querySelector(`#${diaId}`).classList.add('active');
-}
-
+//listener para "desplegar" o "cerrar" y ejercicio
 document.addEventListener('click', function (e) {
   if (e.target.closest('.btn-desplegable')) {
     const btn = e.target.closest('.btn-desplegable');
@@ -170,7 +167,25 @@ document.addEventListener('click', function (e) {
   }
 });
 
-// Opcional: Oculta todos los detalles al inicio
+// Oculta todos los detalles al inicio
 document.querySelectorAll('.detalle-ejercicio').forEach(detalle => {
   detalle.style.display = 'none';
 });
+
+// -------------------------- FUNCIONES -----------------------------------
+function abrirSemana(event, semanaId) {
+  document.querySelectorAll('.btn-semana').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.semana-container').forEach(div => div.classList.remove('active'));
+  document.getElementById(semanaId).classList.add('active');
+}
+
+function abrirEjDelDia(event, diaId, semanaId) {
+  const semanaDiv = document.getElementById(semanaId);
+  semanaDiv.querySelectorAll('.btn-dia').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  semanaDiv.querySelectorAll('.ejercicios-por-dia').forEach(div => div.classList.remove('active'));
+  semanaDiv.querySelector(`#${diaId}`).classList.add('active');
+}
+
+
