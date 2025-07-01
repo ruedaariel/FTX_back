@@ -62,7 +62,6 @@
         <!--FIN NUEVO-->
         <form id="rutinaForm">
             <div class="form-section">
-                <!-- <h2>Información del Plan</h2> -->
                 <div class="row">
                     <div class="col-md-6 form-group">
                         <label for="nombreRutina">Nombre de Rutina:</label>
@@ -94,7 +93,7 @@
                             <option value="semana3">Semana 3</option>
                             <option value="semana4">Semana 4</option>
                         </select>
-                        <!-- <input type="number" id="semana" name="semana" class="form-control" required min="1"> -->
+                        
                     </div>
                     <div class="col-md-6 form-group">
                         <label for="dia">Día:</label>
@@ -172,7 +171,7 @@
                                 <textarea name="observaciones[]" class="form-control"></textarea>
                             </div>
                             <div class="col-md-1 acciones-ejercicio"> <!-- Dentro del row, como columna -->
-                                <div class="form-label">Acción</div> <!-- Nueva etiqueta -->
+                                <div class="form-label">Acción</div> 
                                 <div> <!-- Contenedor para los botones -->
                                     <button type="button" class="btn btn-success btn-sm agregar-fila-btn">+</button>
                                     <button type="button" class="btn btn-danger btn-sm eliminar-fila-btn">x</button>
@@ -190,9 +189,6 @@
                     Rutina</button>
                 <button type="button" id="eliminarRutina" class=" boton_final btn btn-primary btn-guardar">Eliminar
                     Rutina</button>
-                <!--  <button type="submit" class=" boton_final btn btn-primary btn-guardar">Guardar Rutina</button>
-                
-                    <button type="reset" class="boton_final btn btn-primary btn-guardar">Cancelar</button>-->
 
             </div>
 
@@ -212,7 +208,8 @@
     <script src="../../modalError/carga_modal.js"></script>
     <script src="./crea_rutina.js"></script>
     <script src="./validacionesRutina.js"></script>
-
+ <!--sweet alert para el eliminar-->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>
