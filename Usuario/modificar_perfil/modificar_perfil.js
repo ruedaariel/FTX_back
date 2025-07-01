@@ -245,7 +245,10 @@ document.getElementById("perfilForm").addEventListener("submit", function (event
 
   // Si no hay errores, proceder con el envío de datos (simulado o real)
   console.log("Datos del formulario a enviar:", formData);
-  // TODO: Implementar el envío real de datos al backend
+  
+  // enviar datos al backend
+  
+
   mostrarModal("Éxito", "Datos guardados exitosamente (simulado).", "exito", false);
 });
 
