@@ -14,14 +14,10 @@ const ruta = "../../Recursos/Imagenes/";
 const perfilImagenInput = document.getElementById("perfilImagenInput");
 const perfilImagenPreview = document.getElementById("perfilImagenPreview");
 
-// Referencias a los elementos del modal genérico 
-// const genericModal = document.getElementById('genericModal'); // Descomentar si se usa un modal genérico
-// const genericModalTitle = document.getElementById('genericModalTitle'); // Descomentar si se usa un modal genérico
-
 // Referencias a los campos de contraseña 
 const contrasenaInput = document.getElementById("contrasena");
 const verifContrasena = document.getElementById("verficaContrasena");
-// const nuevaContrasenaInput = document.getElementById("nuevaContrasena"); // Descomentar si se usa
+
 
 // Expresión regular para validar contraseñas 
 // Requisitos: Al menos una letra mayúscula, Al menos un número, Al menos una letra minúscula, Tenga entre 9 y 16 caracteres.
@@ -36,7 +32,7 @@ const validacionesCampos = {
   peso: [/^(?:[1-9]\d{1,2})(?:\.\d{1,3})?$/, "Debe ingresar un peso entre 30 y 150 kg"],
   estatura: [/^\d{2,3}$/, "La estatura debe estar entre 50 y 250 cm"],
   restric_med: [/^.{3,}$/, "En restricciones medicas sevdebe escribir al menos 3 caracteres"]
-  // los otros campos tienen validaciones mas complejas
+  
 };
 
 /* ¿Qué hace esta expresión?
@@ -126,16 +122,8 @@ infoIcons.forEach((icon) => {
 
 // Event listener para el envío del formulario de perfil
 document.getElementById("perfilForm").addEventListener("submit", function (event) {
-  console.log("Evento submit del formulario activado."); // Log para verificar si la función se ejecuta
-
-  // Prevenir el envío del formulario por defecto
+ 
   event.preventDefault();
-
-  // Verificar si hay errores de validación activos antes de proceder (asumiendo un modal genérico)
-  // if (genericModal && genericModal.style.display === "flex" && genericModalTitle.textContent === "Errores de Validación") {
-  //   console.log("Errores de validación activos, formulario no enviado.");
-  //   return; // Detener si hay errores de validación activos
-  // }
 
   const pestañaActiva = document.querySelector(".pestaña-item.active");
   if (!pestañaActiva) {
@@ -201,9 +189,9 @@ document.getElementById("perfilForm").addEventListener("submit", function (event
         if (input.required && !input.value.trim()) {
           const label = input.previousElementSibling?.textContent.replace(":", "").trim() || id;
           errorMessages.push(`El campo "${label}" es requerido.`);
-          tieneError = true; // Marcar que hay errores
+          tieneError = true; 
         }
-        if (input.id === "peso") {//valido el peso 
+        if (input.id === "peso") { 
           if (validacionesCampos[input.id]) { //busca la exp reg y el mens de error en el arreglo
             const [regex, mensaje] = validacionesCampos[id];
             if (!regex.test(valor) || parseInt(input.value.trim()) < 30 || parseInt(input.value.trim()) > 150) {
@@ -212,7 +200,7 @@ document.getElementById("perfilForm").addEventListener("submit", function (event
             }
           }
         } else {
-          if (input.id === "estatura") {//valido estatura 
+          if (input.id === "estatura") {
             if (validacionesCampos[id]) { //busca la exp reg y el mens de error en el arreglo
               const [regex, mensaje] = validacionesCampos[id];
               if (!regex.test(valor) || parseInt(input.value.trim()) < 50 || parseInt(input.value.trim()) > 250) {
@@ -346,8 +334,7 @@ function verificarContrasenaBackend() {
     contrasenaActual
   );
 
-  // Muestra un modal informativo (asumiendo la existencia de mostrarModal)
-  // mostrarModal("Verificar Contraseña","Se verificara contra el backend","info",false);
+  
 
 }
 
@@ -374,8 +361,6 @@ function validarContrasenas() {
   // Verifica si las contraseñas no coinciden
   if (nuevaContrasena !== verificaContrasena) {
     mostrarModal("Aviso! ", "Las Contraseñas no coinciden", "warning", false);
-    console.log("Las contraseñas no coinciden."); // Log para verificar el error
-    // nuevaContrasenaInput.focus(); // Opcional: enfocar el primer campo
     return; // Detener la validación si no coinciden
   }
 
@@ -383,7 +368,7 @@ function validarContrasenas() {
   if (!passwordRegex.test(nuevaContrasena)) {
     mostrarModal("Aviso! ", "La contraseña ingresada no cumple con las condiciones", "warning", false);
     nuevaContrasenaInput.focus();
-    return; // Detener la validación si el formato es incorrecto
+    return; 
   }
 }
 
@@ -394,7 +379,7 @@ function validarContrasenas() {
 
 // Cuando el documento se carga completamente, se selecciona la primer pestaña por defecto
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("DOM completamente cargado."); // Log para verificar que el DOM está listo
+ 
 
   // Mostrar la primera solapa por defecto simulando un clic
   const firstpestañaLink = document.querySelector(
@@ -405,5 +390,3 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// Nota: La función mostrarModal() no está definida en este archivo,
-// se asume que está definida en otro script incluido en la página HTML.

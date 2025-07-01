@@ -56,26 +56,17 @@ body {
 
 
 /* ---Contenedor Principal (Mobile First) --- */
-
-
-
-
-
-
 /* Contenedor principal de rutinas */
 .rutinas-container {
   display: flex;
   flex-direction: column;
   width: 100%;
-  /* max-width: 1200px; Ancho máximo en escritorio */
   background-color: var(--color-fondo-mas-oscuro);
   color: var(--color-texto-claro);
   padding: 20px;
   box-sizing: border-box;
   margin: 80px auto 0 auto;
-  /* Ajustado margen superior para el header fijo */
-  /* min-height: calc(100vh - 70px); */
-  /* Asegura que el contenedor llene el espacio visible restante si es necesario */
+ 
 }
 
 .rutinas-header {
@@ -245,11 +236,8 @@ main {
 .lista-ejercicios input[type="checkbox"] {
   margin-right: 12px;
   width: 18px;
-  /* Tamaño del checkbox */
   height: 18px;
-  /* Tamaño del checkbox */
   accent-color: var(--color-primario-naranja);
-  /* Color del check */
   cursor: pointer;
 }
 
@@ -304,24 +292,20 @@ main {
 /* Estilos para los items de ejercicio desplegables */
 .lista-ejercicios li {
   display: flex;
-  /* Cambiado a flex para manejar el div interno */
   flex-direction: column;
-  /* Apilar el header del item y los detalles */
   margin-bottom: 12px;
   padding: 0;
-  /* El padding se manejará en los sub-elementos */
   background-color: var(--color-fondo-gris-claro);
   border-radius: 4px;
   border: 1px solid var(--color-borde-input);
   overflow: hidden;
-  /* Para que el borde redondeado contenga los detalles */
+ 
 }
 
 .encab-ejercicio-container {
   display: flex;
   align-items: center;
   padding: 10px;
-  /* Padding original del li */
   width: 100%;
   box-sizing: border-box;
 }
@@ -333,16 +317,13 @@ main {
   accent-color: var(--color-primario-naranja);
   cursor: pointer;
   flex-shrink: 0;
-  /* Evitar que el checkbox se encoja */
 }
 
 .encab-ejercicio-container label {
   color: var(--color-texto-claro);
   font-size: 0.95rem;
   flex-grow: 1;
-  /* La etiqueta ocupa el espacio restante */
   margin-right: 10px;
-  /* Espacio antes del botón de despliegue */
 }
 
 .btn-desplegable {
@@ -353,9 +334,7 @@ main {
   padding: 5px;
   font-size: 1rem;
   line-height: 1;
-  /* Para alinear mejor el icono */
   margin-left: auto;
-  /* Empuja el botón a la derecha */
   flex-shrink: 0;
   /* Evitar que el botón se encoja */
 }
@@ -395,15 +374,11 @@ main {
 /* Estilos para el panel de detalles del ejercicio */
 .detalle-ejercicio {
   display: none;
-  /* Oculto por defecto */
   padding: 15px;
   background-color: var(--color-fondo-body);
-  /* Un poco más oscuro para diferenciar */
   border-top: 1px solid var(--color-borde-input);
   width: 100%;
-  /* Asegurar que ocupe el ancho completo del li */
   box-sizing: border-box;
-  /* Para que el padding no aumente el ancho total */
 }
 
 .detalle-ejercicio p {
@@ -421,7 +396,7 @@ main {
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
-  /* Apilar label e input */
+ 
 }
 
 .contenedor-detalle-ejercicio label {
@@ -451,7 +426,7 @@ main {
 
 /* Estilos para el contenedor de controles del encabezado de semana */
 .encab-semana {
-  /* Por defecto, los elementos se apilan verticalmente (comportamiento de bloque) */
+ 
   margin-bottom: 20px;
   /* Espacio antes del contenido del día */
 }
@@ -551,16 +526,13 @@ main {
 
   .encab-semana h2 {
     margin-bottom: 0;
-    /* Eliminar margen inferior cuando está en línea */
     margin-right: 20px;
-    /* Espacio a la derecha del título */
     text-align: left;
-    /* Asegurar alineación a la izquierda en desktop */
+    
   }
 
   .btns-dias-container {
     margin-bottom: 0;
-    /* Eliminar margen inferior cuando está en línea */
     justify-content: flex-end;
     /* Alinea los botones de día a la derecha */
   }
