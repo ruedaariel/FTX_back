@@ -306,3 +306,10 @@ textarea {
 .eliminar-fila-btn:hover {
     background-color: #c82333;
 }
+
+/* BORRAR swal2 (es del sweet alert) CUANDO SE IMPLEMENTE MODAL*/
+
+.swal2-icon.swal2-warning {
+  color: #ffcc00 !important;        /* color del icono */
+  border-color: #ffcc00 !important; /* color del borde del icono */
+}

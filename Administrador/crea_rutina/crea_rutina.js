@@ -105,21 +105,62 @@ document.getElementById("guardarRutina").addEventListener("click", () => {
 document.getElementById("eliminarRutina").addEventListener("click", () => {
   const form = document.getElementById("rutinaForm");
 
-  const confirmar = confirm("¿Estás seguro de que querés eliminar toda la rutina?");
+  //const confirmar = confirm("¿Estás seguro de que querés eliminar toda la rutina?");
   //mostrarModal("Confirmación", "¿Estás seguro de que querés eliminar toda la rutina?", "info", false);
-  if (!confirmar) return;
+
+  // codigo sweet alert
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "btn btn-success",
+      cancelButton: "btn btn-danger"
+    },
+    buttonsStyling: false
+  });
+  swalWithBootstrapButtons.fire({
+    title: "Estas seguro?",
+    text: "No lo podrás revertir",
+    background: '#343434',
+    color: '#F0F0F0',
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sí, bórralo",
+    cancelButtonText: "No, cancel!",
+    reverseButtons: true
+  }).then((result) => {
+    if (result.isConfirmed) {
+      swalWithBootstrapButtons.fire({
+        title: "Borrado!",
+        text: "La rutina fue eliminada.",
+        icon: "success"
+      });
+      form.reset();
+      resetearForm(); //en resetearForm esta  rutinaCompleta = rutinaVacia;
+
+    } else if (
+      /* Read more about handling dismissals below */
+      result.dismiss === Swal.DismissReason.cancel
+    ) {
+      return
+    }
+  });
+  // fin codigo sweet alert
 
 
-  form.reset();
-  resetearForm(); //en resetearForm esta  rutinaCompleta = rutinaVacia;
 
-  if (modoActualizacion) {
-    //borrar en el BE
-  }
-  //alert("Rutina eliminada");
-  mostrarModal("Informacion", "Rutina eliminada", "success", true);
 
-  console.log("Rutina completa a enviar:", rutinaCompleta);
+  /* if (!confirmar) return;
+ 
+ 
+   form.reset();
+   resetearForm(); //en resetearForm esta  rutinaCompleta = rutinaVacia;
+ 
+   if (modoActualizacion) {
+     //borrar en el BE
+   }
+   //alert("Rutina eliminada");
+   mostrarModal("Informacion", "Rutina eliminada", "success", true);
+ 
+   console.log("Rutina completa a enviar:", rutinaCompleta);*/
 
 });
 

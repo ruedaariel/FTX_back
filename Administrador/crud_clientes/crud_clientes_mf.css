@@ -315,7 +315,7 @@
  }
 
  .mensaje-error {
-     color: rgb(241, 113, 113); /* Cambiado a blanco */
+     color: rgb(241, 113, 113); 
      font-size: 0.85rem;
      margin-top: 5px;
  }
@@ -443,7 +443,6 @@
      }
 
      .form-group {
-         /*grupo del label e input*/
          display: flex;
          flex-direction: column;
          margin-bottom: 15px;
