@@ -1,10 +1,10 @@
 // Mock data para ejercicios
 let mockEjercicios = [
-    { id: 1, nombre: "Press Banca", repeticiones: "4x8", pesoSugerido: 90, dificultad: "medio", observaciones: "Mantener la espalda recta.", imagenLink: "../../Recursos/Imagenes/Ejercicio_PressBanca.jpg", videoLink: "https://www.youtube.com/watch?v=jlFl7WJ1TzI&t=6s" },
-    { id: 2, nombre: "Sentadillas", repeticiones: "3x12", pesoSugerido: 70, dificultad: "medio", observaciones: "Profundidad hasta 90 grados.", imagenLink: "../../Recursos/Imagenes/Ejercicio_Sentadillas.png", videoLink: "https://www.youtube.com/watch?v=BjixzWEw4EY&t=2s" },
-    { id: 3, nombre: "Dominadas", repeticiones: "3xAMRAP", pesoSugerido: 0, dificultad: "dificil", observaciones: "Agarre ancho.", imagenLink: "../../Recursos/Imagenes/Ejercicio_Dominada.jpg", videoLink: "https://www.youtube.com/watch?v=8mhDd9Ahl1M&t=87s" },
-    { id: 4, nombre: "Peso Muerto", repeticiones: "5x5", pesoSugerido: 120, dificultad: "dificil", observaciones: "Técnica estricta.", imagenLink: "../../Recursos/Imagenes/Ejercicio_PesoMuerto.png", videoLink: "https://www.youtube.com/watch?v=0XL4cZR2Ink" },
-    { id: 5, nombre: "Remo con Barra", repeticiones: "4x10", pesoSugerido: 60, dificultad: "medio", observaciones: "Espalda recta, movimiento controlado.", imagenLink: "../../Recursos/Imagenes/Ejercicio_RemoConBarra.png", videoLink: "https://www.facebook.com/share/v/1AjuZeVNvH/" },
+    { id: 1, nombre: "Press Banca", observaciones: "Mantener la espalda recta.", imagenLink: "../../Recursos/Imagenes/Ejercicio_PressBanca.jpg", videoLink: "https://www.youtube.com/watch?v=jlFl7WJ1TzI&t=6s" },
+    { id: 2, nombre: "Sentadillas", observaciones: "Profundidad hasta 90 grados.", imagenLink: "../../Recursos/Imagenes/Ejercicio_Sentadillas.png", videoLink: "https://www.youtube.com/watch?v=BjixzWEw4EY&t=2s" },
+    { id: 3, nombre: "Dominadas", observaciones: "Agarre ancho.", imagenLink: "../../Recursos/Imagenes/Ejercicio_Dominada.jpg", videoLink: "https://www.youtube.com/watch?v=8mhDd9Ahl1M&t=87s" },
+    { id: 4, nombre: "Peso Muerto", observaciones: "Técnica estricta.", imagenLink: "../../Recursos/Imagenes/Ejercicio_PesoMuerto.png", videoLink: "https://www.youtube.com/watch?v=0XL4cZR2Ink" },
+    { id: 5, nombre: "Remo con Barra", observaciones: "Espalda recta, movimiento controlado.", imagenLink: "../../Recursos/Imagenes/Ejercicio_RemoConBarra.png", videoLink: "https://www.facebook.com/share/v/1AjuZeVNvH/" },
 ];
 
 
@@ -44,9 +44,6 @@ document.getElementById('nombreEjercicio').addEventListener('change', function (
 
         if (selectedExercise) {
             document.getElementById('nombre_ejercicio').value = selectedExercise.nombre;
-            document.getElementById('repeticiones').value = selectedExercise.repeticiones;
-            document.getElementById('pesoSugerido').value = selectedExercise.pesoSugerido;
-            document.getElementById('dificultad').value = selectedExercise.dificultad;
             document.getElementById('observaciones').value = selectedExercise.observaciones;
             //  por seguridad, el navegador no permite visualizar el nombre (pq es de tipo file)
             document.getElementById('imagenLink').value = "";
@@ -152,9 +149,6 @@ document.getElementById('ejercicioForm').addEventListener('submit', function (e)
 
     const nuevoEjercicio = {
         nombre: document.getElementById('nombre_ejercicio').value.trim(),
-        repeticiones: document.getElementById('repeticiones').value.trim(),
-        pesoSugerido: parseFloat(document.getElementById('pesoSugerido').value) || 0,
-        dificultad: document.getElementById('dificultad').value,
         observaciones: document.getElementById('observaciones').value.trim(),
         imagenLink: document.getElementById('imagenPreview').src,
         videoLink: document.getElementById('videoLink').value.trim()
