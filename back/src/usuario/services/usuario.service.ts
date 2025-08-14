@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ROL, UsuarioEntity } from '../entities/usuario.entity';
+import { ESTADO, ROL, UsuarioEntity } from '../entities/usuario.entity';
 import { CreateUsuarioDto } from '../dto/create-usuario.dto';
 import { DeleteResult, Repository, FindOneOptions, UpdateResult } from 'typeorm';
 import { ErrorManager } from 'src/config/error.manager';
@@ -22,10 +22,10 @@ export class UsuarioService {
   public async createUsuario(body: CreateUsuarioDto): Promise<UsuarioEntity> {
     // ver si no devuelve un ususrioRtaDto, para evitar datos sensibles .... OJOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
     try {
-   
+
       //CONTROLAR QUE NO SE REPITA EL MAIL, siempre me da error
       const usuarioExistente = await this.findUsuarioByMail(body.datosBasicos.email);
-  
+
       if (!usuarioExistente) {
         const usuarioBasico = this.usuarioRepository.create(body.datosBasicos); //crea la instancia como si fuera un new UsuarioEntity
         const usuarioCreado = await this.usuarioRepository.save(usuarioBasico); //guarda para obtener el id que será usado para guardar el resto
@@ -35,7 +35,7 @@ export class UsuarioService {
         }
 
         if (usuarioCreado.rol === ROL.USUARIO) {
-           //datos personales
+          //datos personales
           if (body.datosPersonales && Object.keys(body.datosPersonales).length > 0) {
             const datosPersonales = new DatosPersonalesEntity();
             datosPersonales.id = usuarioCreado.id; // compartir el mismo ID
@@ -47,7 +47,7 @@ export class UsuarioService {
             const datosFisicos = new DatosFisicosEntity();
             datosFisicos.id = usuarioCreado.id;
             Object.assign(datosFisicos, body.datosFisicos);
-            usuarioCreado.datosFisicos = datosFisicos; 
+            usuarioCreado.datosFisicos = datosFisicos;
           }
         }
         const usuarioFinal = await this.usuarioRepository.save(usuarioCreado); //guarda todo (los datos basicos no se duplican)
@@ -102,7 +102,7 @@ export class UsuarioService {
       if (!usuarioGuardado) {
         throw new ErrorManager("BAD_REQUEST", "No se encontro usuario");
       }
- 
+
       if (body.datosBasicos) {
         Object.assign(usuarioGuardado, body.datosBasicos);
       }
@@ -130,18 +130,30 @@ export class UsuarioService {
     }
   }
 
-  public async deleteUsuario(id: number): Promise<DeleteResult | undefined> {
+  public async deleteUsuario(id: number): Promise<boolean> {
+//devuelve el true si pudo hacer la baja logica o el error
     try {
-      const deleteUsuario: DeleteResult = await this.usuarioRepository.delete(id)
-      if (deleteUsuario.affected === 0) { //nunca da !updateUsuario siempre devuelve algo
-        throw new ErrorManager("BAD_REQUEST", "no se pudo eliminar");
+      const usuarioGuardado = await this.usuarioRepository.findOne({
+        where: { id },
+      });
+
+      if (!usuarioGuardado) {
+        throw new ErrorManager("BAD_REQUEST", "No se encontro usuario");
       }
-      return deleteUsuario
+
+      usuarioGuardado.estado = ESTADO.ARCHIVADO;
+      usuarioGuardado.fBaja = new Date();
+      //no uso update porque es mas seguro el save
+      const usuarioUpdate = await this.usuarioRepository.save(usuarioGuardado);
+      if (!usuarioUpdate) {
+        throw new ErrorManager("BAD_REQUEST", `No se pudo actualizar los datos del usuario ${usuarioGuardado.id} `);
+      }
+      return true
     } catch (err) {
       throw ErrorManager.handle(err)
+
     }
+
   }
 
 }
-
-
