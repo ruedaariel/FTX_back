@@ -1,6 +1,7 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsString, Matches } from "class-validator";
 import { GENERO, PLAN } from "../entities/datos-personales.entity";
 
+
 export class CreateDatosPersonalesDto {
 
   @IsEnum(PLAN, { message: 'El plan debe ser "basico", "pro" o "premium"' })

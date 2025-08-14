@@ -1,5 +1,5 @@
 import { IDatosPersonales } from "src/interfaces/datos-personales.interface";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 export enum PLAN {
     BASICO = 'basico',

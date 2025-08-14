@@ -1,7 +1,8 @@
 import { IUsuario } from "src/interfaces/usuario.interface";
+import { DatosFisicosEntity } from "src/usuario-datos-fisicos/entities/datos-fisicos.entity";
+import { DatosPersonalesEntity } from "src/usuario-datos-personales/entities/datos-personales.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { DatosPersonalesEntity } from "../datos-personales/entities/datos-personales.entity";
-import { DatosFisicosEntity } from "../datos-fisicos/entities/datos-fisicos.entity";
+
 
 
 export enum ROL {
