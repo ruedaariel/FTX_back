@@ -5,8 +5,9 @@ import { CreateUsuarioDto } from '../dto/create-usuario.dto';
 import { DeleteResult, Repository, FindOneOptions, UpdateResult } from 'typeorm';
 import { ErrorManager } from 'src/config/error.manager';
 import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
-import { DatosPersonalesEntity } from '../datos-personales/entities/datos-personales.entity';
-import { DatosFisicosEntity } from '../datos-fisicos/entities/datos-fisicos.entity';
+import { DatosPersonalesEntity } from 'src/usuario-datos-personales/entities/datos-personales.entity';
+import { DatosFisicosEntity } from 'src/usuario-datos-fisicos/entities/datos-fisicos.entity';
+
 
 @Injectable()
 export class UsuarioService {
@@ -21,56 +22,36 @@ export class UsuarioService {
   public async createUsuario(body: CreateUsuarioDto): Promise<UsuarioEntity> {
     // ver si no devuelve un ususrioRtaDto, para evitar datos sensibles .... OJOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
     try {
-      console.log("entre en service", body.datosBasicos.email);
+   
       //CONTROLAR QUE NO SE REPITA EL MAIL, siempre me da error
       const usuarioExistente = await this.findUsuarioByMail(body.datosBasicos.email);
-      console.log("usuarioexistente", usuarioExistente);
+  
       if (!usuarioExistente) {
         const usuarioBasico = this.usuarioRepository.create(body.datosBasicos); //crea la instancia como si fuera un new UsuarioEntity
-        const usuarioCreado = await this.usuarioRepository.save(usuarioBasico);
+        const usuarioCreado = await this.usuarioRepository.save(usuarioBasico); //guarda para obtener el id que será usado para guardar el resto
         console.log("despues de save, id", usuarioCreado.id);
         if (!usuarioCreado || !usuarioCreado.id) {
           throw new ErrorManager("BAD_REQUEST", "No se guardo el usuario (basico)");
         }
 
-        //datos personales
         if (usuarioCreado.rol === ROL.USUARIO) {
+           //datos personales
           if (body.datosPersonales && Object.keys(body.datosPersonales).length > 0) {
             const datosPersonales = new DatosPersonalesEntity();
             datosPersonales.id = usuarioCreado.id; // compartir el mismo ID
             Object.assign(datosPersonales, body.datosPersonales); // copiar propiedades en datosPersonales
-
-            /*         const datosPersonalesCreado = await this.datosPersonalesRepository.save(datosPersonales);
-           console.log(datosPersonalesCreado.id, "id de datos personales despues de salvar");
-                     console.log(datosPersonalesCreado);
-                     if (!datosPersonalesCreado) {
-                       throw new ErrorManager("BAD_REQUEST", `No se guardo el usuario (datospersonales) de ${usuarioCreado.id}`);
-                     }
-                     usuarioCreado.datosPersonales = datosPersonalesCreado; */
             usuarioCreado.datosPersonales = datosPersonales;
           }
-          //pq usuariobasico tiene la relacion  con datos-personales
+          //datos fisicos
           if (body.datosFisicos && Object.keys(body.datosFisicos).length > 0) {
             const datosFisicos = new DatosFisicosEntity();
             datosFisicos.id = usuarioCreado.id;
             Object.assign(datosFisicos, body.datosFisicos);
-
-            usuarioCreado.datosFisicos = datosFisicos; //pq usuariobasico tiene la relacion  con datos-personales
-            /*        const datosFisicosCreado = await this.datosFisicosRepository.save(datosFisicos);
-                   if (!datosFisicosCreado) {
-                     throw new ErrorManager("BAD_REQUEST", `No se guardo los datos fisicos ${usuarioCreado.id}`);
-                   } */
+            usuarioCreado.datosFisicos = datosFisicos; 
           }
-
         }
-
-        const usuarioFinal = await this.usuarioRepository.save(usuarioCreado);
-        //se suponia que al tenener cascade en tru en la entity de Usuario, se guardaba todo automaticamente
-        //me andubo con uauarIO Y DatosPersonales, pero no me andubo cuando agregué los datosFisicos
-        //return usuarioCreado;
+        const usuarioFinal = await this.usuarioRepository.save(usuarioCreado); //guarda todo (los datos basicos no se duplican)
         return usuarioFinal
-
-
 
       } else {
         throw new ErrorManager("BAD_REQUEST", "Mail existente no se puede crear el usuario");
@@ -121,6 +102,7 @@ export class UsuarioService {
       if (!usuarioGuardado) {
         throw new ErrorManager("BAD_REQUEST", "No se encontro usuario");
       }
+ 
       if (body.datosBasicos) {
         Object.assign(usuarioGuardado, body.datosBasicos);
       }

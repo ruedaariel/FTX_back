@@ -1,4 +1,5 @@
-import { GENERO, PLAN } from "src/usuario/datos-personales/entities/datos-personales.entity";
+import { GENERO, PLAN } from "src/usuario-datos-personales/entities/datos-personales.entity";
+
 
 
 export interface IDatosPersonales {

@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString, Matches, Max, Min } from "class-validator";
 
-export class CreateDatosFisicoDto {
+export class CreateDatosFisicosDto {
     @IsNotEmpty({ message: 'La actividad diaria no puede estar vacía' })
   @IsString({ message: 'La actividad diaria debe ser un texto' })
   actividadDiaria: string;

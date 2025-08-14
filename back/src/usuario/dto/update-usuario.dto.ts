@@ -3,8 +3,9 @@
 import { IsEmail, IsEnum, IsOptional, Matches, ValidateNested } from 'class-validator';
 
 import { Type } from 'class-transformer';
-import { UpdateDatosPersonaleDto } from '../datos-personales/dto/update-datos-personales.dto';
-import { UpdateDatosFisicoDto } from '../datos-fisicos/dto/update-datos-fisicos.dto';
+import { UpdateDatosPersonalesDto } from 'src/usuario-datos-personales/dto/update-datos-personales.dto';
+import { UpdateDatosFisicosDto } from 'src/usuario-datos-fisicos/dto/update-datos-fisicos.dto';
+
 
 export class UpdateUsuarioDto {
   @ValidateNested()
@@ -12,11 +13,11 @@ export class UpdateUsuarioDto {
   datosBasicos?: UpdateUsuarioDto;
 
   @ValidateNested()
-  @Type(() => UpdateDatosPersonaleDto)
-  datosPersonales?: UpdateDatosPersonaleDto;
+  @Type(() => UpdateDatosPersonalesDto)
+  datosPersonales?: UpdateDatosPersonalesDto;
 
   @ValidateNested()
-  @Type(() => UpdateDatosFisicoDto)
-  datosFisicos?: UpdateDatosFisicoDto;
+  @Type(() => UpdateDatosFisicosDto)
+  datosFisicos?: UpdateDatosFisicosDto;
 }
 
