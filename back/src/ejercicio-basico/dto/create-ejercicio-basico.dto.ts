@@ -1,4 +1,4 @@
-import { IsOptional, IsString, IsUrl, Length, Matches } from "class-validator";
+import { IsOptional, isString, IsString, IsUrl, Length, Matches } from "class-validator";
 
 export class CreateEjercicioBasicoDto {
     @IsString({ message: 'El nombre debe ser un texto' })
@@ -10,6 +10,10 @@ export class CreateEjercicioBasicoDto {
     })
     nombreEjercicio: string;
 
+    @IsString()
+    @IsOptional()
+    observaciones:string;
+    
     @IsOptional()
     @Matches(/^(\.\/|\/)?[\w\-\/]+\.(jpg|png|webp)$/, {
         message: 'Debe ser una ruta válida con extensión .jpg, .png o .webp',
