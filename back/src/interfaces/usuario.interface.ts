@@ -1,4 +1,4 @@
-import { ROL } from "src/usuario/entities/usuario.entity";
+import { ESTADO, ROL } from "src/usuario/entities/usuario.entity";
 
 export interface IUsuario {
     id: number;
@@ -7,4 +7,6 @@ export interface IUsuario {
     rol: ROL;
     fCreacion: Date;
     fUltimoAcceso: Date;
+    fBaja: Date|null,
+    estado: ESTADO
 }

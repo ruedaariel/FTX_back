@@ -5,6 +5,7 @@ import { DatabaseModule } from 'src/modulo-database/database.module';
 import { UsuarioModule } from './usuario/usuario.module';
 import { DatosPersonalesModule } from './usuario-datos-personales/datos-personales.module';
 import { DatosFisicosModule } from './usuario-datos-fisicos/usuario-datos-fisicos.module';
+import { EjercicioBasicoModule } from './ejercicio-basico/ejercicio-basico.module';
 
 
 
@@ -17,7 +18,9 @@ import { DatosFisicosModule } from './usuario-datos-fisicos/usuario-datos-fisico
    
     DatosPersonalesModule,
    
-    DatosFisicosModule]
+    DatosFisicosModule,
+   
+    EjercicioBasicoModule]
 
 })
 export class AppModule {

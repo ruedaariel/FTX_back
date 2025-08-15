@@ -29,7 +29,7 @@ export class UsuarioEntity implements IUsuario {
     @Column({ type: 'enum', enum: ESTADO, default: ESTADO.ACTIVO })
     estado: ESTADO;
     @Column({ type: 'timestamp', name: 'f_baja', nullable: true }) //para borrado logico
-    fBaja?: Date;
+    fBaja: Date;
 
     @CreateDateColumn({ //agrega automaticamente la fecha-hora del servidor, el name permite la creacion en la bd con snakeCase
         type: 'timestamp',
