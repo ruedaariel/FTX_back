@@ -34,3 +34,9 @@ npm install @nestjs/typeorm typeorm @nestjs/config
 npm install class-validator class-transformer
 
 //CREO Q HAY Q INSTALAR ALGO PARA CORS
+
+
+//PARA SUBIR ARCHIVOS AL servidor
+IIinstalar mult
+npm install multer
+npm install --save-dev @types/multer

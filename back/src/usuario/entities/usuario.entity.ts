@@ -12,7 +12,8 @@ export enum ROL {
 
 export enum ESTADO {
     ACTIVO = 'activo',
-    INACTIVO = 'inactivo',  // podemos agregar otros como borrado
+    INACTIVO = 'inactivo',
+    ARCHIVADO = 'archivado', // baja logica
 }
 
 @Entity({ name: 'usuario' })
@@ -27,6 +28,9 @@ export class UsuarioEntity implements IUsuario {
     rol: ROL;
     @Column({ type: 'enum', enum: ESTADO, default: ESTADO.ACTIVO })
     estado: ESTADO;
+    @Column({ type: 'timestamp', name: 'f_baja', nullable: true }) //para borrado logico
+    fBaja: Date;
+
     @CreateDateColumn({ //agrega automaticamente la fecha-hora del servidor, el name permite la creacion en la bd con snakeCase
         type: 'timestamp',
         name: 'f_creacion'
