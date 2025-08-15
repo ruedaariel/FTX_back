@@ -12,7 +12,7 @@ export class EjercicioBasicoService {
 
   async createEjercicioBasico(ejercicioBasicoDto: CreateEjercicioBasicoDto) {
     try {
-      const ejercicioGuardado = this.findByName(ejercicioBasicoDto.nombreEjercicio);
+      const ejercicioGuardado =await this.findByName(ejercicioBasicoDto.nombreEjercicio);
       if (!ejercicioGuardado) {
         const nuevoEjercicioBasico = Object.assign(new EjercicioBasicoEntity(), ejercicioBasicoDto);
         const ejercicioCreado = await this.ejercicioBasicoRepository.save(nuevoEjercicioBasico);
