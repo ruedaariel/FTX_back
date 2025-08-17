@@ -19,7 +19,7 @@ npx ts-node --require tsconfig-paths/register ./node_modules/typeorm/cli.js migr
 }
 ejecutar: npm run migration:generate
 npm run migration:run
- 
+// EN LAS BD CONTROLAR QUE LOS CAMPOS NO SEAN SENCIBLES S LSD MSYUSCULAS para ello los campos deben tener _ci. por ejemplo utf8mb4_0900_ai_ci (sino no funcionan varias busquedas por nombre, por ejmplo) 
 
 //Se usan en DTO - da error al levantar el servidor
 npm install @nestjs/mapped-types

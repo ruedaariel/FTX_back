@@ -1,3 +1,4 @@
+
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ESTADO, ROL, UsuarioEntity } from '../entities/usuario.entity';

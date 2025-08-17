@@ -7,10 +7,11 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      envFilePath: `.${process.env.MODE_ENV || 'develope'}.env`,
-      isGlobal: true,
-    }),
+    // ConfigModule.forRoot({
+    //   envFilePath: `.${process.env.MODE_ENV || 'develope'}.env`,
+    //   isGlobal: true,
+    // }),
+    ConfigModule,
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({   //me daba error al cargar la base de datos y se suponia que no tenia las variables
