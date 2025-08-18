@@ -1,7 +1,8 @@
 import { IUsuario } from "src/interfaces/usuario.interface";
+import { RutinaEntity } from "src/rutina/entities/rutina.entity";
 import { DatosFisicosEntity } from "src/usuario-datos-fisicos/entities/datos-fisicos.entity";
 import { DatosPersonalesEntity } from "src/usuario-datos-personales/entities/datos-personales.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 
 
@@ -49,4 +50,9 @@ export class UsuarioEntity implements IUsuario {
     @OneToOne(() => DatosFisicosEntity, { nullable: true, cascade: true })
     @JoinColumn()
     datosFisicos?: DatosFisicosEntity; //opcional, dependiendo del tipo de ROL
+
+    @OneToMany(() => RutinaEntity, rutina => rutina.usuario) //ojo no esta cascade en true
+    rutinas?: RutinaEntity[];
+
+
 }
