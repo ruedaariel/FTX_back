@@ -9,6 +9,10 @@ import { EjercicioBasicoModule } from './ejercicio-basico/ejercicio-basico.modul
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
+import { RutinaModule } from './rutina/rutina.module';
+import { SemanaModule } from './semana/semana.module';
+import { DiaModule } from './dia/dia.module';
+import { EjercicioRutinaModule } from './ejercicio-rutina/ejercicio-rutina.module';
 
 
 
@@ -33,7 +37,15 @@ import { ConfigModule } from '@nestjs/config';
    
     DatosFisicosModule,
    
-    EjercicioBasicoModule]
+    EjercicioBasicoModule,
+   
+    RutinaModule,
+   
+    SemanaModule,
+   
+    DiaModule,
+   
+    EjercicioRutinaModule]
 
 })
 export class AppModule {

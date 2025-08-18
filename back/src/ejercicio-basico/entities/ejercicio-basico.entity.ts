@@ -14,4 +14,7 @@ export class EjercicioBasicoEntity implements IEjercicioBasico {
     imagenLink: string;
     @Column({ type: 'varchar', nullable: true })
     videoLink: string;
+
+
+    //S¡USAR EN LA RELACION CO EJERCICIO_RUTINA; RESTRICT
 }
