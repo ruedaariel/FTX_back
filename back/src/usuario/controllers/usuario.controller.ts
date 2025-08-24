@@ -18,8 +18,8 @@ export class UsuarioController {
   }
 
   @Get(':id')
-  public async findUsuarioById(@Param('id', ParseIntPipe) id: string) { //controla si llega un entero y lanza el error
-    return await this.usuarioService.findUsuarioById(+id);
+  public async findUsuarioById(@Param('id', ParseIntPipe) id: number) { //controla si llega un entero y lanza el error
+    return await this.usuarioService.findUsuarioById(id);
   }
 
 
@@ -35,9 +35,9 @@ export class UsuarioController {
   }
 
   @Patch('update/:id')
-  public async update(@Param('id') id: string, @Body() updateUsuarioDto: UpdateUsuarioDto) {
+  public async update(@Param('id', ParseIntPipe) id: number, @Body() updateUsuarioDto: UpdateUsuarioDto) {
 
-    return await this.usuarioService.updateUsuario(+id, updateUsuarioDto);
+    return await this.usuarioService.updateUsuario(id, updateUsuarioDto);
     
   }
 
