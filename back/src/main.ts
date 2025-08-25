@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { CORS } from './constantes';
 import { ValidationPipe } from '@nestjs/common';
+import * as express from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,6 +26,9 @@ async function bootstrap() {
 
   //establece un prefijo para toda la aplicacion y evita que se mezclen rutas de be y fe
   app.setGlobalPrefix('apiFtx');
+
+  //busca la carpeta uploads y lo sirve como contenido estatico (imagnes, pdf, css, etc), permite el acceso desde el front
+  app.use('/uploads', express.static('uploads'));
 
   await app.listen(port);
 }

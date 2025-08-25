@@ -8,20 +8,21 @@ import { Repository } from 'typeorm';
 import { ErrorManager } from 'src/config/error.manager';
 
 
+
 @Injectable()
 export class RutinaService {
   constructor(
     @InjectRepository(UsuarioEntity) private readonly usuarioRepository: Repository<UsuarioEntity>,
-    @InjectRepository(RutinaEntity)
-    private readonly rutinaRepository: Repository<RutinaEntity>,
+    @InjectRepository(RutinaEntity) private readonly rutinaRepository: Repository<RutinaEntity>,
   ) { }
-  public async create(createRutinaDto: CreateRutinaDto): Promise<RutinaEntity> {
+
+  public async createRutina(createRutinaDto: CreateRutinaDto): Promise<RutinaEntity> {
     try {
       let usuario: UsuarioEntity | null = null;
       if (createRutinaDto.idUsuario) {
         usuario = await this.usuarioRepository.findOneBy({ id: createRutinaDto.idUsuario });
         if (!usuario) {
-          throw new ErrorManager("BAD_REQUEST", `No existe el usuario ${createRutinaDto.idUsuario} asociado a la rutina ${createRutinaDto.nombreRutina}`);
+          throw new ErrorManager("NOT_FOUND", `No existe el usuario ${createRutinaDto.idUsuario}, no se puede asociarlo a la rutina ${createRutinaDto.nombreRutina}`);
         }
       }
       const creaRutina = new RutinaEntity();
@@ -40,7 +41,7 @@ export class RutinaService {
 
   }
 
-  findAll() {
+  findAllRutinas() {
     return `This action returns all rutina`;
   }
 
@@ -48,11 +49,11 @@ export class RutinaService {
     return `This action returns a #${id} rutina`;
   }
 
-  update(id: number, updateRutinaDto: UpdateRutinaDto) {
+  updateRutina(id: number, updateRutinaDto: UpdateRutinaDto) {
     return `This action updates a #${id} rutina`;
   }
 
-  remove(id: number) {
+  deleteRutina(id: number) {
     return `This action removes a #${id} rutina`;
   }
 }

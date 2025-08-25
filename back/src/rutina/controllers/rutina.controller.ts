@@ -9,27 +9,27 @@ export class RutinaController {
   constructor(private readonly rutinaService: RutinaService) {}
 
   @Post('register')
-  create(@Body() createRutinaDto: CreateRutinaDto) {
-    return this.rutinaService.create(createRutinaDto);
+public async  registerRutina(@Body() createRutinaDto: CreateRutinaDto) {
+    return this.rutinaService.createRutina(createRutinaDto);
   }
 
   @Get('all')
-  findAll() {
-    return this.rutinaService.findAll();
+  public async findAllRutinas() {
+    return this.rutinaService.findAllRutinas();
   }
 
   @Get(':id')
-  findRutinaById(@Param('id',ParseIntPipe) id: number) {
+  public async findRutinaById(@Param('id',ParseIntPipe) id: number) {
     return this.rutinaService.findRutinaById(id);
   }
 
   @Put('update:id')
-  update(@Param('id',ParseIntPipe) id: number, @Body() updateRutinaDto: UpdateRutinaDto) {
-    return this.rutinaService.update(id, updateRutinaDto);
+  public async update(@Param('id',ParseIntPipe) id: number, @Body() updateRutinaDto: UpdateRutinaDto) {
+    return this.rutinaService.updateRutina(id, updateRutinaDto);
   }
 
   @Delete('delete/:id')
-  remove(@Param('id',ParseIntPipe) id: number) {
-    return this.rutinaService.remove(id);
+  public async deleteRutina(@Param('id',ParseIntPipe) id: number) {
+    return this.rutinaService.deleteRutina(id);
   }
 }

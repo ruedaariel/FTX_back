@@ -138,6 +138,9 @@ export class UsuarioService {
 
   public async deleteUsuario(id: number): Promise<boolean> {
     //devuelve el true si pudo hacer la baja logica o el error
+
+//Ver si borro las rutinas asociadas ahora o si hacemos un cron job *******************************
+
     try {
       const usuarioGuardado = await this.usuarioRepository.findOne({  
         where: { id },
