@@ -1,4 +1,5 @@
-const ruta='../../Recursos/Imagenes/';
+//const ruta='../../Recursos/Imagenes/';
+const ruta='./../Recursos/Imagenes/';
 
 document.addEventListener('DOMContentLoaded', function () {
   if (typeof perfilData === 'undefined') {
