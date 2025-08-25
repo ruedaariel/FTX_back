@@ -1,6 +1,7 @@
 import { IRutina } from "src/interfaces/rutina.interface";
+import { SemanaEntity } from "src/semana/entities/semana.entity";
 import { UsuarioEntity } from "src/usuario/entities/usuario.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 export enum ESTADORUTINA {
     ACTIVA = 'activa',  //rutina actualmente utilizada por el usuario
@@ -13,20 +14,22 @@ export enum ESTADORUTINA {
 export class RutinaEntity implements IRutina {
     @PrimaryGeneratedColumn()
     idRutina: number;
-    @Column({ type: 'varchar', unique: true })
+
+    @Column({ type: 'varchar', unique: true }) // VER SI AGREGAMOS LENGTH
     nombreRutina: string;
-    @Column({ type: 'enum', enum: ESTADORUTINA })
+
+    @Column({ type: 'enum', enum: ESTADORUTINA }) //VER QUE ESTADO PONEMOS POR DEFECTO
     estadoRutina: ESTADORUTINA;
+
     @CreateDateColumn({ //agrega automaticamente la fecha-hora del servidor, el name permite la creacion en la bd con snakeCase
         type: 'timestamp',
         name: 'f_creacion'
     })
     fCreacionRutina: Date;
-    @UpdateDateColumn({
-        type: 'timestamp',
-        name: 'f_ultimo_acceso'
-    })
+
+    @UpdateDateColumn({type: 'timestamp', name: 'f_ultimo_acceso'})
     fUltimoAccesoRutina: Date;
+    
     @Column({ type: 'timestamp', name: 'f_baja', nullable: true }) //para borrado logico
     fBajaRutina: Date; //VER SI LO HACEMOS LOGICO
 
@@ -38,5 +41,7 @@ export class RutinaEntity implements IRutina {
     @JoinColumn({ name: 'id_usuario' }) // crea la FK en rutina
     usuario: UsuarioEntity|null;
 
-
+    //Relacion con Semana - cascade: true, permite guardar toda la rutina
+    @OneToMany(()=> SemanaEntity, semana => semana.rutina, {cascade: true})
+    semanas:SemanaEntity[];
 }

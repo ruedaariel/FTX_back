@@ -21,14 +21,19 @@ export enum ESTADO {
 export class UsuarioEntity implements IUsuario {
     @PrimaryGeneratedColumn()
     id: number;
-    @Column({ type: 'varchar', unique: true })
+
+    @Column({ type: 'varchar', unique: true }) //VER LENGTH
     email: string;
-    @Column({ type: 'varchar' })
+
+    @Column({ type: 'varchar' }) //VER LENGTH
     password: string;
+
     @Column({ type: 'enum', enum: ROL, default: ROL.USUARIO }) //necesario para que la bd lo tome como enumerado, sino lo toma como string
     rol: ROL;
+
     @Column({ type: 'enum', enum: ESTADO, default: ESTADO.ACTIVO })
     estado: ESTADO;
+
     @Column({ type: 'timestamp', name: 'f_baja', nullable: true }) //para borrado logico
     fBaja: Date;
 
@@ -37,20 +42,22 @@ export class UsuarioEntity implements IUsuario {
         name: 'f_creacion'
     })
     fCreacion: Date;
-    @UpdateDateColumn({
-        type: 'timestamp',
-        name: 'f_ultimo_acceso'
-    })
+    @UpdateDateColumn({type: 'timestamp', name: 'f_ultimo_acceso'})
     fUltimoAcceso: Date;
 
+    //relacion con datos personales
+    //nullable = true porque puede ser que no tenga datos personales segun el ROL
     @OneToOne(() => DatosPersonalesEntity, { nullable: true, cascade: true })
     @JoinColumn() //crea una columna que apunta a DatosPersonalesEntity.id
     datosPersonales?: DatosPersonalesEntity; //opcional, dependiendo del tipo de ROL
 
+    //relacion con datos Fisicos
+    //nullable = true porque puede ser que no tenga datos fisicos segun el ROL
     @OneToOne(() => DatosFisicosEntity, { nullable: true, cascade: true })
     @JoinColumn()
     datosFisicos?: DatosFisicosEntity; //opcional, dependiendo del tipo de ROL
 
+    //relacion con Rutina
     @OneToMany(() => RutinaEntity, rutina => rutina.usuario) //ojo no esta cascade en true
     rutinas?: RutinaEntity[];
 

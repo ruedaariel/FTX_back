@@ -18,16 +18,16 @@ export class EjercicioBasicoService {
 
   async createEjercicioBasico(ejercicioBasicoDto: CreateEjercicioBasicoDto) {
     try {
-      //controlo si ya existe
+      //controlo si ya existe (por nombre)
       const ejercicioGuardado = await this.existName(ejercicioBasicoDto.nombreEjercicio);
 
       if (!ejercicioGuardado) {
         //se guarda y se controla si se creo
         const nuevoEjercicioBasico = Object.assign(new EjercicioBasicoEntity(), ejercicioBasicoDto);
         const ejercicioCreado = await this.ejercicioBasicoRepository.save(nuevoEjercicioBasico);
-        if (!ejercicioCreado) {
-          throw new ErrorManager("BAD_REQUEST", "no se pudo crear ejercicio")
-        }
+        // if (!ejercicioCreado) {
+        //   throw new ErrorManager("BAD_REQUEST", "no se pudo crear ejercicio")
+        // }
         //para ver que trae
         ejercicioCreado.imagenLink = this.construirUrlImagen(ejercicioCreado.imagenLink);
         return ejercicioCreado //es enviado con solo el nombre de la imagen, no la url completa
@@ -155,7 +155,7 @@ export class EjercicioBasicoService {
       let nombreImgAborrar = "";
       if (updateEjercicioBasicoDto.imagenLink && ejercicioGuardado.imagenLink &&
         updateEjercicioBasicoDto.imagenLink !== ejercicioGuardado.imagenLink) {
-          nombreImgAborrar=ejercicioGuardado.imagenLink
+        nombreImgAborrar = ejercicioGuardado.imagenLink
         borrarImg = true
       };
 
