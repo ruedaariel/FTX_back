@@ -7,7 +7,8 @@ export enum ESTADORUTINA {
     ACTIVA = 'activa',  //rutina actualmente utilizada por el usuario
     FINALIZADA = 'finalizada', //rutina ya terminada del usuario
     PROXIMARUTINA = 'proxima', //rutina hecha, pero todavia no comenzada por el usuario
-    //VER SI AGREGAMOS EN PROCESO
+   ENPROCESO = 'en proceso',
+   BORRADA = 'borrada',
 }
 
 @Entity({ name: 'rutina' })
@@ -15,10 +16,10 @@ export class RutinaEntity implements IRutina {
     @PrimaryGeneratedColumn()
     idRutina: number;
 
-    @Column({ type: 'varchar', unique: true }) // VER SI AGREGAMOS LENGTH
+    @Column({ type: 'varchar', unique: true,length:100 }) 
     nombreRutina: string;
 
-    @Column({ type: 'enum', enum: ESTADORUTINA }) //VER QUE ESTADO PONEMOS POR DEFECTO
+    @Column({ type: 'enum', enum: ESTADORUTINA }) 
     estadoRutina: ESTADORUTINA;
 
     @CreateDateColumn({ //agrega automaticamente la fecha-hora del servidor, el name permite la creacion en la bd con snakeCase

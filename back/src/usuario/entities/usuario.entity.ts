@@ -22,10 +22,10 @@ export class UsuarioEntity implements IUsuario {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'varchar', unique: true }) //VER LENGTH
+    @Column({ type: 'varchar', unique: true, length: 255}) 
     email: string;
 
-    @Column({ type: 'varchar' }) //VER LENGTH
+    @Column({ type: 'varchar', length: 128 }) 
     password: string;
 
     @Column({ type: 'enum', enum: ROL, default: ROL.USUARIO }) //necesario para que la bd lo tome como enumerado, sino lo toma como string

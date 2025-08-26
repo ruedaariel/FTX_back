@@ -1,6 +1,6 @@
 // src/config/data.source.ts
 import * as dotenv from 'dotenv';
-dotenv.config({ path: `./.${process.env.MODE_ENV || 'develope'}.env` });
+dotenv.config({ path: `./.${process.env.MODE_ENV || 'develop'}.env` });
 
 import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
