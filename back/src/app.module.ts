@@ -20,7 +20,7 @@ import { EjercicioRutinaModule } from './ejercicio-rutina/ejercicio-rutina.modul
 @Module({
   imports: [
      ConfigModule.forRoot({
-      envFilePath: `.${process.env.MODE_ENV || 'develope'}.env`,
+      envFilePath: `.${process.env.MODE_ENV || 'develop'}.env`,
       isGlobal: true,
     }),
     //para acceder a las imagenes con la ruta completa

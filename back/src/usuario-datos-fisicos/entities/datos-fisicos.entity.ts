@@ -9,19 +9,19 @@ export class DatosFisicosEntity implements IDatosFisicos{
 @PrimaryColumn()
   id: number;
 
-  @Column({ type: 'varchar' }) //VER LENGTH
+  @Column({ type: 'varchar', length: 30 }) 
   actividadDiaria: string;
 
   @Column({type:'decimal', precision:6, scale:3})
   peso: number;
 
-  @Column({type:'int'}) //VER LENGTH
+  @Column({type:'int'}) 
   estatura: number;
 
-  @Column({ type: 'varchar' }) //VER LENGTH
+  @Column({ type: 'varchar', length: 100 }) 
   metas: string;
 
-  @Column({ type: 'varchar' }) //VER LENGTH
+  @Column({ type: 'varchar', length:255 }) 
   observaciones: string;
 
 

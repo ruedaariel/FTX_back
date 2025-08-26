@@ -27,9 +27,7 @@ export class DatosPersonalesEntity implements IDatosPersonales {
        @Column({ type: 'varchar',length: 100, nullable: false,})
       apellido: string;
     
-       @Column({ type: 'varchar', length: 8, nullable: false,
-   // unique: true, // ver esta restriccion
-  })
+       @Column({ type: 'varchar', length: 8, nullable: false, })
       dni: string;
     
        @Column({type: 'varchar',length: 10, })
