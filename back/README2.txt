@@ -20,6 +20,7 @@ npx ts-node --require tsconfig-paths/register ./node_modules/typeorm/cli.js migr
 ejecutar: npm run migration:generate
 npm run migration:run
 // EN LAS BD CONTROLAR QUE LOS CAMPOS NO SEAN SENCIBLES S LSD MSYUSCULAS para ello los campos deben tener _ci. por ejemplo utf8mb4_0900_ai_ci (sino no funcionan varias busquedas por nombre, por ejmplo) 
+//PARA LA BD, CREAR A MANO en mysql, la base de datos: CREATE DATABASE IF NOT EXISTS pruebaFTX
 
 //Se usan en DTO - da error al levantar el servidor
 npm install @nestjs/mapped-types
@@ -28,7 +29,7 @@ npm install @nestjs/mapped-types
 npm install @nestjs/config
 npm install @nestjs/typeorm typeorm @nestjs/config
 
-//PARA LA BD, CREAR A MANO en mysql, la base de datos: CREATE DATABASE IF NOT EXISTS pruebaFTX
+
 
 //Validaciones DTO
 npm install class-validator class-transformer
