@@ -15,7 +15,7 @@ export class CreateRutinaDto {
     @IsInt({ message: 'El idUsuario debe ser un número entero' })
     idUsuario:number | null;
 
-    @ValidateNested({each : true})
+    @ValidateNested({each : true}) //aplica la validacion a cada elemento del arreglo
     @Type(()=> CreateSemanaDto)
     semanas: CreateSemanaDto[];
 }
