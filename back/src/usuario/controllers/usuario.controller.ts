@@ -17,7 +17,7 @@ export class UsuarioController {
     return await this.usuarioService.findAllUsuarios();
   }
 
-  @Get(':id')
+  @Get(':id') //si en @Param no uso 'id', la variable id:number lo toma como objeto y se debe desestructurar en el curpo del controller
   public async findUsuarioById(@Param('id', ParseIntPipe) id: number) { //controla si llega un entero y lanza el error
     return await this.usuarioService.findUsuarioById(id);
   }

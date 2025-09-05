@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import {  ValidateNested } from "class-validator";
+import { ValidateNested } from "class-validator";
 import { CreateUsuarioBasicoDto } from "./create-usuarioBasico.dto";
 import { CreateDatosPersonalesDto } from "src/usuario-datos-personales/dto/create-datos-personales.dto";
 import { CreateDatosFisicosDto } from "src/usuario-datos-fisicos/dto/create-datos-fisicos.dto";
@@ -7,8 +7,8 @@ import { CreateDatosFisicosDto } from "src/usuario-datos-fisicos/dto/create-dato
 
 
 export class CreateUsuarioDto {
-   
-@ValidateNested()
+
+  @ValidateNested()
   @Type(() => CreateUsuarioBasicoDto)
   datosBasicos: CreateUsuarioBasicoDto;
 
@@ -18,5 +18,5 @@ export class CreateUsuarioDto {
 
   @ValidateNested()
   @Type(() => CreateDatosFisicosDto)
- datosFisicos: CreateDatosFisicosDto;
+  datosFisicos: CreateDatosFisicosDto;
 }
