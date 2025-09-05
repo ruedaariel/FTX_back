@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     //escucha cuando hay un input en el form
     contenedor.addEventListener('input', function (event) {
         const input = event.target;
+        
 
         // Validar campo de peso
         if (input.name === "peso[]") {
