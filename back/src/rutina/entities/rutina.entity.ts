@@ -32,7 +32,7 @@ export class RutinaEntity implements IRutina {
     fUltimoAccesoRutina: Date;
     
     @Column({ type: 'timestamp', name: 'f_baja', nullable: true }) //para borrado logico
-    fBajaRutina: Date; //VER SI LO HACEMOS LOGICO
+    fBajaRutina: Date | null; //VER SI LO HACEMOS LOGICO
 
     //Relacion con Usuario
     @ManyToOne(() => UsuarioEntity, usuario => usuario.rutinas, {

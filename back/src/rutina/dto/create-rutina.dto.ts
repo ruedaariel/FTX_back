@@ -1,4 +1,4 @@
-import { IsEnum, IsInt, IsNotEmpty, IsOptional, Matches, ValidateNested } from "class-validator";
+import { IsArray, IsEnum, IsInt, IsNotEmpty, IsOptional, Matches, ValidateNested } from "class-validator";
 import { ESTADORUTINA } from "../entities/rutina.entity";
 import { Type } from "class-transformer";
 import { CreateSemanaDto } from "src/semana/dto/create-semana.dto";
@@ -16,6 +16,7 @@ export class CreateRutinaDto {
     idUsuario:number | null;
 
     @ValidateNested({each : true}) //aplica la validacion a cada elemento del arreglo
+    @IsArray()
     @Type(()=> CreateSemanaDto)
     semanas: CreateSemanaDto[];
 }
