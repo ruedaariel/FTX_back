@@ -35,4 +35,8 @@ export class CreateEjercicioRutinaDto {
   @IsOptional() // Se marca como opcional porque en la entidad es nullable
   observaciones?: string;
 
+  @IsNumber()
+  @IsNotEmpty({ message: 'El ID del ejercicio básico no puede estar vacío.' })
+  idEjercicioBasico: number;
+
 }

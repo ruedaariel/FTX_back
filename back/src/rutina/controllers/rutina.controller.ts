@@ -22,6 +22,10 @@ public async  registerRutina(@Body() createRutinaDto: CreateRutinaDto) {
   public async findRutinaById(@Param('id',ParseIntPipe) id: number) {
     return this.rutinaService.findRutinaById(id);
   }
+//ruta dinamica
+  public async findRutinaByName(@Param('nombre') nombre: string) {
+    return await this.rutinaService.findRutinaByName(nombre);
+  }
 
   @Put('update:id')
   public async update(@Param('id',ParseIntPipe) id: number, @Body() updateRutinaDto: UpdateRutinaDto) {
@@ -30,6 +34,7 @@ public async  registerRutina(@Body() createRutinaDto: CreateRutinaDto) {
 
   @Delete('delete/:id')
   public async deleteRutina(@Param('id',ParseIntPipe) id: number) {
+    
     return this.rutinaService.deleteRutina(id);
   }
 }

@@ -5,10 +5,11 @@ import { RutinaEntity } from './entities/rutina.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsuarioEntity } from 'src/usuario/entities/usuario.entity';
 import { UsuarioModule } from 'src/usuario/usuario.module';
+import { EjercicioBasicoEntity } from 'src/ejercicio-basico/entities/ejercicio-basico.entity';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([RutinaEntity,UsuarioEntity]), UsuarioModule],
+  imports: [TypeOrmModule.forFeature([RutinaEntity,UsuarioEntity,EjercicioBasicoEntity]), UsuarioModule],
   controllers: [RutinaController],
   providers: [RutinaService],
 })

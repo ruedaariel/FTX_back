@@ -24,3 +24,5 @@ export class CreateSemanaDto {
     @Type(() => CreateDiaDto)
     dias: CreateDiaDto[];
 }
+
+
