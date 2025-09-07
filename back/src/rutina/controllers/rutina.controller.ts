@@ -27,14 +27,14 @@ public async  registerRutina(@Body() createRutinaDto: CreateRutinaDto) {
     return await this.rutinaService.findRutinaByName(nombre);
   }
 
-  @Put('update:id')
-  public async update(@Param('id',ParseIntPipe) id: number, @Body() updateRutinaDto: UpdateRutinaDto) {
-    return this.rutinaService.updateRutina(id, updateRutinaDto);
+  @Put('update/:id')
+  public async update(@Param('id',ParseIntPipe) id: number, @Body()rutinaDto: CreateRutinaDto) {
+    //uso CreateRutinaDto para obligar a que traiga todos los campos como si estuviera creando una nueva rutina
+    return this.rutinaService.updateRutina(id, rutinaDto);
   }
 
   @Delete('delete/:id')
   public async deleteRutina(@Param('id',ParseIntPipe) id: number) {
-    
     return this.rutinaService.deleteRutina(id);
   }
 }

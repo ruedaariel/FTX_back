@@ -7,7 +7,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "t
 export class EjercicioRutinaEntity implements IEjercicioRutina {
 
     //CONTROLAR LOS CAMPOS SI SON OBLIGATORIOS O SI HAY ALGO POR DEFECTO
-     @PrimaryGeneratedColumn({name:'ejercicio_rutina'})
+     @PrimaryGeneratedColumn()
         idEjercicioRutina: number;
 
         @Column({ type: 'varchar',length: 30,}) //VER LA LONG Y SI LO AJUSTAMOS EN EL FRONT
