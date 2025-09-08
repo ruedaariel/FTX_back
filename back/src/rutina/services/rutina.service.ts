@@ -130,6 +130,7 @@ export class RutinaService {
 
   public async findRutinaByName(nombre: string): Promise<RutinaEntity | null> {
     try {
+      console.log("entre a finbyname");
       //no se puede usar findOneBy pq tengo relaciones anidadas
       const rutina = await this.rutinaRepository.findOneBy({ nombreRutina: nombre });
 

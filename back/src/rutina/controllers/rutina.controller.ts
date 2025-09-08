@@ -22,7 +22,8 @@ public async  registerRutina(@Body() createRutinaDto: CreateRutinaDto) {
   public async findRutinaById(@Param('id',ParseIntPipe) id: number) {
     return this.rutinaService.findRutinaById(id);
   }
-//ruta dinamica
+
+  @Get('name/:nombre')
   public async findRutinaByName(@Param('nombre') nombre: string) {
     return await this.rutinaService.findRutinaByName(nombre);
   }
