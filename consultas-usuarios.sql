@@ -1,9 +1,11 @@
 use pruebaftx;
 select * from usuario;
 
+select * from ejercicio_basico;
 select * from datospersonales;
 
 select * from datos_fisicos;
+
 
 /*listado de todos los usuarios (todos los datos)*/
 SELECT * FROM usuario u
@@ -24,3 +26,4 @@ WHERE id = 5;
 
 /*borrar un ususario OJO NO BORRA EN CASCADA*/
 DELETE FROM datos_fisicos WHERE id = 17;
+

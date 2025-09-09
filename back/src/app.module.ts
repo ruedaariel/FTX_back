@@ -13,6 +13,7 @@ import { RutinaModule } from './rutina/rutina.module';
 import { SemanaModule } from './semana/semana.module';
 import { DiaModule } from './dia/dia.module';
 import { EjercicioRutinaModule } from './ejercicio-rutina/ejercicio-rutina.module';
+import { PlanModule } from './plan/plan.module';
 
 
 
@@ -45,7 +46,9 @@ import { EjercicioRutinaModule } from './ejercicio-rutina/ejercicio-rutina.modul
    
     DiaModule,
    
-    EjercicioRutinaModule]
+    EjercicioRutinaModule,
+   
+    PlanModule]
 
 })
 export class AppModule {
