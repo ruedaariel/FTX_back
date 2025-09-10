@@ -1,5 +1,6 @@
 import { IDatosPersonales } from "src/interfaces/datos-personales.interface";
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { PlanEntity } from "src/plan/entities/plan.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 
 export enum PLAN {
     BASICO = 'basico',
@@ -18,8 +19,8 @@ export class DatosPersonalesEntity implements IDatosPersonales {
     @PrimaryColumn()
     id: number;
 
-    @Column({ type: 'enum', enum: PLAN, default: PLAN.BASICO, })
-    plan: PLAN;
+    // @Column({ type: 'enum', enum: PLAN, default: PLAN.BASICO, })
+    // plan: PLAN; //borrar para que no de error
 
     @Column({ type: 'varchar', length: 100, nullable: false, })
     nombre: string;
@@ -38,4 +39,9 @@ export class DatosPersonalesEntity implements IDatosPersonales {
 
     @Column({ type: 'varchar', length: 255, nullable: true, })
     imagenPerfil: string;
+
+    //relacion con datos_personales
+    @ManyToOne(()=> PlanEntity,  plan => plan.datosPersonales)
+    @JoinColumn()
+    plan:PlanEntity;
 }
