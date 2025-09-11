@@ -17,6 +17,6 @@ export class CreatePlanDto {
 
   @IsNotEmpty()
   @IsDateString() //verifica que tenga formato de fecha
-  fCambioPrecio: string; 
+  fCambio: string; 
 }
 

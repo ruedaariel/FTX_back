@@ -13,7 +13,7 @@ export const imagenEjercicioInterceptor = () =>
     }),
     fileFilter: (req, file, cb) => {
       if (!file.mimetype.match(/\/(jpg|jpeg|png|webp)$/)) {
-        return cb(new ErrorManager('BAD_REQUEST', 'Solo se permiten imágenes JPG, JPEG o PNG'), false);
+        return cb(new ErrorManager('BAD_REQUEST', 'Solo se permiten imágenes JPG, JPEG, WEBP o PNG'), false);
       }
       cb(null, true);
     },

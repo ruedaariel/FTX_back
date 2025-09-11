@@ -18,7 +18,7 @@ export class PlanEntity implements IPlan {
     precio: number;
 
     @Column({ type: 'date' })
-    fCambioPrecio: Date;
+    fCambio: Date;
 
     //Relacion Con Usuario
     @OneToMany(()=>DatosPersonalesEntity, datosPersonales => datosPersonales.plan) //dejar un solo campo plan
