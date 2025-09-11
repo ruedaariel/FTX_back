@@ -7,11 +7,13 @@ import { DatosPersonalesEntity } from 'src/usuario-datos-personales/entities/dat
 import { DatosFisicosEntity } from 'src/usuario-datos-fisicos/entities/datos-fisicos.entity';
 import { DatosFisicosModule } from 'src/usuario-datos-fisicos/usuario-datos-fisicos.module';
 import { DatosPersonalesModule } from 'src/usuario-datos-personales/datos-personales.module';
+import { PlanEntity } from 'src/plan/entities/plan.entity';
+import { PlanModule } from 'src/plan/plan.module';
 
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UsuarioEntity, DatosPersonalesEntity, DatosFisicosEntity]), DatosFisicosModule,DatosPersonalesModule],
+  imports: [TypeOrmModule.forFeature([UsuarioEntity, DatosPersonalesEntity, DatosFisicosEntity, PlanEntity]), DatosFisicosModule,DatosPersonalesModule, PlanModule],
   controllers: [UsuarioController],
   providers: [UsuarioService],
 })

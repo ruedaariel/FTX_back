@@ -1,11 +1,8 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString, Matches } from "class-validator";
+import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, Matches, Min } from "class-validator";
 import { GENERO, PLAN } from "../entities/datos-personales.entity";
 
 
 export class CreateDatosPersonalesDto {
-
-  @IsEnum(PLAN, { message: 'El plan debe ser "basico", "pro" o "premium"' })
-  plan: PLAN;
 
   @IsNotEmpty({ message: 'El nombre no puede estar vacío' })
   @Matches(/^.{2,}$/, { message: 'El nombre debe tener al menos 2 caracteres' })
@@ -25,6 +22,11 @@ export class CreateDatosPersonalesDto {
 
   @IsEnum(GENERO, { message: 'El género debe ser "hombre", "mujer" o "otro"' })
   genero: GENERO;
+
+  @IsNotEmpty()
+  @IsInt()
+  @Min(1, { message: 'El id del plan debe ser mayor a 0' })
+  idPlan: number;
 
   @IsOptional()
   @IsString()

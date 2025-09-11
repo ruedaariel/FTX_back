@@ -5,5 +5,5 @@ export interface IPlan {
     nombrePlan: string;
     descripcion: string;
     precio: number;
-    fCambioPrecio: Date;
+    fCambio: Date;
 }

@@ -12,37 +12,48 @@ export class PlanService {
 
   public async create(planDto: CreatePlanDto): Promise<PlanEntity> {
     try {
+      //controlo que no exista plan con igual nombre
       const planExistente = await this.planRepository.findOneBy({ nombrePlan: planDto.nombrePlan });
       if (planExistente) {
         throw new ErrorManager("CONFLICT", `El nombre del plan ${planDto.nombrePlan} ya existe en la base de datos`)
       }
 
       //convercion de fecha y validacion
-      const fechaValida = new Date(planDto.fCambioPrecio);
+      const fechaValida = new Date(planDto.fCambio);
       if (isNaN(fechaValida.getTime())) {
         throw new ErrorManager("BAD_REQUEST","La fecha de cambio de precio no es válida");
       }
 
-      const planNuevo = this.planRepository.create({...planDto, fCambioPrecio: fechaValida});
+      const planNuevo = this.planRepository.create({...planDto, fCambio: fechaValida});
       return await this.planRepository.save(planNuevo);
     } catch (error) {
       throw ErrorManager.handle(error);
     }
   }
 
-  findAll(): Promise<PlanEntity[]> {
-    return this.planRepository.find({where:{}});//ver como almaceno el historico
+  public async findAll(): Promise<PlanEntity[]> {
+    return await this.planRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} plan`;
+  public async findOneById(id: number):Promise <PlanEntity | null> {
+    try {
+      const unPlan = await this.planRepository.findOneBy({idPlan:id});
+      if (!unPlan) {
+        return null
+      }
+      return unPlan;
+    } catch (error) {
+      throw ErrorManager.handle(error);
+    }
   }
 
   update(id: number, updatePlanDto: UpdatePlanDto) {
+    //ACA HAY QUE AGREGAR EL HISTORICO
     return `This action updates a #${id} plan`;
   }
 
   remove(id: number) {
+    //ACA TAMBIEN HAY QUE VER EL HISTORICO Y CONTROLAR  QUE NO HAYA USUARIOS CON PLANES ACTIVOS
     return `This action removes a #${id} plan`;
   }
 }
