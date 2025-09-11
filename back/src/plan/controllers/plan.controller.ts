@@ -20,7 +20,7 @@ export class PlanController {
 
   @Get(':id')
   findOne(@Param('id',ParseIntPipe) id: number) {
-    return this.planService.findOne(id);
+    return this.planService.findOneById(id);
   }
 
   @Patch('update/:id')
@@ -28,8 +28,8 @@ export class PlanController {
     return this.planService.update(id, updatePlanDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.planService.remove(+id);
+  @Delete('delete:id')
+  remove(@Param('id',ParseIntPipe) id: number) {
+    return this.planService.remove(id);
   }
 }

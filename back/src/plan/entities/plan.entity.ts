@@ -1,12 +1,14 @@
 import { IPlan } from "src/interfaces/plan.interface";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { DatosPersonalesEntity } from "src/usuario-datos-personales/entities/datos-personales.entity";
+import { UsuarioEntity } from "src/usuario/entities/usuario.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
-export class Plan implements IPlan {
+@Entity({name: 'plan'})
+export class PlanEntity implements IPlan {
     @PrimaryGeneratedColumn()
     idPlan: number;
 
-    @Column({ type: 'varchar', length: 30 })
+    @Column({ type: 'varchar', length: 30, unique: true })
     nombrePlan: string;
 
     @Column({ type: 'varchar' })
@@ -16,5 +18,9 @@ export class Plan implements IPlan {
     precio: number;
 
     @Column({ type: 'date' })
-    fCambioPrecio: Date;
+    fCambio: Date;
+
+    //Relacion Con Usuario
+    @OneToMany(()=>DatosPersonalesEntity, datosPersonales => datosPersonales.plan) //dejar un solo campo plan
+    datosPersonales: DatosPersonalesEntity[];
 }

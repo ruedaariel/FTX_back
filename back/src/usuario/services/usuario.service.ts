@@ -8,6 +8,7 @@ import { ErrorManager } from 'src/config/error.manager';
 import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
 import { DatosPersonalesEntity } from 'src/usuario-datos-personales/entities/datos-personales.entity';
 import { DatosFisicosEntity } from 'src/usuario-datos-fisicos/entities/datos-fisicos.entity';
+import { PlanService } from 'src/plan/services/plan.service';
 
 
 @Injectable()
@@ -18,19 +19,25 @@ export class UsuarioService {
     @InjectRepository(DatosPersonalesEntity)
     private readonly datosPersonalesRepository: Repository<DatosPersonalesEntity>,
     @InjectRepository(DatosFisicosEntity)
-    private readonly datosFisicosRepository: Repository<DatosFisicosEntity>) { }
+    private readonly datosFisicosRepository: Repository<DatosFisicosEntity>,
+    private readonly planService: PlanService) { }
 
   public async createUsuario(body: CreateUsuarioDto): Promise<UsuarioEntity> {
-    
+
     try {
+      //validar la existencia del plan, se llama al metodo de Plan.service. Devuelve null si no lo encuentra
+      const unPlan = await this.planService.findOneById(body.datosPersonales.idPlan);
+      if (!unPlan) {
+        throw new ErrorManager("NOT_FOUND", `No existe el plan ${body.datosPersonales.idPlan}`);
+      }
 
       //controlar que mail no exista
-      const usuarioExistente = await this.findUsuarioByMail(body.datosBasicos.email); //********************************************************** */
+      const usuarioExistente = await this.findUsuarioByMail(body.datosBasicos.email);
 
       if (!usuarioExistente) {
         const usuarioBasico = this.usuarioRepository.create(body.datosBasicos); //crea la instancia como si fuera un new UsuarioEntity
         const usuarioCreado = await this.usuarioRepository.save(usuarioBasico); //guarda para obtener el id que será usado para guardar el resto
-        console.log("despues de save, id", usuarioCreado.id);
+
         if (!usuarioCreado || !usuarioCreado.id) { //es como precaucion, el save, si falla va al trycatch directo
           throw new ErrorManager("BAD_REQUEST", "No se guardo el usuario (basico)");
         }
@@ -40,8 +47,12 @@ export class UsuarioService {
           if (body.datosPersonales && Object.keys(body.datosPersonales).length > 0) {
             const datosPersonales = new DatosPersonalesEntity();
             datosPersonales.id = usuarioCreado.id; // compartir el mismo ID
-            Object.assign(datosPersonales, body.datosPersonales); // copiar propiedades en datosPersonales
+            const { idPlan, ...restoDatos } = body.datosPersonales;//saca el dato idPlan para que no se copie en datosPersonales en el Object.assign
+            Object.assign(datosPersonales, restoDatos); // copiar propiedades en datosPersonales
+            datosPersonales.plan = unPlan;//agrego los datos del plan (relacion)
+            
             usuarioCreado.datosPersonales = datosPersonales;
+
           }
           //datos fisicos
           if (body.datosFisicos && Object.keys(body.datosFisicos).length > 0) {
@@ -86,6 +97,7 @@ export class UsuarioService {
     } catch (err) { throw ErrorManager.handle(err) }
   }
 
+  //encuentra un usuario por mail (solo datos basicos)
   public async findUsuarioByMail(mail: string): Promise<UsuarioEntity | null> { //retorna null si no encuentra el mail para crear unnuevo ususario
     try {
 
@@ -99,7 +111,7 @@ export class UsuarioService {
     try {
       const usuarioGuardado = await this.usuarioRepository.findOne({
         where: { id },
-        relations: ['datosPersonales', 'datosFisicos'],
+        relations: ['datosPersonales', 'datosFisicos'], // AGREGAR LO DEL PLAN
       });
       if (!usuarioGuardado) {  //************************************************************************* */
         throw new ErrorManager("NOT_FOUND", "No se encontro usuario");
@@ -112,15 +124,16 @@ export class UsuarioService {
       }
       if (body.datosPersonales && Object.keys(body.datosPersonales).length > 0) {
         if (!usuarioGuardado.datosPersonales) {
-         // throw new ErrorManager("BAD_REQUEST", `el usuario ${usuarioGuardado.id} no tiene datos personales`);
-         usuarioGuardado.datosPersonales = new DatosPersonalesEntity;
+          // throw new ErrorManager("BAD_REQUEST", `el usuario ${usuarioGuardado.id} no tiene datos personales`);
+          usuarioGuardado.datosPersonales = new DatosPersonalesEntity;
         }
+        //ACA VER LO DE PLAN, llamar a plan.service para que maneje el cambio de plan (si es que lo hubo)
         Object.assign(usuarioGuardado.datosPersonales, body.datosPersonales);
       }
       if (body.datosFisicos && Object.keys(body.datosFisicos).length > 0) {
         if (!usuarioGuardado.datosFisicos) {
-         // throw new ErrorManager("BAD_REQUEST", `el usuario ${usuarioGuardado.id} no tiene datos fisicos`);
-         usuarioGuardado.datosFisicos = new DatosFisicosEntity;
+          // throw new ErrorManager("BAD_REQUEST", `el usuario ${usuarioGuardado.id} no tiene datos fisicos`);
+          usuarioGuardado.datosFisicos = new DatosFisicosEntity;
         }
         Object.assign(usuarioGuardado.datosFisicos, body.datosFisicos);
       }
@@ -139,14 +152,14 @@ export class UsuarioService {
   public async deleteUsuario(id: number): Promise<boolean> {
     //devuelve el true si pudo hacer la baja logica o el error
 
-//Ver si borro las rutinas asociadas ahora o si hacemos un cron job *******************************
+    //Ver si borro las rutinas asociadas ahora o si hacemos un  (tarea programada) *******************************
 
     try {
-      const usuarioGuardado = await this.usuarioRepository.findOne({  
+      const usuarioGuardado = await this.usuarioRepository.findOne({
         where: { id },
       });
 
-      if (!usuarioGuardado) { 
+      if (!usuarioGuardado) {
         throw new ErrorManager("NOT_FOUND", "No se encontro usuario");
       }
 
