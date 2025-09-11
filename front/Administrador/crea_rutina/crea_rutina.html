@@ -24,6 +24,7 @@
      <link rel="stylesheet" href="../../modalError/style_reseteo_modal.css">
 
     <link rel="stylesheet" href="../../css/validacion.css">
+    <link rel="stylesheet" href="./overlay.css">
 
 </head>
 
@@ -42,20 +43,33 @@
     </header>
 
     <main class="container">
+        <div id="overlay" style="display: none;"></div>
 
         <!--NUEVO-->
         <div class="row align-items-end mb-3">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <h4>Carga de Rutinas</h4> <!--VIEJO (unica linea)-->
             </div>
-            <div class="col-md-4  ms-auto">
-                <div class="input-group select-con-lupa justify-content-end">
-                    <select id="buscarRutina" class="form-select ">
-                        <option selected disabled>Elegí una rutina...</option>
-                    </select>
-                    <span class="input-group-text">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </span>
+            <div class="col-md-8  ms-auto">
+                <div class="d-flex align-items-center">
+                    <div class="input-group select-con-lupa me-3">
+                        <select id="buscarRutina" class="form-select ">
+                            <option selected disabled>Elegí una rutina...</option>
+                        </select>
+                        <span class="input-group-text">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </span>
+                    </div>
+                    <div id="radioOptionsContainer" style="display: none;">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="plantillaRadio" value="plantilla">
+                            <label class="form-check-label" for="plantillaRadio">Plantilla</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="editableRadio" value="editable">
+                            <label class="form-check-label" for="editableRadio">Editable</label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

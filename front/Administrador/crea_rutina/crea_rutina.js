@@ -10,7 +10,7 @@ const rutinaVacia = {
 };
 let rutinaCompleta = rutinaVacia;
 let modoActualizacion = false;
-const nombresRutinas = ["Rutina A", "xxx", "yyy"]; //ver cómo la devuelve el BE, tal vez devuela un arreglo de (nombre, id)
+const nombresRutinas = ["Rutina A", "Rutina B", "Rutina C", "Rutina D"]; //ver cómo la devuelve el BE, tal vez devuela un arreglo de (nombre, id)
 
 
 //carga el Select de buscarRutina cuando se carga la pagina
@@ -23,6 +23,39 @@ document.addEventListener("DOMContentLoaded", function () {
     option.textContent = nombre;
     selectRutinas.appendChild(option);
   });
+
+  const buscarRutina = document.getElementById('buscarRutina');
+  const radioOptionsContainer = document.getElementById('radioOptionsContainer');
+  const plantillaRadio = document.getElementById('plantillaRadio');
+  const editableRadio = document.getElementById('editableRadio');
+  const overlay = document.getElementById('overlay');
+  const rutinaForm = document.getElementById('rutinaForm');
+
+  buscarRutina.addEventListener('change', () => {
+    radioOptionsContainer.style.display = 'block';
+    overlay.style.display = 'block';
+  });
+
+  plantillaRadio.addEventListener('change', () => {
+    if (plantillaRadio.checked) {
+      overlay.style.display = 'none';
+      disableFormElements(true);
+    }
+  });
+
+  editableRadio.addEventListener('change', () => {
+    if (editableRadio.checked) {
+      overlay.style.display = 'none';
+      disableFormElements(false);
+    }
+  });
+
+  function disableFormElements(disable) {
+    const formElements = rutinaForm.elements;
+    for (let i = 0; i < formElements.length; i++) {
+      formElements[i].disabled = disable;
+    }
+  }
 });
 
 // actualiza el label del boton "Grabar ejercicio Dia x / Semana y" al cargar la página y al eliminar una rutina

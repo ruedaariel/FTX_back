@@ -72,15 +72,27 @@
                     <div class="input-warning text-danger" data-warn="nombre"></div>
                 </div>
 
-                <div class=" form-group">
-                    <label for="dni">DNI:</label>
-                    <div class="input-icon-validate">
-                        <input type="text" id="dni" name="dni" class="input-medium form-control"
-                            placeholder="Tu DNI (ingresar sin puntos)" autocomplete="off" required>
-                        <span class="icon-validate" data-icon="dni"></span>
+                <!-- Inicio: Nuevo div para agrupar DNI y Fecha de Nacimiento en la misma fila -->
+                <div class="form-group-inline">
+                    <div class="form-group">
+                        <label for="dni">DNI:</label>
+                        <div class="input-icon-validate">
+                            <input type="text" id="dni" name="dni" class="input-medium form-control"
+                                placeholder="Tu DNI (sin puntos)" autocomplete="off" required>
+                            <span class="icon-validate" data-icon="dni"></span>
+                        </div>
+                        <div class="input-warning text-danger" data-warn="dni"></div>
                     </div>
-                    <div class="input-warning text-danger" data-warn="dni"></div>
+                    <div class="form-group">
+                        <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+                        <div class="input-icon-validate">
+                            <input type="date" id="fechaNacimiento" name="fechaNacimiento" class="form-control" required>
+                            <span class="icon-validate" data-icon="fechaNacimiento"></span>
+                        </div>
+                        <div class="input-warning text-danger" data-warn="fechaNacimiento"></div>
+                    </div>
                 </div>
+                <!-- Fin: Nuevo div para agrupar DNI y Fecha de Nacimiento en la misma fila -->
 
                 <div class=" form-group">
                     <label for="email">Email:</label>
@@ -138,6 +150,34 @@
     <script src="../modalError/carga_modal.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="./js/validaciones.js"></script>
+    <!-- Inicio: Script para manejar el envío del formulario de registro y guardar datos en localStorage -->
+    <script>
+        document.getElementById('form-registro').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevenir el envío por defecto del formulario
+
+            // Recopilar datos del formulario de suscripción
+            const datosSuscripcion = {
+                plan: document.getElementById('plan').value,
+                apellido: document.getElementById('apellido').value,
+                nombre: document.getElementById('nombre').value,
+                dni: document.getElementById('dni').value,
+                fechaNacimiento: document.getElementById('fechaNacimiento').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                genero: document.querySelector('input[name="genero"]:checked').value
+            };
+            // Guardar datos en localStorage para ser usados en la siguiente página
+            localStorage.setItem('datosSuscripcion', JSON.stringify(datosSuscripcion));
+
+            // Obtener DNI y Email para pasarlos como parámetros de URL a la siguiente página
+            const dni = document.getElementById("dni").value.trim();
+            const email = document.getElementById("email").value.trim();
+            // Redirigir a login_perfil.html con DNI y Email en la URL
+            const url = `login_perfil.html?dni=${encodeURIComponent(dni)}&email=${encodeURIComponent(email)}`;
+            window.location.href = url;
+        });
+    </script>
+    <!-- Fin: Script para manejar el envío del formulario de registro y guardar datos en localStorage -->
 </body>
 
 </html>

@@ -18,6 +18,35 @@ document.addEventListener('DOMContentLoaded', function () {
             validarTextoLibre(input, /^\d{7,8}$/, "Debe tener 7 u 8 dígitos sin puntos");
         }
 
+        if (input.id === "fechaNacimiento") {
+            const fechaNacimiento = new Date(input.value);
+            const hoy = new Date();
+            let valido = true;
+            let mensaje = "";
+
+            if (isNaN(fechaNacimiento.getTime())) {
+                valido = false;
+                mensaje = "Fecha de nacimiento inválida";
+            } else if (fechaNacimiento > hoy) {
+                valido = false;
+                mensaje = "La fecha de nacimiento no puede ser futura";
+            } else {
+                const edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+                const mes = hoy.getMonth() - fechaNacimiento.getMonth();
+                const dia = hoy.getDate() - fechaNacimiento.getDate();
+
+                if (edad < 18 || (edad === 18 && (mes < 0 || (mes === 0 && dia < 0)))) {
+                    valido = false;
+                    mensaje = "Debes tener al menos 18 años";
+                }
+            }
+            const campo = input.name.replace("[]", "");
+            const grupo = input.closest(".form-group");
+            const icon = grupo.querySelector(`[data-icon="${campo}"]`);
+            const warn = grupo.querySelector(`[data-warn="${campo}"]`);
+            actualizarEstado(valido, icon, warn, mensaje);
+        }
+
         if (input.id === "email") {
             const valor = input.value.trim();
 
@@ -47,6 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const nombreInput = document.getElementById('nombre');
         const apellidoInput = document.getElementById('apellido');
         const dniInput = document.getElementById('dni');
+        const fechaNacimientoInput = document.getElementById('fechaNacimiento');
         const emailInput = document.getElementById('email');
         const phoneInput = document.getElementById('phone');
         const pesoInput = document.getElementById('peso');        // Si existen
@@ -65,6 +95,22 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!/^\d{7,8}$/.test(dniInput.value.trim())) {
             valido = false;
             mensajes.push("DNI inválido");
+        }
+
+        const fechaNacimiento = new Date(fechaNacimientoInput.value);
+        const hoy = new Date();
+        if (isNaN(fechaNacimiento.getTime()) || fechaNacimiento > hoy) {
+            valido = false;
+            mensajes.push("Fecha de nacimiento inválida o futura");
+        } else {
+            const edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+            const mes = hoy.getMonth() - fechaNacimiento.getMonth();
+            const dia = hoy.getDate() - fechaNacimiento.getDate();
+
+            if (edad < 18 || (edad === 18 && (mes < 0 || (mes === 0 && dia < 0)))) {
+                valido = false;
+                mensajes.push("Debes tener al menos 18 años");
+            }
         }
 
         const emailVal = emailInput.value.trim();

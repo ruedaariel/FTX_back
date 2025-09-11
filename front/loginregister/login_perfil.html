@@ -113,6 +113,17 @@
         integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
         crossorigin="anonymous"></script>
     <script src="./js/validacionesPerfilFisico.js"></script>
+    <!-- Inicio: Inclusión del nuevo script para el registro de usuario y llamada a la API -->
+    <script src="./js/registro_api.js"></script>
+    <script>
+        // Listener para el botón "Guardar Perfil"
+        document.getElementById('guardarPerfil').addEventListener('click', function() {
+            // Se asume que las validaciones de validacionesPerfilFisico.js ya se ejecutaron.
+            // Si los datos son válidos, se llama a la función para registrar al usuario.
+            registrarUsuario();
+        });
+    </script>
+    <!-- Fin: Inclusión del nuevo script para el registro de usuario y llamada a la API -->
 </body>
 
 </html>

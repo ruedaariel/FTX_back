@@ -213,6 +213,11 @@ textarea {
     width: 45%;
 }
 
+#radioOptionsContainer {
+    position: relative;
+    z-index: 1001;
+}
+
 /* Estilos para tablet */
 @media (min-width: 769px) and (max-width: 1199.98px) {
 
