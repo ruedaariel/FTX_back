@@ -1,7 +1,7 @@
 import { IPlan } from "src/interfaces/plan.interface";
 import { DatosPersonalesEntity } from "src/usuario-datos-personales/entities/datos-personales.entity";
-import { UsuarioEntity } from "src/usuario/entities/usuario.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { HistoricoPlanEntity } from "./historico-plan.entity";
 
 @Entity({name: 'plan'})
 export class PlanEntity implements IPlan {
@@ -17,10 +17,17 @@ export class PlanEntity implements IPlan {
     @Column({ type: 'decimal', precision: 8, scale: 2 })
     precio: number;
 
-    @Column({ type: 'date' })
+    @CreateDateColumn({ //agrega automaticamente la fecha-hora del servidor, el name permite la creacion en la bd con snakeCase
+            type: 'timestamp',
+            name: 'f_cambio'
+        })
     fCambio: Date;
 
     //Relacion Con Usuario
-    @OneToMany(()=>DatosPersonalesEntity, datosPersonales => datosPersonales.plan) //dejar un solo campo plan
+    @OneToMany(()=>DatosPersonalesEntity, datosPersonales => datosPersonales.plan) 
     datosPersonales: DatosPersonalesEntity[];
+
+    //Relacion con Historico
+    @OneToMany( ()=>HistoricoPlanEntity, historicoPlan => historicoPlan.plan)
+    historicoPlanes: HistoricoPlanEntity[];
 }

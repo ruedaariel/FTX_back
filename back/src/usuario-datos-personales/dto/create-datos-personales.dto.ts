@@ -1,4 +1,4 @@
-import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, Matches, Min } from "class-validator";
+import { IsDateString, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, Matches, Min } from "class-validator";
 import { GENERO, PLAN } from "../entities/datos-personales.entity";
 
 
@@ -27,6 +27,10 @@ export class CreateDatosPersonalesDto {
   @IsInt()
   @Min(1, { message: 'El id del plan debe ser mayor a 0' })
   idPlan: number;
+
+  @IsNotEmpty({ message: 'La fecha de nacimiento no debe ser vacia' })
+  @IsDateString()
+  fNacimiento: string;
 
   @IsOptional()
   @IsString()

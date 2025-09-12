@@ -22,10 +22,10 @@ export class UsuarioEntity implements IUsuario {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'varchar', unique: true, length: 255}) 
+    @Column({ type: 'varchar', unique: true, length: 255 })
     email: string;
 
-    @Column({ type: 'varchar', length: 128 }) 
+    @Column({ type: 'varchar', length: 128 })
     password: string;
 
     @Column({ type: 'enum', enum: ROL, default: ROL.USUARIO }) //necesario para que la bd lo tome como enumerado, sino lo toma como string
@@ -42,7 +42,7 @@ export class UsuarioEntity implements IUsuario {
         name: 'f_creacion'
     })
     fCreacion: Date;
-    @UpdateDateColumn({type: 'timestamp', name: 'f_ultimo_acceso'})
+    @UpdateDateColumn({ type: 'timestamp', name: 'f_ultimo_acceso' })
     fUltimoAcceso: Date;
 
     //relacion con datos personales
