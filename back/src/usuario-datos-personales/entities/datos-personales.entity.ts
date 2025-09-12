@@ -1,12 +1,13 @@
 import { IDatosPersonales } from "src/interfaces/datos-personales.interface";
 import { PlanEntity } from "src/plan/entities/plan.entity";
+import { ESTADO } from "src/usuario/entities/usuario.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 
-export enum PLAN {
-    BASICO = 'basico',
-    PRO = 'pro',
-    PREMIUM = 'premium',
-}
+// export enum PLAN {
+//     BASICO = 'basico',
+//     PRO = 'pro',
+//     PREMIUM = 'premium',
+// }
 
 export enum GENERO {
     HOMBRE = 'hombre',
@@ -18,9 +19,6 @@ export enum GENERO {
 export class DatosPersonalesEntity implements IDatosPersonales {
     @PrimaryColumn()
     id: number;
-
-    // @Column({ type: 'enum', enum: PLAN, default: PLAN.BASICO, })
-    // plan: PLAN; //borrar para que no de error
 
     @Column({ type: 'varchar', length: 100, nullable: false, })
     nombre: string;
@@ -37,9 +35,16 @@ export class DatosPersonalesEntity implements IDatosPersonales {
     @Column({ type: 'enum', enum: GENERO, nullable: false, })
     genero: GENERO;
 
+    @Column({type: 'date'})
+    fNacimiento: Date;
+
     @Column({ type: 'varchar', length: 255, nullable: true, })
     imagenPerfil: string;
 
+    @Column({ type: 'enum', enum: ESTADO, default: ESTADO.ACTIVO })
+       estado: ESTADO;
+   
+    
     //relacion con datos_personales
     @ManyToOne(()=> PlanEntity,  plan => plan.datosPersonales)
     @JoinColumn()

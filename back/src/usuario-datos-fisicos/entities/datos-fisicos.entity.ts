@@ -1,28 +1,31 @@
 import { IDatosFisicos } from "src/interfaces/datos-fisicos.interface";
-import { UsuarioEntity } from "src/usuario/entities/usuario.entity";
+import { ESTADO, UsuarioEntity } from "src/usuario/entities/usuario.entity";
 import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
 
 
-@Entity({name:'datos_fisicos'})
-export class DatosFisicosEntity implements IDatosFisicos{
+@Entity({ name: 'datos_fisicos' })
+export class DatosFisicosEntity implements IDatosFisicos {
 
-@PrimaryColumn()
+  @PrimaryColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 30 }) 
+  @Column({ type: 'varchar', length: 30 })
   actividadDiaria: string;
 
-  @Column({type:'decimal', precision:6, scale:3})
+  @Column({ type: 'decimal', precision: 6, scale: 3 })
   peso: number;
 
-  @Column({type:'int'}) 
+  @Column({ type: 'int' })
   estatura: number;
 
-  @Column({ type: 'varchar', length: 100 }) 
+  @Column({ type: 'varchar', length: 100 })
   metas: string;
 
-  @Column({ type: 'varchar', length:255 }) 
+  @Column({ type: 'varchar', length: 255 })
   observaciones: string;
+
+  @Column({ type: 'enum', enum: ESTADO, default: ESTADO.ACTIVO })
+  estado: ESTADO;
 
 
 }

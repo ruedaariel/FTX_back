@@ -22,6 +22,8 @@ export class UsuarioService {
     private readonly datosFisicosRepository: Repository<DatosFisicosEntity>,
     private readonly planService: PlanService) { }
 
+    //Crea un nuevo usuario
+    //Se puede llamar desde : login_perfil (suscripcion) o desde crudClientes
   public async createUsuario(body: CreateUsuarioDto): Promise<UsuarioEntity> {
 
     try {
@@ -73,6 +75,7 @@ export class UsuarioService {
   }
 
   //devuelve todos los usuarios con datos basicos, incluso los "archivados" y los "inactivos"
+  //se llama de crudeUsuario (admin)
   public async findAllUsuarios(): Promise<UsuarioEntity[]> {
     try {
       const usuarios: UsuarioEntity[] = await this.usuarioRepository.find(); //ojo, incluye los usuarios borrados
@@ -86,6 +89,7 @@ export class UsuarioService {
   }
 
   //encuentra un usuario por id (solo datos basicos)
+  //VER SI NO HAY QUE DEVOLVER TODO
   public async findUsuarioById(id: number): Promise<UsuarioEntity> {
     try {
       const unUsuario = await this.usuarioRepository.findOneBy({ id: id });
@@ -98,6 +102,7 @@ export class UsuarioService {
   }
 
   //encuentra un usuario por mail (solo datos basicos)
+  //se llama desde usuarioService.createUsuario (Se puede llamar desde login u otro lado)
   public async findUsuarioByMail(mail: string): Promise<UsuarioEntity | null> { //retorna null si no encuentra el mail para crear unnuevo ususario
     try {
 
@@ -107,6 +112,8 @@ export class UsuarioService {
     } catch (err) { throw ErrorManager.handle(err) }
   }
 
+  //Actualiza todos los datos de un usuario.
+  //se llama: desde perfil_usuario y crudUsuario
   public async updateUsuario(id: number, body: UpdateUsuarioDto): Promise<UsuarioEntity> {
     try {
       const usuarioGuardado = await this.usuarioRepository.findOne({
@@ -148,7 +155,8 @@ export class UsuarioService {
       throw ErrorManager.handle(err)
     }
   }
-
+//baja logica de usuario
+//Se llama desde: crudUsuario (admin)
   public async deleteUsuario(id: number): Promise<boolean> {
     //devuelve el true si pudo hacer la baja logica o el error
 
