@@ -1,5 +1,5 @@
 import { IsDateString, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, Matches, Min } from "class-validator";
-import { GENERO, PLAN } from "../entities/datos-personales.entity";
+import { GENERO } from "../entities/datos-personales.entity";
 
 
 export class CreateDatosPersonalesDto {
