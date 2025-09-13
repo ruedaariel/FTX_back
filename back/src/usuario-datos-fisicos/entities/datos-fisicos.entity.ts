@@ -1,6 +1,6 @@
+import { ESTADO } from "src/constantes/estado.enum";
 import { IDatosFisicos } from "src/interfaces/datos-fisicos.interface";
-import { ESTADO, UsuarioEntity } from "src/usuario/entities/usuario.entity";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 
 @Entity({ name: 'datos_fisicos' })

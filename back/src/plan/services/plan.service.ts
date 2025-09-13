@@ -6,12 +6,15 @@ import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
 import { ErrorManager } from 'src/config/error.manager';
 import { DatosPersonalesEntity } from 'src/usuario-datos-personales/entities/datos-personales.entity';
-import { ESTADO } from 'src/usuario/entities/usuario.entity';
+import { CreateHistoricoPlanDto } from '../dto/create-historico-plan.dto';
+import { HistoricoPlanEntity } from '../entities/historico-plan.entity';
+import { ESTADO } from 'src/constantes/estado.enum';
 
 @Injectable()
 export class PlanService {
   constructor(@InjectRepository(PlanEntity) private readonly planRepository: Repository<PlanEntity>,
     @InjectRepository(DatosPersonalesEntity) private readonly datosPersonalesRepository: Repository<DatosPersonalesEntity>,
+    @InjectRepository(HistoricoPlanEntity) private readonly historicoPlanRepository: Repository<HistoricoPlanEntity>,
     @InjectEntityManager() private readonly entityManager: EntityManager,) { }
 
   public async create(planDto: CreatePlanDto): Promise<PlanEntity> {
@@ -60,13 +63,13 @@ export class PlanService {
     try {
       return await this.entityManager.transaction(async (transaccion) => {
         //valida si existe el plan
-        const planExistente = await transaccion.findOneBy(PlanEntity,{ idPlan: id });
+        const planExistente = await transaccion.findOneBy(PlanEntity, { idPlan: id });
         if (!planExistente) {
           throw new ErrorManager("CONFLICT", `El plan ${id} no existe`);
         }
 
         //controla si hay usuarios activos vinculados al plan
-        const usuariosActivos = await transaccion.count(DatosPersonalesEntity,{
+        const usuariosActivos = await transaccion.count(DatosPersonalesEntity, {
           where: {
             plan: { idPlan: id },
             estado: ESTADO.ACTIVO,
@@ -76,8 +79,8 @@ export class PlanService {
           throw new ErrorManager("CONFLICT", `Existen ${usuariosActivos} activos con ese plan, no se puede eliminar el plan ${id}`)
         }
 
-         //controla si hay usuarios inactivos vinculados al plan
-        const usuariosInactivos = await transaccion.count(DatosPersonalesEntity,{ 
+        //controla si hay usuarios inactivos vinculados al plan
+        const usuariosInactivos = await transaccion.count(DatosPersonalesEntity, {
           where: {
             plan: { idPlan: id },
             estado: ESTADO.INACTIVO,
@@ -95,13 +98,36 @@ export class PlanService {
           },
           { plan: undefined }
         );
-        const resultado = await transaccion.delete(PlanEntity,id);
+
+        //se carga en historico
+        const historico = transaccion.create(HistoricoPlanEntity, {
+          idPlanOrigen: planExistente.idPlan,
+          nombrePlan: planExistente.nombrePlan,
+          descripcion: planExistente.descripcion,
+          precio: planExistente.precio,
+          fCambioInicio: planExistente.fCambio, // O la fecha de inicio del plan
+          detalleCambio: `Eliminación del plan ${planExistente.nombrePlan}, id: ${id}`,
+        });
+        await transaccion.save(HistoricoPlanEntity, historico);
+
+        //borrado de plan
+        const resultado = await transaccion.delete(PlanEntity, id);
 
         return resultado.affected === 1
 
       });
 
 
+    } catch (error) {
+      throw ErrorManager.handle(error);
+    }
+
+  }
+
+  public async createHistorico(planDto: CreateHistoricoPlanDto): Promise<HistoricoPlanEntity> {
+    try {
+      const historicoNuevo = this.historicoPlanRepository.create(planDto);
+      return this.historicoPlanRepository.save(historicoNuevo);
     } catch (error) {
       throw ErrorManager.handle(error);
     }

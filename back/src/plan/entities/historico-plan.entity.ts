@@ -19,12 +19,14 @@ export class HistoricoPlanEntity implements IHistoricoPlan {
     @Column({ type: 'decimal', precision: 8, scale: 2 })
     precio: number;
 
-    @CreateDateColumn({ type: 'date' })
+    @Column({ type: 'timestamp' })
     fCambioInicio: Date;
 
     @CreateDateColumn({ 
         type: 'timestamp',
-        name: 'f_cambio_fin'
+       // name: 'f_cambio_fin',
+      //  default: () => 'CURRENT_TIMESTAMP',
+       // precision: 0 //elimina error en la migracion de los miliseg
     })
     fCambioFin: Date;
 
