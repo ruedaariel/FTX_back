@@ -1,7 +1,7 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ESTADO, ROL, UsuarioEntity } from '../entities/usuario.entity';
+import { ROL, UsuarioEntity } from '../entities/usuario.entity';
 import { CreateUsuarioDto } from '../dto/create-usuario.dto';
 import { DeleteResult, Repository, FindOneOptions, UpdateResult } from 'typeorm';
 import { ErrorManager } from 'src/config/error.manager';
@@ -9,6 +9,7 @@ import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
 import { DatosPersonalesEntity } from 'src/usuario-datos-personales/entities/datos-personales.entity';
 import { DatosFisicosEntity } from 'src/usuario-datos-fisicos/entities/datos-fisicos.entity';
 import { PlanService } from 'src/plan/services/plan.service';
+import { ESTADO } from 'src/constantes/estado.enum';
 
 
 @Injectable()

@@ -1,3 +1,4 @@
+import { ESTADO } from "src/constantes/estado.enum";
 import { IUsuario } from "src/interfaces/usuario.interface";
 import { RutinaEntity } from "src/rutina/entities/rutina.entity";
 import { DatosFisicosEntity } from "src/usuario-datos-fisicos/entities/datos-fisicos.entity";
@@ -11,11 +12,7 @@ export enum ROL {
     ADMIN = 'admin',
 }
 
-export enum ESTADO {
-    ACTIVO = 'activo',
-    INACTIVO = 'inactivo', //no esta al dia con el pago, se bloquea los servicios
-    ARCHIVADO = 'archivado', // baja logica
-}
+
 
 @Entity({ name: 'usuario' })
 export class UsuarioEntity implements IUsuario {

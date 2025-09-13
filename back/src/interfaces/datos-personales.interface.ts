@@ -1,4 +1,4 @@
-import { GENERO, PLAN } from "src/usuario-datos-personales/entities/datos-personales.entity";
+import { GENERO } from "src/usuario-datos-personales/entities/datos-personales.entity";
 
 
 

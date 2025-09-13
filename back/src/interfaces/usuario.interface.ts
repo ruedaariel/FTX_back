@@ -1,4 +1,5 @@
-import { ESTADO, ROL } from "src/usuario/entities/usuario.entity";
+import { ESTADO } from "src/constantes/estado.enum";
+import { ROL } from "src/usuario/entities/usuario.entity";
 
 export interface IUsuario {
     id: number;
