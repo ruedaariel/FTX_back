@@ -5,6 +5,7 @@ export enum MetodoDePago {
   TARJETA = 'tarjeta',
   MERCADOPAGO = 'mercadopago',
   TRANSFERENCIA = 'transferencia',
+  EFECTIVO = 'efectivo',
 }
 
 @Entity({ name: 'Pagos' })

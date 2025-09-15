@@ -1,4 +1,4 @@
-Flujo correcto:
+Flujo correcto para pagos del usuario:
 
 POST /pagos/iniciar → Recibe IniciarPagoDto del frontend
 POST /pagos/webhook → Recibe notificaciones de MercadoPago 
@@ -50,3 +50,28 @@ Procesar el pago de forma segura
 Enviar notificaciones y redirecciones apropiadas
 Cumplir regulaciones (identificación del pagador)
 El frontend debe recopilar estos datos del usuario antes de enviar la petición al backend.
+
+Ejemplo de petición para pago manual:
+
+POST /pagos/manual
+{
+  "usuarioId": 123,
+  "monto": 5000.50,
+  "diasAdicionales": 30,
+  "metodoDePago": "TRANSFERENCIA",
+  "estado": "approved",
+  "fechaPago": "2025-01-15T14:30:00",
+  "external_reference": "transferencia-123"
+}
+
+Respuesta esperada:
+
+{
+  "message": "Pago manual registrado exitosamente",
+  "pago": {
+    "idPagos": 456,
+    "estado": "approved",
+    "monto": 5000.50,
+    // ... resto de datos
+  }
+}

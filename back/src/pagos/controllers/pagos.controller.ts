@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { IniciarPagoDto } from '../dto/create-pago.dto';
+import { CreatePagoDto, IniciarPagoDto } from '../dto/create-pago.dto';
 import { PagosService } from '../services/pagos.service';
 
 @Controller('pagos')
@@ -10,6 +10,16 @@ export class PagosController {
   async iniciarPago(@Body() iniciarPagoDto: IniciarPagoDto) {
     // Recibe los datos del frontend y llama al servicio para procesar el pago
     return await this.pagosService.iniciarPago(iniciarPagoDto);
+  }
+
+  @Post('manual')
+  async registrarPagoManual(@Body() createPagoDto: CreatePagoDto) {
+    // Registra un pago manual (transferencia/efectivo) directamente
+    const pagoGuardado = await this.pagosService.guardarPagoManual(createPagoDto);
+    return {
+      message: 'Pago manual registrado exitosamente',
+      pago: pagoGuardado
+    };
   }
 
   @Post('webhook')

@@ -68,6 +68,20 @@ export class PagosService {
     return await this.pagoRepository.save(pago);
   }
 
+  async guardarPagoManual(createPagoDto: CreatePagoDto): Promise<PagoEntity> {
+    // Validar que sea un pago manual válido
+    if (!['TRANSFERENCIA', 'EFECTIVO'].includes(createPagoDto.metodoDePago)) {
+      throw new Error('Método de pago no válido para registro manual');
+    }
+    
+    if (createPagoDto.estado !== 'approved') {
+      throw new Error('Los pagos manuales deben estar aprobados');
+    }
+    
+    // ✅ REUTILIZAR la función existente
+    return await this.guardarPago(createPagoDto);
+  }
+
   // Método para webhook: actualizar con datos frescos de MercadoPago
   async actualizarEstadoPago(datosMercadoPago: any) {
     // Buscar el pago existente por external_reference o preferenciaId
