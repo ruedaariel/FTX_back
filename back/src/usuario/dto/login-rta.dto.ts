@@ -11,5 +11,5 @@ export class LoginRtaDto {
 
     estado: ESTADO;
 
-    //AGREGAR TOKEN
+    //AGREGAR TOKEN 
 }

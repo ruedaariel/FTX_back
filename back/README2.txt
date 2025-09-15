@@ -51,3 +51,6 @@ npm install --save-dev @types/bcrypt
 # Para el mail
 npm install nodemailer
 npm install @nestjs-modules/mailer
+
+//Para dar formato a las fechas
+npm install date-fns

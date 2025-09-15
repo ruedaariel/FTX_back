@@ -16,6 +16,12 @@ import { EmailService } from 'src/email/email.service';
 import { generateRandomPassword } from 'src/utils/random-password';
 import { LoginDto } from '../dto/login.dto';
 import { LoginRtaDto } from '../dto/login-rta.dto';
+import { UsuarioBasicoRtaDto } from '../dto/usuario-basico-rta.dto';
+import { UsuarioRtaDto } from '../dto/usuario-rta.dto';
+import { DatosPersonalesRtaDto } from 'src/usuario-datos-personales/dto/datos-personales-rta.dto';
+import { DatosFisicosRtaDto } from 'src/usuario-datos-fisicos/dto/datos-fisicos-rta.dto';
+import { format } from 'date-fns';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class UsuarioService {
@@ -177,8 +183,9 @@ export class UsuarioService {
     try {
       const usuarios: UsuarioEntity[] = await this.usuarioRepository.find(); //ojo, incluye los usuarios borrados
       if (usuarios.length === 0) {
-        throw new ErrorManager("BAD_REQUEST", "No se encontró ususarios");
+        throw new ErrorManager("BAD_REQUEST", "No se encontró usuarios");
       }
+      //USAR DTO PARA SALIDA, pero primero ver si necesito todos los datos o no
       return usuarios;
     } catch (err) {
       throw ErrorManager.handle(err)
@@ -187,7 +194,7 @@ export class UsuarioService {
 
   //encuentra un usuario por id ( datos basicos, datos personales, datos fisicos y plan)
   //VER SI CONTROLO ACA SI ESTA BORRADO
-  public async findUsuarioById(id: number): Promise<UsuarioEntity> {
+  public async findUsuarioById(id: number): Promise<UsuarioRtaDto> {
     try {
       const unUsuario = await this.usuarioRepository.findOne({
         where: { id: id },
@@ -197,9 +204,14 @@ export class UsuarioService {
         throw new ErrorManager("NOT_FOUND", `Usuario con id ${id} no encontrado`)
 
       }
-      return unUsuario;   // controlar de donde se llama, puede ser que unUsuario esté borrado y no se deba enviar
+      console.log(unUsuario);
+      const usuarioRtaDto = plainToClass(UsuarioRtaDto, unUsuario);
+
+     // return this.mapUsuarioDto(unUsuario);   // controlar de donde se llama, puede ser que unUsuario esté borrado y no se deba enviar
+     return usuarioRtaDto
     } catch (err) { throw ErrorManager.handle(err) }
   }
+
 
   //encuentra un usuario por mail (solo datos basicos)
   //se llama desde usuarioService.createUsuario (Se puede llamar  otro lado)
@@ -236,7 +248,7 @@ export class UsuarioService {
         //  token: tokenGenerado, 
       };
 
-      return rtaUsuario; 
+      return rtaUsuario;
     } catch (err) { throw ErrorManager.handle(err) }
   }
   //Actualiza todos los datos de un usuario.
@@ -350,5 +362,43 @@ export class UsuarioService {
       throw ErrorManager.handle(err)
     }
   }
+
+//   private mapUsuarioDto(usuario: UsuarioEntity): UsuarioRtaDto {
+//     console.log("entro a dto");
+//     const dto = new UsuarioRtaDto();
+//  console.log("entro a dto",dto);
+//     dto.datosBasicos.id = usuario.id;
+//     dto.datosBasicos.email = usuario.email;
+//     dto.datosBasicos.rol = usuario.rol;
+//     dto.datosBasicos.estado = usuario.estado;
+
+//     if (!usuario.datosPersonales) {
+//       dto.datosPersonales = undefined;
+//     } else {
+//       dto.datosPersonales = new DatosPersonalesRtaDto();
+//       dto.datosPersonales.nombre = usuario.datosPersonales.nombre;
+//       dto.datosPersonales.apellido = usuario.datosPersonales.apellido;
+//       dto.datosPersonales.dni = usuario.datosPersonales.dni;
+//       dto.datosPersonales.phone = usuario.datosPersonales.phone;
+//       dto.datosPersonales.genero = usuario.datosPersonales.genero;
+//       dto.datosPersonales.idPlan = usuario.datosPersonales.plan.idPlan;
+//       dto.datosPersonales.nombrePlan = usuario.datosPersonales.plan.nombrePlan;
+//       dto.datosPersonales.fNacimiento = format(usuario.datosPersonales.fNacimiento, 'dd/MM/yyyy');
+//       dto.datosPersonales.imagenPerfil = usuario.datosPersonales.imagenPerfil;
+//     }
+//     // Datos físicos
+//     if (!usuario.datosFisicos) {
+//       dto.datosFisicos = undefined;
+//     } else {
+//       dto.datosFisicos = new DatosFisicosRtaDto();
+//       dto.datosFisicos.actividadDiaria = usuario.datosFisicos.actividadDiaria;
+//       dto.datosFisicos.peso = usuario.datosFisicos.peso;
+//       dto.datosFisicos.estatura = usuario.datosFisicos.estatura;
+//       dto.datosFisicos.metas = usuario.datosFisicos.metas;
+//       dto.datosFisicos.observaciones = usuario.datosFisicos.observaciones;
+//     }
+//     console.log("dto:", dto);
+//     return dto;
+//   }
 
 }
