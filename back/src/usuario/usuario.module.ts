@@ -9,12 +9,16 @@ import { DatosFisicosModule } from 'src/usuario-datos-fisicos/usuario-datos-fisi
 import { DatosPersonalesModule } from 'src/usuario-datos-personales/datos-personales.module';
 import { PlanEntity } from 'src/plan/entities/plan.entity';
 import { PlanModule } from 'src/plan/plan.module';
+import { RutinaEntity } from 'src/rutina/entities/rutina.entity';
+import { EmailService } from 'src/email/email.service';
+import { EmailModule } from 'src/email/email.module';
 
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UsuarioEntity, DatosPersonalesEntity, DatosFisicosEntity, PlanEntity]), DatosFisicosModule,DatosPersonalesModule, PlanModule],
+  imports: [TypeOrmModule.forFeature([UsuarioEntity, DatosPersonalesEntity, DatosFisicosEntity, PlanEntity, RutinaEntity]), DatosFisicosModule,DatosPersonalesModule, PlanModule, EmailModule],
   controllers: [UsuarioController],
   providers: [UsuarioService],
+ 
 })
 export class UsuarioModule {}

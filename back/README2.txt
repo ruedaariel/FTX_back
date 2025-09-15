@@ -41,3 +41,9 @@ npm install class-validator class-transformer
 IIinstalar mult
 npm install multer
 npm install --save-dev @types/multer
+
+# Para encriptar contraseñas de forma segura
+npm install --save bcrypt
+
+# Tipos de TypeScript para bcrypt (buena práctica)
+npm install --save-dev @types/bcrypt

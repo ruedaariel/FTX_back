@@ -230,7 +230,6 @@ export class RutinaService {
 
       //usamos transaccion porque hay muchas tablas anidadas y es mas seguro
       await this.entityManager.transaction(async (transaccion) => {
-        console.log("antes de remove");
         await transaccion.remove(rutina); //devuelve rutina, pero no la uso
       });
       return true
