@@ -1,3 +1,9 @@
+Flujo correcto:
+
+POST /pagos/iniciar → Recibe IniciarPagoDto del frontend
+POST /pagos/webhook → Recibe notificaciones de MercadoPago 
+ 
+ 
  Ejemplo de uso desde el Frontend
 
  const datosParaPago: IniciarPagoDto = {
