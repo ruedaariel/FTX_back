@@ -14,6 +14,8 @@ import { RutinaEntity } from 'src/rutina/entities/rutina.entity';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from 'src/email/email.service';
 import { generateRandomPassword } from 'src/utils/random-password';
+import { LoginDto } from '../dto/login.dto';
+import { LoginRtaDto } from '../dto/login-rta.dto';
 
 @Injectable()
 export class UsuarioService {
@@ -99,6 +101,8 @@ export class UsuarioService {
         return usuarioFinal;
 
       } else { // Si el rol no es USUARIO, solo se devuelve el usuario creado
+        //envio de mail, si falla, lanza una excepcion y se hace rollback
+        await this.emailService.enviarCredenciales(usuarioCreado.email, contrasenaGenerada);
         await queryRunner.commitTransaction();
         return usuarioCreado;
       }
@@ -106,7 +110,7 @@ export class UsuarioService {
       await queryRunner.rollbackTransaction();
       throw ErrorManager.handle(error);
     } finally {
-      // 11. Liberar el query runner
+      // Liberar el query runner
       await queryRunner.release();
     }
   }
@@ -198,7 +202,7 @@ export class UsuarioService {
   }
 
   //encuentra un usuario por mail (solo datos basicos)
-  //se llama desde usuarioService.createUsuario (Se puede llamar desde login u otro lado)
+  //se llama desde usuarioService.createUsuario (Se puede llamar  otro lado)
   public async findUsuarioByMail(mail: string): Promise<UsuarioEntity | null> { //retorna null si no encuentra el mail para crear unnuevo ususario
     try {
 
@@ -208,6 +212,33 @@ export class UsuarioService {
     } catch (err) { throw ErrorManager.handle(err) }
   }
 
+  //Se llama desde el login (valida mail y contraseña)
+  public async loginUsuario(body: LoginDto): Promise<LoginRtaDto> { //retorna null si no encuentra el mail para crear unnuevo ususario
+    try {
+
+      const unUsuario = await this.usuarioRepository.findOneBy({ email: body.email }); //necesito el null para usarlo en el createUsuario
+
+      if (!unUsuario || unUsuario.estado === ESTADO.ARCHIVADO) {
+        throw new ErrorManager('UNAUTHORIZED', 'Email incorrecto');
+      }
+
+      const passwordValida = await bcrypt.compare(body.password, unUsuario.password);
+      if (!passwordValida) {
+        throw new ErrorManager('UNAUTHORIZED', 'password incorrecta');
+      }
+
+      //FALTA GENERAR EL TOKEN
+      const rtaUsuario: LoginRtaDto = {
+        id: unUsuario.id,
+        email: unUsuario.email,
+        rol: unUsuario.rol,
+        estado: unUsuario.estado,
+        //  token: tokenGenerado, 
+      };
+
+      return rtaUsuario; 
+    } catch (err) { throw ErrorManager.handle(err) }
+  }
   //Actualiza todos los datos de un usuario.
   //se llama: desde perfil_usuario y crudUsuario
   public async updateUsuario(id: number, body: UpdateUsuarioDto): Promise<UsuarioEntity> {

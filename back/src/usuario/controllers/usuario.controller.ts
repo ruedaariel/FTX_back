@@ -2,6 +2,7 @@ import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe
 import { UsuarioService } from '../services/usuario.service';
 import { CreateUsuarioDto } from '../dto/create-usuario.dto';
 import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
+import { LoginDto } from '../dto/login.dto';
 
 
 @Controller('usuario')
@@ -23,7 +24,7 @@ export class UsuarioController {
   }
 
 
-  @Get('email/:mail') 
+  @Get('email/:mail')
   public async findUsuarioByMail(@Param('mail') mail: string) {
     return await this.usuarioService.findUsuarioByMail(mail);
   }
@@ -32,11 +33,17 @@ export class UsuarioController {
   public async update(@Param('id', ParseIntPipe) id: number, @Body() updateUsuarioDto: UpdateUsuarioDto) {
 
     return await this.usuarioService.updateUsuario(id, updateUsuarioDto);
-    
+
   }
 
   @Delete('delete/:id')
   public async deleteUsuario(@Param('id') id: string) {
     return await this.usuarioService.deleteUsuario(+id);
   }
+
+  @Post('login')
+  public async login(@Body() body: LoginDto) {
+    return await this.usuarioService.loginUsuario(body);
+  }
+
 }
