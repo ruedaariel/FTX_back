@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreatePagoDto } from '../dto/create-pago.dto';
+import { CreatePagoDto, IniciarPagoDto } from '../dto/create-pago.dto';
 import { PagoEntity } from '../entity/pago.entity';
 import { MercadoPagoService } from './mercadopago.service';
+import { UsuarioEntity } from '../../usuario/entities/usuario.entity';
 
 @Injectable()
 export class PagosService {
@@ -11,43 +12,83 @@ export class PagosService {
     private readonly mpService: MercadoPagoService,
     @InjectRepository(PagoEntity)
     private readonly pagoRepository: Repository<PagoEntity>,
+    @InjectRepository(UsuarioEntity)
+    private readonly usuarioRepository: Repository<UsuarioEntity>,
   ) {}
 
-  async iniciarPago(createPagoDto: CreatePagoDto) {
-    // 1. Crear preferencia en MercadoPago
-    const mpResponse = await this.mpService.crearPreferencia(createPagoDto);
+  async iniciarPago(iniciarPagoDto: IniciarPagoDto) {
+    // 1. Crear preferencia en MercadoPago con datos del frontend
+    const mpResponse = await this.mpService.crearPreferencia(iniciarPagoDto);
 
-    // 2. En las preferencias, el estado inicial siempre es 'pending'
-    const estado = 'pending';
-
-    // 3. Guardar en la base de datos solo si es 'pending' o 'approved'
-    if (estado === 'pending' || estado === 'approved') {
-      // Buscar el usuario para la relación
-      const usuario = await this.pagoRepository.manager.findOne('UsuarioEntity', {
-        where: { id: createPagoDto.usuarioId }
-      });
-
-      if (!usuario) {
-        throw new Error(`Usuario con ID ${createPagoDto.usuarioId} no encontrado`);
-      }
-
-      const pago = this.pagoRepository.create({
-        fechaPago: createPagoDto.fechaPago ? new Date(createPagoDto.fechaPago) : new Date(),
-        estado: estado,
-        diasAdicionales: createPagoDto.diasAdicionales,
-        metodoDePago: createPagoDto.metodoDePago,
-        monto: createPagoDto.monto,
-        usuario: usuario,
-      });
+    // 2. Mapear respuesta de MercadoPago al DTO para BD
+    const createPagoDto: CreatePagoDto = {
+      fechaPago: mpResponse.date_created,
+      estado: 'pending', // Estado inicial de una preferencia
+      monto: mpResponse.items?.[0]?.unit_price || iniciarPagoDto.monto,
+      preferenciaId: mpResponse.id,
+      external_reference: mpResponse.external_reference,
       
-      await this.pagoRepository.save(pago);
-    }
+      // Datos que vienen del frontend original
+      diasAdicionales: iniciarPagoDto.diasAdicionales,
+      metodoDePago: iniciarPagoDto.metodoDePago,
+      usuarioId: iniciarPagoDto.usuarioId,
+    };
 
-    // 4. Retornar la respuesta relevante al frontend
+    // 3. Guardar en la base de datos usando el DTO con datos de MercadoPago
+    const pagoGuardado = await this.guardarPago(createPagoDto);
+
+    // 4. Retornar respuesta al frontend
     return {
-      estado,
+      estado: createPagoDto.estado,
       init_point: mpResponse.init_point,
       preferenciaId: mpResponse.id,
+      pagoId: pagoGuardado.idPagos,
     };
+  }
+
+  private async guardarPago(createPagoDto: CreatePagoDto): Promise<PagoEntity> {
+    // Buscar el usuario para la relación
+    const usuario = await this.usuarioRepository.findOne({
+      where: { id: createPagoDto.usuarioId }
+    });
+
+    if (!usuario) {
+      throw new Error(`Usuario con ID ${createPagoDto.usuarioId} no encontrado`);
+    }
+
+    const pago = this.pagoRepository.create({
+      fechaPago: createPagoDto.fechaPago ? new Date(createPagoDto.fechaPago) : new Date(),
+      estado: createPagoDto.estado,
+      diasAdicionales: createPagoDto.diasAdicionales,
+      metodoDePago: createPagoDto.metodoDePago,
+      monto: createPagoDto.monto,
+      usuario: usuario,
+    });
+
+    return await this.pagoRepository.save(pago);
+  }
+
+  // Método para webhook: actualizar con datos frescos de MercadoPago
+  async actualizarEstadoPago(datosMercadoPago: any) {
+    // Buscar el pago existente por external_reference o preferenciaId
+    const pagoExistente = await this.pagoRepository.findOne({
+      where: { 
+        usuario: { id: parseInt(datosMercadoPago.external_reference?.replace('usuario-', '')) }
+      },
+      relations: ['usuario']
+    });
+
+    if (pagoExistente) {
+      // Actualizar solo los campos que vienen de MercadoPago
+      pagoExistente.estado = datosMercadoPago.status;
+      pagoExistente.fechaPago = datosMercadoPago.date_approved 
+        ? new Date(datosMercadoPago.date_approved) 
+        : pagoExistente.fechaPago;
+      pagoExistente.monto = datosMercadoPago.transaction_amount || pagoExistente.monto;
+      
+      return await this.pagoRepository.save(pagoExistente);
+    }
+
+    throw new Error(`Pago no encontrado para los datos de MercadoPago`);
   }
 }
