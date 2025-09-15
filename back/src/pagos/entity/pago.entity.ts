@@ -1,0 +1,35 @@
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
+import { UsuarioEntity } from '../../usuario/entities/usuario.entity';
+
+export enum MetodoDePago {
+  TARJETA = 'tarjeta',
+  MERCADOPAGO = 'mercadopago',
+  TRANSFERENCIA = 'transferencia',
+}
+
+@Entity({ name: 'Pagos' })
+export class PagoEntity {
+  @PrimaryGeneratedColumn()
+  idPagos: number;
+
+  @Column({ type: 'timestamp' })
+  fechaPago: Date;
+
+  @Column({ type: 'varchar', length: 32 })
+  estado: string; // status devuelto por MercadoPago
+
+  @Column({ type: 'int', default: 0 })
+  diasAdicionales: number;
+
+  @Column({ type: 'enum', enum: MetodoDePago })
+  metodoDePago: MetodoDePago;
+
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  monto: number;
+
+  @ManyToOne(() => UsuarioEntity, usuario => usuario.id, { nullable: false })
+  usuario: UsuarioEntity;
+
+  @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
+  createdAt: Date;
+}

@@ -14,6 +14,7 @@ import { SemanaModule } from './semana/semana.module';
 import { DiaModule } from './dia/dia.module';
 import { EjercicioRutinaModule } from './ejercicio-rutina/ejercicio-rutina.module';
 import { PlanModule } from './plan/plan.module';
+import { PagosModule } from './pagos/pagos.module';
 
 
 
@@ -48,7 +49,9 @@ import { PlanModule } from './plan/plan.module';
    
     EjercicioRutinaModule,
    
-    PlanModule]
+    PlanModule,
+   
+    PagosModule]
 
 })
 export class AppModule {
