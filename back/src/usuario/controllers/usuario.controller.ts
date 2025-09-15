@@ -23,13 +23,7 @@ export class UsuarioController {
   }
 
 
-  // @Get('buscar/:email') //ruta estatica
-  // public async findUsuarioByMail(@Param('email') email:string) {
-  //        console.log('Email recibido:', email);
-  //   return await this.usuarioService.findUsuarioByMail(email);
-  // }
-
-  @Get('email/:mail') //ruta dinamica
+  @Get('email/:mail') 
   public async findUsuarioByMail(@Param('mail') mail: string) {
     return await this.usuarioService.findUsuarioByMail(mail);
   }
