@@ -304,15 +304,16 @@ video {
 }
 
 .autor-info {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 .autor-imagen {
-    width: 80px;
-    height: 80px;
+    width: 200px;
+    height: 200px;
     border-radius: 50%;
     border: 3px solid var(--color-primario-naranja);
-    margin: 0 auto 15px auto;
+    /* margin: auto;
+    padding: 0; */
 }
 
 .autor-nombre {

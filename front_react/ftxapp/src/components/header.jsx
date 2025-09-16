@@ -18,7 +18,7 @@ function Header() {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ms-auto">
-                        <li class="nav-item">
+                        <li className="nav-item">
                             <a className="nav-link active" aria-current="page" href="#inicio">Inicio</a>
                         </li>
                         <li className="nav-item">
