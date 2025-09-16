@@ -31,7 +31,6 @@ export class UsuarioController {
 
   @Patch('update/:id')
   public async update(@Param('id', ParseIntPipe) id: number, @Body() updateUsuarioDto: UpdateUsuarioDto) {
-
     return await this.usuarioService.updateUsuario(id, updateUsuarioDto);
 
   }

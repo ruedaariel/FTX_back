@@ -12,8 +12,8 @@ export class LoginDto {
     })
     password: string;
 
-    @IsNotEmpty({ message: 'El rol no puede ser vacio' })
-    @IsEnum(ROL, { message: 'tipo de usuario invalido, debe ser usuario o admin (enumerado)' })
-    rol:ROL;
+    // @IsNotEmpty({ message: 'El rol no puede ser vacio' })
+    // @IsEnum(ROL, { message: 'tipo de usuario invalido, debe ser usuario o admin (enumerado)' })
+    // rol:ROL;
 
 }
