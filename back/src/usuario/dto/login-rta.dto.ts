@@ -1,15 +1,31 @@
 import { IsEmail, IsEnum, IsNotEmpty, Matches } from "class-validator";
 import { ROL } from "../entities/usuario.entity";
 import { ESTADO } from "src/constantes/estado.enum";
+import { Exclude, Expose } from "class-transformer";
 
 export class LoginRtaDto {
-    id: number; 
+    @Expose()
+    id: number;
 
+    @Expose()
     email: string;
 
-    rol:ROL;
+    @Expose()
+    rol: ROL;
 
+    @Expose()
     estado: ESTADO;
 
+    @Exclude()
+    password: string;
+    
+    @Exclude()
+    fBaja: Date;
+
+    @Exclude()
+    fCreacion: Date;
+
+    @Exclude()
+    fUltimoAcceso: Date;
     //AGREGAR TOKEN 
 }

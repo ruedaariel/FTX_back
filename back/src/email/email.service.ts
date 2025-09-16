@@ -12,8 +12,8 @@ export class EmailService {
         this.transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'profherreratic@gmail.com',
-                pass: 'gladys646596' // O usa una variable de entorno
+                user: 'usuarionuevo.ftx@gmail.com',
+                pass: 'wxsw lyfa tyum ojuu' // O usa una variable de entorno
             },
             tls: {
                 rejectUnauthorized: false // <-- ignora el certificado (SOLO PARA ETAPA DE DESARROLLO }
@@ -23,7 +23,7 @@ export class EmailService {
 
     async enviarCredenciales(email: string, passwordGenerada: string) {
         const mailOptions = {
-            from: 'profherreratic@gmail.com',
+            from: 'usuarionuevo.ftx@gmail.com',
             to: email,
             subject: '¡Bienvenido! Aquí están tus credenciales de acceso',
             html: `<p>Hola,</p>

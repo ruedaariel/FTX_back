@@ -34,6 +34,6 @@ export class CreateDatosPersonalesDto {
 
   @IsOptional()
   @IsString()
-  imagenPerfil: string;
+  imagenPerfil?: string;  //CUando se crea no se carga la imagen de perfil
 }
 

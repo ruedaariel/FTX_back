@@ -1,6 +1,4 @@
 import { Exclude, Expose, Type } from "class-transformer";
-import { ValidateNested } from "class-validator";
-import { UsuarioBasicoRtaDto } from "./usuario-basico-rta.dto";
 import { DatosPersonalesRtaDto } from "src/usuario-datos-personales/dto/datos-personales-rta.dto";
 import { DatosFisicosRtaDto } from "src/usuario-datos-fisicos/dto/datos-fisicos-rta.dto";
 import { ROL } from "../entities/usuario.entity";
@@ -9,10 +7,13 @@ import { ESTADO } from "src/constantes/estado.enum";
 export class UsuarioRtaDto {
     @Expose()
     id: number;
+    
     @Expose()
     email: string;
+
     @Expose()
     rol: ROL; //ver si se deja
+
     @Expose()
     estado: ESTADO;
 

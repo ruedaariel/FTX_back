@@ -16,10 +16,7 @@ import { EmailService } from 'src/email/email.service';
 import { generateRandomPassword } from 'src/utils/random-password';
 import { LoginDto } from '../dto/login.dto';
 import { LoginRtaDto } from '../dto/login-rta.dto';
-import { UsuarioBasicoRtaDto } from '../dto/usuario-basico-rta.dto';
 import { UsuarioRtaDto } from '../dto/usuario-rta.dto';
-import { DatosPersonalesRtaDto } from 'src/usuario-datos-personales/dto/datos-personales-rta.dto';
-import { DatosFisicosRtaDto } from 'src/usuario-datos-fisicos/dto/datos-fisicos-rta.dto';
 import { format } from 'date-fns';
 import { plainToClass } from 'class-transformer';
 
@@ -38,9 +35,10 @@ export class UsuarioService {
     private readonly emailService: EmailService,
     private readonly planService: PlanService) { }
 
+  //************************************FALTA CARGAR LA IMAGEN DEL USUARIO ******************************************************************************** */
   //Crea un nuevo usuario, crea contraseña y envia el mail
   //Se puede llamar desde : login_perfil (suscripcion) o desde crudClientes
-  public async createUsuario(body: CreateUsuarioDto): Promise<UsuarioEntity> {
+  public async createUsuario(body: CreateUsuarioDto): Promise<UsuarioRtaDto> {
     //se usa QueryRunner (otra forma de manejar transacciones), debido a que se juntan manejo de BD y envio de mails
     //es la forma mas segura de transaccion debido al esquema de BD (un id unico para las 3 tablas)
     const queryRunner = this.dataSource.createQueryRunner();
@@ -76,7 +74,7 @@ export class UsuarioService {
           const { idPlan, fNacimiento, ...restoDatos } = body.datosPersonales;//saca el dato idPlan y fNacimiento para que no se copie en datosPersonales en el Object.assign
           Object.assign(datosPersonales, restoDatos); // copiar propiedades en datosPersonales
 
-          //convierte y valida fNaciiento
+          //convierte y valida fNacimiento
           if (body.datosPersonales.fNacimiento) {
             const fechaValida = new Date(body.datosPersonales.fNacimiento);
             if (!isNaN(fechaValida.getTime())) {
@@ -104,13 +102,15 @@ export class UsuarioService {
 
         //confirma la transaccion
         await queryRunner.commitTransaction();
-        return usuarioFinal;
+        const usuarioRtaDto = plainToClass(UsuarioRtaDto, usuarioFinal);
+        return usuarioRtaDto;
 
       } else { // Si el rol no es USUARIO, solo se devuelve el usuario creado
         //envio de mail, si falla, lanza una excepcion y se hace rollback
         await this.emailService.enviarCredenciales(usuarioCreado.email, contrasenaGenerada);
         await queryRunner.commitTransaction();
-        return usuarioCreado;
+        const usuarioRtaDto = plainToClass(UsuarioRtaDto, usuarioCreado);
+        return usuarioRtaDto;
       }
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -121,61 +121,6 @@ export class UsuarioService {
     }
   }
 
-
-
-  // try {
-  //   //validar la existencia del plan, se llama al metodo de Plan.service. Devuelve null si no lo encuentra
-  //   const unPlan = await this.planService.findOneById(body.datosPersonales.idPlan);
-  //   if (!unPlan) {
-  //     throw new ErrorManager("NOT_FOUND", `No existe el plan ${body.datosPersonales.idPlan}`);
-  //   }
-
-  //   //controlar que mail no exista
-  //   const usuarioExistente = await this.findUsuarioByMail(body.datosBasicos.email);
-
-  //   if (usuarioExistente) {
-  //     throw new ErrorManager("BAD_REQUEST", `Mail existente no se puede crear el usuario. Estado de usuario: ${usuarioExistente.estado}`);
-  //   }
-  //   const usuarioBasico = this.usuarioRepository.create(body.datosBasicos); //crea la instancia como si fuera un new UsuarioEntity
-  //   const usuarioCreado = await this.usuarioRepository.save(usuarioBasico); //guarda para obtener el id que será usado para guardar el resto
-
-  //   if (!usuarioCreado || !usuarioCreado.id) { //es como precaucion, el save, si falla va al trycatch directo
-  //     throw new ErrorManager("BAD_REQUEST", "No se guardo el usuario (basico)");
-  //   }
-
-  //   if (usuarioCreado.rol === ROL.USUARIO) {
-  //     //datos personales
-  //     if (body.datosPersonales && Object.keys(body.datosPersonales).length > 0) {
-  //       const datosPersonales = new DatosPersonalesEntity();
-  //       datosPersonales.id = usuarioCreado.id; // compartir el mismo ID
-
-  //       const { idPlan, fNacimiento, ...restoDatos } = body.datosPersonales;//saca el dato idPlan y fNacimiento para que no se copie en datosPersonales en el Object.assign
-  //       Object.assign(datosPersonales, restoDatos); // copiar propiedades en datosPersonales
-  //       if (body.datosPersonales.fNacimiento) {
-  //         const fechaValida = new Date(body.datosPersonales.fNacimiento);
-  //         if (!isNaN(fechaValida.getTime())) {
-  //           datosPersonales.fNacimiento = fechaValida;
-  //         }
-  //       }//SINO PONER UN WARNING
-  //       datosPersonales.plan = unPlan;//agrego los datos del plan (relacion)
-  //       usuarioCreado.datosPersonales = datosPersonales;
-
-
-  //     }
-  //     //datos fisicos
-  //     if (body.datosFisicos && Object.keys(body.datosFisicos).length > 0) {
-  //       const datosFisicos = new DatosFisicosEntity();
-  //       datosFisicos.id = usuarioCreado.id;
-  //       Object.assign(datosFisicos, body.datosFisicos);
-  //       usuarioCreado.datosFisicos = datosFisicos;
-  //     }
-
-  //     const usuarioFinal = await this.usuarioRepository.save(usuarioCreado); //guarda todo (los datos basicos no se duplican)
-  //     return usuarioFinal
-  //   } else {
-  //     return usuarioCreado
-  //   }
-  // } catch (err) { throw ErrorManager.handle(err) }
 
   //devuelve todos los usuarios con datos basicos, incluso los "archivados" y los "inactivos"
   //se llama de crudeUsuario (admin)
@@ -202,13 +147,10 @@ export class UsuarioService {
       }); //ver si se agrega rutina
       if (!unUsuario) {
         throw new ErrorManager("NOT_FOUND", `Usuario con id ${id} no encontrado`)
-
       }
-      console.log(unUsuario);
       const usuarioRtaDto = plainToClass(UsuarioRtaDto, unUsuario);
 
-     // return this.mapUsuarioDto(unUsuario);   // controlar de donde se llama, puede ser que unUsuario esté borrado y no se deba enviar
-     return usuarioRtaDto
+      return usuarioRtaDto
     } catch (err) { throw ErrorManager.handle(err) }
   }
 
@@ -238,17 +180,11 @@ export class UsuarioService {
       if (!passwordValida) {
         throw new ErrorManager('UNAUTHORIZED', 'password incorrecta');
       }
+      const usuarioRtaDto = plainToClass(LoginRtaDto, unUsuario);
+      //FALTA GENERAR EL TOKEN -
 
-      //FALTA GENERAR EL TOKEN
-      const rtaUsuario: LoginRtaDto = {
-        id: unUsuario.id,
-        email: unUsuario.email,
-        rol: unUsuario.rol,
-        estado: unUsuario.estado,
-        //  token: tokenGenerado, 
-      };
 
-      return rtaUsuario;
+      return usuarioRtaDto;
     } catch (err) { throw ErrorManager.handle(err) }
   }
   //Actualiza todos los datos de un usuario.
@@ -363,42 +299,6 @@ export class UsuarioService {
     }
   }
 
-//   private mapUsuarioDto(usuario: UsuarioEntity): UsuarioRtaDto {
-//     console.log("entro a dto");
-//     const dto = new UsuarioRtaDto();
-//  console.log("entro a dto",dto);
-//     dto.datosBasicos.id = usuario.id;
-//     dto.datosBasicos.email = usuario.email;
-//     dto.datosBasicos.rol = usuario.rol;
-//     dto.datosBasicos.estado = usuario.estado;
 
-//     if (!usuario.datosPersonales) {
-//       dto.datosPersonales = undefined;
-//     } else {
-//       dto.datosPersonales = new DatosPersonalesRtaDto();
-//       dto.datosPersonales.nombre = usuario.datosPersonales.nombre;
-//       dto.datosPersonales.apellido = usuario.datosPersonales.apellido;
-//       dto.datosPersonales.dni = usuario.datosPersonales.dni;
-//       dto.datosPersonales.phone = usuario.datosPersonales.phone;
-//       dto.datosPersonales.genero = usuario.datosPersonales.genero;
-//       dto.datosPersonales.idPlan = usuario.datosPersonales.plan.idPlan;
-//       dto.datosPersonales.nombrePlan = usuario.datosPersonales.plan.nombrePlan;
-//       dto.datosPersonales.fNacimiento = format(usuario.datosPersonales.fNacimiento, 'dd/MM/yyyy');
-//       dto.datosPersonales.imagenPerfil = usuario.datosPersonales.imagenPerfil;
-//     }
-//     // Datos físicos
-//     if (!usuario.datosFisicos) {
-//       dto.datosFisicos = undefined;
-//     } else {
-//       dto.datosFisicos = new DatosFisicosRtaDto();
-//       dto.datosFisicos.actividadDiaria = usuario.datosFisicos.actividadDiaria;
-//       dto.datosFisicos.peso = usuario.datosFisicos.peso;
-//       dto.datosFisicos.estatura = usuario.datosFisicos.estatura;
-//       dto.datosFisicos.metas = usuario.datosFisicos.metas;
-//       dto.datosFisicos.observaciones = usuario.datosFisicos.observaciones;
-//     }
-//     console.log("dto:", dto);
-//     return dto;
-//   }
 
 }
