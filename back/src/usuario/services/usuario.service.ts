@@ -35,7 +35,6 @@ export class UsuarioService {
     private readonly emailService: EmailService,
     private readonly planService: PlanService) { }
 
-  //************************************FALTA CARGAR LA IMAGEN DEL USUARIO ******************************************************************************** */
   //Crea un nuevo usuario, crea contraseña y envia el mail
   //Se puede llamar desde : login_perfil (suscripcion) o desde crudClientes
   public async createUsuario(body: CreateUsuarioDto): Promise<UsuarioRtaDto> {
@@ -191,6 +190,7 @@ export class UsuarioService {
   //se llama: desde perfil_usuario y crudUsuario
   public async updateUsuario(id: number, body: UpdateUsuarioDto): Promise<UsuarioEntity> {
     try {
+      let borrarImg = true;
       const usuarioGuardado = await this.usuarioRepository.findOne({
         where: { id },
         relations: ['datosPersonales', 'datosFisicos', 'datosPersonales.plan'], // AGREGAR LO DEL PLAN
@@ -219,6 +219,7 @@ export class UsuarioService {
           //MANDAR UN WARNING  si la fecha de nac es incorrecta
           delete body.datosPersonales.fNacimiento;
         }
+
         //ACA VER LO DE PLAN, llamar a plan.service para que maneje el cambio de plan (si es que lo hubo)
         if (body.datosPersonales.idPlan) {
           const planActualizado = await this.planService.findOneById(body.datosPersonales.idPlan);
@@ -229,6 +230,13 @@ export class UsuarioService {
           delete body.datosPersonales.idPlan; //elimina idPlan del body por las dudas (que no interfiera con la relacion con plan)
         }
 
+        
+        if (body.datosPersonales.imagenPerfil) {
+
+          if (usuarioGuardado.datosPersonales.imagenPerfil == "usuario.png") {
+            borrarImg = false;
+          }
+        }
         Object.assign(usuarioGuardado.datosPersonales, body.datosPersonales);
       }
       if (body.datosFisicos && Object.keys(body.datosFisicos).length > 0) {
@@ -244,7 +252,10 @@ export class UsuarioService {
       if (!usuarioUpdate) {
         throw new ErrorManager("BAD_REQUEST", `No se pudo actualizar los datos del usuario ${usuarioGuardado.id} `);
       }
-      return usuarioUpdate
+
+      if (borrarImg) {//BORRO LA IMAGEN ACA
+        }
+        return usuarioUpdate
     } catch (err) {
       throw ErrorManager.handle(err)
     }

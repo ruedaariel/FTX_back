@@ -30,18 +30,22 @@ export class DatosPersonalesEntity implements IDatosPersonales {
     @Column({ type: 'enum', enum: GENERO, nullable: false, })
     genero: GENERO;
 
-    @Column({type: 'date'})
+    @Column({ type: 'date' })
     fNacimiento: Date;
 
-    @Column({ type: 'varchar', length: 255, nullable: true, })
+    @Column({ type: 'varchar', length: 255, default: 'usuario.png', })
     imagenPerfil: string;
 
     @Column({ type: 'enum', enum: ESTADO, default: ESTADO.ACTIVO })
-       estado: ESTADO;
-   
-    
+    estado: ESTADO;
+
+
     //relacion con datos_personales
-    @ManyToOne(()=> PlanEntity,  plan => plan.datosPersonales)
+    @ManyToOne(() => PlanEntity, plan => plan.datosPersonales)
     @JoinColumn()
-    plan:PlanEntity;
+    plan: PlanEntity;
+
+    constructor() {
+        this.imagenPerfil = 'usuario.png'; // Establece el valor por defecto
+    }
 }
