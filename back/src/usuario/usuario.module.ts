@@ -10,8 +10,8 @@ import { DatosPersonalesModule } from 'src/usuario-datos-personales/datos-person
 import { PlanEntity } from 'src/plan/entities/plan.entity';
 import { PlanModule } from 'src/plan/plan.module';
 import { RutinaEntity } from 'src/rutina/entities/rutina.entity';
-import { EmailService } from 'src/email/email.service';
-import { EmailModule } from 'src/email/email.module';
+import { EmailService } from 'src/shared/email/email.service';
+import { EmailModule } from 'src/shared/email/email.module';
 
 
 
