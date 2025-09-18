@@ -12,13 +12,14 @@ import { PlanService } from 'src/plan/services/plan.service';
 import { ESTADO } from 'src/constantes/estado.enum';
 import { RutinaEntity } from 'src/rutina/entities/rutina.entity';
 import * as bcrypt from 'bcrypt';
-import { EmailService } from 'src/email/email.service';
+import { EmailService } from 'src/shared/email/email.service';
 import { generateRandomPassword } from 'src/utils/random-password';
 import { LoginDto } from '../dto/login.dto';
 import { LoginRtaDto } from '../dto/login-rta.dto';
 import { UsuarioRtaDto } from '../dto/usuario-rta.dto';
 import { format } from 'date-fns';
 import { plainToClass } from 'class-transformer';
+import { FileImgService } from 'src/shared/file-img/file-img.service';
 
 @Injectable()
 export class UsuarioService {
@@ -33,7 +34,8 @@ export class UsuarioService {
     @InjectEntityManager() private readonly entityManager: EntityManager,
     private readonly dataSource: DataSource,
     private readonly emailService: EmailService,
-    private readonly planService: PlanService) { }
+    private readonly planService: PlanService,
+    private readonly fileImgService: FileImgService) { }
 
   //Crea un nuevo usuario, crea contraseña y envia el mail
   //Se puede llamar desde : login_perfil (suscripcion) o desde crudClientes
@@ -70,16 +72,17 @@ export class UsuarioService {
           const datosPersonales = new DatosPersonalesEntity();
           datosPersonales.id = usuarioCreado.id; // compartir el mismo ID
 
-          const { idPlan, fNacimiento, ...restoDatos } = body.datosPersonales;//saca el dato idPlan y fNacimiento para que no se copie en datosPersonales en el Object.assign
+            const { idPlan, ...restoDatos } = body.datosPersonales;
+          //const { idPlan, fNacimiento, ...restoDatos } = body.datosPersonales;//saca el dato idPlan y fNacimiento para que no se copie en datosPersonales en el Object.assign
           Object.assign(datosPersonales, restoDatos); // copiar propiedades en datosPersonales
 
           //convierte y valida fNacimiento
-          if (body.datosPersonales.fNacimiento) {
-            const fechaValida = new Date(body.datosPersonales.fNacimiento);
-            if (!isNaN(fechaValida.getTime())) {
-              datosPersonales.fNacimiento = fechaValida;
-            }
-          }//SINO PONER UN WARNING
+          // if (body.datosPersonales.fNacimiento) {
+          //   const fechaValida = new Date(body.datosPersonales.fNacimiento);
+          //   if (!isNaN(fechaValida.getTime())) {
+          //     datosPersonales.fNacimiento = fechaValida;
+          //   }
+          // }//SINO PONER UN WARNING
 
           //agrega el plan
           datosPersonales.plan = unPlan;//agrego los datos del plan (relacion)
@@ -190,7 +193,7 @@ export class UsuarioService {
   //se llama: desde perfil_usuario y crudUsuario
   public async updateUsuario(id: number, body: UpdateUsuarioDto): Promise<UsuarioEntity> {
     try {
-      let borrarImg = true;
+      let imagenVieja = "";
       const usuarioGuardado = await this.usuarioRepository.findOne({
         where: { id },
         relations: ['datosPersonales', 'datosFisicos', 'datosPersonales.plan'], // AGREGAR LO DEL PLAN
@@ -211,14 +214,14 @@ export class UsuarioService {
           usuarioGuardado.datosPersonales = new DatosPersonalesEntity;
         }
 
-        if (body.datosPersonales.fNacimiento) {
-          const fechaValida = new Date(body.datosPersonales.fNacimiento);
-          if (!isNaN(fechaValida.getTime())) {
-            usuarioGuardado.datosPersonales.fNacimiento = fechaValida;
-          }
-          //MANDAR UN WARNING  si la fecha de nac es incorrecta
-          delete body.datosPersonales.fNacimiento;
-        }
+        // if (body.datosPersonales.fNacimiento) {
+        //   const fechaValida = new Date(body.datosPersonales.fNacimiento);
+        //   if (!isNaN(fechaValida.getTime())) {
+        //     usuarioGuardado.datosPersonales.fNacimiento = fechaValida;
+        //   }
+        //   //MANDAR UN WARNING  si la fecha de nac es incorrecta
+        //   delete body.datosPersonales.fNacimiento;
+        // }
 
         //ACA VER LO DE PLAN, llamar a plan.service para que maneje el cambio de plan (si es que lo hubo)
         if (body.datosPersonales.idPlan) {
@@ -230,13 +233,12 @@ export class UsuarioService {
           delete body.datosPersonales.idPlan; //elimina idPlan del body por las dudas (que no interfiera con la relacion con plan)
         }
 
-        
-        if (body.datosPersonales.imagenPerfil) {
 
-          if (usuarioGuardado.datosPersonales.imagenPerfil == "usuario.png") {
-            borrarImg = false;
+        if (body.datosPersonales.imagenPerfil && usuarioGuardado.datosPersonales.imagenPerfil !== "usuario.png") {
+          imagenVieja = body.datosPersonales.imagenPerfil;
+          
           }
-        }
+       
         Object.assign(usuarioGuardado.datosPersonales, body.datosPersonales);
       }
       if (body.datosFisicos && Object.keys(body.datosFisicos).length > 0) {
@@ -253,13 +255,20 @@ export class UsuarioService {
         throw new ErrorManager("BAD_REQUEST", `No se pudo actualizar los datos del usuario ${usuarioGuardado.id} `);
       }
 
-      if (borrarImg) {//BORRO LA IMAGEN ACA
+      if (imagenVieja) {
+        const imgBorrada = await this.fileImgService.borrarImagen(imagenVieja,"perfiles");
+        if (imgBorrada) {
+          console.log(`se borro la imagen de perfil anterior del usuario ${id}`);
+        } else {
+          console.log(`No existe la imagende perfil anterior del usuario ${id}`)
         }
-        return usuarioUpdate
+      }
+      return usuarioUpdate
     } catch (err) {
       throw ErrorManager.handle(err)
     }
   }
+
   //baja logica de usuario
   //Se llama desde: crudUsuario (admin)
   public async deleteUsuario(id: number): Promise<boolean> {

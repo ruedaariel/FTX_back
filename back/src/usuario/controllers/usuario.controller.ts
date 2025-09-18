@@ -1,13 +1,15 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UsuarioService } from '../services/usuario.service';
 import { CreateUsuarioDto } from '../dto/create-usuario.dto';
 import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
 import { LoginDto } from '../dto/login.dto';
+import { imagenPerfilInterceptor } from 'src/interceptors/imagen-perfil.interceptor';
 
 
 @Controller('usuario')
 export class UsuarioController {
-  constructor(private readonly usuarioService: UsuarioService) { }
+  constructor(private readonly usuarioService: UsuarioService
+  ) { }
 
   @Post('register')
   public async registerUsuario(@Body() body: CreateUsuarioDto) {
@@ -30,7 +32,11 @@ export class UsuarioController {
   }
 
   @Patch('update/:id')
-  public async update(@Param('id', ParseIntPipe) id: number, @Body() updateUsuarioDto: UpdateUsuarioDto) {
+  @UseInterceptors(imagenPerfilInterceptor())
+  public async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUsuarioDto: UpdateUsuarioDto,
+    @UploadedFile() file: Express.Multer.File) {
     return await this.usuarioService.updateUsuario(id, updateUsuarioDto);
 
   }

@@ -3,10 +3,11 @@ import { EjercicioBasicoController } from './controllers/ejercicio-basico.contro
 import { EjercicioBasicoService } from './services/ejercicio-basico.service';
 import { EjercicioBasicoEntity } from './entities/ejercicio-basico.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { FileImgModule } from 'src/shared/file-img/file-img.module';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([EjercicioBasicoEntity])],
+  imports: [TypeOrmModule.forFeature([EjercicioBasicoEntity]),FileImgModule],
   controllers: [EjercicioBasicoController],
   providers: [EjercicioBasicoService],
 })

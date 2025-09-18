@@ -1,5 +1,7 @@
 import { IsDateString, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, Matches, Min } from "class-validator";
 import { GENERO } from "../entities/datos-personales.entity";
+import { Transform } from "class-transformer";
+import { parseISO } from "date-fns";
 
 
 export class CreateDatosPersonalesDto {
@@ -30,7 +32,8 @@ export class CreateDatosPersonalesDto {
 
   @IsNotEmpty({ message: 'La fecha de nacimiento no debe ser vacia' })
   @IsDateString()
-  fNacimiento: string;
+   @Transform(({ value }) => parseISO(value)) // Convierte el string '2025-09-18' a un objeto Date
+  fNacimiento: Date;
 
   @IsOptional()
   @IsString()

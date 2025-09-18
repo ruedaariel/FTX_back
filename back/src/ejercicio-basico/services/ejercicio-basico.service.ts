@@ -9,12 +9,15 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { ConfigService } from '@nestjs/config';
 import { normalizarSinEspacios } from 'src/utils/normalizar-string';
+import { FileImgService } from 'src/shared/file-img/file-img.service';
 
 
 @Injectable()
 export class EjercicioBasicoService {
 
-  constructor(@InjectRepository(EjercicioBasicoEntity) private readonly ejercicioBasicoRepository: Repository<EjercicioBasicoEntity>, private readonly configService: ConfigService) { }
+  constructor(@InjectRepository(EjercicioBasicoEntity) private readonly ejercicioBasicoRepository: Repository<EjercicioBasicoEntity>,
+   private readonly configService: ConfigService,
+  private readonly fileImgService: FileImgService) { }
 
   async createEjercicioBasico(ejercicioBasicoDto: CreateEjercicioBasicoDto) {
     try {
@@ -29,7 +32,7 @@ export class EjercicioBasicoService {
         //   throw new ErrorManager("BAD_REQUEST", "no se pudo crear ejercicio")
         // }
         //para ver que trae
-        ejercicioCreado.imagenLink = this.construirUrlImagen(ejercicioCreado.imagenLink);
+        ejercicioCreado.imagenLink = this.fileImgService.construirUrlImagen(ejercicioCreado.imagenLink,"ejercicios");
         return ejercicioCreado //es enviado con solo el nombre de la imagen, no la url completa
       } else {
         throw new ErrorManager("BAD_REQUEST", "ya existe el mismo nombre de ejercicio")
@@ -49,7 +52,7 @@ export class EjercicioBasicoService {
       if (!unEjercicio) {
         throw new ErrorManager("BAD_REQUEST", `no se encontró ejercicio con nombre ${nombreEj}`);
       }
-      unEjercicio.imagenLink = this.construirUrlImagen(unEjercicio.imagenLink);
+      unEjercicio.imagenLink = this.fileImgService.construirUrlImagen(unEjercicio.imagenLink,"ejercicios");
       return unEjercicio;
     } catch (err) {
       throw ErrorManager.handle(err)
@@ -88,7 +91,7 @@ export class EjercicioBasicoService {
 
       //borro la imagen del ejercicio de uploads/ejercicios
       if (ejercicioGuardado.imagenLink) {
-        const imgBorrada = await this.borrarImagen(ejercicioGuardado.imagenLink);
+        const imgBorrada = await this.fileImgService.borrarImagen(ejercicioGuardado.imagenLink,"ejercicios");
         if (imgBorrada) {
           console.log(`se borro la imagen del ejercicio ${id}, ${ejercicioGuardado.imagenLink}`);
         } else {
@@ -110,7 +113,7 @@ export class EjercicioBasicoService {
         throw new ErrorManager("BAD_REQUEST", `No se encontro el ejercicio id ${id}`);
       }
       //ojo, recordar que estoy modificando el campo imagenLink, aunque NO en la b/d
-      unEjercicio.imagenLink = this.construirUrlImagen(unEjercicio.imagenLink);
+      unEjercicio.imagenLink = this.fileImgService.construirUrlImagen(unEjercicio.imagenLink,"ejercicios");
       return unEjercicio;
     } catch (err) {
       throw ErrorManager.handle(err);
@@ -121,7 +124,7 @@ export class EjercicioBasicoService {
     try {
       const ejercicios = await this.ejercicioBasicoRepository.find();
       //ojo, recordar que estoy modificando el campo imagenLink, aunque NO en la b/d
-      ejercicios.forEach(ej => { ej.imagenLink = this.construirUrlImagen(ej.imagenLink); });
+      ejercicios.forEach(ej => { ej.imagenLink = this.fileImgService.construirUrlImagen(ej.imagenLink,"ejercicios"); });
       return ejercicios;
     } catch (err) {
       throw ErrorManager.handle(err);
@@ -167,7 +170,7 @@ export class EjercicioBasicoService {
       }
       //ya modifiqué el ejercicio ->borro la imagen vieja
       if (borrarImg) {
-        const imgBorrada = await this.borrarImagen(nombreImgAborrar);
+        const imgBorrada = await this.fileImgService.borrarImagen(nombreImgAborrar,"ejercicios");
         if (imgBorrada) {
           console.log(`se borro la imagen del ejercicio ${id}, ${ejercicioGuardado.imagenLink}`);
         } else {
@@ -180,32 +183,32 @@ export class EjercicioBasicoService {
     }
   }
 
-  private construirUrlImagen(nombreArchivo: string): string {
-    //para mandar al front, construyo la ruta+nombreArchivo
-    const port = this.configService.get<string>('PORT') || '8000';
-    const host = this.configService.get<string>('HOST') || 'localhost';
-    const baseUrl = `http://${host}:${port}/uploads/ejercicios/`;
-    return nombreArchivo ? baseUrl + nombreArchivo : "";
-  }
+  // private construirUrlImagen(nombreArchivo: string): string {
+  //   //para mandar al front, construyo la ruta+nombreArchivo
+  //   const port = this.configService.get<string>('PORT') || '8000';
+  //   const host = this.configService.get<string>('HOST') || 'localhost';
+  //   const baseUrl = `http://${host}:${port}/uploads/ejercicios/`;
+  //   return nombreArchivo ? baseUrl + nombreArchivo : "";
+  // }
 
-  private async borrarImagen(nombreArchivo: string): Promise<boolean> {
-    //true: si se borra
-    //false si no existe el nombre
-    //error si no lo puede borrar (x causa)
+  // private async borrarImagen(nombreArchivo: string): Promise<boolean> {
+  //   //true: si se borra
+  //   //false si no existe el nombre
+  //   //error si no lo puede borrar (x causa)
 
-    if (nombreArchivo) {
+  //   if (nombreArchivo) {
 
-      const rutaBaseProyecto = process.cwd();
-      const rutaImagen = path.join(rutaBaseProyecto, 'uploads', 'ejercicios', nombreArchivo);
+  //     const rutaBaseProyecto = process.cwd();
+  //     const rutaImagen = path.join(rutaBaseProyecto, 'uploads', 'ejercicios', nombreArchivo);
 
-      try {
-        await fs.promises.unlink(rutaImagen);
-        return true;
-      } catch (err) {
-        throw ErrorManager.handle(err);
-      }
-    }
-    return false;
-  }
+  //     try {
+  //       await fs.promises.unlink(rutaImagen);
+  //       return true;
+  //     } catch (err) {
+  //       throw ErrorManager.handle(err);
+  //     }
+  //   }
+  //   return false;
+  // }
 
 }
