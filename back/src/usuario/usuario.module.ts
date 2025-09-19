@@ -10,13 +10,13 @@ import { DatosPersonalesModule } from 'src/usuario-datos-personales/datos-person
 import { PlanEntity } from 'src/plan/entities/plan.entity';
 import { PlanModule } from 'src/plan/plan.module';
 import { RutinaEntity } from 'src/rutina/entities/rutina.entity';
-import { EmailService } from 'src/shared/email/email.service';
 import { EmailModule } from 'src/shared/email/email.module';
+import { FileImgModule } from 'src/shared/file-img/file-img.module';
 
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UsuarioEntity, DatosPersonalesEntity, DatosFisicosEntity, PlanEntity, RutinaEntity]), DatosFisicosModule,DatosPersonalesModule, PlanModule, EmailModule],
+  imports: [TypeOrmModule.forFeature([UsuarioEntity, DatosPersonalesEntity, DatosFisicosEntity, PlanEntity, RutinaEntity]), DatosFisicosModule,DatosPersonalesModule, PlanModule, EmailModule, FileImgModule],
   controllers: [UsuarioController],
   providers: [UsuarioService],
  

@@ -72,7 +72,7 @@ export class UsuarioService {
           const datosPersonales = new DatosPersonalesEntity();
           datosPersonales.id = usuarioCreado.id; // compartir el mismo ID
 
-            const { idPlan, ...restoDatos } = body.datosPersonales;
+          const { idPlan, ...restoDatos } = body.datosPersonales;
           //const { idPlan, fNacimiento, ...restoDatos } = body.datosPersonales;//saca el dato idPlan y fNacimiento para que no se copie en datosPersonales en el Object.assign
           Object.assign(datosPersonales, restoDatos); // copiar propiedades en datosPersonales
 
@@ -122,7 +122,6 @@ export class UsuarioService {
       await queryRunner.release();
     }
   }
-
 
   //devuelve todos los usuarios con datos basicos, incluso los "archivados" y los "inactivos"
   //se llama de crudeUsuario (admin)
@@ -193,7 +192,6 @@ export class UsuarioService {
   //se llama: desde perfil_usuario y crudUsuario
   public async updateUsuario(id: number, body: UpdateUsuarioDto): Promise<UsuarioEntity> {
     try {
-      let imagenVieja = "";
       const usuarioGuardado = await this.usuarioRepository.findOne({
         where: { id },
         relations: ['datosPersonales', 'datosFisicos', 'datosPersonales.plan'], // AGREGAR LO DEL PLAN
@@ -204,7 +202,12 @@ export class UsuarioService {
       if (usuarioGuardado.estado == ESTADO.ARCHIVADO) {
         throw new ErrorManager("BAD_REQUEST", "El usuario esta dado de baja");
       }
-      if (body.datosBasicos && Object.keys(body.datosBasicos).length > 0) {
+      if (body.datosBasicos ) {
+        if (body.datosBasicos.password) {
+          usuarioGuardado.password = await bcrypt.hash(body.datosBasicos.password, 10);
+          
+          delete body.datosBasicos.password;
+        }
         Object.assign(usuarioGuardado, body.datosBasicos);
       }
       if (body.datosPersonales && Object.keys(body.datosPersonales).length > 0) {
@@ -223,7 +226,7 @@ export class UsuarioService {
         //   delete body.datosPersonales.fNacimiento;
         // }
 
-        //ACA VER LO DE PLAN, llamar a plan.service para que maneje el cambio de plan (si es que lo hubo)
+
         if (body.datosPersonales.idPlan) {
           const planActualizado = await this.planService.findOneById(body.datosPersonales.idPlan);
           if (!planActualizado) {
@@ -233,12 +236,6 @@ export class UsuarioService {
           delete body.datosPersonales.idPlan; //elimina idPlan del body por las dudas (que no interfiera con la relacion con plan)
         }
 
-
-        if (body.datosPersonales.imagenPerfil && usuarioGuardado.datosPersonales.imagenPerfil !== "usuario.png") {
-          imagenVieja = body.datosPersonales.imagenPerfil;
-          
-          }
-       
         Object.assign(usuarioGuardado.datosPersonales, body.datosPersonales);
       }
       if (body.datosFisicos && Object.keys(body.datosFisicos).length > 0) {
@@ -255,20 +252,50 @@ export class UsuarioService {
         throw new ErrorManager("BAD_REQUEST", `No se pudo actualizar los datos del usuario ${usuarioGuardado.id} `);
       }
 
-      if (imagenVieja) {
-        const imgBorrada = await this.fileImgService.borrarImagen(imagenVieja,"perfiles");
-        if (imgBorrada) {
-          console.log(`se borro la imagen de perfil anterior del usuario ${id}`);
-        } else {
-          console.log(`No existe la imagende perfil anterior del usuario ${id}`)
-        }
-      }
       return usuarioUpdate
     } catch (err) {
       throw ErrorManager.handle(err)
     }
   }
 
+  //se actualiza la imagen en un patch a parte
+  //Se usa en modificar usurio (usuario)
+  public async updateImagenPerfil(id: number, fileName: string): Promise<boolean> {
+    try {
+      let imagenVieja = "";
+      const usuarioGuardado = await this.usuarioRepository.findOne({
+        where: { id },
+        relations: ['datosPersonales'],
+      });
+      if (!usuarioGuardado) {
+        throw new ErrorManager("NOT_FOUND", "No se encontro usuario");
+      }
+      if (!usuarioGuardado.datosPersonales) {
+        throw new ErrorManager("NOT_FOUND", "El usuario no tiene datos personales guardados");
+      }
+
+      if (usuarioGuardado.datosPersonales.imagenPerfil && usuarioGuardado.datosPersonales.imagenPerfil !== "usuario.png") {
+        imagenVieja = usuarioGuardado.datosPersonales.imagenPerfil;
+      }
+      usuarioGuardado.datosPersonales.imagenPerfil = fileName;
+
+      const usuarioUpdate = await this.usuarioRepository.save(usuarioGuardado);
+      if (!usuarioUpdate) {
+        throw new ErrorManager("BAD_REQUEST", `No se pudo actualizar los datos del usuario ${usuarioGuardado.id} `);
+      }
+      if (imagenVieja) {
+        const imgBorrada = await this.fileImgService.borrarImagen(imagenVieja, "perfiles");
+        if (imgBorrada) {
+          console.log(`se borro la imagen de perfil anterior del usuario ${id}`);
+        } else {
+          console.log(`No existe la imagende perfil anterior del usuario ${id}`)
+        }
+      }
+      return true;
+    } catch (error) {
+      throw ErrorManager.handle(error)
+    }
+  }
   //baja logica de usuario
   //Se llama desde: crudUsuario (admin)
   public async deleteUsuario(id: number): Promise<boolean> {
