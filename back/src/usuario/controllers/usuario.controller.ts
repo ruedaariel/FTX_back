@@ -4,6 +4,7 @@ import { CreateUsuarioDto } from '../dto/create-usuario.dto';
 import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
 import { LoginDto } from '../dto/login.dto';
 import { imagenPerfilInterceptor } from 'src/interceptors/imagen-perfil.interceptor';
+import { ErrorManager } from 'src/config/error.manager';
 
 
 @Controller('usuario')
@@ -32,14 +33,28 @@ export class UsuarioController {
   }
 
   @Patch('update/:id')
-  @UseInterceptors(imagenPerfilInterceptor())
-  public async update(
+   public async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateUsuarioDto: UpdateUsuarioDto,
-    @UploadedFile() file: Express.Multer.File) {
+    @Body() updateUsuarioDto: UpdateUsuarioDto,) {
     return await this.usuarioService.updateUsuario(id, updateUsuarioDto);
-
   }
+
+  // usuario.controller.ts
+@Patch(':id/imagen-perfil') // Nuevo endpoint solo para la imagen
+@UseInterceptors(imagenPerfilInterceptor())
+public async updateImagenPerfil(
+  @Param('id', ParseIntPipe) id: number,
+  @UploadedFile() file: Express.Multer.File,
+) {
+  if (!file) {
+    throw new ErrorManager('BAD_REQUEST', 'No se ha subido ningún archivo.');
+  }
+  
+  // Llama a un nuevo método en tu servicio para actualizar solo la imagen de perfil
+  const imagenActualizada = await this.usuarioService.updateImagenPerfil(id, file.filename);
+  
+  return imagenActualizada;
+}
 
   @Delete('delete/:id')
   public async deleteUsuario(@Param('id') id: string) {
