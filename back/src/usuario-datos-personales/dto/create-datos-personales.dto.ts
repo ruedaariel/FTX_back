@@ -32,14 +32,7 @@ export class CreateDatosPersonalesDto {
 
   @IsNotEmpty({ message: 'La fecha de nacimiento no debe ser vacia' })
   @IsDateString()
-   @Transform(({ value }) => {
-      // Esta es la validación más estricta para asegurar que el valor es una cadena
-      if (value && typeof value === 'string') {
-        return parseISO(value);
-      }
-      return null;
-    }) // Convierte el string '2025-09-18' a un objeto Date
-  fNacimiento: Date;
+  fNacimiento: string;
 
   @IsOptional()
   @IsString()
