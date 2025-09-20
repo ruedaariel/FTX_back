@@ -54,3 +54,7 @@ npm install @nestjs-modules/mailer
 
 //Para dar formato a las fechas
 npm install date-fns
+
+
+//para mercado pago
+npm install mercadopago
