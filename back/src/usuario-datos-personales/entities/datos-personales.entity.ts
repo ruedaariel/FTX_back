@@ -30,8 +30,8 @@ export class DatosPersonalesEntity implements IDatosPersonales {
     @Column({ type: 'enum', enum: GENERO, nullable: false, })
     genero: GENERO;
 
-    @Column({ type: 'date' })
-    fNacimiento: Date;
+    @Column({ type: 'date', nullable: true })
+    fNacimiento: Date | null;
 
     @Column({ type: 'varchar', length: 255, default: 'usuario.png', })
     imagenPerfil: string;
