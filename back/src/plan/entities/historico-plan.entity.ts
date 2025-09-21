@@ -10,7 +10,7 @@ export class HistoricoPlanEntity implements IHistoricoPlan {
     @Column()
     idPlanOrigen: number; //guarda el id del plan para identificarlo si cambia el nombre
 
-    @Column({ type: 'varchar', length: 30, unique: true })
+    @Column({ type: 'varchar', length: 30 })
     nombrePlan: string;
 
     @Column({ type: 'varchar' })
@@ -22,12 +22,7 @@ export class HistoricoPlanEntity implements IHistoricoPlan {
     @Column({ type: 'timestamp' })
     fCambioInicio: Date;
 
-    @CreateDateColumn({ 
-        type: 'timestamp',
-       // name: 'f_cambio_fin',
-      //  default: () => 'CURRENT_TIMESTAMP',
-       // precision: 0 //elimina error en la migracion de los miliseg
-    })
+    @CreateDateColumn({  type: 'timestamp'    })
     fCambioFin: Date;
 
     @Column({type:'varchar'})

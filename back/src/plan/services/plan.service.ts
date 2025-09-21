@@ -9,6 +9,9 @@ import { DatosPersonalesEntity } from 'src/usuario-datos-personales/entities/dat
 import { CreateHistoricoPlanDto } from '../dto/create-historico-plan.dto';
 import { HistoricoPlanEntity } from '../entities/historico-plan.entity';
 import { ESTADO } from 'src/constantes/estado.enum';
+import {  plainToInstance } from 'class-transformer';
+import { PlanRtaDto } from '../dto/plan-rta.dto';
+import { PlanRtaCompletaDto } from '../dto/plan-rta-completa.dto';
 
 @Injectable()
 export class PlanService {
@@ -17,7 +20,7 @@ export class PlanService {
     @InjectRepository(HistoricoPlanEntity) private readonly historicoPlanRepository: Repository<HistoricoPlanEntity>,
     @InjectEntityManager() private readonly entityManager: EntityManager,) { }
 
-  public async create(planDto: CreatePlanDto): Promise<PlanEntity> {
+  public async create(planDto: CreatePlanDto): Promise<PlanRtaCompletaDto> {
     try {
       //controlo que no exista plan con igual nombre
       const planExistente = await this.planRepository.findOneBy({ nombrePlan: planDto.nombrePlan });
@@ -25,21 +28,23 @@ export class PlanService {
         throw new ErrorManager("CONFLICT", `El nombre del plan ${planDto.nombrePlan} ya existe en la base de datos`)
       }
 
-      //convercion de fecha y validacion
-      const fechaValida = new Date(planDto.fCambio);
-      if (isNaN(fechaValida.getTime())) {
-        throw new ErrorManager("BAD_REQUEST", "La fecha de cambio de precio no es válida");
-      }
+      // //convercion de fecha y validacion
+      // const fechaValida = new Date(planDto.fCambio);
+      // if (isNaN(fechaValida.getTime())) {
+      //   throw new ErrorManager("BAD_REQUEST", "La fecha de cambio de precio no es válida");
+      // }
+      const planNuevo = this.planRepository.create(planDto);
+      const plan = await this.planRepository.save(planNuevo);
 
-      const planNuevo = this.planRepository.create({ ...planDto, fCambio: fechaValida });
-      return await this.planRepository.save(planNuevo);
+      return plainToInstance(PlanRtaCompletaDto,plan)
     } catch (error) {
       throw ErrorManager.handle(error);
     }
   }
 
-  public async findAll(): Promise<PlanEntity[]> {
-    return await this.planRepository.find();
+  public async findAll(): Promise<PlanRtaCompletaDto[]> {
+    const planes = await this.planRepository.find();
+    return plainToInstance(PlanRtaCompletaDto,planes)
   }
 
   public async findOneById(id: number): Promise<PlanEntity | null> {
@@ -54,12 +59,53 @@ export class PlanService {
     }
   }
 
-  update(id: number, updatePlanDto: UpdatePlanDto) {
-    //ACA HAY QUE AGREGAR EL HISTORICO
-    return `This action updates a #${id} plan`;
+  public async update(id: number, updatePlanDto: UpdatePlanDto): Promise<PlanRtaCompletaDto> {
+    try {
+      return await this.entityManager.transaction(async (transaccion) => {
+        //valida si existe el plan
+        const planExistente = await transaccion.findOneBy(PlanEntity, { idPlan: id });
+        if (!planExistente) {
+          throw new ErrorManager("CONFLICT", `El plan ${id} no existe`);
+        }
+
+        const planViejo = { ...planExistente };
+        let camposModif: string[] = [];
+
+        Object.keys(updatePlanDto).forEach(clave => {
+          if (updatePlanDto[clave] !== undefined && updatePlanDto[clave] !== null) {
+            planExistente[clave] = updatePlanDto[clave];
+            camposModif.push(clave)
+          }
+        });
+//no se guarda nada si no hay cambios
+        if (camposModif.length === 0) {
+                return planExistente;
+            }
+
+        const planActualizado = await transaccion.save(PlanEntity, planExistente);
+
+        const historico = transaccion.create(HistoricoPlanEntity, {
+          idPlanOrigen: planViejo.idPlan,
+          nombrePlan: planViejo.nombrePlan,
+          descripcion: planViejo.descripcion,
+          precio: planViejo.precio,
+          fCambioInicio: planViejo.fCambio, // O la fecha de inicio del plan
+          detalleCambio: camposModif.join(';'),
+          plan: planExistente
+        });
+        await transaccion.save(HistoricoPlanEntity, historico);
+        
+       
+        return  plainToInstance(PlanRtaDto, planActualizado); //transforma un objeto plano a una clase;
+      })
+    } catch (error) {
+      throw ErrorManager.handle(error);
+    }
   }
 
-  public async remove(id: number) {
+  //Se aplica borrado fisico, pero se guarda el registro en un Historico. No se borra el plan si hay usuarios Activos o Inactivos.
+  //Si el plan esta vinculado a usuarios borrados (Archivados), se borra.
+  public async remove(id: number): Promise<Boolean> {
     try {
       return await this.entityManager.transaction(async (transaccion) => {
         //valida si existe el plan
@@ -107,6 +153,7 @@ export class PlanService {
           precio: planExistente.precio,
           fCambioInicio: planExistente.fCambio, // O la fecha de inicio del plan
           detalleCambio: `Eliminación del plan ${planExistente.nombrePlan}, id: ${id}`,
+          plan: planExistente
         });
         await transaccion.save(HistoricoPlanEntity, historico);
 
