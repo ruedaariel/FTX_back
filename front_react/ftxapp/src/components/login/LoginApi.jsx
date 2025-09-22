@@ -28,8 +28,8 @@ const LoginBasico = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [warnEmail, setWarnEmail] = useState('');
-  const [warnPassword, setWarnPassword] = useState('');
+  const [errorEmail, setErrorEmail] = useState('');
+  const [errorPassword, setErrorPassword] = useState('');
   const [modal, setModal] = useState({
     isOpen: false,
     title: '',
@@ -44,21 +44,21 @@ const LoginBasico = () => {
     e.preventDefault();
     let isValid = true;
 
-    setWarnEmail('');
-    setWarnPassword('');
+    setErrorEmail('');
+    setErrorPassword('');
 
     if (!emailRegex.test(email)) {
-      setWarnEmail('Por favor, introduce un email válido.');
+      setErrorEmail('Por favor, introduce un email válido.');
       isValid = false;
     }
 
     if (!passwordRegex.test(password)) {
-      setWarnPassword('La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula y un número.');
+      setErrorPassword('La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula y un número.');
       isValid = false;
     }
 
     if (password.length === 0) {
-      setWarnPassword('La contraseña no puede estar vacía.');
+      setErrorPassword('La contraseña no puede estar vacía.');
       isValid = false;
     }
 
@@ -74,18 +74,23 @@ const LoginBasico = () => {
 
     // 🔗 Llamada a la API
     try {
-      const response = await fetch('https://tu-api.com/login', {
+      const response = await fetch('http://localhost:8000/apiFtx/usuario/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
 
       const data = await response.json();
+            
+      if (response.ok && data && Object.keys(data).length > 0) {
 
-      if (data.success) {
-        if (data.role === 'usuario') {
+        
+        console.log(data);
+
+        // Redirigir según el rol
+        if (data.rol === 'usuario') {
           window.location.href = '../Usuario/home_usuario.html';
-        } else if (data.role === 'admin') {
+        } else if (data.rol === 'admin') {
           window.location.href = '../Administrador/home_administrador.html';
         } else {
           setModal({
@@ -148,7 +153,7 @@ const LoginBasico = () => {
                 required
               />
             </div>
-            <div className="input-warning">{warnEmail}</div>
+            <div className="input-erroring">{errorEmail}</div>
 
             <div className="input-icon-validate">
               <input
@@ -163,7 +168,7 @@ const LoginBasico = () => {
                 onClick={() => setShowPassword(!showPassword)}
               ></span>
             </div>
-            <div className="input-warning">{warnPassword}</div>
+            <div className="input-erroring">{errorPassword}</div>
 
             <p className="enlace">
               ¿Olvidaste el password? <a href="reseteo_password.html">Ir a resetear</a>
@@ -179,7 +184,8 @@ const LoginBasico = () => {
 
       {modal.isOpen && (
         <div id="genericModal" className="modal">
-          <div className={`modal-content ${modal.borderClass || ''}`}>
+          <div className={`modal-content ${modal.borderClass}`}>
+            
             <span className="close-button" onClick={closeModal}>&times;</span>
             <h1>{modal.title}</h1>
             <p>{modal.message}</p>

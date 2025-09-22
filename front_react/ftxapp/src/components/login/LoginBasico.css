@@ -240,6 +240,30 @@
     align-items: center;
 }
 
+
+/* Estilo para el borde de éxito en el modal */
+.modal-content.modal-success-border {
+    border: 3px solid green; /* Borde verde */
+    box-shadow: 5px 5px 30px rgba(38, 118, 38, 0.8); /* Sombra verde para destacar el éxito */
+
+}
+
+/* Estilo para el borde de error en el modal */
+.modal-content.modal-error-border {
+    border: 3px solid rgb(237, 41, 41);     /* Borde rojo */
+    box-shadow: 5px 5px 30px rgba(151, 31, 31, 0.8); /* Sombra roja para destacar el error */
+}
+
+/* Estilo para el borde de error en el modal */
+.modal-content.modal-info-border {
+    border: 3px solid rgb(221, 221, 38); /* Borde amarillo */
+    box-shadow: 5px 5px 30px rgba(255, 179,67, 0.8); /* Sombra amarilla para destacar la advertencia */
+}
+
+
+
+
+
 .modal-content {
     background-color: var(--color-fondo-gris-claro);
     padding: 30px;
@@ -310,24 +334,6 @@
         overflow-y: auto;
     }
 
-/* Estilo para el borde de éxito en el modal */
-.modal-content.modal-success-border {
-    border: 3px solid green; /* Borde verde */
-    box-shadow: 5px 5px 30px rgba(38, 118, 38, 0.8); /* Sombra verde para destacar el éxito */
-
-}
-
-/* Estilo para el borde de error en el modal */
-.modal-content.modal-error-border {
-    border: 3px solid rgb(237, 41, 41);     /* Borde rojo */
-    box-shadow: 5px 5px 30px rgba(151, 31, 31, 0.8); /* Sombra roja para destacar el error */
-}
-
-/* Estilo para el borde de error en el modal */
-.modal-content.modal-info-border {
-    border: 3px solid rgb(221, 221, 38); /* Borde amarillo */
-    box-shadow: 5px 5px 30px rgba(255, 179,67, 0.8); /* Sombra amarilla para destacar la advertencia */
-}
 
 
 
