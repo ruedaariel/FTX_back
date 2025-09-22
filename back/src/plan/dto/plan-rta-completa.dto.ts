@@ -8,8 +8,8 @@ export class PlanRtaCompletaDto {
   nombrePlan: string;
 
   // Otros campos que quieras exponer, como el precio
-   @Exclude()
- // @Expose()
+  // @Exclude()
+  @Expose()
   precio: number;
 
   @Expose()
