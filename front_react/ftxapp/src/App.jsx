@@ -21,8 +21,8 @@ function App() {
       <Tutrainer />
       <Planes />
       <Testimonios />
-      <Faq />
-      <Footer /> */}
+      <Faq /> */}
+      {/* <Footer /> */}
       <LoginApi />
      
 
