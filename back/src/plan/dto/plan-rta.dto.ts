@@ -8,8 +8,8 @@ export class PlanRtaDto {
   nombrePlan: string;
 
   // Otros campos que quieras exponer, como el precio
-  @Exclude()
-  //@Expose()
+ // @Exclude()
+  @Expose()
   precio: number;
 
   // El resto de los campos de la entidad PlanEntity se excluirán por defecto

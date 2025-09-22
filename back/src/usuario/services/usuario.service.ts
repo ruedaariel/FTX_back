@@ -12,13 +12,15 @@ import { PlanService } from 'src/plan/services/plan.service';
 import { ESTADO } from 'src/constantes/estado.enum';
 import { RutinaEntity } from 'src/rutina/entities/rutina.entity';
 import * as bcrypt from 'bcrypt';
-import { EmailService } from 'src/email/email.service';
+import { EmailService } from 'src/shared/email/email.service';
 import { generateRandomPassword } from 'src/utils/random-password';
 import { LoginDto } from '../dto/login.dto';
 import { LoginRtaDto } from '../dto/login-rta.dto';
 import { UsuarioRtaDto } from '../dto/usuario-rta.dto';
 import { format } from 'date-fns';
 import { plainToClass } from 'class-transformer';
+import { FileImgService } from 'src/shared/file-img/file-img.service';
+import { transformarFecha } from 'src/utils/transformar-fecha';
 
 @Injectable()
 export class UsuarioService {
@@ -33,12 +35,13 @@ export class UsuarioService {
     @InjectEntityManager() private readonly entityManager: EntityManager,
     private readonly dataSource: DataSource,
     private readonly emailService: EmailService,
-    private readonly planService: PlanService) { }
+    private readonly planService: PlanService,
+    private readonly fileImgService: FileImgService) { }
 
-  //************************************FALTA CARGAR LA IMAGEN DEL USUARIO ******************************************************************************** */
   //Crea un nuevo usuario, crea contraseña y envia el mail
   //Se puede llamar desde : login_perfil (suscripcion) o desde crudClientes
   public async createUsuario(body: CreateUsuarioDto): Promise<UsuarioRtaDto> {
+
     //se usa QueryRunner (otra forma de manejar transacciones), debido a que se juntan manejo de BD y envio de mails
     //es la forma mas segura de transaccion debido al esquema de BD (un id unico para las 3 tablas)
     const queryRunner = this.dataSource.createQueryRunner();
@@ -71,16 +74,15 @@ export class UsuarioService {
           const datosPersonales = new DatosPersonalesEntity();
           datosPersonales.id = usuarioCreado.id; // compartir el mismo ID
 
-          const { idPlan, fNacimiento, ...restoDatos } = body.datosPersonales;//saca el dato idPlan y fNacimiento para que no se copie en datosPersonales en el Object.assign
-          Object.assign(datosPersonales, restoDatos); // copiar propiedades en datosPersonales
-
           //convierte y valida fNacimiento
           if (body.datosPersonales.fNacimiento) {
-            const fechaValida = new Date(body.datosPersonales.fNacimiento);
-            if (!isNaN(fechaValida.getTime())) {
-              datosPersonales.fNacimiento = fechaValida;
-            }
-          }//SINO PONER UN WARNING
+            datosPersonales.fNacimiento = transformarFecha(body.datosPersonales.fNacimiento);
+          }
+          //SINO PONER UN WARNING
+
+          //const { idPlan, ...restoDatos } = body.datosPersonales;
+          const { idPlan, fNacimiento, ...restoDatos } = body.datosPersonales;//saca el dato idPlan y fNacimiento para que no se copie en datosPersonales en el Object.assign
+          Object.assign(datosPersonales, restoDatos); // copiar propiedades en datosPersonales
 
           //agrega el plan
           datosPersonales.plan = unPlan;//agrego los datos del plan (relacion)
@@ -97,12 +99,20 @@ export class UsuarioService {
 
         // Se guarda el objeto completo, las relaciones se actualizarán en cascada.
         const usuarioFinal = await queryRunner.manager.save(UsuarioEntity, usuarioCreado);
-        //envio de mail, si falla, lanza una excepcion y se hace rollback
-        await this.emailService.enviarCredenciales(usuarioFinal.email, contrasenaGenerada);
+
 
         //confirma la transaccion
         await queryRunner.commitTransaction();
         const usuarioRtaDto = plainToClass(UsuarioRtaDto, usuarioFinal);
+        setImmediate(async () => {
+          try {
+            await this.emailService.enviarCredenciales(usuarioFinal.email, contrasenaGenerada);
+
+          } catch (error) {
+            // acá solo logueás el error, no afecta al flujo
+            console.error("Error enviando mail:", error.message);
+          }
+        });
         return usuarioRtaDto;
 
       } else { // Si el rol no es USUARIO, solo se devuelve el usuario creado
@@ -120,7 +130,6 @@ export class UsuarioService {
       await queryRunner.release();
     }
   }
-
 
   //devuelve todos los usuarios con datos basicos, incluso los "archivados" y los "inactivos"
   //se llama de crudeUsuario (admin)
@@ -201,7 +210,13 @@ export class UsuarioService {
       if (usuarioGuardado.estado == ESTADO.ARCHIVADO) {
         throw new ErrorManager("BAD_REQUEST", "El usuario esta dado de baja");
       }
-      if (body.datosBasicos && Object.keys(body.datosBasicos).length > 0) {
+      if (body.datosBasicos && Object.keys(body.datosBasicos).length > 0) { //que no sea null o undefined y que no sea vacio
+        if (body.datosBasicos.password) {
+          usuarioGuardado.password = await bcrypt.hash(body.datosBasicos.password, 10);
+
+          delete body.datosBasicos.password;
+          //MANDAMOS UN MAIL PARA INDICAR QUE SE CAMBIO LA CONTRASEÑA????? *******************************************************************
+        }
         Object.assign(usuarioGuardado, body.datosBasicos);
       }
       if (body.datosPersonales && Object.keys(body.datosPersonales).length > 0) {
@@ -210,16 +225,11 @@ export class UsuarioService {
           //mandar un warning NO TENIA DATOS PERSONALES
           usuarioGuardado.datosPersonales = new DatosPersonalesEntity;
         }
-
         if (body.datosPersonales.fNacimiento) {
-          const fechaValida = new Date(body.datosPersonales.fNacimiento);
-          if (!isNaN(fechaValida.getTime())) {
-            usuarioGuardado.datosPersonales.fNacimiento = fechaValida;
-          }
-          //MANDAR UN WARNING  si la fecha de nac es incorrecta
-          delete body.datosPersonales.fNacimiento;
+          usuarioGuardado.datosPersonales.fNacimiento = transformarFecha(body.datosPersonales.fNacimiento);
         }
-        //ACA VER LO DE PLAN, llamar a plan.service para que maneje el cambio de plan (si es que lo hubo)
+  
+
         if (body.datosPersonales.idPlan) {
           const planActualizado = await this.planService.findOneById(body.datosPersonales.idPlan);
           if (!planActualizado) {
@@ -244,9 +254,49 @@ export class UsuarioService {
       if (!usuarioUpdate) {
         throw new ErrorManager("BAD_REQUEST", `No se pudo actualizar los datos del usuario ${usuarioGuardado.id} `);
       }
+
       return usuarioUpdate
     } catch (err) {
       throw ErrorManager.handle(err)
+    }
+  }
+
+  //se actualiza la imagen en un patch a parte
+  //Se usa en modificar usurio (usuario)
+  public async updateImagenPerfil(id: number, fileName: string): Promise<boolean> {
+    try {
+      let imagenVieja = "";
+      const usuarioGuardado = await this.usuarioRepository.findOne({
+        where: { id },
+        relations: ['datosPersonales'],
+      });
+      if (!usuarioGuardado) {
+        throw new ErrorManager("NOT_FOUND", "No se encontro usuario");
+      }
+      if (!usuarioGuardado.datosPersonales) {
+        throw new ErrorManager("NOT_FOUND", "El usuario no tiene datos personales guardados");
+      }
+
+      if (usuarioGuardado.datosPersonales.imagenPerfil && usuarioGuardado.datosPersonales.imagenPerfil !== "usuario.png") {
+        imagenVieja = usuarioGuardado.datosPersonales.imagenPerfil;
+      }
+      usuarioGuardado.datosPersonales.imagenPerfil = fileName;
+
+      const usuarioUpdate = await this.usuarioRepository.save(usuarioGuardado);
+      if (!usuarioUpdate) {
+        throw new ErrorManager("BAD_REQUEST", `No se pudo actualizar los datos del usuario ${usuarioGuardado.id} `);
+      }
+      if (imagenVieja) {
+        const imgBorrada = await this.fileImgService.borrarImagen(imagenVieja, "perfiles");
+        if (imgBorrada) {
+          console.log(`se borro la imagen de perfil anterior del usuario ${id}`);
+        } else {
+          console.log(`No existe la imagende perfil anterior del usuario ${id}`)
+        }
+      }
+      return true;
+    } catch (error) {
+      throw ErrorManager.handle(error)
     }
   }
   //baja logica de usuario

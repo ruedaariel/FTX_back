@@ -33,14 +33,14 @@ export class EjercicioBasicoController {
   @Patch('update/:id')
   @UseInterceptors(imagenEjercicioInterceptor()) //ver src/interceptors/imagen-interceptor
   update(
-    @Param('id') id: string,
+    @Param('id',ParseIntPipe) id: number,
     @Body() updateEjercicioBasicoDto: UpdateEjercicioBasicoDto,
     @UploadedFile() file: Express.Multer.File
   ) {
     if (file?.filename) {
       updateEjercicioBasicoDto.imagenLink = file?.filename;
     }
-    return this.ejercicioBasicoService.update(+id, updateEjercicioBasicoDto);
+    return this.ejercicioBasicoService.update(id, updateEjercicioBasicoDto);
   }
 
   @Delete('delete/:id')

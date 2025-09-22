@@ -30,18 +30,26 @@ export class DatosPersonalesEntity implements IDatosPersonales {
     @Column({ type: 'enum', enum: GENERO, nullable: false, })
     genero: GENERO;
 
-    @Column({type: 'date'})
-    fNacimiento: Date;
+    @Column({ type: 'date', nullable: true })
+    fNacimiento: Date | null;
 
-    @Column({ type: 'varchar', length: 255, nullable: true, })
+    @Column({ type: 'varchar', length: 255, default: 'usuario.png', })
     imagenPerfil: string;
 
     @Column({ type: 'enum', enum: ESTADO, default: ESTADO.ACTIVO })
-       estado: ESTADO;
-   
-    
+    estado: ESTADO;
+
+
     //relacion con datos_personales
-    @ManyToOne(()=> PlanEntity,  plan => plan.datosPersonales)
+    @ManyToOne(() => PlanEntity, plan => plan.datosPersonales, {
+        nullable: true,
+        onDelete: 'SET NULL'
+    })  // al borrar el plan, pone planId a NULL
+
     @JoinColumn()
-    plan:PlanEntity;
+    plan?: PlanEntity | null; //para poder poner null cuando se borra un plan y estado es ARCHIVADO
+
+    constructor() {
+        this.imagenPerfil = 'usuario.png'; // Establece el valor por defecto
+    }
 }
