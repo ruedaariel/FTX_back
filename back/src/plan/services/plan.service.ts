@@ -9,7 +9,7 @@ import { DatosPersonalesEntity } from 'src/usuario-datos-personales/entities/dat
 import { CreateHistoricoPlanDto } from '../dto/create-historico-plan.dto';
 import { HistoricoPlanEntity } from '../entities/historico-plan.entity';
 import { ESTADO } from 'src/constantes/estado.enum';
-import {  plainToInstance } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { PlanRtaDto } from '../dto/plan-rta.dto';
 import { PlanRtaCompletaDto } from '../dto/plan-rta-completa.dto';
 
@@ -36,15 +36,16 @@ export class PlanService {
       const planNuevo = this.planRepository.create(planDto);
       const plan = await this.planRepository.save(planNuevo);
 
-      return plainToInstance(PlanRtaCompletaDto,plan)
+      return plainToInstance(PlanRtaCompletaDto, plan)
     } catch (error) {
       throw ErrorManager.handle(error);
     }
   }
 
+  //busca todos los planes. Formato completo
   public async findAll(): Promise<PlanRtaCompletaDto[]> {
     const planes = await this.planRepository.find();
-    return plainToInstance(PlanRtaCompletaDto,planes)
+    return plainToInstance(PlanRtaCompletaDto, planes)
   }
 
   public async findOneById(id: number): Promise<PlanEntity | null> {
@@ -63,6 +64,7 @@ export class PlanService {
     try {
       return await this.entityManager.transaction(async (transaccion) => {
         //valida si existe el plan
+
         const planExistente = await transaccion.findOneBy(PlanEntity, { idPlan: id });
         if (!planExistente) {
           throw new ErrorManager("CONFLICT", `El plan ${id} no existe`);
@@ -77,13 +79,13 @@ export class PlanService {
             camposModif.push(clave)
           }
         });
-//no se guarda nada si no hay cambios
+
+        //no se guarda nada si no hay cambios
         if (camposModif.length === 0) {
-                return planExistente;
-            }
+          return planExistente;
+        }
 
         const planActualizado = await transaccion.save(PlanEntity, planExistente);
-
         const historico = transaccion.create(HistoricoPlanEntity, {
           idPlanOrigen: planViejo.idPlan,
           nombrePlan: planViejo.nombrePlan,
@@ -94,9 +96,9 @@ export class PlanService {
           plan: planExistente
         });
         await transaccion.save(HistoricoPlanEntity, historico);
-        
-       
-        return  plainToInstance(PlanRtaDto, planActualizado); //transforma un objeto plano a una clase;
+
+
+        return plainToInstance(PlanRtaDto, planActualizado); //transforma un objeto plano a una clase;
       })
     } catch (error) {
       throw ErrorManager.handle(error);
@@ -142,7 +144,7 @@ export class PlanService {
             plan: { idPlan: id },
             estado: ESTADO.ARCHIVADO,
           },
-          { plan: undefined }
+          { plan: null }
         );
 
         //se carga en historico
@@ -153,8 +155,9 @@ export class PlanService {
           precio: planExistente.precio,
           fCambioInicio: planExistente.fCambio, // O la fecha de inicio del plan
           detalleCambio: `Eliminación del plan ${planExistente.nombrePlan}, id: ${id}`,
-          plan: planExistente
+          plan: null
         });
+
         await transaccion.save(HistoricoPlanEntity, historico);
 
         //borrado de plan

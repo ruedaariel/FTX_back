@@ -41,9 +41,13 @@ export class DatosPersonalesEntity implements IDatosPersonales {
 
 
     //relacion con datos_personales
-    @ManyToOne(() => PlanEntity, plan => plan.datosPersonales)
+    @ManyToOne(() => PlanEntity, plan => plan.datosPersonales, {
+        nullable: true,
+        onDelete: 'SET NULL'
+    })  // al borrar el plan, pone planId a NULL
+
     @JoinColumn()
-    plan: PlanEntity;
+    plan?: PlanEntity | null; //para poder poner null cuando se borra un plan y estado es ARCHIVADO
 
     constructor() {
         this.imagenPerfil = 'usuario.png'; // Establece el valor por defecto

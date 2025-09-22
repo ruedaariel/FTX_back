@@ -29,8 +29,8 @@ export class HistoricoPlanEntity implements IHistoricoPlan {
     detalleCambio: string;
 
    //Relacion con Plan
-   @ManyToOne(()=>PlanEntity, plan => plan.historicoPlanes)
+   @ManyToOne(()=>PlanEntity, plan => plan.historicoPlanes, {nullable: true,  onDelete: 'SET NULL', })
    @JoinColumn()
-   plan: PlanEntity;
+   plan?: PlanEntity | null;
 
 }
