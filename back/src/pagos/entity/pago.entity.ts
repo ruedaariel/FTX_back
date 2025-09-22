@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
 import { UsuarioEntity } from '../../usuario/entities/usuario.entity';
 
 export enum MetodoDePago {
@@ -17,7 +17,7 @@ export class PagoEntity {
   fechaPago: Date;
 
   @Column({ type: 'varchar', length: 32 })
-  estado: string;
+  estado: string; // status devuelto por MercadoPago
 
   @Column({ type: 'int', default: 0 })
   diasAdicionales: number;
@@ -28,15 +28,9 @@ export class PagoEntity {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   monto: number;
 
-  // 🔗 RELACIÓN MUCHOS A UNO: Muchos pagos pertenecen a un usuario
-  @ManyToOne(() => UsuarioEntity, (usuario) => usuario.pagos, {
-    nullable: false,
-    onDelete: 'RESTRICT',
-    onUpdate: 'CASCADE'
-  })
-  @JoinColumn({ name: 'usuarioId' })
+  @ManyToOne(() => UsuarioEntity, usuario => usuario.id, { nullable: false })
   usuario: UsuarioEntity;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn({ type: 'timestamp', name: 'created_at' })
   createdAt: Date;
 }
