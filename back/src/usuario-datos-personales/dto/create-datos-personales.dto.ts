@@ -1,5 +1,7 @@
 import { IsDateString, IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, Matches, Min } from "class-validator";
 import { GENERO } from "../entities/datos-personales.entity";
+import { Transform } from "class-transformer";
+import { parseISO } from "date-fns";
 
 
 export class CreateDatosPersonalesDto {
@@ -34,6 +36,6 @@ export class CreateDatosPersonalesDto {
 
   @IsOptional()
   @IsString()
-  imagenPerfil: string;
+  imagenPerfil?: string;  //CUando se crea no se carga la imagen de perfil
 }
 

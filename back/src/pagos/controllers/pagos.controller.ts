@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { CreatePagoDto, IniciarPagoDto } from '../dto/create-pago.dto';
 import { PagosService } from '../services/pagos.service';
+import { CreatePagoDto, IniciarPagoDto } from '../dto/create-pago.dto';
 
 @Controller('pagos')
 export class PagosController {

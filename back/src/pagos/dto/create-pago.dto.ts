@@ -2,6 +2,7 @@ import { IsEnum, IsInt, IsNumber, IsOptional, IsString, IsEmail, ValidateNested,
 import { Type } from 'class-transformer';
 import { MetodoDePago } from '../entity/pago.entity';
 
+
 // Sub-DTO para información del pagador
 export class PayerDto {
   @IsString()

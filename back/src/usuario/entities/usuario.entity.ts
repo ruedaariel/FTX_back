@@ -39,6 +39,7 @@ export class UsuarioEntity implements IUsuario {
         name: 'f_creacion'
     })
     fCreacion: Date;
+    
     @UpdateDateColumn({ type: 'timestamp', name: 'f_ultimo_acceso' })
     fUltimoAcceso: Date;
 

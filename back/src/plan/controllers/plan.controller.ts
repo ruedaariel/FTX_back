@@ -2,6 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from 
 import { PlanService } from '../services/plan.service';
 import { CreatePlanDto } from '../dto/create-plan.dto';
 import { UpdatePlanDto } from '../dto/update-plan.dto';
+import { plainToInstance } from 'class-transformer';
+import { PlanRtaCompletaDto } from '../dto/plan-rta-completa.dto';
 
 
 @Controller('plan')
@@ -20,7 +22,7 @@ export class PlanController {
 
   @Get(':id')
   findOne(@Param('id',ParseIntPipe) id: number) {
-    return this.planService.findOneById(id);
+    return plainToInstance(PlanRtaCompletaDto,this.planService.findOneById(id));
   }
 
   @Patch('update/:id')
@@ -28,7 +30,7 @@ export class PlanController {
     return this.planService.update(id, updatePlanDto);
   }
 
-  @Delete('delete:id')
+  @Delete('delete/:id')
   remove(@Param('id',ParseIntPipe) id: number) {
     return this.planService.remove(id);
   }

@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePagoDto, IniciarPagoDto } from '../dto/create-pago.dto';
 import { PagoEntity } from '../entity/pago.entity';
-import { MercadoPagoService } from './mercadopago.service';
 import { UsuarioEntity } from '../../usuario/entities/usuario.entity';
+import { MercadoPagoService } from './mercadopago.service';
 
 @Injectable()
 export class PagosService {

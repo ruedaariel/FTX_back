@@ -18,8 +18,7 @@ export class PlanEntity implements IPlan {
     precio: number;
 
     @CreateDateColumn({ //agrega automaticamente la fecha-hora del servidor, el name permite la creacion en la bd con snakeCase
-            type: 'timestamp',
-            name: 'f_cambio'
+            type: 'timestamp'
         })
     fCambio: Date;
 
