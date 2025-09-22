@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, JoinColumn } from 'typeorm';
 import { UsuarioEntity } from '../../usuario/entities/usuario.entity';
 
 export enum MetodoDePago {
@@ -28,7 +28,11 @@ export class PagoEntity {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   monto: number;
 
-  @ManyToOne(() => UsuarioEntity, usuario => usuario.id, { nullable: false })
+   @ManyToOne(() => UsuarioEntity, (usuario) => usuario.pagos, {
+    nullable: false,
+    onUpdate: 'CASCADE'
+  })
+  @JoinColumn({ name: 'usuarioId' })
   usuario: UsuarioEntity;
 
   @CreateDateColumn({ type: 'timestamp', name: 'created_at' })

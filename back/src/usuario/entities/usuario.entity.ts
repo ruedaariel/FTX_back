@@ -1,5 +1,6 @@
 import { ESTADO } from "src/constantes/estado.enum";
 import { IUsuario } from "src/interfaces/usuario.interface";
+import { PagoEntity } from "src/pagos/entity/pago.entity";
 import { RutinaEntity } from "src/rutina/entities/rutina.entity";
 import { DatosFisicosEntity } from "src/usuario-datos-fisicos/entities/datos-fisicos.entity";
 import { DatosPersonalesEntity } from "src/usuario-datos-personales/entities/datos-personales.entity";
@@ -59,5 +60,8 @@ export class UsuarioEntity implements IUsuario {
     @OneToMany(() => RutinaEntity, rutina => rutina.usuario) //ojo no esta cascade en true
     rutinas?: RutinaEntity[];
 
+// RELACIÓN UNO A MUCHOS: Un usuario puede tener muchos pagos
+    @OneToMany(() => PagoEntity, (pago) => pago.usuario)
+    pagos: PagoEntity[];
 
 }
