@@ -4,6 +4,7 @@ import { RutinaEntity } from "src/rutina/entities/rutina.entity";
 import { DatosFisicosEntity } from "src/usuario-datos-fisicos/entities/datos-fisicos.entity";
 import { DatosPersonalesEntity } from "src/usuario-datos-personales/entities/datos-personales.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { PagoEntity } from '../../pagos/entity/pago.entity';
 
 
 
@@ -59,5 +60,17 @@ export class UsuarioEntity implements IUsuario {
     @OneToMany(() => RutinaEntity, rutina => rutina.usuario) //ojo no esta cascade en true
     rutinas?: RutinaEntity[];
 
+    // RELACIÓN UNO A MUCHOS: Un usuario puede tener muchos pagos
+    @OneToMany(() => PagoEntity, (pago) => pago.usuario)
+    pagos: PagoEntity[];
 
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    created_at: Date;
+
+    @Column({ 
+        type: 'timestamp', 
+        default: () => 'CURRENT_TIMESTAMP',
+        onUpdate: 'CURRENT_TIMESTAMP'
+    })
+    updated_at: Date;
 }

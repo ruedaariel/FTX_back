@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePagoDto, IniciarPagoDto } from '../dto/create-pago.dto';
 import { PagoEntity } from '../entity/pago.entity';
-import { UsuarioEntity } from '../../usuario/entities/usuario.entity';
 import { MercadoPagoService } from './mercadopago.service';
+import { UsuarioEntity } from '../../usuario/entities/usuario.entity';
 
 @Injectable()
 export class PagosService {
@@ -46,6 +46,29 @@ export class PagosService {
     };
   }
 
+  // 🆕 Nuevo método: Obtener pagos de un usuario
+  async obtenerPagosPorUsuario(usuarioId: number): Promise<PagoEntity[]> {
+    return await this.pagoRepository.find({
+      where: { usuario: { id: usuarioId } },
+      relations: ['usuario'],
+      order: { fechaPago: 'DESC' }
+    });
+  }
+
+  // 🆕 Nuevo método: Obtener usuario con todos sus pagos
+  async obtenerUsuarioConPagos(usuarioId: number): Promise<UsuarioEntity> {
+    const usuario = await this.usuarioRepository.findOne({
+      where: { id: usuarioId },
+      relations: ['pagos'],
+    });
+
+    if (!usuario) {
+      throw new Error(`Usuario con ID ${usuarioId} no encontrado`);
+    }
+
+    return usuario;
+  }
+
   private async guardarPago(createPagoDto: CreatePagoDto): Promise<PagoEntity> {
     // Buscar el usuario para la relación
     const usuario = await this.usuarioRepository.findOne({
@@ -62,7 +85,7 @@ export class PagosService {
       diasAdicionales: createPagoDto.diasAdicionales,
       metodoDePago: createPagoDto.metodoDePago,
       monto: createPagoDto.monto,
-      usuario: usuario,
+      usuario: usuario, // 🔗 Asignar la relación
     });
 
     return await this.pagoRepository.save(pago);
