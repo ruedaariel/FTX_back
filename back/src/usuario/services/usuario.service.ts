@@ -118,9 +118,18 @@ export class UsuarioService {
 
       } else { // Si el rol no es USUARIO, solo se devuelve el usuario creado
         //envio de mail, si falla, lanza una excepcion y se hace rollback
-        await this.emailService.enviarCredenciales(usuarioCreado.email, contrasenaGenerada);
+
         await queryRunner.commitTransaction();
         const usuarioRtaDto = plainToInstance(UsuarioRtaDto, usuarioCreado);
+        setImmediate(async () => {
+          try {
+            await this.emailService.enviarCredenciales(usuarioCreado.email, contrasenaGenerada);
+
+          } catch (error) {
+            // acá solo logueás el error, no afecta al flujo
+            console.error("Error enviando mail:", error.message);
+          }
+        });
         return usuarioRtaDto;
       }
     } catch (error) {
@@ -137,16 +146,17 @@ export class UsuarioService {
   public async findAllUsuarios(): Promise<UsuarioDatosPersonalesRtaDto[]> {
     try {
       const usuarios: UsuarioEntity[] = await this.usuarioRepository.find({
-    //    where: {
-      //  estado: Not(ESTADO.ARCHIVADO),
-      // },
-  relations: ['datosPersonales', 'plan'],
-}); //ojo, incluye los usuarios borrados
+        //    where: {
+        //  estado: Not(ESTADO.ARCHIVADO),
+        // },
+        relations: ['datosPersonales', 'datosPersonales.plan'],
+      }); //ojo, incluye los usuarios borrados
+
       if (usuarios.length === 0) {
         throw new ErrorManager("BAD_REQUEST", "No se encontró usuarios");
       }
-      //USAR DTO PARA SALIDA, pero primero ver si necesito todos los datos o no
-      return  plainToInstance(UsuarioDatosPersonalesRtaDto, usuarios);
+      
+      return plainToInstance(UsuarioDatosPersonalesRtaDto, usuarios);
     } catch (err) {
       throw ErrorManager.handle(err)
     }
@@ -202,6 +212,7 @@ export class UsuarioService {
       return usuarioRtaDto;
     } catch (err) { throw ErrorManager.handle(err) }
   }
+
   //Actualiza todos los datos de un usuario.
   //se llama: desde perfil_usuario y crudUsuario
   public async updateUsuario(id: number, body: UpdateUsuarioDto): Promise<UsuarioEntity> {
@@ -221,6 +232,15 @@ export class UsuarioService {
           usuarioGuardado.password = await bcrypt.hash(body.datosBasicos.password, 10);
 
           delete body.datosBasicos.password;
+          setImmediate(async () => {
+            try {
+              await this.emailService.enviarCambioContrasena(usuarioGuardado.email);
+
+            } catch (error) {
+              // acá solo logueás el error, no afecta al flujo
+              console.error("Error enviando mail:", error.message);
+            }
+          });
           //MANDAMOS UN MAIL PARA INDICAR QUE SE CAMBIO LA CONTRASEÑA????? *******************************************************************
         }
         Object.assign(usuarioGuardado, body.datosBasicos);
@@ -234,7 +254,7 @@ export class UsuarioService {
         if (body.datosPersonales.fNacimiento) {
           usuarioGuardado.datosPersonales.fNacimiento = transformarFecha(body.datosPersonales.fNacimiento);
         }
-  
+
 
         if (body.datosPersonales.idPlan) {
           const planActualizado = await this.planService.findOneById(body.datosPersonales.idPlan);

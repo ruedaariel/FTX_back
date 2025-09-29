@@ -78,7 +78,6 @@ export class PagosService {
       throw new Error('Los pagos manuales deben estar aprobados');
     }
     
-    // ✅ REUTILIZAR la función existente
     return await this.guardarPago(createPagoDto);
   }
 
