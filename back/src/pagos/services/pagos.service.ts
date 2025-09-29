@@ -70,7 +70,7 @@ export class PagosService {
 
   async guardarPagoManual(createPagoDto: CreatePagoDto): Promise<PagoEntity> {
     // Validar que sea un pago manual válido
-    if (!['TRANSFERENCIA', 'EFECTIVO'].includes(createPagoDto.metodoDePago)) {
+    if (!['TRANSFERENCIA', 'efectivo'].includes(createPagoDto.metodoDePago)) {
       throw new Error('Método de pago no válido para registro manual');
     }
     

@@ -12,7 +12,7 @@ export class PagosController {
     return await this.pagosService.iniciarPago(iniciarPagoDto);
   }
 
-  @Post('manual')
+  @Post('/manual')
   async registrarPagoManual(@Body() createPagoDto: CreatePagoDto) {
     // Registra un pago manual (transferencia/efectivo) directamente
     const pagoGuardado = await this.pagosService.guardarPagoManual(createPagoDto);
