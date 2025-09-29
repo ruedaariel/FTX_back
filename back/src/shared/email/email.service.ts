@@ -41,4 +41,25 @@ export class EmailService {
             throw new Error('No se pudo enviar el correo de bienvenida');
         }
     }
+
+       async enviarCambioContrasena(email: string) {
+        const mailOptions = {
+            from: 'usuarionuevo.ftx@gmail.com',
+            to: email,
+            subject: 'Cambio de Contraseña',
+            html: `<p>Hola,</p>
+             <p>Te informamos que tu contraseña ha cambiado en tu cuenta FTX</p>
+             <p>Saludos,</p>
+             <p>Tu Equipo</p>`,
+        };
+
+        try {
+            await this.transporter.sendMail(mailOptions);
+            console.log(`Correo enviado a: ${email}`);
+        } catch (error) {
+            console.error(`Error al enviar el correo a ${email}:`, error);
+            throw new Error('No se pudo enviar el correo de bienvenida');
+        }
+    }
+
 }
