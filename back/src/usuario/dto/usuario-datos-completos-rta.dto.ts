@@ -4,7 +4,7 @@ import { DatosFisicosRtaDto } from "src/usuario-datos-fisicos/dto/datos-fisicos-
 import { ROL } from "../entities/usuario.entity";
 import { ESTADO } from "src/constantes/estado.enum";
 
-export class UsuarioDatosPersonalesRtaDto {
+export class UsuarioDatosCompletosRtaDto {
     @Expose()
     id: number;
     
@@ -20,17 +20,20 @@ export class UsuarioDatosPersonalesRtaDto {
     @Exclude()
     password: string;
 
-    @Exclude()
+    @Expose()
     fBaja: Date;
 
-    @Exclude()
+    @Expose()
     fCreacion: Date;
 
-    @Exclude()
+    @Expose()
     fUltimoAcceso: Date;
 
     @Expose()
     @Type(() => DatosPersonalesRtaDto)
     datosPersonales?: DatosPersonalesRtaDto;
 
+@Expose()
+    @Type(() => DatosFisicosRtaDto)
+    datosFisicos?: DatosFisicosRtaDto;
 }

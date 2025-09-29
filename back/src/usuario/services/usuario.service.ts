@@ -21,7 +21,7 @@ import { format } from 'date-fns';
 import { plainToInstance } from 'class-transformer';
 import { FileImgService } from 'src/shared/file-img/file-img.service';
 import { transformarFecha } from 'src/utils/transformar-fecha';
-import { UsuarioDatosPersonalesRtaDto } from '../dto/usuario-datos-personales-rta.dto';
+import { UsuarioDatosCompletosRtaDto } from '../dto/usuario-datos-completos-rta.dto';
 
 @Injectable()
 export class UsuarioService {
@@ -141,22 +141,29 @@ export class UsuarioService {
     }
   }
 
-  //devuelve todos los usuarios con datos basicos, incluso los "archivados" y los "inactivos"
+  //devuelve todos los usuarios con datos basicos, fisicos y personales, incluso los "archivados" y los "inactivos"
   //se llama de crudeUsuario (admin)
-  public async findAllUsuarios(): Promise<UsuarioDatosPersonalesRtaDto[]> {
+  public async findAllUsuarios(): Promise<UsuarioDatosCompletosRtaDto[]> {
     try {
       const usuarios: UsuarioEntity[] = await this.usuarioRepository.find({
         //    where: {
         //  estado: Not(ESTADO.ARCHIVADO),
         // },
-        relations: ['datosPersonales', 'datosPersonales.plan'],
+        relations: ['datosPersonales', 'datosPersonales.plan', 'datosFisicos'],
       }); //ojo, incluye los usuarios borrados
 
       if (usuarios.length === 0) {
         throw new ErrorManager("BAD_REQUEST", "No se encontró usuarios");
       }
       
-      return plainToInstance(UsuarioDatosPersonalesRtaDto, usuarios);
+      const usuariosDto= plainToInstance(UsuarioDatosCompletosRtaDto, usuarios);
+      usuariosDto.forEach( (usuario)=> {
+        if (usuario.datosPersonales?.imagenPerfil) {
+          usuario.datosPersonales.imagenPerfil = this.fileImgService.construirUrlImagen(usuario.datosPersonales.imagenPerfil,"perfiles");
+        }
+      })
+
+      return usuariosDto
     } catch (err) {
       throw ErrorManager.handle(err)
     }
