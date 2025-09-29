@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectDataSource, InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { ROL, UsuarioEntity } from '../entities/usuario.entity';
 import { CreateUsuarioDto } from '../dto/create-usuario.dto';
-import { Repository, EntityManager, DataSource } from 'typeorm';
+import { Repository, EntityManager, DataSource, Not } from 'typeorm';
 import { ErrorManager } from 'src/config/error.manager';
 import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
 import { DatosPersonalesEntity } from 'src/usuario-datos-personales/entities/datos-personales.entity';
@@ -18,9 +18,10 @@ import { LoginDto } from '../dto/login.dto';
 import { LoginRtaDto } from '../dto/login-rta.dto';
 import { UsuarioRtaDto } from '../dto/usuario-rta.dto';
 import { format } from 'date-fns';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { FileImgService } from 'src/shared/file-img/file-img.service';
 import { transformarFecha } from 'src/utils/transformar-fecha';
+import { UsuarioDatosPersonalesRtaDto } from '../dto/usuario-datos-personales-rta.dto';
 
 @Injectable()
 export class UsuarioService {
@@ -103,7 +104,7 @@ export class UsuarioService {
 
         //confirma la transaccion
         await queryRunner.commitTransaction();
-        const usuarioRtaDto = plainToClass(UsuarioRtaDto, usuarioFinal);
+        const usuarioRtaDto = plainToInstance(UsuarioRtaDto, usuarioFinal);
         setImmediate(async () => {
           try {
             await this.emailService.enviarCredenciales(usuarioFinal.email, contrasenaGenerada);
@@ -117,9 +118,18 @@ export class UsuarioService {
 
       } else { // Si el rol no es USUARIO, solo se devuelve el usuario creado
         //envio de mail, si falla, lanza una excepcion y se hace rollback
-        await this.emailService.enviarCredenciales(usuarioCreado.email, contrasenaGenerada);
+
         await queryRunner.commitTransaction();
-        const usuarioRtaDto = plainToClass(UsuarioRtaDto, usuarioCreado);
+        const usuarioRtaDto = plainToInstance(UsuarioRtaDto, usuarioCreado);
+        setImmediate(async () => {
+          try {
+            await this.emailService.enviarCredenciales(usuarioCreado.email, contrasenaGenerada);
+
+          } catch (error) {
+            // acá solo logueás el error, no afecta al flujo
+            console.error("Error enviando mail:", error.message);
+          }
+        });
         return usuarioRtaDto;
       }
     } catch (error) {
@@ -133,14 +143,20 @@ export class UsuarioService {
 
   //devuelve todos los usuarios con datos basicos, incluso los "archivados" y los "inactivos"
   //se llama de crudeUsuario (admin)
-  public async findAllUsuarios(): Promise<UsuarioEntity[]> {
+  public async findAllUsuarios(): Promise<UsuarioDatosPersonalesRtaDto[]> {
     try {
-      const usuarios: UsuarioEntity[] = await this.usuarioRepository.find(); //ojo, incluye los usuarios borrados
+      const usuarios: UsuarioEntity[] = await this.usuarioRepository.find({
+        //    where: {
+        //  estado: Not(ESTADO.ARCHIVADO),
+        // },
+        relations: ['datosPersonales', 'datosPersonales.plan'],
+      }); //ojo, incluye los usuarios borrados
+
       if (usuarios.length === 0) {
         throw new ErrorManager("BAD_REQUEST", "No se encontró usuarios");
       }
-      //USAR DTO PARA SALIDA, pero primero ver si necesito todos los datos o no
-      return usuarios;
+      
+      return plainToInstance(UsuarioDatosPersonalesRtaDto, usuarios);
     } catch (err) {
       throw ErrorManager.handle(err)
     }
@@ -157,7 +173,7 @@ export class UsuarioService {
       if (!unUsuario) {
         throw new ErrorManager("NOT_FOUND", `Usuario con id ${id} no encontrado`)
       }
-      const usuarioRtaDto = plainToClass(UsuarioRtaDto, unUsuario);
+      const usuarioRtaDto = plainToInstance(UsuarioRtaDto, unUsuario);
 
       return usuarioRtaDto
     } catch (err) { throw ErrorManager.handle(err) }
@@ -189,13 +205,14 @@ export class UsuarioService {
       if (!passwordValida) {
         throw new ErrorManager('UNAUTHORIZED', 'password incorrecta');
       }
-      const usuarioRtaDto = plainToClass(LoginRtaDto, unUsuario);
+      const usuarioRtaDto = plainToInstance(LoginRtaDto, unUsuario);
       //FALTA GENERAR EL TOKEN -
 
 
       return usuarioRtaDto;
     } catch (err) { throw ErrorManager.handle(err) }
   }
+
   //Actualiza todos los datos de un usuario.
   //se llama: desde perfil_usuario y crudUsuario
   public async updateUsuario(id: number, body: UpdateUsuarioDto): Promise<UsuarioEntity> {
@@ -215,6 +232,15 @@ export class UsuarioService {
           usuarioGuardado.password = await bcrypt.hash(body.datosBasicos.password, 10);
 
           delete body.datosBasicos.password;
+          setImmediate(async () => {
+            try {
+              await this.emailService.enviarCambioContrasena(usuarioGuardado.email);
+
+            } catch (error) {
+              // acá solo logueás el error, no afecta al flujo
+              console.error("Error enviando mail:", error.message);
+            }
+          });
           //MANDAMOS UN MAIL PARA INDICAR QUE SE CAMBIO LA CONTRASEÑA????? *******************************************************************
         }
         Object.assign(usuarioGuardado, body.datosBasicos);
@@ -228,7 +254,7 @@ export class UsuarioService {
         if (body.datosPersonales.fNacimiento) {
           usuarioGuardado.datosPersonales.fNacimiento = transformarFecha(body.datosPersonales.fNacimiento);
         }
-  
+
 
         if (body.datosPersonales.idPlan) {
           const planActualizado = await this.planService.findOneById(body.datosPersonales.idPlan);
