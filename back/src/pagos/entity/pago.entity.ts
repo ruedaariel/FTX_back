@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, JoinColumn } from 'typeorm';
 import { UsuarioEntity } from '../../usuario/entities/usuario.entity';
 
-export enum MetodoDePago {
+export enum METODODEPAGO {
   TARJETA = 'tarjeta',
   MERCADOPAGO = 'mercadopago',
   TRANSFERENCIA = 'transferencia',
@@ -22,8 +22,8 @@ export class PagoEntity {
   @Column({ type: 'int', default: 0 })
   diasAdicionales: number;
 
-  @Column({ type: 'enum', enum: MetodoDePago })
-  metodoDePago: MetodoDePago;
+  @Column({ type: 'enum', enum: METODODEPAGO})
+  metodoDePago: METODODEPAGO;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   monto: number;

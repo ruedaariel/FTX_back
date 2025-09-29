@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectDataSource, InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { ROL, UsuarioEntity } from '../entities/usuario.entity';
 import { CreateUsuarioDto } from '../dto/create-usuario.dto';
-import { Repository, EntityManager, DataSource } from 'typeorm';
+import { Repository, EntityManager, DataSource, Not } from 'typeorm';
 import { ErrorManager } from 'src/config/error.manager';
 import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
 import { DatosPersonalesEntity } from 'src/usuario-datos-personales/entities/datos-personales.entity';
@@ -18,9 +18,10 @@ import { LoginDto } from '../dto/login.dto';
 import { LoginRtaDto } from '../dto/login-rta.dto';
 import { UsuarioRtaDto } from '../dto/usuario-rta.dto';
 import { format } from 'date-fns';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { FileImgService } from 'src/shared/file-img/file-img.service';
 import { transformarFecha } from 'src/utils/transformar-fecha';
+import { UsuarioDatosPersonalesRtaDto } from '../dto/usuario-datos-personales-rta.dto';
 
 @Injectable()
 export class UsuarioService {
@@ -103,7 +104,7 @@ export class UsuarioService {
 
         //confirma la transaccion
         await queryRunner.commitTransaction();
-        const usuarioRtaDto = plainToClass(UsuarioRtaDto, usuarioFinal);
+        const usuarioRtaDto = plainToInstance(UsuarioRtaDto, usuarioFinal);
         setImmediate(async () => {
           try {
             await this.emailService.enviarCredenciales(usuarioFinal.email, contrasenaGenerada);
@@ -119,7 +120,7 @@ export class UsuarioService {
         //envio de mail, si falla, lanza una excepcion y se hace rollback
         await this.emailService.enviarCredenciales(usuarioCreado.email, contrasenaGenerada);
         await queryRunner.commitTransaction();
-        const usuarioRtaDto = plainToClass(UsuarioRtaDto, usuarioCreado);
+        const usuarioRtaDto = plainToInstance(UsuarioRtaDto, usuarioCreado);
         return usuarioRtaDto;
       }
     } catch (error) {
@@ -133,14 +134,19 @@ export class UsuarioService {
 
   //devuelve todos los usuarios con datos basicos, incluso los "archivados" y los "inactivos"
   //se llama de crudeUsuario (admin)
-  public async findAllUsuarios(): Promise<UsuarioEntity[]> {
+  public async findAllUsuarios(): Promise<UsuarioDatosPersonalesRtaDto[]> {
     try {
-      const usuarios: UsuarioEntity[] = await this.usuarioRepository.find(); //ojo, incluye los usuarios borrados
+      const usuarios: UsuarioEntity[] = await this.usuarioRepository.find({
+    //    where: {
+      //  estado: Not(ESTADO.ARCHIVADO),
+      // },
+  relations: ['datosPersonales', 'plan'],
+}); //ojo, incluye los usuarios borrados
       if (usuarios.length === 0) {
         throw new ErrorManager("BAD_REQUEST", "No se encontró usuarios");
       }
       //USAR DTO PARA SALIDA, pero primero ver si necesito todos los datos o no
-      return usuarios;
+      return  plainToInstance(UsuarioDatosPersonalesRtaDto, usuarios);
     } catch (err) {
       throw ErrorManager.handle(err)
     }
@@ -157,7 +163,7 @@ export class UsuarioService {
       if (!unUsuario) {
         throw new ErrorManager("NOT_FOUND", `Usuario con id ${id} no encontrado`)
       }
-      const usuarioRtaDto = plainToClass(UsuarioRtaDto, unUsuario);
+      const usuarioRtaDto = plainToInstance(UsuarioRtaDto, unUsuario);
 
       return usuarioRtaDto
     } catch (err) { throw ErrorManager.handle(err) }
@@ -189,7 +195,7 @@ export class UsuarioService {
       if (!passwordValida) {
         throw new ErrorManager('UNAUTHORIZED', 'password incorrecta');
       }
-      const usuarioRtaDto = plainToClass(LoginRtaDto, unUsuario);
+      const usuarioRtaDto = plainToInstance(LoginRtaDto, unUsuario);
       //FALTA GENERAR EL TOKEN -
 
 
