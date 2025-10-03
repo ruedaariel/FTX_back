@@ -338,7 +338,7 @@ export class UsuarioService {
 
   //Actualiza todos los datos BASICOS de un usuario.
   //se llama: desde crud usuario (admin)
-  public async updateUsuarioBasico(id: number, body: UpdateUsuarioAdmDto): Promise<Boolean> {
+  public async updateUsuarioBasico(id: number, body: UpdateUsuarioAdmDto): Promise<UsuarioEntity> {
     try {
 
       return await this.entityManager.transaction(async (transaccion) => {
@@ -403,7 +403,7 @@ export class UsuarioService {
           //no uso update porque tengo relaciones que guardar
           const usuarioUpdate = await transaccion.save(usuarioGuardado);
  
-          return true
+          return usuarioUpdate
         } else {
           throw new ErrorManager("BAD_REQUEST", "No se reciben datos para modificar usuario")
         }
