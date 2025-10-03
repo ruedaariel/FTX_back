@@ -5,6 +5,7 @@ import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
 import { LoginDto } from '../dto/login.dto';
 import { imagenPerfilInterceptor } from 'src/interceptors/imagen-perfil.interceptor';
 import { ErrorManager } from 'src/config/error.manager';
+import { UpdateUsuarioAdmDto } from '../dto/update-Usuario-adm.dto';
 
 
 @Controller('usuario')
@@ -32,6 +33,7 @@ export class UsuarioController {
     return await this.usuarioService.findUsuarioByMail(mail);
   }
 
+
   @Patch('update/:id')
    public async update(
     @Param('id', ParseIntPipe) id: number,
@@ -55,6 +57,13 @@ public async updateImagenPerfil(
   
   return imagenActualizada;
 }
+
+  @Patch('update-basico/:id')
+   public async updateBasico(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUsuarioAdmDto: UpdateUsuarioAdmDto,) {
+    return await this.usuarioService.updateUsuarioBasico(id, updateUsuarioAdmDto);
+  }
 
   @Delete('delete/:id')
   public async deleteUsuario(@Param('id') id: string) {
