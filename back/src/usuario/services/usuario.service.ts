@@ -338,7 +338,7 @@ export class UsuarioService {
 
   //Actualiza todos los datos BASICOS de un usuario.
   //se llama: desde crud usuario (admin)
-  public async updateUsuarioBasico(id: number, body: UpdateUsuarioAdmDto): Promise<Boolean> {
+  public async updateUsuarioBasico(id: number, body: UpdateUsuarioAdmDto): Promise<UsuarioEntity> {
     try {
 
       return await this.entityManager.transaction(async (transaccion) => {
@@ -374,28 +374,24 @@ export class UsuarioService {
             }
           }
 
-          // if (body.estado) {
-          //   if (usuarioGuardado.datosPersonales) {
-          //     usuarioGuardado.datosPersonales.estado = body.estado
-          //   }
-          //   if (usuarioGuardado.datosFisicos) {
-          //     usuarioGuardado.datosFisicos.estado = body.estado
-          //   }
+          if (body.estado) {
+            if (usuarioGuardado.datosPersonales) {
+              usuarioGuardado.datosPersonales.estado = body.estado
+            }
+            if (usuarioGuardado.datosFisicos) {
+              usuarioGuardado.datosFisicos.estado = body.estado
+            }
 
-          //   if (usuarioGuardado.estado === ESTADO.ARCHIVADO && body.estado !== ESTADO.ARCHIVADO) { //pasa de borrado a no borrado
-          //     usuarioGuardado.fBaja = null;
-          //   }
+            if (usuarioGuardado.estado === ESTADO.ARCHIVADO && body.estado !== ESTADO.ARCHIVADO) { //pasa de borrado a no borrado
+              usuarioGuardado.fBaja = null;
+            }
 
-          //   if (body.estado === ESTADO.ARCHIVADO && usuarioGuardado.estado !== ESTADO.ARCHIVADO) { //usuario es borrado
-          //     usuarioGuardado.fBaja = new Date();
-          //     // Borrado fisico las rutinas asociadas 
-          //     if (usuarioGuardado.rutinas && usuarioGuardado.rutinas.length > 0) {
-          //       await transaccion.remove(RutinaEntity, usuarioGuardado.rutinas);
-          //     }
-          //   }
-          //   usuarioGuardado.estado = body.estado;
+            if (body.estado === ESTADO.ARCHIVADO && usuarioGuardado.estado !== ESTADO.ARCHIVADO) { //usuario es borrado
+             throw new ErrorManager("BAD_REQUEST", "El nuevo estado no puede ser ARCHIVADO");
+            }
+            usuarioGuardado.estado = body.estado;
 
-          // }
+          }
 
 
           // Object.assign(usuarioGuardado, body);
@@ -403,7 +399,7 @@ export class UsuarioService {
           //no uso update porque tengo relaciones que guardar
           const usuarioUpdate = await transaccion.save(usuarioGuardado);
  
-          return true
+          return usuarioUpdate
         } else {
           throw new ErrorManager("BAD_REQUEST", "No se reciben datos para modificar usuario")
         }
