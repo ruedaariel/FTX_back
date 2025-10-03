@@ -22,6 +22,8 @@ import { plainToInstance } from 'class-transformer';
 import { FileImgService } from 'src/shared/file-img/file-img.service';
 import { transformarFecha } from 'src/utils/transformar-fecha';
 import { UsuarioDatosCompletosRtaDto } from '../dto/usuario-datos-completos-rta.dto';
+import { UpdateUsuarioAdmDto } from '../dto/update-Usuario-adm.dto';
+import { PlanEntity } from 'src/plan/entities/plan.entity';
 
 @Injectable()
 export class UsuarioService {
@@ -34,6 +36,7 @@ export class UsuarioService {
     private readonly datosFisicosRepository: Repository<DatosFisicosEntity>,
     @InjectRepository(RutinaEntity) private readonly rutinaRepository: Repository<RutinaEntity>,
     @InjectEntityManager() private readonly entityManager: EntityManager,
+    @InjectRepository(PlanEntity) private readonly planRepository: Repository<PlanEntity>,
     private readonly dataSource: DataSource,
     private readonly emailService: EmailService,
     private readonly planService: PlanService,
@@ -155,11 +158,11 @@ export class UsuarioService {
       if (usuarios.length === 0) {
         throw new ErrorManager("BAD_REQUEST", "No se encontró usuarios");
       }
-      
-      const usuariosDto= plainToInstance(UsuarioDatosCompletosRtaDto, usuarios);
-      usuariosDto.forEach( (usuario)=> {
+
+      const usuariosDto = plainToInstance(UsuarioDatosCompletosRtaDto, usuarios);
+      usuariosDto.forEach((usuario) => {
         if (usuario.datosPersonales?.imagenPerfil) {
-          usuario.datosPersonales.imagenPerfil = this.fileImgService.construirUrlImagen(usuario.datosPersonales.imagenPerfil,"perfiles");
+          usuario.datosPersonales.imagenPerfil = this.fileImgService.construirUrlImagen(usuario.datosPersonales.imagenPerfil, "perfiles");
         }
       })
 
@@ -221,7 +224,7 @@ export class UsuarioService {
   }
 
   //Actualiza todos los datos de un usuario.
-  //se llama: desde perfil_usuario y crudUsuario
+  //se llama: desde perfil_usuario
   public async updateUsuario(id: number, body: UpdateUsuarioDto): Promise<UsuarioEntity> {
     try {
       const usuarioGuardado = await this.usuarioRepository.findOne({
@@ -332,6 +335,87 @@ export class UsuarioService {
       throw ErrorManager.handle(error)
     }
   }
+
+  //Actualiza todos los datos BASICOS de un usuario.
+  //se llama: desde crud usuario (admin)
+  public async updateUsuarioBasico(id: number, body: UpdateUsuarioAdmDto): Promise<Boolean> {
+    try {
+
+      return await this.entityManager.transaction(async (transaccion) => {
+        const usuarioGuardado = await transaccion.findOne(UsuarioEntity, {
+          where: { id },
+          relations: ['datosPersonales', 'datosFisicos', 'datosPersonales.plan', 'rutinas'],
+        });
+
+        if (!usuarioGuardado) {
+          throw new ErrorManager("NOT_FOUND", "No se encontro usuario");
+        }
+        if (usuarioGuardado.estado == ESTADO.ARCHIVADO && !body.estado) {
+          throw new ErrorManager("BAD_REQUEST", "El usuario esta dado de baja");
+        }
+
+        if (body && Object.keys(body).length > 0) { //que no sea null o undefined y que no sea vacio
+          if (body.email) {
+            const unUsuario = await transaccion.findOne(UsuarioEntity, { where: { email: body.email } });
+            if (unUsuario) {
+              throw new ErrorManager("CONFLICT", `${body.email} ya existe en la base de datos`);
+            }
+            usuarioGuardado.email = body.email;
+          }
+
+          if (body.idPlan) {
+            const unPlan = await transaccion.findOneBy(PlanEntity, { idPlan: body.idPlan })
+            if (!unPlan) {
+              throw new ErrorManager("BAD_REQUEST", `El plan ${body.idPlan} no existe`)
+            }
+            if (usuarioGuardado.datosPersonales) {
+              usuarioGuardado.datosPersonales.plan = unPlan;
+              //delete body.idPlan;
+            }
+          }
+
+          // if (body.estado) {
+          //   if (usuarioGuardado.datosPersonales) {
+          //     usuarioGuardado.datosPersonales.estado = body.estado
+          //   }
+          //   if (usuarioGuardado.datosFisicos) {
+          //     usuarioGuardado.datosFisicos.estado = body.estado
+          //   }
+
+          //   if (usuarioGuardado.estado === ESTADO.ARCHIVADO && body.estado !== ESTADO.ARCHIVADO) { //pasa de borrado a no borrado
+          //     usuarioGuardado.fBaja = null;
+          //   }
+
+          //   if (body.estado === ESTADO.ARCHIVADO && usuarioGuardado.estado !== ESTADO.ARCHIVADO) { //usuario es borrado
+          //     usuarioGuardado.fBaja = new Date();
+          //     // Borrado fisico las rutinas asociadas 
+          //     if (usuarioGuardado.rutinas && usuarioGuardado.rutinas.length > 0) {
+          //       await transaccion.remove(RutinaEntity, usuarioGuardado.rutinas);
+          //     }
+          //   }
+          //   usuarioGuardado.estado = body.estado;
+
+          // }
+
+
+          // Object.assign(usuarioGuardado, body);
+
+          //no uso update porque tengo relaciones que guardar
+          const usuarioUpdate = await transaccion.save(usuarioGuardado);
+ 
+          return true
+        } else {
+          throw new ErrorManager("BAD_REQUEST", "No se reciben datos para modificar usuario")
+        }
+      })
+
+
+    } catch (err) {
+      throw ErrorManager.handle(err)
+    }
+  }
+
+
   //baja logica de usuario
   //Se llama desde: crudUsuario (admin)
   public async deleteUsuario(id: number): Promise<boolean> {

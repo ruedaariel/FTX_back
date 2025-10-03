@@ -1,6 +1,6 @@
 use pruebaftx;
 
-
+select * from usuario;
 select * from ejercicio_basico;
 select * from datospersonales;
 
@@ -50,7 +50,11 @@ UPDATE usuario
 SET estado = 'inactivo' -- o 'activo', 'archivado'
 WHERE id = 5;
 
-/*borrar un ususario OJO NO BORRA EN CASCADA*/
-DELETE FROM datos_fisicos WHERE id = 17;
+UPDATE datospersonales
+SET imagen_perfil = 'usuario.png' -- o 'activo', 'archivado'
+WHERE id = 16;
 
-DELETE FROM usuario WHERE id = 10;
+/*borrar un ususario OJO NO BORRA EN CASCADA*/
+DELETE FROM datos_fisicos WHERE id = 18;
+DELETE FROM datospersonales WHERE id = 18;
+DELETE FROM usuario WHERE id = 18;
