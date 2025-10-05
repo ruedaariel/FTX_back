@@ -229,7 +229,7 @@ export class UsuarioService {
     try {
       const usuarioGuardado = await this.usuarioRepository.findOne({
         where: { id },
-        relations: ['datosPersonales', 'datosFisicos', 'datosPersonales.plan'], // AGREGAR LO DEL PLAN
+        relations: ['datosPersonales', 'datosFisicos', 'datosPersonales.plan'], 
       });
       if (!usuarioGuardado) {
         throw new ErrorManager("NOT_FOUND", "No se encontro usuario");
@@ -251,7 +251,7 @@ export class UsuarioService {
               console.error("Error enviando mail:", error.message);
             }
           });
-          //MANDAMOS UN MAIL PARA INDICAR QUE SE CAMBIO LA CONTRASEÑA????? *******************************************************************
+          
         }
         Object.assign(usuarioGuardado, body.datosBasicos);
       }
@@ -350,9 +350,9 @@ export class UsuarioService {
         if (!usuarioGuardado) {
           throw new ErrorManager("NOT_FOUND", "No se encontro usuario");
         }
-        if (usuarioGuardado.estado == ESTADO.ARCHIVADO && !body.estado) {
-          throw new ErrorManager("BAD_REQUEST", "El usuario esta dado de baja");
-        }
+        // if (usuarioGuardado.estado == ESTADO.ARCHIVADO && !body.estado) {
+        //   throw new ErrorManager("BAD_REQUEST", "El usuario esta dado de baja");
+        // }
 
         if (body && Object.keys(body).length > 0) { //que no sea null o undefined y que no sea vacio
           if (body.email) {
@@ -387,7 +387,7 @@ export class UsuarioService {
             }
 
             if (body.estado === ESTADO.ARCHIVADO && usuarioGuardado.estado !== ESTADO.ARCHIVADO) { //usuario es borrado
-             throw new ErrorManager("BAD_REQUEST", "El nuevo estado no puede ser ARCHIVADO");
+             throw new ErrorManager("BAD_REQUEST", "El nuevo estado no puede ser ARCHIVADO. PAra eliminar, ingresar por la opcion 'Eliminar'");
             }
             usuarioGuardado.estado = body.estado;
 
