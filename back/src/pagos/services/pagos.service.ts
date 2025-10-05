@@ -89,6 +89,28 @@ export class PagosService {
     return await this.guardarPago(createPagoDto);
   }
 
+  //obtener todos los pagos
+  async obtenerTodosLosPagos(): Promise<PagoEntity[]> {
+    return await this.pagoRepository.find({ relations: ['usuario'] });
+  }
+
+  //obtener un pago por su ID
+  async obtenerPagoPorId(id: number): Promise<PagoEntity> {
+    const pago = await this.pagoRepository.findOne({
+      where: { idPagos: id },
+      relations: ['usuario'],
+    });
+    if (!pago) {
+      throw new Error(`Pago con ID ${id} no encontrado`);
+    }
+    return pago;
+  }
+
+  //eliminar un pago por su ID
+  async eliminarPago(id: number): Promise<void> {
+    await this.pagoRepository.delete(id);
+  }
+
   // Método para webhook: actualizar con datos frescos de MercadoPago
   async actualizarEstadoPago(datosMercadoPago: any) {
     // Buscar el pago existente por external_reference o preferenciaId
