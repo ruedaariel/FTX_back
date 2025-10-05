@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePagoDto, IniciarPagoDto } from '../dto/create-pago.dto';
-import { PagoEntity } from '../entity/pago.entity';
+import { PagoEntity, METODODEPAGO } from '../entity/pago.entity';
 import { UsuarioEntity } from '../../usuario/entities/usuario.entity';
 import { MercadoPagoService } from './mercadopago.service';
 
@@ -70,7 +70,7 @@ export class PagosService {
 
   async guardarPagoManual(createPagoDto: CreatePagoDto): Promise<PagoEntity> {
     // Validar que sea un pago manual válido
-    if (!['TRANSFERENCIA', 'efectivo'].includes(createPagoDto.metodoDePago)) {
+    if (![METODODEPAGO.TRANSFERENCIA, METODODEPAGO.EFECTIVO].includes(createPagoDto.metodoDePago)) {
       throw new Error('Método de pago no válido para registro manual');
     }
     
