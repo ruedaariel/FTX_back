@@ -1,11 +1,10 @@
 import React from 'react';
-import modal_politica from './modal_politica.jsx';
 
 function Footer() {
    
     return (
 
-            <footer>
+    <footer>
         <div className="container">
             <p>&copy; 2025 FTX Fitness. Todos los derechos reservados.</p>
             <p>
@@ -24,7 +23,7 @@ function Footer() {
             </div>
         </div>
 
-        modal_politica()
+        
 
 
         <div id="terminosServicio" className="modal fade" tabIndex="-1" role="dialog">
