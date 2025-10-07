@@ -7,8 +7,8 @@ export enum ESTADORUTINA {
     ACTIVA = 'activa',  //rutina actualmente utilizada por el usuario
     FINALIZADA = 'finalizada', //rutina ya terminada del usuario
     PROXIMARUTINA = 'proxima', //rutina hecha, pero todavia no comenzada por el usuario
-   ENPROCESO = 'en proceso',
-   BORRADA = 'borrada',
+   ENPROCESO = 'en proceso',//rutina en proceso por el personal trainer
+  // BORRADA = 'borrada',
 }
 
 @Entity({ name: 'rutina' })
