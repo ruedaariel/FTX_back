@@ -25,6 +25,11 @@ export class EjercicioBasicoController {
     return this.ejercicioBasicoService.findAll();
   }
 
+    @Get('allnames')
+  findAllNames() {
+    return this.ejercicioBasicoService.findAllNames();
+  }
+
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.ejercicioBasicoService.findOne(+id);

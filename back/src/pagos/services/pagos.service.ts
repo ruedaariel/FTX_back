@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePagoDto, IniciarPagoDto } from '../dto/create-pago.dto';
-import { PagoEntity } from '../entity/pago.entity';
+import { PagoEntity, METODODEPAGO } from '../entity/pago.entity';
 import { UsuarioEntity } from '../../usuario/entities/usuario.entity';
 import { MercadoPagoService } from './mercadopago.service';
 
@@ -27,7 +27,7 @@ export class PagosService {
       monto: mpResponse.items?.[0]?.unit_price || iniciarPagoDto.monto,
       preferenciaId: mpResponse.id,
       external_reference: mpResponse.external_reference,
-      
+
       // Datos que vienen del frontend original
       diasAdicionales: iniciarPagoDto.diasAdicionales,
       metodoDePago: iniciarPagoDto.metodoDePago,
@@ -49,15 +49,19 @@ export class PagosService {
   private async guardarPago(createPagoDto: CreatePagoDto): Promise<PagoEntity> {
     // Buscar el usuario para la relación
     const usuario = await this.usuarioRepository.findOne({
-      where: { id: createPagoDto.usuarioId }
+      where: { id: createPagoDto.usuarioId },
     });
 
     if (!usuario) {
-      throw new Error(`Usuario con ID ${createPagoDto.usuarioId} no encontrado`);
+      throw new Error(
+        `Usuario con ID ${createPagoDto.usuarioId} no encontrado`,
+      );
     }
 
     const pago = this.pagoRepository.create({
-      fechaPago: createPagoDto.fechaPago ? new Date(createPagoDto.fechaPago) : new Date(),
+      fechaPago: createPagoDto.fechaPago
+        ? new Date(createPagoDto.fechaPago)
+        : new Date(),
       estado: createPagoDto.estado,
       diasAdicionales: createPagoDto.diasAdicionales,
       metodoDePago: createPagoDto.metodoDePago,
@@ -70,35 +74,66 @@ export class PagosService {
 
   async guardarPagoManual(createPagoDto: CreatePagoDto): Promise<PagoEntity> {
     // Validar que sea un pago manual válido
-    if (!['TRANSFERENCIA', 'efectivo'].includes(createPagoDto.metodoDePago)) {
+    if (
+      ![METODODEPAGO.TRANSFERENCIA, METODODEPAGO.EFECTIVO].includes(
+        createPagoDto.metodoDePago,
+      )
+    ) {
       throw new Error('Método de pago no válido para registro manual');
     }
-    
+
     if (createPagoDto.estado !== 'approved') {
       throw new Error('Los pagos manuales deben estar aprobados');
     }
-    
+
     return await this.guardarPago(createPagoDto);
+  }
+
+  //obtener todos los pagos
+  async obtenerTodosLosPagos(): Promise<PagoEntity[]> {
+    return await this.pagoRepository.find({ relations: ['usuario'] });
+  }
+
+  //obtener un pago por su ID
+  async obtenerPagoPorId(id: number): Promise<PagoEntity> {
+    const pago = await this.pagoRepository.findOne({
+      where: { idPagos: id },
+      relations: ['usuario'],
+    });
+    if (!pago) {
+      throw new Error(`Pago con ID ${id} no encontrado`);
+    }
+    return pago;
+  }
+
+  //eliminar un pago por su ID
+  async eliminarPago(id: number): Promise<void> {
+    await this.pagoRepository.delete(id);
   }
 
   // Método para webhook: actualizar con datos frescos de MercadoPago
   async actualizarEstadoPago(datosMercadoPago: any) {
     // Buscar el pago existente por external_reference o preferenciaId
     const pagoExistente = await this.pagoRepository.findOne({
-      where: { 
-        usuario: { id: parseInt(datosMercadoPago.external_reference?.replace('usuario-', '')) }
+      where: {
+        usuario: {
+          id: parseInt(
+            datosMercadoPago.external_reference?.replace('usuario-', ''),
+          ),
+        },
       },
-      relations: ['usuario']
+      relations: ['usuario'],
     });
 
     if (pagoExistente) {
       // Actualizar solo los campos que vienen de MercadoPago
       pagoExistente.estado = datosMercadoPago.status;
-      pagoExistente.fechaPago = datosMercadoPago.date_approved 
-        ? new Date(datosMercadoPago.date_approved) 
+      pagoExistente.fechaPago = datosMercadoPago.date_approved
+        ? new Date(datosMercadoPago.date_approved)
         : pagoExistente.fechaPago;
-      pagoExistente.monto = datosMercadoPago.transaction_amount || pagoExistente.monto;
-      
+      pagoExistente.monto =
+        datosMercadoPago.transaction_amount || pagoExistente.monto;
+
       return await this.pagoRepository.save(pagoExistente);
     }
 
