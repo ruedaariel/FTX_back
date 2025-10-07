@@ -10,14 +10,16 @@ import * as fs from 'fs';
 import { ConfigService } from '@nestjs/config';
 import { normalizarSinEspacios } from 'src/utils/normalizar-string';
 import { FileImgService } from 'src/shared/file-img/file-img.service';
+import { RtaNombreEjercicioBasicoDto } from '../dto/rta-nombre-ejercicio-basico.dto';
+import { plainToInstance } from 'class-transformer';
 
 
 @Injectable()
 export class EjercicioBasicoService {
 
   constructor(@InjectRepository(EjercicioBasicoEntity) private readonly ejercicioBasicoRepository: Repository<EjercicioBasicoEntity>,
-   private readonly configService: ConfigService,
-  private readonly fileImgService: FileImgService) { }
+    private readonly configService: ConfigService,
+    private readonly fileImgService: FileImgService) { }
 
   async createEjercicioBasico(ejercicioBasicoDto: CreateEjercicioBasicoDto) {
     try {
@@ -32,7 +34,7 @@ export class EjercicioBasicoService {
         //   throw new ErrorManager("BAD_REQUEST", "no se pudo crear ejercicio")
         // }
         //para ver que trae
-        ejercicioCreado.imagenLink = this.fileImgService.construirUrlImagen(ejercicioCreado.imagenLink,"ejercicios");
+        ejercicioCreado.imagenLink = this.fileImgService.construirUrlImagen(ejercicioCreado.imagenLink, "ejercicios");
         return ejercicioCreado //es enviado con solo el nombre de la imagen, no la url completa
       } else {
         throw new ErrorManager("BAD_REQUEST", "ya existe el mismo nombre de ejercicio")
@@ -52,7 +54,7 @@ export class EjercicioBasicoService {
       if (!unEjercicio) {
         throw new ErrorManager("BAD_REQUEST", `no se encontró ejercicio con nombre ${nombreEj}`);
       }
-      unEjercicio.imagenLink = this.fileImgService.construirUrlImagen(unEjercicio.imagenLink,"ejercicios");
+      unEjercicio.imagenLink = this.fileImgService.construirUrlImagen(unEjercicio.imagenLink, "ejercicios");
       return unEjercicio;
     } catch (err) {
       throw ErrorManager.handle(err)
@@ -91,7 +93,7 @@ export class EjercicioBasicoService {
 
       //borro la imagen del ejercicio de uploads/ejercicios
       if (ejercicioGuardado.imagenLink) {
-        const imgBorrada = await this.fileImgService.borrarImagen(ejercicioGuardado.imagenLink,"ejercicios");
+        const imgBorrada = await this.fileImgService.borrarImagen(ejercicioGuardado.imagenLink, "ejercicios");
         if (imgBorrada) {
           console.log(`se borro la imagen del ejercicio ${id}, ${ejercicioGuardado.imagenLink}`);
         } else {
@@ -113,7 +115,7 @@ export class EjercicioBasicoService {
         throw new ErrorManager("BAD_REQUEST", `No se encontro el ejercicio id ${id}`);
       }
       //ojo, recordar que estoy modificando el campo imagenLink, aunque NO en la b/d
-      unEjercicio.imagenLink = this.fileImgService.construirUrlImagen(unEjercicio.imagenLink,"ejercicios");
+      unEjercicio.imagenLink = this.fileImgService.construirUrlImagen(unEjercicio.imagenLink, "ejercicios");
       return unEjercicio;
     } catch (err) {
       throw ErrorManager.handle(err);
@@ -124,7 +126,7 @@ export class EjercicioBasicoService {
     try {
       const ejercicios = await this.ejercicioBasicoRepository.find();
       //ojo, recordar que estoy modificando el campo imagenLink, aunque NO en la b/d
-      ejercicios.forEach(ej => { ej.imagenLink = this.fileImgService.construirUrlImagen(ej.imagenLink,"ejercicios"); });
+      ejercicios.forEach(ej => { ej.imagenLink = this.fileImgService.construirUrlImagen(ej.imagenLink, "ejercicios"); });
       return ejercicios;
     } catch (err) {
       throw ErrorManager.handle(err);
@@ -132,6 +134,16 @@ export class EjercicioBasicoService {
 
   }
 
+  public async findAllNames(): Promise<RtaNombreEjercicioBasicoDto[]> {
+    try {
+      const ejercicios = await this.ejercicioBasicoRepository.find();
+
+      return plainToInstance(RtaNombreEjercicioBasicoDto,ejercicios, { excludeExtraneousValues: true } );
+    } catch (err) {
+      throw ErrorManager.handle(err);
+    }
+
+  }
 
 
   public async update(id: number, updateEjercicioBasicoDto: UpdateEjercicioBasicoDto): Promise<EjercicioBasicoEntity> {
@@ -170,7 +182,7 @@ export class EjercicioBasicoService {
       }
       //ya modifiqué el ejercicio ->borro la imagen vieja
       if (borrarImg) {
-        const imgBorrada = await this.fileImgService.borrarImagen(nombreImgAborrar,"ejercicios");
+        const imgBorrada = await this.fileImgService.borrarImagen(nombreImgAborrar, "ejercicios");
         if (imgBorrada) {
           console.log(`se borro la imagen del ejercicio ${id}, ${ejercicioGuardado.imagenLink}`);
         } else {
