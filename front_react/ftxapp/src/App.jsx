@@ -8,7 +8,8 @@ import Testimonios from '../src/components/testimonios.jsx'
 import Faq from '../src/components/faq.jsx'
 import Footer from '../src/components/footer.jsx'
 //import LoginBasico from './components/login/LoginBasico.jsx'
-import LoginApi from './components/login/LoginApi.jsx'
+//import LoginApi from './components/login/LoginApi.jsx'
+import CrudClientes from './components/crud_clientes/CrudClientes.jsx'
 
   
 function App() {
@@ -23,7 +24,8 @@ function App() {
       <Testimonios />
       <Faq /> */}
       {/* <Footer /> */}
-      <LoginApi />
+      {/* <LoginApi /> */}
+      <CrudClientes />
      
 
     </div>

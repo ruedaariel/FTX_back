@@ -1,0 +1,33 @@
+.grupo-radios-horizontal {
+  display: flex;
+  gap: 5px;
+  justify-content: flex-start;
+  align-items: center;
+  border: 2px solid #ff8f00;
+  border-radius: 8px;
+  padding: 0.3rem;
+  flex-wrap: wrap; /* 🔥 clave para mantenerlos en una línea */
+  overflow-x: auto;   /* permite scroll si el espacio es muy reducido */
+}
+
+.radio-opcion {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 500;
+  color: var(--color-texto-claro);
+  cursor: pointer;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: background 0.3s ease;
+}
+
+.radio-opcion input {
+  display: none;
+}
+
+.radio-opcion.activo {
+  background-color: var(--color-primario-naranja);
+  color: var(--color-texto-claro);
+}
