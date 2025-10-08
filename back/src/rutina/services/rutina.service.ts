@@ -10,6 +10,8 @@ import { SemanaEntity } from 'src/semana/entities/semana.entity';
 import { DiaEntity } from 'src/dia/entities/dia.entity';
 import { EjercicioRutinaEntity } from 'src/ejercicio-rutina/entities/ejercicio-rutina.entity';
 import { EjercicioBasicoEntity } from 'src/ejercicio-basico/entities/ejercicio-basico.entity';
+import { RtaAllRutinasDto } from '../dto/rta-all-rutinas.dto';
+import { plainToInstance } from 'class-transformer';
 
 
 
@@ -78,10 +80,19 @@ export class RutinaService {
 
   }
 
-  public async findAllRutinas(): Promise<RutinaEntity[]> {
-    //solo trae las rutinas con sus datos basicos
-    const rutinas = await this.rutinaRepository.find();
-    return rutinas;
+  public async findAllRutinas(): Promise<RtaAllRutinasDto[]> {
+    //solo trae las rutinas con sus datos basicos y id y nombre/apellido del usuario
+    const rutinas = await this.rutinaRepository.find({relations: ['usuario','usuario.datosPersonales']});
+    const rtaDto = rutinas.map (r =>plainToInstance(RtaAllRutinasDto, {
+      idRutina: r.idRutina,
+      nombreRutina: r.nombreRutina,
+      estadoRutina: r.estadoRutina,
+      idUsuario: r.usuario ? r.usuario.id : null,
+      nombreUsuario: r.usuario ? r.usuario.datosPersonales ? r.usuario.datosPersonales.nombre.trim()+' '+ r.usuario.datosPersonales.apellido.trim() : "anonimo": "anonimo"
+    }));
+
+    
+    return rtaDto;
   }
 
   //todas las rutinas con todos los datos anidados
