@@ -1,6 +1,6 @@
 import React from "react";
 import "./SelectorGenerico.css";
-
+import { useEffect } from "react";
 const SelectorGenerico = ({
   opciones = [],
   valueKey = "id",
@@ -18,6 +18,13 @@ const SelectorGenerico = ({
     if (onSeleccionar) onSeleccionar(objetoSeleccionado);
   };
   
+  const valorSelectInterno = valorSeleccionado ? valorSeleccionado[valueKey] : "";
+
+useEffect(() => {
+  console.log("Valor seleccionado cambió:", valorSeleccionado);
+}, [valorSeleccionado]);
+
+
 
   return (
     <div className="selector-generico-header">
@@ -25,7 +32,7 @@ const SelectorGenerico = ({
         <span className="selector-generico-label">{labelTexto}</span>
         <select
           id="selector-generico"
-          value={valorSeleccionado}
+          value={valorSelectInterno}
           onChange={handleChange}
           disabled={disabled}
         >

@@ -41,7 +41,8 @@ const SelectorRutinas = ({ onSeleccionarRutina }) => {
           opciones={rutinas}
           valueKey="idRutina"
           labelKey="nombreRutina"
-          valorSeleccionado={rutinaSeleccionada?.id || ""}
+          valorSeleccionado={rutinaSeleccionada}
+          // valorSeleccionado={rutinaSeleccionada?.id || ""}
           onSeleccionar={(rutina) => {setRutinaSeleccionada(rutina);
           if (onSeleccionarRutina) onSeleccionarRutina(rutina);}}
           labelTexto="Seleccione Rutina"
