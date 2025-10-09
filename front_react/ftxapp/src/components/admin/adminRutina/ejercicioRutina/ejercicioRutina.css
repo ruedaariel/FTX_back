@@ -79,6 +79,7 @@
   color: green;
 }
 .icon-eliminar:hover {
+  
   transform: rotate(90deg);
   color: red
 }

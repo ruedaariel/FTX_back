@@ -18,6 +18,13 @@ const SelectorGenerico = ({
     if (onSeleccionar) onSeleccionar(objetoSeleccionado);
   };
   
+  const valorSelectInterno = valorSeleccionado ? valorSeleccionado[valueKey] : "";
+
+useEffect(() => {
+  console.log("Valor seleccionado cambió:", valorSeleccionado);
+}, [valorSeleccionado]);
+
+
 
 useEffect(() => {
   console.log("Valor seleccionado cambió:", valorSeleccionado);
@@ -29,7 +36,7 @@ useEffect(() => {
         <span className="selector-generico-label">{labelTexto}</span>
         <select
           id="selector-generico"
-          value={valorSeleccionado}
+          value={valorSelectInterno}
           onChange={handleChange}
           disabled={disabled}
         >
