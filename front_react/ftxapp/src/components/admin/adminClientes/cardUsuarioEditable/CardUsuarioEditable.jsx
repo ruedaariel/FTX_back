@@ -1,4 +1,4 @@
-import React, { useState, useref, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import "./CardUsuarioEditable.css";
 import { FaInfoCircle } from "react-icons/fa";
 
@@ -8,7 +8,7 @@ function CardUsuarioEditable({
   activeTab, // Pestaña activa por usuario
   setActiveTab, // Función para cambiar la pestaña activa
   onGuardar, // Función que se ejecuta al guardar cambios
-  handleEliminarClick, // (No usado aquí) función para eliminar usuario
+  
 }) {
   const tab = activeTab[usuario.id]; // Pestaña activa para este usuario
   // Estado para controlar errores de validación
@@ -20,9 +20,7 @@ function CardUsuarioEditable({
   // Estado para mostrar/ocultar el tooltip del ícono de información
   const [mostrarTooltip, setMostrarTooltip] = useState(false);
 
-  // Estado para manejar errores generales (no usado actualmente)
-  const [error, setError] = useState(null);
-
+  
   // Estado que almacena los planes disponibles obtenidos del backend
   const [planesDisponibles, setPlanesDisponibles] = useState([]);
 
@@ -66,9 +64,6 @@ function CardUsuarioEditable({
   }, [formData.planId, planesDisponibles]);
 
   
-
-  //console.log("formData inicial:", formData);
-
   // Estado para mostrar el nombre del plan actual
   const [planActual, setPlanActual] = useState(formData.plan);
 
@@ -94,19 +89,20 @@ function CardUsuarioEditable({
       })); // Actualiza el estado en bodyCambios
   };
 
-  // fundion que filtra los campos no vacíos de un objeto
-  // const filtrarCamposNoVacios = (obj) => {
-  //   const resultado = {};
+  //funcion que filtra los campos no vacíos de un objeto
+  const filtrarCamposNoVacios = (obj) => {
+    const resultado = {};
 
-  //   Object.entries(obj).forEach(([clave, valor]) => {
-  //     if (valor !== null && valor !== "" && valor !== undefined) {
-  //       resultado[clave] = valor;
-  //     }
-  //   });
+    Object.entries(obj).forEach(([clave, valor]) => {
+      if (valor !== null && valor !== "" && valor !== undefined) {
+        resultado[clave] = valor;
+      }
+    });
 
-  //   return resultado;
-  // };
+    return resultado;
+  };
 
+  
   // Función que valida el formato del email
   const validarEmail = (email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -123,14 +119,13 @@ function CardUsuarioEditable({
       emailInputRef.current?.select();
       return;
     }
-    // Si todo está bien, limpiar errores y guardar y guarda en bodyCambios el email ingresado
+    // Si todo está bien, limpiar errores y  guarda en bodyCambios el email ingresado
 
     setErrores({ email: false });
 
-    //console.log("bodyCambios:", filtrarCamposNoVacios(bodyCambios));
-
+    
     onGuardar(filtrarCamposNoVacios(bodyCambios));
-    //onGuardar(formData);
+    
   };
 
   // Renderizado principal del componente
@@ -169,9 +164,10 @@ function CardUsuarioEditable({
             <div className="col-datos-editable">
               <div className="dato-linea-editable">
                 <strong>
-                  
                   Plan Actual:{" "}
-                  <span className="plan-actual-color">{formData.planNombre}</span>
+                  <span className="plan-actual-color">
+                    {formData.planNombre}
+                  </span>
                 </strong>
                 <select
                   name="planId"
@@ -201,10 +197,14 @@ function CardUsuarioEditable({
                   name="estado"
                   value={formData.estado}
                   onChange={handleChange}
+                  onClick={(e) => {
+                    const { name, value } = e.target;
+                    setBodyCambios((prev) => ({ ...prev, [name]: value }));
+                  }}
                 >
                   <option value="activo">Activo</option>
                   <option value="inactivo">Inactivo</option>
-                  <option value="archivado">Archivado</option>
+                  {/* <option value="archivado">Archivado</option> */}
                 </select>
 
                 {/* Ícono con tooltip */}
@@ -278,7 +278,7 @@ function CardUsuarioEditable({
           </div>
         )}
 
-     {/*    {tab === "personales" && (
+            {tab === "personales" && (
           <>
             <div className="dato-linea-personales-editable">
               <strong>DNI:</strong> {usuario.datosPersonales?.dni || "—"}
@@ -294,9 +294,9 @@ function CardUsuarioEditable({
               {usuario.datosPersonales?.fNacimiento || "—"}
             </div>
           </>
-        )} */}
+        )} 
 
-        {/* {tab === "fisicos" && (
+         {tab === "fisicos" && (
           <>
             <div className="dato-linea-personales-editable">
               <strong>Peso (Kg.):</strong> {usuario.datosFisicos?.peso || "—"}
@@ -317,7 +317,7 @@ function CardUsuarioEditable({
               {usuario.datosFisicos?.observaciones || "—"}
             </div>
           </>
-        )} */}
+        )} 
       </div>
 
       <div className="acciones-card-editable">
