@@ -1,7 +1,7 @@
 import React from "react";
 import "./BarraBusqueda.css";
-import "../../cadminclientes/colores.css";
-import GrupoRadios from "../../grupoRadios/grupoRadios.jsx"; // ajustá la ruta según tu estructura
+import "../../../../colores.css";
+import GrupoRadios from "../../../componentsShare/grupoRadios/grupoRadios"; // ajustá la ruta según tu estructura
 
 function BarraBusqueda({
   estadoSeleccionado,

@@ -2,15 +2,15 @@
 import React, { useEffect, useState } from "react";
 
 //  Función genérica para llamadas al backend
-import { fetchGeneral } from "../fetchGeneral";
+import { fetchGeneral } from "../../../componentsShare/utils/fetchGeneral";
 
 //  Estilos específicos del componente y colores globales
 import "./listaUsuarios.css";
-import "../../cadminclientes/colores.css";
+import "../../../../colores.css";
 
 //  Componentes hijos
 import ContenedorCards from "../contenedorCards/ContenedorCards";
-import ModalInfoTemporizado from "../../Modal/ModalInfoTemporizado";
+import ModalInfoTemporizado from "../../../componentsShare/Modal/ModalInfoTemporizado";
 
 //  Componente principal que muestra la lista de usuarios
 const TablaUsuarios = ({ estadoFiltro, filtrosAvanzados }) => {
@@ -161,7 +161,7 @@ const TablaUsuarios = ({ estadoFiltro, filtrosAvanzados }) => {
         mostrarModal({
           title: "Usuario eliminado",
           message: `El usuario "${nombre} ${apellido}" ha sido eliminado correctamente.`,
-          borderClass: "borde-verde",
+          borderClass: "modal-success-border",
           autoCloseMs: 2000,
         });
       },

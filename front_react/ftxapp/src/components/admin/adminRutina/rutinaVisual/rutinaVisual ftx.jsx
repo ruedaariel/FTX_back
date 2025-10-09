@@ -2,6 +2,11 @@ import React from "react";
 import "./RutinaVisual.css";
 
 const RutinaVisual = ({ rutina }) => {
+
+  console.log("Rutina para visualización:", rutina);
+
+
+
   return (
     <div className="rutina-wrapper">
       <header className="rutina-header">

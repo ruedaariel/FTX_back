@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./selectorRutina.css";
 //  Función genérica para llamadas al backend
-import { fetchGeneral } from "../../cadminclientes/fetchGeneral";
-import GrupoRadios from "../../grupoRadios/grupoRadios.jsx"; // ajustá la ruta según tu estructura
-import SelectorGenerico from "../../selectorGenerico/selectorGenerico.jsx";
+import { fetchGeneral } from "./../../../componentsShare/utils/fetchGeneral.js";
+import GrupoRadios from "./../../../componentsShare/grupoRadios/grupoRadios.jsx"; // ajustá la ruta según tu estructura
+import SelectorGenerico from "./../../../componentsShare/selectorGenerico/selectorGenerico.jsx";
 
 const SelectorRutinas = ({ onSeleccionarRutina }) => {
   const [rutinas, setRutinas] = useState([]);

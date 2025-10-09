@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./ModalEditarUsuario.css";
-import CardUsuarioEditable from "../../cadminclientes/cardUsuarioEditable/CardUsuarioEditable";
+import CardUsuarioEditable from "../../../admin/adminClientes/cardUsuarioEditable/CardUsuarioEditable";
 
 
 function ModalEditarUsuario({ usuario, onClose, onGuardar }) {

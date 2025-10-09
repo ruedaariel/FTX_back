@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import HeaderCrud from '../header/HeaderCrud';
-import BarraBusqueda from '../barraBusqueda/BarraBusqueda';
-import TablaUsuarios from '../clientes/clientes';
-import ModalBusqueda from '../../Modal/modalBusqueda/ModalBusqueda';
+import HeaderCrud from './../../../componentsShare/header/HeaderCrud';
+import BarraBusqueda from '../../../admin/adminClientes/barraBusqueda/BarraBusqueda';
+import TablaUsuarios from '../../adminClientes/clientes/clientes';
+import ModalBusqueda from './../../../componentsShare/Modal/modalBusqueda/ModalBusqueda';
 import './PantallaClientes.css';
 
 function PantallaClientes() {
