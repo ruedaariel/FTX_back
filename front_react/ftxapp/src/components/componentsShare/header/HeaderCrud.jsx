@@ -1,7 +1,7 @@
 import React from 'react'
 import logo from '../../../assets/recursos/IconosLogos/logoSinLetrasNaranja.png'
 import './HeaderCrud.css'
-import '../../admin/adminClientes/colores.css'
+import '../../../colores.css'
 import { useNavigate } from 'react-router-dom';
 
 
