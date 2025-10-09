@@ -10,6 +10,7 @@ const SelectorGenerico = ({
   labelTexto = "Seleccione una opción",
   disabled = false,
 }) => {
+
   const handleChange = (e) => {
     const valor = e.target.value;
     const objetoSeleccionado = opciones.find(
@@ -17,18 +18,19 @@ const SelectorGenerico = ({
     );
     if (onSeleccionar) onSeleccionar(objetoSeleccionado);
   };
-  
-  const valorSelectInterno = valorSeleccionado ? valorSeleccionado[valueKey] : "";
 
-useEffect(() => {
-  console.log("Valor seleccionado cambió:", valorSeleccionado);
-}, [valorSeleccionado]);
+  //const valorSelectInterno = valorSeleccionado ? valorSeleccionado[valueKey] : "";
+  const valorSelectInterno =
+    valorSeleccionado && valorSeleccionado[valueKey]
+      ? String(valorSeleccionado[valueKey])
+      : ""; // Retorna "" si es null, undefined, o la clave no existe/es nula.
+
+      //solo para control
+  useEffect(() => {
+    console.log("Valor seleccionado cambió:", valorSeleccionado);
+  }, [valorSeleccionado]);
 
 
-
-useEffect(() => {
-  console.log("Valor seleccionado cambió:", valorSeleccionado);
-}, [valorSeleccionado]);
 
   return (
     <div className="selector-generico-header">
@@ -42,12 +44,12 @@ useEffect(() => {
         >
           <option value="">Elige una opción...</option>
           {opciones.map((item) => (
-            <option key={item[valueKey]?? item.id} value={item[valueKey]}>
+            <option key={item[valueKey] ?? item.id} value={String(item[valueKey])}>
               {item[labelKey]}
             </option>
           ))}
         </select>
-        
+
       </div>
     </div>
   );

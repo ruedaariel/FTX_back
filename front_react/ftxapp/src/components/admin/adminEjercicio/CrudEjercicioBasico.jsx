@@ -11,29 +11,65 @@ import ModalInfoTemporizado from "../../componentsShare/Modal/ModalInfoTemporiza
 
 const CrudEjercicioBasico = () => {
 
+    const EJERCICIO_VACIO = {
+        nombre_ejercicio: "",
+        observaciones: "",
+        imagenLink: null, // con "" da error o warning
+        videoLink: null,
+    };
+
     const [ejercicioSeleccionado, setEjercicioSeleccionado] = useState(null);
     const [modoEjercicio, setModoEjercicio] = useState("Crear");
 
+    const [ejercicioData, setEjercicioData] = useState(EJERCICIO_VACIO); //contendrá los datos del formulario
 
-    const handleModoChange = (nuevoModo) => {
+    const [ejercicios, setEjercicios] = useState([]); //ejercicios que vienen del backend
+
+    const [loading, setLoading] = useState(false); //maneja delay
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        fetchGeneral({
+            url: "http://localhost:8000/apiFtx/ejbasico/all",
+            method: "GET",
+            setLoading,
+            setError,
+            onSuccess: (data) => setEjercicios(data),
+        });
+    }, []);
+
+    const handleSeleccionarModo = (nuevoModo) => {
         setModoEjercicio(nuevoModo);
-        console.log("nuevoModo", nuevoModo);
-        // cualquier lógica adicional al cambiar modo
-    };
+        if (nuevoModo === "Crear") {
+            setEjercicioSeleccionado(null);
+            setEjercicioData(EJERCICIO_VACIO);
+        }
+    }
+    // Manejador que selecciona un ejercicio por su ID (si es necesario) o por el objeto
+    const handleSeleccionarEjercicio = (ejercicio) => {
+        if (ejercicio && ejercicio.id) {
+            setEjercicioSeleccionado(ejercicio);
+            setEjercicioData(ejercicio);
+        } else {
+            setEjercicioSeleccionado(null);
+            setEjercicioData(EJERCICIO_VACIO);
+            //VER SI MANDO ERROR O SI CARGO EJERCICIOVACIO
+        }
 
-    const handleEjercicioChange = (nuevoEjercicio) => {
-        setEjercicioSeleccionado(nuevoEjercicio);
-        console.log(nuevoEjercicio)
-        // por ejemplo: cargar datos del ejercicio para editar
-    };
+    }
+
 
     return (
         <main className="container">
             <SelectorEjercicio
                 modoEjercicio={modoEjercicio}
+                ejercicios={ejercicios}
                 ejercicioSeleccionado={ejercicioSeleccionado}
-                setModoEjercicio={setModoEjercicio}
-                onSeleccionarEjercicio={setEjercicioSeleccionado}></SelectorEjercicio>
+                onSeleccionarEjercicio={handleSeleccionarEjercicio}
+                noCambiarModo={handleSeleccionarModo}
+                loading={loading}
+                error={error}
+            ></SelectorEjercicio>
 
             <form id="ejercicioForm">
                 <div className="form-container">
@@ -41,26 +77,10 @@ const CrudEjercicioBasico = () => {
                     <div className="columna-izq">
 
                         <div className="form-group">
-
-
-                            {/* <select id="nombreEjercicio" name="nombreEjercicio" className="form-select" required>
-                                    { /* ACA LLAMAR AL COMPONENTE DE ARIEL la lista de ejercicio se lee de la base de ejercicios - 
-                            la opcion nuevo permitiria agregar un nuevo ejercicio a la base*/}
-
-                            {/*      <option value="Nuevo">Nuevo</option>
-                                    <option value="Press Banca">Press Banca</option>
-                                    <option value="Sentadillas">Sentadillas</option>
-                                    <option value="Dominadas">Dominadas</option>
-                                    <option value="Peso Muerto">Peso Muerto</option>
-                                    <option value="Remo con Barra">Remo con Barra</option>
-                                </select> */}
-
-
-
-                            <label htmlFor="nombre_ejercicio">Nombre Ejercicio:</label>
+                            <label htmlFor="nombreEjercicio">Nombre Ejercicio:</label>
                             <div className="input-icon-validate">
-                                <input type="text" id="nombre_ejercicio" name="nombre_ejercicio" className="form-control"
-                                    required placeholder="espalda" />
+                                <input type="text" id="nombreEjercicio" name="nombreEjercicio" className="form-control"
+                                    required placeholder="El nombre debe ser unico, por ejemplo, sentadilla sumo" />
                                 <span className="icon-validate" data-icon="nombre_ejercicio"></span>
                             </div>
                             <div className="input-warning text-danger" data-warn="nombre_ejercicio" style={{ display: "none" }}  >
