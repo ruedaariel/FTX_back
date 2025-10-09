@@ -1,8 +1,8 @@
 // ContenedorCards.jsx
 import React from 'react';
 import CardUsuario from '../cardUsuario/CardUsuario';
-import ModalEditarUsuario from '../../Modal/modalEditarUsuario/ModalEditarUsuario';
-import ModalDecision from '../../Modal/ModalDecision';
+import ModalEditarUsuario from '../../../componentsShare/Modal/modalEditarUsuario/ModalEditarUsuario';
+import ModalDecision from '../../../componentsShare/Modal/ModalDecision';
 
 function ContenedorCards({
   usuariosFiltrados,

@@ -7,11 +7,11 @@ import { useNavigate } from 'react-router-dom';
 
 
 function HeaderCrud({ title = "Panel" }) {
-  const navegar = useNavigate();
+  // const navegar = useNavigate();
 
-  const volver = () => {
-    navegar(-1); // Volver a la página anterior
-  };
+  const volver = () => { console.log("Volver a la página anterior");}
+  //   navegar(-1); // Volver a la página anterior
+  // };
 
   return (
     <nav className="top-menu">

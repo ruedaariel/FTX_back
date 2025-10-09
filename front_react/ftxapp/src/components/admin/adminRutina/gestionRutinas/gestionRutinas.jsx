@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import HeaderCrud from "./HeaderCrud";
-import SelectorRutinas from "./SelectorRutinas";
-import RutinaUsuario from "./RutinaUsuario";
+import SelectorRutinas from "./../SelectorRutina/selectorRutina";
+import RutinaUsuario from "./../rutinaUsuario/rutinaUsario";
 
 function GestionRutinas() {
   const [rutinaSeleccionada, setRutinaSeleccionada] = useState(null);
