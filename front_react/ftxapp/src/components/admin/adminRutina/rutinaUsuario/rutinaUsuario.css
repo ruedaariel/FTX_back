@@ -55,16 +55,68 @@
   border-color: var(--color-borde-focus);
 }
 
+.rutina-usuario-form-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.rutina-usuario-boton {
+  display: flex;
+  align-items: flex-end;
+}
+
+.rutina-usuario-boton button {
+  height: 40px;
+}
+
+
+.btn-guardar-rutina{
+background-color: var(--color-primario-naranja);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
 /* 📱 Mobile view */
 @media (max-width: 768px) {
-  .rutina-usuario-visual {
+  .rutina-usuario-container {
     flex-direction: column;
-    gap: 10px;
-    padding: 5px;
+    align-items: stretch;
+    padding: 1rem;
+  }
+
+  .rutina-usuario-form-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
   }
 
   .rutina-usuario-nombre,
-  .rutina-usuario-selector {
+  .rutina-usuario-selector,
+  .rutina-usuario-boton {
     width: 100%;
+  }
+
+  .rutina-usuario-boton {
+    justify-content: flex-start;
+  }
+
+  .btn-guardar-rutina {
+    width: 100%;
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  .mensaje-contextual {
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+    text-align: center;
   }
 }
