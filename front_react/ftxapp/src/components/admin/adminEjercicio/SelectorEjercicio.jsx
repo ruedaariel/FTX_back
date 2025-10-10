@@ -35,7 +35,7 @@ const isDisabled = modoEjercicio === "Crear";
         <GrupoRadios
           opciones={["Crear", "Editar"]}
           valorSeleccionado={modoEjercicio}
-          onChange={setModoEjercicio}
+          onChange={onCambiarModo}
           nombreGrupo="modoEjercicio"
         />
 
