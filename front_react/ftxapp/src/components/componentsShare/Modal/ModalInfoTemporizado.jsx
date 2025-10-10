@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import '../Modal/modalError/ModalError.css'; // Usá tus estilos existentes
+import './modalError/modalError.css'; // Usá tus estilos existentes
 
-const ModalError = ({
+const ModalInfoTemporizado = ({
   isOpen,
   title,
   message,
@@ -58,4 +58,4 @@ const ModalError = ({
   );
 };
 
-export default ModalError;
+export default ModalInfoTemporizado;

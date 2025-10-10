@@ -12,6 +12,8 @@ const EjercicioRutina = ({
 }) => {
   const [ejerciciosDisponibles, setEjerciciosDisponibles] = useState([]);
 
+  //console.log("Agregar ejercicio en índice:", index);
+
   useEffect(() => {
     fetchGeneral({
       url: "http://localhost:8000/apiFtx/ejbasico/all",
@@ -26,7 +28,7 @@ const EjercicioRutina = ({
     }
   };
 
-  console.log("Ejercicios:", ejerciciosDisponibles);
+  // console.log("Ejercicios:", ejerciciosDisponibles);
 
   return (
     <div className="ejercicio-rutina-row">

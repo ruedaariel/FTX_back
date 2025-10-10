@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from "react";
 import "./RutinaUsuario.css";
 import { fetchGeneral } from "./../../../componentsShare/utils/fetchGeneral";
+import { guardarRutinaEnBackend } from "./../../../componentsShare/utils/guardarRutina";
 
-// Componente que permite editar el nombre de la rutina y seleccionar el usuario asociado
-const RutinaUsuario = ({ rutinaSeleccionada }) => {
-  // Estado para almacenar la lista de usuarios disponibles
+const RutinaUsuario = ({
+  rutinaSeleccionada,
+  rutinaEditable,
+  mostrarModalInfo,
+  modoRutina,
+  onResetearInterfaz,
+}) => {
+  // Estados locales
   const [usuarios, setUsuarios] = useState([]);
-
-  // Estado para el usuario actualmente seleccionado
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState("");
-
-  // Estado para el nombre editable de la rutina
   const [nombreRutinaEditable, setNombreRutinaEditable] = useState("");
 
-  // Al montar el componente, se obtienen todos los usuarios desde el backend
+  // Validación para habilitar botón en modo Crear
+  const camposValidosCrear = nombreRutinaEditable.trim().length > 0;
+
+  // Carga de usuarios desde backend
   useEffect(() => {
     fetchGeneral({
       url: "http://localhost:8000/apiFtx/usuario/all",
@@ -22,7 +27,7 @@ const RutinaUsuario = ({ rutinaSeleccionada }) => {
     });
   }, []);
 
-  // Cuando se recibe una rutina seleccionada, se actualizan los campos editables
+  // Inicialización de campos al seleccionar rutina
   useEffect(() => {
     if (rutinaSeleccionada?.nombreRutina) {
       setNombreRutinaEditable(rutinaSeleccionada.nombreRutina);
@@ -30,53 +35,201 @@ const RutinaUsuario = ({ rutinaSeleccionada }) => {
     }
   }, [rutinaSeleccionada]);
 
-  // Maneja el cambio en el selector de usuario
+  // Handlers de inputs
   const handleUsuarioChange = (e) => {
     setUsuarioSeleccionado(e.target.value);
   };
 
-  // Maneja el cambio en el campo de nombre de rutina
   const handleNombreChange = (e) => {
     setNombreRutinaEditable(e.target.value);
   };
 
-  // Log de depuración para verificar los nombres de los usuarios cargados
-  /* console.log(
-    "usuarios --->",
-    usuarios.map((usuario) => usuario.datosPersonales?.nombre)
-  ); */
+  // Validación para habilitar botón en modo Copiar
+  const camposModificados = (() => {
+    if (!rutinaSeleccionada) return false;
+    return (
+      nombreRutinaEditable &&
+      usuarioSeleccionado &&
+      nombreRutinaEditable !== rutinaSeleccionada.nombreRutina &&
+      usuarioSeleccionado !== rutinaSeleccionada.nombreUsuario
+    );
+  })();
+
+  // Guardado en modo Copiar
+  const handleGuardarRutinaCopiada = async () => {
+    if (!nombreRutinaEditable || !usuarioSeleccionado) {
+      mostrarModalInfo("Debes ingresar un nombre y seleccionar un usuario");
+      return;
+    }
+
+    if (
+      nombreRutinaEditable === rutinaSeleccionada.nombreRutina ||
+      usuarioSeleccionado === rutinaSeleccionada.nombreUsuario
+    ) {
+      mostrarModalInfo(
+        "Debes cambiar el nombre y seleccionar un nuevo usuario"
+      );
+      return;
+    }
+
+    const rutinaParaGuardar = {
+      ...rutinaEditable,
+      nombreRutina: nombreRutinaEditable,
+      nombreUsuario: usuarioSeleccionado,
+      id: null,
+    };
+
+    try {
+      await guardarRutinaEnBackend(rutinaParaGuardar);
+      mostrarModalInfo("Rutina copiada y guardada correctamente");
+      onResetearInterfaz();
+    } catch (error) {
+      mostrarModalInfo("Error al guardar la rutina");
+    }
+  };
+
+  // Guardado en modo Crear
+  const handleGuardarRutinaCreada = async () => {
+    if (!nombreRutinaEditable || nombreRutinaEditable.trim().length === 0) {
+      mostrarModalInfo("Una rutina no puede guardarse sin nombre");
+      return;
+    }
+
+    const rutinaParaGuardar = {
+      ...rutinaEditable,
+      nombreRutina: nombreRutinaEditable,
+      nombreUsuario: usuarioSeleccionado,
+      id: null,
+    };
+
+    try {
+      await guardarRutinaEnBackend(rutinaParaGuardar);
+      mostrarModalInfo("Rutina creada correctamente");
+      onResetearInterfaz();
+    } catch (error) {
+      mostrarModalInfo("Error al guardar la rutina");
+    }
+  };
+
+  // Guardado en modo Editar
+  const handleGuardarRutinaEditada = async () => {
+    if (!nombreRutinaEditable) {
+      mostrarModalInfo("Debes ingresar un nombre para la rutina");
+      return;
+    }
+
+    const rutinaParaGuardar = {
+      ...rutinaEditable,
+      nombreRutina: nombreRutinaEditable,
+      nombreUsuario: rutinaEditable.nombreUsuario,
+      id: rutinaEditable.id,
+    };
+
+    try {
+      await guardarRutinaEnBackend(rutinaParaGuardar);
+      mostrarModalInfo("Rutina editada correctamente");
+      onResetearInterfaz();
+    } catch (error) {
+      mostrarModalInfo("Error al guardar la rutina");
+    }
+  };
 
   return (
     <div className="rutina-usuario-container">
-      <div className="rutina-usuario-visual">
-        {/* Campo editable para el nombre de la rutina */}
+      {/* Mensaje contextual según modo */}
+      {modoRutina === "Copiar" &&
+        rutinaSeleccionada?.nombreRutina &&
+        rutinaSeleccionada?.nombreUsuario && (
+          <div className="mensaje-contextual">
+            Estás copiando la rutina{" "}
+            <strong>{rutinaSeleccionada.nombreRutina}</strong> de{" "}
+            <strong>{rutinaSeleccionada.nombreUsuario}</strong>.
+          </div>
+        )}
+
+      {modoRutina === "Crear" && (
+        <div className="mensaje-contextual">
+          Estás creando una nueva rutina. Ingresá un nombre y asignale un
+          usuario (opcional).
+        </div>
+      )}
+
+      {modoRutina === "Editar" && rutinaSeleccionada?.nombreRutina && (
+        <div className="mensaje-contextual">
+          Estás editando la rutina{" "}
+          <strong>{rutinaSeleccionada.nombreRutina}</strong>. Solo podés
+          modificar el nombre y la estructura, no el usuario.
+        </div>
+      )}
+
+      {/* Formulario principal */}
+      <div className="rutina-usuario-form-row">
+        {/* Campo nombre de rutina */}
         <div className="rutina-usuario-nombre">
           <label>Nombre de Rutina</label>
           <input
             type="text"
             value={nombreRutinaEditable}
             onChange={handleNombreChange}
-            placeholder="Nombre de la rutina"
+            placeholder="Nuevo nombre de la rutina"
           />
         </div>
 
-        {/* Selector de usuario asociado a la rutina */}
+        {/* Selector de usuario */}
         <div className="rutina-usuario-selector">
           <label>Seleccione Usuario</label>
-          <select value={usuarioSeleccionado} onChange={handleUsuarioChange}>
-            {/* Opción inicial que muestra el usuario actual si existe */}
+          <select
+            value={usuarioSeleccionado}
+            onChange={handleUsuarioChange}
+            disabled={modoRutina === "Editar"}
+          >
             <option value="">{usuarioSeleccionado}</option>
-
-            {/* Opciones filtradas por rol "usuario" */}
             {usuarios
               .filter((usuario) => usuario.rol === "usuario")
               .map((usuario) => (
                 <option key={usuario.id} value={usuario.id}>
-                  {usuario.datosPersonales?.nombre} {usuario.datosPersonales?.apellido}
+                  {usuario.datosPersonales?.nombre}{" "}
+                  {usuario.datosPersonales?.apellido}
                 </option>
               ))}
           </select>
         </div>
+
+        {/* Botón guardar según modo */}
+        {modoRutina === "Copiar" && (
+          <div className="rutina-usuario-boton">
+            <button
+              className="btn-guardar-rutina"
+              onClick={handleGuardarRutinaCopiada}
+              disabled={!camposModificados}
+            >
+              Guardar rutina copiada
+            </button>
+          </div>
+        )}
+
+        {modoRutina === "Crear" && (
+          <div className="rutina-usuario-boton">
+            <button
+              className="btn-guardar-rutina"
+              onClick={handleGuardarRutinaCreada}
+            >
+              Guardar rutina creada
+            </button>
+          </div>
+        )}
+
+        {modoRutina === "Editar" && (
+          <div className="rutina-usuario-boton">
+            <button
+              className="btn-guardar-rutina"
+              onClick={handleGuardarRutinaEditada}
+              disabled={!nombreRutinaEditable}
+            >
+              Guardar rutina editada
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

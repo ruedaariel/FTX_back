@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
 import "./selectorRutina.css";
-//  Función genérica para llamadas al backend
+
+// Utilidades y componentes compartidos
 import { fetchGeneral } from "./../../../componentsShare/utils/fetchGeneral.js";
-import GrupoRadios from "./../../../componentsShare/grupoRadios/grupoRadios.jsx"; // ajustá la ruta según tu estructura
+import GrupoRadios from "./../../../componentsShare/grupoRadios/grupoRadios.jsx";
 import SelectorGenerico from "./../../../componentsShare/selectorGenerico/selectorGenerico.jsx";
 
-const SelectorRutinas = ({ onSeleccionarRutina }) => {
-  const [rutinas, setRutinas] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [rutinaSeleccionada, setRutinaSeleccionada] = useState("");
-  const [modoRutina, setModoRutina] = useState("Crear");
+const SelectorRutinas = ({
+  onSeleccionarRutina, // Callback para enviar rutina seleccionada al componente padre
+  modoRutina,          // Modo actual: "Crear", "Editar", "Copiar"
+  setModoRutina        // Setter para cambiar el modo
+}) => {
+  // Estados locales
+  const [rutinas, setRutinas] = useState([]);               // Lista de rutinas disponibles
+  const [loading, setLoading] = useState(false);            // Estado de carga
+  const [error, setError] = useState(null);                 // Estado de error
+  const [rutinaSeleccionada, setRutinaSeleccionada] = useState(""); // Rutina seleccionada localmente
 
+  // Cargar todas las rutinas al montar el componente
   useEffect(() => {
     fetchGeneral({
       url: "http://localhost:8000/apiFtx/rutina/all",
@@ -22,13 +28,17 @@ const SelectorRutinas = ({ onSeleccionarRutina }) => {
     });
   }, []);
 
-  
-
+  // Limpiar selección al entrar en modo "Crear"
+  useEffect(() => {
+    if (modoRutina === "Crear") {
+      setRutinaSeleccionada(null);
+    }
+  }, [modoRutina]);
 
   return (
     <div className="selector-rutinas-container">
       <div className="selector-rutinas-visual">
-        {/* Radios a la izquierda */}
+        {/* Selector de modo: Crear / Editar / Copiar */}
         <GrupoRadios
           opciones={["Crear", "Editar", "Copiar"]}
           valorSeleccionado={modoRutina}
@@ -36,19 +46,21 @@ const SelectorRutinas = ({ onSeleccionarRutina }) => {
           nombreGrupo="modoRutina"
         />
 
-        {/* Selector a la derecha */}
+        {/* Selector de rutina disponible */}
         <SelectorGenerico
           opciones={rutinas}
           valueKey="idRutina"
           labelKey="nombreRutina"
           valorSeleccionado={rutinaSeleccionada}
-          // valorSeleccionado={rutinaSeleccionada?.id || ""}
-          onSeleccionar={(rutina) => {setRutinaSeleccionada(rutina);
-          if (onSeleccionarRutina) onSeleccionarRutina(rutina);}}
+          onSeleccionar={(rutina) => {
+            setRutinaSeleccionada(rutina);
+            if (onSeleccionarRutina) onSeleccionarRutina(rutina);
+          }}
           labelTexto="Seleccione Rutina"
         />
       </div>
 
+      {/* Mensaje de error si falla la carga */}
       {error && <p className="error-texto">Error: {error}</p>}
     </div>
   );
