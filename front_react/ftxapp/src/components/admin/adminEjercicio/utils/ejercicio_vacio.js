@@ -2,7 +2,7 @@
 export const EJERCICIO_VACIO = {
     nombreEjercicio: "", // Usando la clave consistente (si hiciste el cambio)
     observaciones: "",
-    imagenLink: null, 
+    imagenPreviewUrl: null, 
     imagenFile:null,
     videoLink: null,
 };
