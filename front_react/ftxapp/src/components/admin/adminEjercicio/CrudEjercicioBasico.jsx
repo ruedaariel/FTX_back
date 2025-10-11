@@ -8,6 +8,7 @@ import LOGO_PLACEHOLDER from '../../../assets/Recursos/IconosLogos/logoblanco.pn
 import ModalInfoTemporizado from "../../componentsShare/Modal/ModalInfoTemporizado";
 import { EJERCICIO_VACIO } from './utils/ejercicio_vacio';
 import { useEjercicioForm } from "./useEjercicioForm";
+import { getEmbedUrl } from "./utils/formatoVideo";
 
 
 
@@ -83,7 +84,7 @@ const CrudEjercicioBasico = () => {
                             <div className="input-icon-validate">
                                 <input type="text" id="nombreEjercicio" name="nombreEjercicio" className={`form-control ${errores.nombreEjercicio ? 'is-invalid' : ''}`}
                                     required placeholder="El nombre debe ser unico, por ejemplo, sentadilla sumo"
-                                    value={ejercicioData.nombreEjercicio || ''} onChange={handleInputChange} onBlur={handleBlur} />
+                                    value={ejercicioData?.nombreEjercicio || ''} onChange={handleInputChange} onBlur={handleBlur} />
                                 <span className="icon-validate" data-icon="nombreEjercicio"></span>
                             </div>
                             <div className="input-warning text-danger" style={{ display: "none" }}  >
@@ -107,9 +108,10 @@ const CrudEjercicioBasico = () => {
 
                         <div className="form-group">
                             <label htmlFor="imagenLink">Link Imagen: </label>
-                            <input type="file" id="imagenLink" name="imagenLink" className={`form-control ${errores.imagenLink ? 'is-invalid' : ''}`}
+                            <input type="file" id="imagenLink" name="imagenLink" 
+                                className={`form-control ${errores.imagenFile ? 'is-invalid' : ''}`}
                                 accept="image/*" onChange={handleInputChange} />
-                            {errores.imagenLink && (
+                            {errores.imagenFile && (
                                 <div className="input-warning text-danger" style={{ display: "block" }}>
                                     {errores.imagenLink}
                                 </div>
@@ -154,12 +156,12 @@ const CrudEjercicioBasico = () => {
                 {/* El valor de src ahora proviene de ejercicioData.imagenLink del hook */}
                 <div className="imagen-preview">
                     <h4>Vista previa de la imagen</h4>
-                    <img id="imagenPreview" src={ejercicioData.imagenLink ? ejercicioData.imagenLink : LOGO_PLACEHOLDER}
+                    <img id="imagenPreview" src={ejercicioData.imagenPreviewUrl ? ejercicioData.imagenPreviewUrl : LOGO_PLACEHOLDER}
                         alt="Vista previa de la imagen" style={{ maxWidth: '100%', maxHeight: '150px' }} />
                 </div>
                 <div className="video-preview">
                     <h4>Vista previa del video</h4>
-                    <iframe id="videoPreview" src={ejercicioData.videoLink || undefined} className="video-iframe-preview"
+                    <iframe id="videoPreview" src={getEmbedUrl(ejercicioData.videoLink)} className="video-iframe-preview"
                         allowFullScreen title="Vista previa del video del ejercicio">
                     </iframe>
 

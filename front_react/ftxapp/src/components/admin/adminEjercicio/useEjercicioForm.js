@@ -50,8 +50,8 @@ export const useEjercicioForm = (modoEjercicio, ejercicioSeleccionado) => {
         const camposaValidar = Object.keys(VALIDACION_REGLAS);
 
         camposaValidar.forEach(nombreEj => {
-            const value = data[nameEj];
-            const error = validarCampo(nameEj, value);
+            const value = data[nombreEj];
+            const error = validarCampo(nombreEj, value);
             if (error) {
                 nuevosErrores[nombreEj] = error;
                 esValido = false;
@@ -71,16 +71,16 @@ export const useEjercicioForm = (modoEjercicio, ejercicioSeleccionado) => {
                 //Crear la URL temporal segura para el navegador
                 previewUrl = URL.createObjectURL(file);
             }
-            //    'imagenLink'  recibe la URL temporal
-            //    'imagenFile'  recibe el objeto File para subir.
+
             setEjercicioData(prevData => {
-                // 💡 Limpieza de la URL anterior 
-                if (prevData.imagenLink && prevData.imagenLink.startsWith('blob:')) {
-                    URL.revokeObjectURL(prevData.imagenLink);
+                //  Limpieza de la URL anterior 
+                if (prevData.imagenPreviewUrl && prevData.imagenPreviewUrl.startsWith('blob:')) {
+                    URL.revokeObjectURL(prevData.imagenPreviewUrl);
                 }
                 return {
                     ...prevData,
-                    [name]: previewUrl,
+                    imagenPreviewUrl: previewUrl,
+                    imagenFile: file,
                 };
             });
             return;
@@ -100,7 +100,7 @@ export const useEjercicioForm = (modoEjercicio, ejercicioSeleccionado) => {
 
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const { errores, esValido } = validarTodoEjercicio(ejercicioData);
@@ -112,60 +112,77 @@ export const useEjercicioForm = (modoEjercicio, ejercicioSeleccionado) => {
             return;
         }
 
+        //Preparacion para enviar al backend
+
+        const urlBase = "http://localhost:8000/apiFtx/ejbasico";
+        const method = modoEjercicio === 'Crear' ? "POST" : "PATCH";
+        const url = modoEjercicio === 'Crear'
+            ? `${urlBase}/register`
+            : `${urlBase}/update/${ejercicioData.idEjercicioBasico}`;
+
         const formData = new FormData();
         for (const key in ejercicioData) {
-            // Excluir la URL temporal de la imagen que usamos solo para preview
-            if (key === 'imagenLink' && ejercicioData[key] instanceof File) {
-                // Si imagenLink contiene el objeto File 
-                if (ejercicioData.imagenFile) {
-                    formData.append('imagenLink', ejercicioData.imagenFile);
-                }
-            } else if (key === 'imagenFile') {
-                // Ignorar la clave temporal 'imagenFile' (es para visualizar)
+
+            if (key === 'imagenFile' && ejercicioData.imagenFile) {
+                //  Adjuntamos el objeto File usando la clave que espera el backend ('imagenLink')
+                formData.append('imagenLink', ejercicioData.imagenFile);
+                continue;
+            } else if (key === 'imagenPreviewUrl') {
+                // Ignoramos la URL temporal
                 continue;
             } else if (ejercicioData[key] !== null && ejercicioData[key] !== undefined) {
                 // Agregar el resto de campos (nombreEjercicio, observaciones, videoLink)
                 formData.append(key, ejercicioData[key]);
             }
         }
-        const body = { ...ejercicioData } //clona y limpia los datos
-        if (modoEjercicio === 'Crear') {
-            fetchGeneral({
-                url: "http://localhost:8000/apiFtx/ejbasico/register",
-                method: "POST",
+
+         try {
+       
+            await fetchGeneral({ 
+                url: url,
+                method: method,
+                body: formData, // Usa el objeto FormData como body
                 setLoading,
                 setError,
-                onSuccess: (data) => setEjercicioData(EJERCICIO_VACIO), //ver como recargar el arreglo de ejercicios
+                onSuccess: (data) => setEjercicioData(EJERCICIO_VACIO),
+                // 💡 Puedes agregar la lógica para recargar la lista de ejercicios aquí
             });
-        } else {
-            if (modoEjercicio === 'Editar') {
-                fetchGeneral({
-                    url: `http://localhost:8000/apiFtx/ejbasico/update/${ejercicioData.idEjercicioBasico}`,
-                    method: "PATCH",
-                    setLoading,
-                    setError,
-                    onSuccess: (data) => setEjercicioData(EJERCICIO_VACIO), //ver como recargar el arreglo de ejercicios
-                })
-            } else {
-                //borrar
-            }
-            //ver logica de edicion
+        } catch (error) {
+            console.error("Error en la operación del formulario:", error);
         }
-
     }
 
-    useEffect(() => {
-
-        if (ejercicioSeleccionado && modoEjercicio === "Editar") {
-
-            setEjercicioData(ejercicioSeleccionado);
-            setErrores({}); // Limpiar errores al cargar nuevo ejercicio
-        } else if (modoEjercicio === "Crear") {
-            // Limpiar al modo Crear
-            setEjercicioData(EJERCICIO_VACIO);
-            setErrores({});
+  useEffect(() => {
+    
+    if (ejercicioSeleccionado && modoEjercicio !== 'Crear') {
+        
+        //REVOCAR URL antigua (si existe) para liberar memoria
+        if (ejercicioData.imagenPreviewUrl && ejercicioData.imagenPreviewUrl.startsWith('blob:')) {
+            URL.revokeObjectURL(ejercicioData.imagenPreviewUrl);
         }
-    }, [modoEjercicio, ejercicioSeleccionado]);
+
+        //  Establecer los datos del ejercicio seleccionado
+        setEjercicioData({
+            ...ejercicioSeleccionado,
+            imagenPreviewUrl: ejercicioSeleccionado.imagenLink || null, 
+            imagenFile: null, // Siempre nulo al cargar desde el servidor
+        });
+        setErrores({});
+        
+    } else {
+        //  Lógica de Resetear (cuando se pasa a modo 'Crear' o el ejercicio se deselecciona)
+        
+        // REVOCAR URL antigua (si existe)
+        if (ejercicioData.imagenPreviewUrl && ejercicioData.imagenPreviewUrl.startsWith('blob:')) {
+            URL.revokeObjectURL(ejercicioData.imagenPreviewUrl);
+        }
+        
+        // Resetear al estado inicial
+        setEjercicioData(EJERCICIO_VACIO);
+        setErrores({});
+    }
+
+}, [ejercicioSeleccionado, modoEjercicio]); 
 
     return {
         ejercicioData,

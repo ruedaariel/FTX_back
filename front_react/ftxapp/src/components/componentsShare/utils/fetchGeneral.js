@@ -12,12 +12,23 @@ export const fetchGeneral = async ({
 }) => {
   if (setLoading) setLoading(true);
 
+  //detecta si es formData
+  const isFormData = body instanceof FormData;
+
+  const fetchOptions = {
+    method,
+    // Si es FormData, el body es el objeto FormData directo.
+    // Si no lo es, y el body no es null, se serializa a JSON.
+    body: isFormData ? body : (body ? JSON.stringify(body) : null),
+  };
+
+  if (!isFormData) {
+    fetchOptions.headers = headers;
+  }
+  // Si es FormData, NO pasamos el encabezado Content-Type.
+
   try {
-    const response = await fetch(url, {
-      method,
-      headers,
-      body: body ? JSON.stringify(body) : null,
-    });
+    const response = await fetch(url, fetchOptions);
 
     if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
 
