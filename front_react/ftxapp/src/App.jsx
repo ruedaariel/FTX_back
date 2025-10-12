@@ -9,6 +9,7 @@ import Faq from '../src/components/faq.jsx'
 import Footer from '../src/components/footer.jsx'
 //import LoginBasico from './components/login/LoginBasico.jsx'
 import LoginApi from './components/login/LoginApi.jsx'
+import AdminDashboard from './pages/adminDashboard/adminDashboard.jsx'
 
   
 function App() {
@@ -22,8 +23,11 @@ function App() {
       <Planes />
       <Testimonios />
       <Faq />
-      <Footer /> */}
+      <Footer /> 
       <LoginApi />
+      */}
+      <AdminDashboard />
+      
      
 
     </div>
