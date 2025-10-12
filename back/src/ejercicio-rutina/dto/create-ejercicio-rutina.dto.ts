@@ -25,7 +25,6 @@ export class CreateEjercicioRutinaDto {
   dificultad: string;
 
   @IsNumber({}, { message: 'El peso debe ser un número.' })
-  @IsPositive({ message: 'El peso debe ser un número positivo.' })
   @IsNotEmpty({ message: 'El peso no puede estar vacío.' })
   @Min(0, { message: 'El peso debe ser un numero positivo o 0kg' })
   @Max(500, { message: 'El peso debe ser como máximo 500kg' })

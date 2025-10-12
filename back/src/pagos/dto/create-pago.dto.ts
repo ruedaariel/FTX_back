@@ -1,6 +1,6 @@
 import { IsEnum, IsInt, IsNumber, IsOptional, IsString, IsEmail, ValidateNested, IsObject } from 'class-validator';
 import { Type } from 'class-transformer';
-import { MetodoDePago } from '../entity/pago.entity';
+import { METODODEPAGO } from '../entity/pago.entity';
 
 
 // Sub-DTO para información del pagador
@@ -53,8 +53,8 @@ export class IniciarPagoDto {
   @IsInt()
   diasAdicionales: number;
 
-  @IsEnum(MetodoDePago)
-  metodoDePago: MetodoDePago;
+  @IsEnum(METODODEPAGO)
+  metodoDePago: METODODEPAGO;
 
   @IsString()
   descripcion: string; // Título del producto/servicio
@@ -101,8 +101,8 @@ export class CreatePagoDto {
   @IsInt()
   diasAdicionales: number; // del frontend original
 
-  @IsEnum(MetodoDePago)
-  metodoDePago: MetodoDePago; // del frontend original
+  @IsEnum(METODODEPAGO)
+  metodoDePago: METODODEPAGO; // del frontend original
 
   @IsNumber({ maxDecimalPlaces: 2 })
   monto: number; // transaction_amount de MercadoPago

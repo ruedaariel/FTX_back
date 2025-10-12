@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectDataSource, InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { ROL, UsuarioEntity } from '../entities/usuario.entity';
 import { CreateUsuarioDto } from '../dto/create-usuario.dto';
-import { Repository, EntityManager, DataSource } from 'typeorm';
+import { Repository, EntityManager, DataSource, Not } from 'typeorm';
 import { ErrorManager } from 'src/config/error.manager';
 import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
 import { DatosPersonalesEntity } from 'src/usuario-datos-personales/entities/datos-personales.entity';
@@ -18,9 +18,12 @@ import { LoginDto } from '../dto/login.dto';
 import { LoginRtaDto } from '../dto/login-rta.dto';
 import { UsuarioRtaDto } from '../dto/usuario-rta.dto';
 import { format } from 'date-fns';
-import { plainToClass } from 'class-transformer';
+import { plainToInstance } from 'class-transformer';
 import { FileImgService } from 'src/shared/file-img/file-img.service';
 import { transformarFecha } from 'src/utils/transformar-fecha';
+import { UsuarioDatosCompletosRtaDto } from '../dto/usuario-datos-completos-rta.dto';
+import { UpdateUsuarioAdmDto } from '../dto/update-Usuario-adm.dto';
+import { PlanEntity } from 'src/plan/entities/plan.entity';
 
 @Injectable()
 export class UsuarioService {
@@ -33,6 +36,7 @@ export class UsuarioService {
     private readonly datosFisicosRepository: Repository<DatosFisicosEntity>,
     @InjectRepository(RutinaEntity) private readonly rutinaRepository: Repository<RutinaEntity>,
     @InjectEntityManager() private readonly entityManager: EntityManager,
+    @InjectRepository(PlanEntity) private readonly planRepository: Repository<PlanEntity>,
     private readonly dataSource: DataSource,
     private readonly emailService: EmailService,
     private readonly planService: PlanService,
@@ -103,7 +107,7 @@ export class UsuarioService {
 
         //confirma la transaccion
         await queryRunner.commitTransaction();
-        const usuarioRtaDto = plainToClass(UsuarioRtaDto, usuarioFinal);
+        const usuarioRtaDto = plainToInstance(UsuarioRtaDto, usuarioFinal);
         setImmediate(async () => {
           try {
             await this.emailService.enviarCredenciales(usuarioFinal.email, contrasenaGenerada);
@@ -117,9 +121,18 @@ export class UsuarioService {
 
       } else { // Si el rol no es USUARIO, solo se devuelve el usuario creado
         //envio de mail, si falla, lanza una excepcion y se hace rollback
-        await this.emailService.enviarCredenciales(usuarioCreado.email, contrasenaGenerada);
+
         await queryRunner.commitTransaction();
-        const usuarioRtaDto = plainToClass(UsuarioRtaDto, usuarioCreado);
+        const usuarioRtaDto = plainToInstance(UsuarioRtaDto, usuarioCreado);
+        setImmediate(async () => {
+          try {
+            await this.emailService.enviarCredenciales(usuarioCreado.email, contrasenaGenerada);
+
+          } catch (error) {
+            // acá solo logueás el error, no afecta al flujo
+            console.error("Error enviando mail:", error.message);
+          }
+        });
         return usuarioRtaDto;
       }
     } catch (error) {
@@ -131,16 +144,29 @@ export class UsuarioService {
     }
   }
 
-  //devuelve todos los usuarios con datos basicos, incluso los "archivados" y los "inactivos"
+  //devuelve todos los usuarios con datos basicos, fisicos y personales, incluso los "archivados" y los "inactivos"
   //se llama de crudeUsuario (admin)
-  public async findAllUsuarios(): Promise<UsuarioEntity[]> {
+  public async findAllUsuarios(): Promise<UsuarioDatosCompletosRtaDto[]> {
     try {
-      const usuarios: UsuarioEntity[] = await this.usuarioRepository.find(); //ojo, incluye los usuarios borrados
+      const usuarios: UsuarioEntity[] = await this.usuarioRepository.find({
+        //    where: {
+        //  estado: Not(ESTADO.ARCHIVADO),
+        // },
+        relations: ['datosPersonales', 'datosPersonales.plan', 'datosFisicos'],
+      }); //ojo, incluye los usuarios borrados
+
       if (usuarios.length === 0) {
         throw new ErrorManager("BAD_REQUEST", "No se encontró usuarios");
       }
-      //USAR DTO PARA SALIDA, pero primero ver si necesito todos los datos o no
-      return usuarios;
+
+      const usuariosDto = plainToInstance(UsuarioDatosCompletosRtaDto, usuarios);
+      usuariosDto.forEach((usuario) => {
+        if (usuario.datosPersonales?.imagenPerfil) {
+          usuario.datosPersonales.imagenPerfil = this.fileImgService.construirUrlImagen(usuario.datosPersonales.imagenPerfil, "perfiles");
+        }
+      })
+
+      return usuariosDto
     } catch (err) {
       throw ErrorManager.handle(err)
     }
@@ -157,7 +183,7 @@ export class UsuarioService {
       if (!unUsuario) {
         throw new ErrorManager("NOT_FOUND", `Usuario con id ${id} no encontrado`)
       }
-      const usuarioRtaDto = plainToClass(UsuarioRtaDto, unUsuario);
+      const usuarioRtaDto = plainToInstance(UsuarioRtaDto, unUsuario);
 
       return usuarioRtaDto
     } catch (err) { throw ErrorManager.handle(err) }
@@ -189,20 +215,21 @@ export class UsuarioService {
       if (!passwordValida) {
         throw new ErrorManager('UNAUTHORIZED', 'password incorrecta');
       }
-      const usuarioRtaDto = plainToClass(LoginRtaDto, unUsuario);
+      const usuarioRtaDto = plainToInstance(LoginRtaDto, unUsuario);
       //FALTA GENERAR EL TOKEN -
 
 
       return usuarioRtaDto;
     } catch (err) { throw ErrorManager.handle(err) }
   }
+
   //Actualiza todos los datos de un usuario.
-  //se llama: desde perfil_usuario y crudUsuario
+  //se llama: desde perfil_usuario
   public async updateUsuario(id: number, body: UpdateUsuarioDto): Promise<UsuarioEntity> {
     try {
       const usuarioGuardado = await this.usuarioRepository.findOne({
         where: { id },
-        relations: ['datosPersonales', 'datosFisicos', 'datosPersonales.plan'], // AGREGAR LO DEL PLAN
+        relations: ['datosPersonales', 'datosFisicos', 'datosPersonales.plan'], 
       });
       if (!usuarioGuardado) {
         throw new ErrorManager("NOT_FOUND", "No se encontro usuario");
@@ -215,7 +242,16 @@ export class UsuarioService {
           usuarioGuardado.password = await bcrypt.hash(body.datosBasicos.password, 10);
 
           delete body.datosBasicos.password;
-          //MANDAMOS UN MAIL PARA INDICAR QUE SE CAMBIO LA CONTRASEÑA????? *******************************************************************
+          setImmediate(async () => {
+            try {
+              await this.emailService.enviarCambioContrasena(usuarioGuardado.email);
+
+            } catch (error) {
+              // acá solo logueás el error, no afecta al flujo
+              console.error("Error enviando mail:", error.message);
+            }
+          });
+          
         }
         Object.assign(usuarioGuardado, body.datosBasicos);
       }
@@ -228,7 +264,7 @@ export class UsuarioService {
         if (body.datosPersonales.fNacimiento) {
           usuarioGuardado.datosPersonales.fNacimiento = transformarFecha(body.datosPersonales.fNacimiento);
         }
-  
+
 
         if (body.datosPersonales.idPlan) {
           const planActualizado = await this.planService.findOneById(body.datosPersonales.idPlan);
@@ -299,6 +335,83 @@ export class UsuarioService {
       throw ErrorManager.handle(error)
     }
   }
+
+  //Actualiza todos los datos BASICOS de un usuario.
+  //se llama: desde crud usuario (admin)
+  public async updateUsuarioBasico(id: number, body: UpdateUsuarioAdmDto): Promise<UsuarioEntity> {
+    try {
+
+      return await this.entityManager.transaction(async (transaccion) => {
+        const usuarioGuardado = await transaccion.findOne(UsuarioEntity, {
+          where: { id },
+          relations: ['datosPersonales', 'datosFisicos', 'datosPersonales.plan', 'rutinas'],
+        });
+
+        if (!usuarioGuardado) {
+          throw new ErrorManager("NOT_FOUND", "No se encontro usuario");
+        }
+        // if (usuarioGuardado.estado == ESTADO.ARCHIVADO && !body.estado) {
+        //   throw new ErrorManager("BAD_REQUEST", "El usuario esta dado de baja");
+        // }
+
+        if (body && Object.keys(body).length > 0) { //que no sea null o undefined y que no sea vacio
+          if (body.email) {
+            const unUsuario = await transaccion.findOne(UsuarioEntity, { where: { email: body.email } });
+            if (unUsuario) {
+              throw new ErrorManager("CONFLICT", `${body.email} ya existe en la base de datos`);
+            }
+            usuarioGuardado.email = body.email;
+          }
+
+          if (body.idPlan) {
+            const unPlan = await transaccion.findOneBy(PlanEntity, { idPlan: body.idPlan })
+            if (!unPlan) {
+              throw new ErrorManager("BAD_REQUEST", `El plan ${body.idPlan} no existe`)
+            }
+            if (usuarioGuardado.datosPersonales) {
+              usuarioGuardado.datosPersonales.plan = unPlan;
+              //delete body.idPlan;
+            }
+          }
+
+          if (body.estado) {
+            if (usuarioGuardado.datosPersonales) {
+              usuarioGuardado.datosPersonales.estado = body.estado
+            }
+            if (usuarioGuardado.datosFisicos) {
+              usuarioGuardado.datosFisicos.estado = body.estado
+            }
+
+            if (usuarioGuardado.estado === ESTADO.ARCHIVADO && body.estado !== ESTADO.ARCHIVADO) { //pasa de borrado a no borrado
+              usuarioGuardado.fBaja = null;
+            }
+
+            if (body.estado === ESTADO.ARCHIVADO && usuarioGuardado.estado !== ESTADO.ARCHIVADO) { //usuario es borrado
+             throw new ErrorManager("BAD_REQUEST", "El nuevo estado no puede ser ARCHIVADO. PAra eliminar, ingresar por la opcion 'Eliminar'");
+            }
+            usuarioGuardado.estado = body.estado;
+
+          }
+
+
+          // Object.assign(usuarioGuardado, body);
+
+          //no uso update porque tengo relaciones que guardar
+          const usuarioUpdate = await transaccion.save(usuarioGuardado);
+ 
+          return usuarioUpdate
+        } else {
+          throw new ErrorManager("BAD_REQUEST", "No se reciben datos para modificar usuario")
+        }
+      })
+
+
+    } catch (err) {
+      throw ErrorManager.handle(err)
+    }
+  }
+
+
   //baja logica de usuario
   //Se llama desde: crudUsuario (admin)
   public async deleteUsuario(id: number): Promise<boolean> {

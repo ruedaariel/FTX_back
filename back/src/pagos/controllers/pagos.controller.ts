@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Get, Delete, Param } from '@nestjs/common';
 import { PagosService } from '../services/pagos.service';
 import { CreatePagoDto, IniciarPagoDto } from '../dto/create-pago.dto';
 
@@ -12,14 +12,34 @@ export class PagosController {
     return await this.pagosService.iniciarPago(iniciarPagoDto);
   }
 
-  @Post('manual')
+  @Post('/manual')
   async registrarPagoManual(@Body() createPagoDto: CreatePagoDto) {
     // Registra un pago manual (transferencia/efectivo) directamente
-    const pagoGuardado = await this.pagosService.guardarPagoManual(createPagoDto);
+    const pagoGuardado =
+      await this.pagosService.guardarPagoManual(createPagoDto);
     return {
       message: 'Pago manual registrado exitosamente',
-      pago: pagoGuardado
+      pago: pagoGuardado,
     };
+  }
+
+  //obtener todos los pagos
+  @Get()
+  async obtenerTodosLosPagos() {
+    return await this.pagosService.obtenerTodosLosPagos();
+  }
+
+  //obtener pagos por id
+  @Get(':id')
+  async obtenerPagoPorId(@Param('id') id: number) {
+    return await this.pagosService.obtenerPagoPorId(+id);
+  }
+
+  //eliminar pago por id
+  @Delete(':id')
+  async eliminarPago(@Param('id') id: number) {
+    await this.pagosService.eliminarPago(+id);
+    return { message: 'Pago eliminado exitosamente' };
   }
 
   @Post('webhook')

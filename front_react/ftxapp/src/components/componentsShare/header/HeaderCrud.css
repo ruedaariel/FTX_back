@@ -1,0 +1,81 @@
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  /*font-family: 'Inter', sans-serif;*/
+  margin: 0;
+  padding: 0;
+}
+
+/*   ----  menu   ---*/
+.top-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  background-color: var(--color-fondo-gris-claro);
+  padding: 1rem;
+  border-radius: 8px;
+
+  color: var(--color-texto-claro);
+  margin: .2rem auto;
+  margin-top: 1rem;
+
+  z-index: 1000;
+}
+
+.logo {
+  padding-left: 10px;
+}
+
+.logo img {
+  width: 30px;
+  height: auto;
+}
+
+.menu-title {
+  font-size: 1.2rem;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.close-app {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-texto-claro);
+  padding-right: 10px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.close-app:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-primario-naranja);
+}
+
+/* fin menu */
+
+.seccion-busqueda button:hover {
+  background-image: var(--gradiente-boton-hover);
+  transform: translateY(-1px);
+}
+
+/* Estilos para Desktop (min-width: 768px) */
+@media (min-width: 768px) {
+  .logo {
+    padding-left: 20px;
+  }
+
+  .logo img {
+    width: 40px;
+    height: auto;
+  }
+
+  .menu-title {
+    font-size: 1.5rem;
+  }
+
+  .close-app {
+    font-size: 1.8rem;
+    padding-right: 20px;
+  }
+}

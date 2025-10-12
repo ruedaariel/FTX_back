@@ -1,0 +1,50 @@
+.modal-content.modal-info-border {
+  border: 2px solid var(--color-secundario-naranja);
+  background-color: var(--color-fondo-body);
+  color: var(--color-texto-claro);
+}
+
+.campo-busqueda {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.campo-busqueda label {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+}
+
+.campo-busqueda input,
+.campo-busqueda select {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--color-borde);
+  background-color: var(--color-fondo-input);
+  color: var(--color-texto-claro);
+}
+
+.botones-modal {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn-confirmar {
+  background-image: var(--gradiente-boton);
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-cancelar {
+  background-color: var(--color-secundario-naranja);
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
