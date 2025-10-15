@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import SemanaRutina from "./semanaRutina/semanaRutina";
 import "./rutinaModular.css";
+import { useModal } from "../../../../context/ModalContext";
+
 
 // Utilidades para manipular la rutina
 import {
@@ -17,21 +19,23 @@ import {
 import ModalDecision from "./../../../componentsShare/Modal/ModalDecision";
 import ModalInfoTemporizado from "./../../../componentsShare/Modal/ModalInfoTemporizado";
 
-const RutinaVisual = ({ rutina }) => {
+const RutinaVisual = ({ rutina, modoRutina, mostrarModalInfo}) => {
   // Estado editable de la rutina
   const [rutinaEditable, setRutinaEditable] = useState(null);
 
   // Estado de navegación y mensajes
   const [semanaActivaIndex, setSemanaActivaIndex] = useState(0);
   const [mostrarModalDecision, setMostrarModalDecision] = useState(false);
-  const [mostrarModalInfo, setMostrarModalInfo] = useState(false);
-  const [mensajeModalInfo, setMensajeModalInfo] = useState("");
+  //const [mostrarModalInfo, setMostrarModalInfo] = useState(false);
+  //const [mensajeModalInfo, setMensajeModalInfo] = useState("");
 
   // Mostrar mensaje informativo temporal
-  const mostrarModalInfoTemporizado = (mensaje, duracion = 3000) => {
+  /* const mostrarModalInfoTemporizado = (mensaje, duracion = 3000) => {
     setMensajeModalInfo(mensaje);
     setMostrarModalInfo(true);
-  };
+  }; */
+
+  const { showModal } = useModal();
 
   // Expandir o contraer una semana
   const toggleSemanaExpandida = (index) => {
@@ -61,20 +65,24 @@ const RutinaVisual = ({ rutina }) => {
 
     if (siguienteSemanaExiste) {
       setSemanaActivaIndex(semanaIndex + 1);
-      mostrarModalInfoTemporizado("Semana completa, pasando a la siguiente");
+      //mostrarModalInfoTemporizado("Semana completa, pasando a la siguiente");
+      //mostrarModalInfo("Semana completa, pasando a la siguiente");
+      showModal("Semana completa, pasando a la siguiente","success");
       return;
     }
 
     if (rutinaTiene4Semanas) {
       setMostrarModalDecision(true);
-      mostrarModalInfoTemporizado("Se alcanzó el límite de 4 semanas");
+      //mostrarModalInfo("Se alcanzó el límite de 4 semanas");
+      showModal("Se alcanzó el límite de 4 semanas","info");
       return;
     }
 
     const nuevaRutina = avanzarODuplicarSemana(rutinaEditable, semanaIndex);
     setRutinaEditable(nuevaRutina);
     setSemanaActivaIndex(semanaIndex + 1);
-    mostrarModalInfoTemporizado("Semana completa, comenzando nueva semana");
+    //mostrarModalInfo("Semana completa, comenzando nueva semana");
+    showModal("Semana completa, comenzando nueva semana","success");
   };
 
   // Guardar semana actual (estructura lista para backend)
@@ -109,21 +117,24 @@ const RutinaVisual = ({ rutina }) => {
     if (siguienteSemanaExiste) {
       setRutinaEditable(nuevaRutina);
       setSemanaActivaIndex(semanaIndex + 1);
-      mostrarModalInfoTemporizado("Pasando a la siguiente semana");
+      //mostrarModalInfoTemporizado("Pasando a la siguiente semana");
+      showModal("Pasando a la siguiente semana","success");
       return;
     }
 
     if (rutinaTiene4Semanas) {
       setRutinaEditable(nuevaRutina);
       setMostrarModalDecision(true);
-      mostrarModalInfoTemporizado("Se alcanzó el límite de 4 semanas");
+      //mostrarModalInfoTemporizado("Se alcanzó el límite de 4 semanas");
+      showModal("Se alcanzó el límite de 4 semanas","info");
       return;
     }
 
     nuevaRutina = avanzarODuplicarSemana(nuevaRutina, semanaIndex);
     setRutinaEditable(nuevaRutina);
     setSemanaActivaIndex(semanaIndex + 1);
-    mostrarModalInfoTemporizado("Nueva semana creada");
+    //mostrarModalInfoTemporizado("Nueva semana creada");
+    showModal("Nueva semana creada","success");
   };
 
   // Actualizar un ejercicio específico
@@ -167,6 +178,7 @@ const RutinaVisual = ({ rutina }) => {
       {mostrarModalDecision && (
         <ModalDecision
           isOpen={mostrarModalDecision}
+          borderClass="modal-info-border"
           title="Límite alcanzado"
           message="Se alcanzó el límite de 4 semanas. ¿Querés guardar la rutina o seguir editando?"
           onDecision={(confirmar) => {
@@ -180,16 +192,7 @@ const RutinaVisual = ({ rutina }) => {
       )}
 
       {/* Modal informativo temporal */}
-      {mostrarModalInfo && (
-        <ModalInfoTemporizado
-          isOpen={mostrarModalInfo}
-          title="Información"
-          message={mensajeModalInfo}
-          borderClass="modal-info-border"
-          onClose={() => setMostrarModalInfo(false)}
-          autoCloseMs={3000}
-        />
-      )}
+      
 
       {/* Render de cada semana */}
       {rutinaEditable.semanas.map((semana, index) => (
@@ -206,6 +209,7 @@ const RutinaVisual = ({ rutina }) => {
           onGuardarSemana={handleGuardarSemana}
           onGuardarSemanaAvanzar={handleGuardarSemanaAvanzar}
           onToggleExpand={toggleSemanaExpandida}
+          
         />
       ))}
     </div>

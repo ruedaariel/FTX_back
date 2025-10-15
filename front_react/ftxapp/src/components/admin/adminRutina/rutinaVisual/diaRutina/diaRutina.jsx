@@ -1,5 +1,7 @@
 import React from "react";
 import EjercicioRutina from "../../ejercicioRutina/ejercicioRutina";
+import { useModal } from "../../../../../context/ModalContext";
+
 
 // Componente que representa un día dentro de una semana de rutina
 const DiaRutina = ({
@@ -8,7 +10,9 @@ const DiaRutina = ({
   onEjercicioChange,   // Callback para actualizar un ejercicio
   onAgregarEjercicio,  // Callback para agregar un nuevo ejercicio
   onEliminarEjercicio, // Callback para eliminar un ejercicio
-  onGuardarDia         // Callback para guardar los cambios del día
+  onGuardarDia,
+  
+
 }) => {
   return (
     <div className="dia-rutina">
@@ -37,6 +41,7 @@ const DiaRutina = ({
             }
             onAgregar={() => onAgregarEjercicio(nroDia - 1, index)}
             onEliminar={() => onEliminarEjercicio(nroDia - 1, index)}
+            
           />
         ))}
       </div>

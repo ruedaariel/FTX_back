@@ -41,6 +41,8 @@
 
     --gradiente-boton-blanco: linear-gradient(to right, #FFFFFF, #FFD580, var(--color-primario-naranja));
 
+    --color-error: #e74c3c;
+  --color-error-sombra: rgba(231, 76, 60, 0.3);
     /* (135deg, #FFFFFF 30%, #FFA500 100%);*/
 
     /* -----------------------------------------------------------------------------------*/

@@ -1,5 +1,7 @@
 import React from "react";
 import DiaRutina from "../diaRutina/diaRutina";
+import { useModal } from "../../../../../context/ModalContext";
+
 
 const SemanaRutina = ({
   semana,
@@ -12,6 +14,7 @@ const SemanaRutina = ({
   onGuardarSemanaAvanzar,
   esActiva,
   onToggleExpand,
+  
 }) => {
   const diaTieneEjercicios = (dia) =>
     dia.ejerciciosRutina.some(
@@ -74,6 +77,7 @@ const SemanaRutina = ({
                   onEliminarEjercicio(semanaIndex, diaIdx, ejIdx)
                 }
                 onGuardarDia={(diaIdx) => onGuardarDia(semanaIndex, diaIdx)}
+                
               />
             ))
           ) : (
