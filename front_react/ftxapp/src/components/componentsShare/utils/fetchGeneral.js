@@ -36,7 +36,7 @@ export const fetchGeneral = async ({
     if (onSuccess) onSuccess(data);
     if (setError) setError(null);
 
-    // ✅ Mostrar modal de éxito solo si no es GET
+    // Mostrar modal de éxito solo si no es GET
     if (mostrarModal && method !== "GET") {
       mostrarModal({
         title: "Operación exitosa",
@@ -50,7 +50,7 @@ export const fetchGeneral = async ({
     if (onError) onError(err);
     if (setMostrarErrorAcceso) setMostrarErrorAcceso(true);
 
-    // ❌ Mostrar modal de error siempre
+    //  Mostrar modal de error siempre
     if (mostrarModal) {
       mostrarModal({
         title: "Error",

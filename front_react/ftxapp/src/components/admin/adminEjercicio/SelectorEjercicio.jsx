@@ -7,9 +7,9 @@ import "../../componentsShare/selectorGenerico/selectorGenerico.css";
 import GrupoRadios from "../../componentsShare/grupoRadios/grupoRadios.jsx"; // ajustá la ruta según tu estructura
 import SelectorGenerico from "../../componentsShare/selectorGenerico/selectorGenerico.jsx";
 
-const SelectorEjercicio = ({ modoEjercicio, ejercicios,ejercicioSeleccionado, onSeleccionarEjercicio,onCambiarModo, loading, error }) => {
+const SelectorEjercicio = ({ modoEjercicio, ejercicios,ejercicioSeleccionado, onSeleccionarEjercicio,onCambiarModo, error }) => {
   
-  // const [loading, setLoading] = useState(false);
+ 
   // const [error, setError] = useState(null);
   //const [ejercicioSeleccionado, setEjercicioSeleccionado] = useState("");
  // const [modoEjercicio, setModoEjercicio] = useState("Crear");

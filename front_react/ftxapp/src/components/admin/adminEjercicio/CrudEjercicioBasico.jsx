@@ -14,32 +14,61 @@ import { getEmbedUrl } from "./utils/formatoVideo";
 
 
 const CrudEjercicioBasico = () => {
-
+    //ejercicio seleccionado (Crear -> null, Editar -> ejrcicio del backend)
     const [ejercicioSeleccionado, setEjercicioSeleccionado] = useState(null);
+    //Crear o Editar
     const [modoEjercicio, setModoEjercicio] = useState("Crear");
-    const [ejercicios, setEjercicios] = useState([]); //ejercicios que vienen del backend
-
-    const [loading, setLoading] = useState(false); //maneja delay
+    //Todos los ejercicios que vienen del backend (EjercicioBasicoEntity[])
+    const [ejercicios, setEjercicios] = useState([]); //ejercicios 
+    //maneja delay
+   // const [loading, setLoading] = useState(false);
+    //interviene en el manejo de error
     const [error, setError] = useState(null);
+    //para previsualizar el video
+    const [showVideo, setShowVideo] = useState(false);
+    //para recargar o no los ejercicios del backend
+    const [reload, setReload] = useState(false);
 
     const {
         ejercicioData,      // Datos del formulario
         errores,            // Errores de validación
-        isLoading,          // Estado de carga (usado en botones)
+        loading,          // Estado de carga 
+        setLoading,
         handleInputChange,  // on/Change
         handleBlur,         // onBlur
         handleSubmit,       // onSubmit
-    } = useEjercicioForm(modoEjercicio, ejercicioSeleccionado);
+    } = useEjercicioForm(modoEjercicio, ejercicioSeleccionado,setReload, setEjercicioSeleccionado);
 
-    useEffect(() => {
+    const fetchEjercicios = () => {
         fetchGeneral({
             url: "http://localhost:8000/apiFtx/ejbasico/all",
             method: "GET",
             setLoading,
             setError,
-            onSuccess: (data) => setEjercicios(data),
+            onSuccess: (data) => {
+                setEjercicios(data);
+                setReload(false);
+            }
         });
+    }
+
+    //cuando se carga la pagina, se carga el arreglo de ejercicios desde el BE
+    useEffect(() => {
+        fetchEjercicios();
     }, []);
+
+    //se vuelve a cargar los Ejercicios cada vez que se graba
+    useEffect(() => {
+        if (reload) {
+            fetchEjercicios();
+        }
+
+    }, [reload]);
+
+    //si cambia la seleccion o el modo, no muestra el video
+    useEffect(() => {
+        setShowVideo(false);
+    }, [ejercicioSeleccionado, modoEjercicio]);
 
     const handleSeleccionarModo = (nuevoModo) => {
         setModoEjercicio(nuevoModo);
@@ -61,6 +90,34 @@ const CrudEjercicioBasico = () => {
 
     }
 
+const handleDelete = async () => {
+  if (!ejercicioSeleccionado || !ejercicioSeleccionado.idEjercicioBasico) return;
+
+  //aca va el modal
+  const confirmDelete = window.confirm(`¿Eliminar "${ejercicioSeleccionado.nombreEjercicio}"? Esta acción no se puede deshacer.`);
+  if (!confirmDelete) return;
+
+  const url = `http://localhost:8000/apiFtx/ejbasico/delete/${ejercicioSeleccionado.idEjercicioBasico}`;
+
+  try {
+    await fetchGeneral({
+      url,
+      method: 'DELETE',
+      setLoading,     // usa el setLoading devuelto por el hook
+      setError,
+      onSuccess: () => {
+        // Limpiar la selección y forzar recarga
+        setEjercicioSeleccionado(null);
+        setModoEjercicio('Crear'); // opcional
+        setReload(true);
+      }
+    });
+  } catch (err) {
+    //modal
+    console.error("Error eliminando ejercicio:", err);
+    
+  }
+};
 
     return (
         <div className="container">
@@ -70,7 +127,6 @@ const CrudEjercicioBasico = () => {
                 ejercicioSeleccionado={ejercicioSeleccionado}
                 onSeleccionarEjercicio={handleSeleccionarEjercicio}
                 onCambiarModo={handleSeleccionarModo}
-                loading={loading}
                 error={error}
             ></SelectorEjercicio>
 
@@ -87,9 +143,12 @@ const CrudEjercicioBasico = () => {
                                     value={ejercicioData?.nombreEjercicio || ''} onChange={handleInputChange} onBlur={handleBlur} />
                                 <span className="icon-validate" data-icon="nombreEjercicio"></span>
                             </div>
-                            <div className="input-warning text-danger" style={{ display: "none" }}  >
-                                {errores.nombreEjercicio}
-                            </div>
+                            {errores.nombreEjercicio && (
+                                <div className="input-warning text-danger"   >
+                                    {errores.nombreEjercicio}
+                                </div>
+                            )}
+
                         </div>
 
 
@@ -108,12 +167,12 @@ const CrudEjercicioBasico = () => {
 
                         <div className="form-group">
                             <label htmlFor="imagenLink">Link Imagen: </label>
-                            <input type="file" id="imagenLink" name="imagenLink" 
+                            <input type="file" id="imagenLink" name="imagenLink"
                                 className={`form-control ${errores.imagenFile ? 'is-invalid' : ''}`}
                                 accept="image/*" onChange={handleInputChange} />
                             {errores.imagenFile && (
-                                <div className="input-warning text-danger" style={{ display: "block" }}>
-                                    {errores.imagenLink}
+                                <div className="input-warning text-danger" >
+                                    {errores.imagenFile}
                                 </div>
                             )}
 
@@ -121,10 +180,13 @@ const CrudEjercicioBasico = () => {
 
                         <div className="form-group">
                             <label htmlFor="videoLink">Link Video:
-                                <span className="etiqueta-carga"
-                                    onClick={() => { /* Lógica de previsualización */ }}>
-                                    Previsualizar video
-                                </span>
+                                {ejercicioData.videoLink && !showVideo && (
+                                    <span className="etiqueta-carga"
+                                        onClick={() => { setShowVideo(true); }}>
+                                        Previsualizar video
+                                    </span>
+                                )}
+
                             </label>
                             <input type="url" id="videoLink" name="videoLink"
                                 className={`form-control ${errores.videoLink ? 'is-invalid' : ''}`}
@@ -138,12 +200,12 @@ const CrudEjercicioBasico = () => {
                             )} </div>
 
                         <div className="botones">
-                            <button type="submit" className="btn btn-primary" disabled={isLoading}>
-                                {isLoading ? 'Guardando...' : 'Guardar'}
+                            <button type="submit" className="btn btn-primary" disabled={loading}>
+                                {loading ? 'Guardando...' : 'Guardar'}
                             </button>
                             {/* El botón eliminar solo se muestra en modo Editar */}
                             {modoEjercicio === "Editar" && (
-                                <button type="button" className="btn btn-danger" disabled={isLoading}>
+                                <button type="button" className="btn btn-danger" disabled={loading} onClick={handleDelete}> 
                                     Eliminar
                                 </button>
                             )}
@@ -161,9 +223,22 @@ const CrudEjercicioBasico = () => {
                 </div>
                 <div className="video-preview">
                     <h4>Vista previa del video</h4>
-                    <iframe id="videoPreview" src={getEmbedUrl(ejercicioData.videoLink)} className="video-iframe-preview"
-                        allowFullScreen title="Vista previa del video del ejercicio">
-                    </iframe>
+                    {ejercicioData.videoLink && showVideo ? (
+                        <iframe id="videoPreview" src={getEmbedUrl(ejercicioData.videoLink)} className="video-iframe-preview"
+                            allowFullScreen title="Vista previa del video del ejercicio">
+                        </iframe>
+                    ) : (ejercicioData.videoLink ? (
+                        <div className="video-placeholder-mensaje video-iframe-preview">
+                            El video no se ha cargado. Presione **"Previsualizar video"** para cargarlo.
+                        </div>
+                    ) : (
+                        // 3. Si no hay link, no mostramos nada del video
+                        <div className="video-placeholder-mensaje video-iframe-preview">
+                            No hay un enlace de video ingresado.
+                        </div>
+                    )
+                    )}
+
 
                 </div>
             </div>
