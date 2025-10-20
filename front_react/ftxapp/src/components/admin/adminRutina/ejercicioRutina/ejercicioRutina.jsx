@@ -4,21 +4,24 @@ import { fetchGeneral } from "./../../../componentsShare/utils/fetchGeneral";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { useModal } from "../../../../context/ModalContext";
 
+/**
+ * Componente que representa un ejercicio dentro de un día de rutina.
+ * Permite seleccionar el ejercicio, ingresar repeticiones, peso, dificultad y observaciones.
+ * Incluye validaciones y acciones para agregar o eliminar el ejercicio.
+ */
 const EjercicioRutina = ({
-  ejercicio,
-  onChange,
-  onAgregar,
-  onEliminar,
-  index,
-  
+  ejercicio, // Objeto con datos del ejercicio actual
+  onChange, // Callback para actualizar el ejercicio
+  onAgregar, // Callback para agregar un nuevo ejercicio
+  onEliminar, // Callback para eliminar el ejercicio actual
+  index, // Índice del ejercicio en la lista
 }) => {
   const [ejerciciosDisponibles, setEjerciciosDisponibles] = useState([]);
-
   const [errorRepeticiones, setErrorRepeticiones] = useState("");
   const [errorPeso, setErrorPeso] = useState("");
+  const { showModal } = useModal();
 
-  //console.log("Agregar ejercicio en índice:", index);
-
+  // Cargar lista de ejercicios disponibles desde el backend
   useEffect(() => {
     fetchGeneral({
       url: "http://localhost:8000/apiFtx/ejbasico/all",
@@ -27,9 +30,9 @@ const EjercicioRutina = ({
     });
   }, []);
 
-  const { showModal } = useModal();
-
-
+  /**
+   * Maneja cambios en los campos del ejercicio
+   */
   const handleFieldChange = (field, value) => {
     // Permitir borrar el campo
     if (value === "") {
@@ -39,6 +42,7 @@ const EjercicioRutina = ({
       return;
     }
 
+    // Validación de repeticiones (formato: 5 x 12)
     if (field === "repeticiones") {
       const regex = /^([1-9]|10)\s*x\s*([1-9]|1[0-9]|2[0-5])$/;
       if (!regex.test(value)) {
@@ -50,6 +54,7 @@ const EjercicioRutina = ({
       return;
     }
 
+    // Validación de peso (entre 1 y 500 kg)
     if (field === "peso") {
       const pesoNum = parseFloat(value);
       if (isNaN(pesoNum) || pesoNum <= 0 || pesoNum > 500) {
@@ -61,37 +66,77 @@ const EjercicioRutina = ({
       return;
     }
 
+    // Otros campos sin validación
     onChange(index, { ...ejercicio, [field]: value });
   };
 
+  /**
+   * Valida y agrega el ejercicio actual
+   */
   const handleAgregarValidado = () => {
-  const { idEjercicioBasico, repeticiones, peso } = ejercicio;
+    const { idEjercicioBasico, repeticiones, peso, dificultad, observaciones } =
+      ejercicio;
 
-  if (!idEjercicioBasico) {
-    //mostrarModalInfo?.("Debés seleccionar un ejercicio antes de agregar.");
-    showModal("Debés seleccionar un ejercicio antes de agregar.","error");
-    return;
-  }
+    if (!idEjercicioBasico) {
+      showModal(
+        "Debés seleccionar un ejercicio antes de agregar.",
+        "error",
+        0,
+        true
+      );
+      return;
+    }
 
-  if (!repeticiones || repeticiones.trim() === "") {
-    //mostrarModalInfo?.("Ingresá repeticiones en formato válido (Ej: 5 x 12).");
-    showModal("Ingresá repeticiones en formato válido (Ej: 5 x 12).","error");
-    return;
-  }
+    if (!repeticiones || repeticiones.trim() === "") {
+      showModal(
+        "Ingresá repeticiones en formato válido (Ej: 5 x 12).",
+        "error",
+        0,
+        true
+      );
+      return;
+    }
 
-  if (!peso || parseFloat(peso) <= 0) {
-    mostrarModalInfo?.("Ingresá un peso válido mayor a 0.","error");
-    return;
-  }
+    if (!peso || parseFloat(peso) <= 0) {
+      showModal("Ingresá un peso válido mayor a 0.", "error", 0, true);
+      return;
+    }
 
-  onAgregar(index);
-};
+    // Normalizar dificultad y observaciones
+    const dificultadFinal = dificultad?.trim() === "" ? "--" : dificultad;
+    const observacionesFinal =
+      observaciones?.trim() === "" ? "--" : observaciones;
 
+    // Actualizar ejercicio antes de agregar
+    onChange(index, {
+      ...ejercicio,
+      dificultad: dificultadFinal,
+      observaciones: observacionesFinal,
+    });
 
-  // console.log("Ejercicios:", ejerciciosDisponibles);
+    onAgregar(index);
+  };
+  
+  // Verificar si el ejercicio actual está en la lista
+  const ejercicioActual = ejerciciosDisponibles.find(
+    (ej) =>
+      ej.idEjercicioBasico === ejercicio.idEjercicioBasico?.idEjercicioBasico
+  );
+
+  // Si no está, crear una opción temporal
+  const opcionesEjercicio = ejercicioActual
+    ? ejerciciosDisponibles
+    : [
+        {
+          idEjercicioBasico: `temp-${index}`, //para salver la unicidad de los renders
+        nombreEjercicio: ejercicio.ejercicioBasico?.nombreEjercicio || "Ejercicio seleccionado",
+        },
+        ...ejerciciosDisponibles,
+      ];
 
   return (
     <div className="ejercicio-rutina-row">
+      {/* Selector de ejercicio */}
       <div className="ejercicio-rutina-field">
         <label>Ejercicio</label>
         <select
@@ -100,8 +145,7 @@ const EjercicioRutina = ({
             handleFieldChange("idEjercicioBasico", parseInt(e.target.value))
           }
         >
-          <option value="">Seleccione...</option>
-          {ejerciciosDisponibles.map((ej) => (
+          {opcionesEjercicio.map((ej) => (
             <option key={ej.idEjercicioBasico} value={ej.idEjercicioBasico}>
               {ej.nombreEjercicio}
             </option>
@@ -109,6 +153,7 @@ const EjercicioRutina = ({
         </select>
       </div>
 
+      {/* Campo de repeticiones */}
       <div className="ejercicio-rutina-field">
         <label
           htmlFor={`repeticiones-${index}`}
@@ -126,6 +171,7 @@ const EjercicioRutina = ({
         {errorRepeticiones && <p className="error-text">{errorRepeticiones}</p>}
       </div>
 
+      {/* Campo de peso */}
       <div className="ejercicio-rutina-field">
         <label htmlFor={`peso-${index}`} title="Máximo permitido: 500 kg">
           Peso (kg)
@@ -140,6 +186,7 @@ const EjercicioRutina = ({
         {errorPeso && <p className="error-text">{errorPeso}</p>}
       </div>
 
+      {/* Campo de dificultad */}
       <div className="ejercicio-rutina-field">
         <label>Dificultad</label>
         <input
@@ -150,6 +197,7 @@ const EjercicioRutina = ({
         />
       </div>
 
+      {/* Campo de observaciones */}
       <div className="ejercicio-rutina-field observaciones">
         <label>Observaciones</label>
         <textarea
@@ -158,6 +206,7 @@ const EjercicioRutina = ({
         />
       </div>
 
+      {/* Acciones: agregar y eliminar */}
       <div className="ejercicio-rutina-actions">
         <button
           className="btn-ejercicio-agregar"

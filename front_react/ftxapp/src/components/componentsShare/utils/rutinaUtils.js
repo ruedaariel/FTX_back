@@ -1,5 +1,5 @@
 
-const guardarSemanaCompleta = (rutina, semanaIndex) => {
+/* const guardarSemanaCompleta = (rutina, semanaIndex) => {
   const semana = rutina.semanas[semanaIndex];
 
   const payload = {
@@ -22,6 +22,27 @@ const guardarSemanaCompleta = (rutina, semanaIndex) => {
 
 
   return payload;
+}; */
+
+const guardarSemanaCompleta = (rutina, semanaIndex) => {
+  const semana = rutina.semanas[semanaIndex];
+
+  return {
+    nroSemana: semanaIndex + 1,
+    estadoSemana: semana.estadoSemana || "en proceso",
+    descripcion: semana.descripcion || "",
+    dias: semana.dias.map((dia, diaIndex) => ({
+      nroDia: diaIndex + 1,
+      focus: dia.focus || "",
+      ejercicios: dia.ejerciciosRutina.map((ej) => ({
+        idEjercicioBasico: ej.idEjercicioBasico,
+        repeticiones: ej.repeticiones,
+        peso: ej.peso,
+        dificultad: ej.dificultad,
+        observaciones: ej.observaciones,
+      })),
+    })),
+  };
 };
 
 
@@ -197,6 +218,23 @@ const avanzarODuplicarSemana = (rutina, semanaIndex) => {
 const diaTieneEjercicios = (dia) =>
   dia.ejerciciosRutina.some((ej) => ej.idEjercicioBasico && ej.idEjercicioBasico !== "");
 
+const transformarRutinaCompleta = (rutina) =>
+  rutina.semanas.map((semana, semanaIndex) => ({
+    nroSemana: String(semanaIndex + 1),
+    estadoSemana: semana.estadoSemana || "en proceso",
+    descripcion: semana.descripcion || "",
+    dias: semana.dias.map((dia, diaIndex) => ({
+      nroDia: String(diaIndex + 1),
+      focus: dia.focus || "",
+      ejerciciosRutina: dia.ejerciciosRutina.map((ej) => ({
+        idEjercicioBasico: ej.idEjercicioBasico,
+        repeticiones: ej.repeticiones,
+        peso: ej.peso,
+        dificultad: ej.dificultad,
+        observaciones: ej.observaciones || "",
+      })),
+    })),
+  }));
 
 
 export {
@@ -206,6 +244,7 @@ export {
   guardarSemanaCompleta,
   agregarDiaEnSemanaConLimite,
   avanzarODuplicarSemana,
-  diaTieneEjercicios
+  diaTieneEjercicios,
+  transformarRutinaCompleta
 };
 
