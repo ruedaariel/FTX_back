@@ -1,5 +1,5 @@
 
-import logo from '../assets/Recursos/IconosLogos/logoSinLetrasNaranja.png'
+import logo from '../../assets/Recursos/IconosLogos/logoSinLetrasNaranja.png'
 
 function Header() {
 

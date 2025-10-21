@@ -1,4 +1,4 @@
-import videotrainer from '../assets/Recursos/Videos/competenciaNeuquen.mp4'
+import videotrainer from '../../assets/Recursos/Videos/competenciaNeuquen.mp4';
 
 
 function TuTrainner() {

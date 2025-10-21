@@ -6,7 +6,7 @@ import { fetchGeneral } from "../../../componentsShare/utils/fetchGeneral";
 
 //  Estilos específicos del componente y colores globales
 import "./listaUsuarios.css";
-import "../../../../colores.css";
+//import "../../../../colores.css";
 
 //  Componentes hijos
 import ContenedorCards from "../contenedorCards/ContenedorCards";

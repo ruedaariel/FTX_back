@@ -1,0 +1,147 @@
+import { useState, useEffect } from "react";
+
+// Componentes principales
+import HeaderCrud from "../../../components/componentsShare/header/HeaderCrud.jsx";
+import SelectorRutinas from "../../../components/admin/adminRutina/SelectorRutina/selectorRutina.jsx";
+import RutinaUsuario from "../../../components/admin/adminRutina/rutinaUsuario/rutinaUsario.jsx";
+import RutinaVisual from "../../../components/admin/adminRutina/rutinaVisual/rutinaVisual.jsx";
+
+// Contexto de modal
+import { useModal } from "../../../context/ModalContext.jsx";
+
+// Utilidades
+import { fetchGeneral } from "../../../components/componentsShare/utils/fetchGeneral.js";
+import { guardarRutinaEnBackend } from "../../../components/componentsShare/utils/guardarRutina.js";
+import {
+  guardarSemanaCompleta,
+  transformarRutinaCompleta,
+} from "../../../components/componentsShare/utils/rutinaUtils.js";
+import { armarRutinaParaGuardar } from "../../../components/componentsShare/utils/armarRutinaParaGuardar.js";
+import { validarRutinaCompleta } from "../../../components/componentsShare/utils/validarRutinaCompleta.js";
+import { sanearRutinaCompleta } from "../../../components/componentsShare/utils/sanearRutinaCompleta.js";
+import { crearRutinaNueva } from "../../../components/componentsShare/utils/plantillasRutina.js";
+
+function inicioRutina() {
+  // Estados principales
+  const [rutinaSeleccionada, setRutinaSeleccionada] = useState(null); // Rutina seleccionada desde el selector
+  const [rutinaData, setRutinaData] = useState(null); // Rutina cargada desde backend
+  const [modoRutina, setModoRutina] = useState("Crear"); // Modo actual: Crear, Copiar o Editar
+  const [reiniciarRutina, setReiniciarRutina] = useState(false); // Flag para reiniciar interfaz
+  const { showModal } = useModal(); // Modal global
+  const [rutinaFinal, setRutinaFinal] = useState(null); // Rutina editada lista para guardar
+  const [datosRutinaUsuario, setDatosRutinaUsuario] = useState({
+    nombreRutina: "",
+    idUsuario: null,
+  });
+
+  // Cargar rutina desde backend al seleccionar una existente
+  useEffect(() => {
+    if (rutinaSeleccionada?.idRutina) {
+      fetchGeneral({
+        url: `http://localhost:8000/apiFtx/rutina/${rutinaSeleccionada.idRutina}`,
+        method: "GET",
+        onSuccess: (data) => {
+          setRutinaData(data);
+        },
+      });
+    }
+  }, [rutinaSeleccionada]);
+
+  // Generar rutina vacía al entrar en modo "Crear"
+  useEffect(() => {
+    if (modoRutina === "Crear") {
+      const rutinaNueva = crearRutinaNueva();
+      setRutinaSeleccionada(rutinaNueva);
+      setRutinaData(rutinaNueva);
+    }
+  }, [modoRutina]);
+
+  // Guardar rutina en backend
+  const handleGuardarRutina = async () => {
+    const payload = rutinaFinal.semanas.map((_, index) =>
+      guardarSemanaCompleta(rutinaFinal, index)
+    );
+
+    if (!rutinaFinal || !datosRutinaUsuario.nombreRutina) {
+      showModal("Faltan datos para guardar la rutina", "error");
+      return;
+    }
+
+    const rutinaFinalSaneada = sanearRutinaCompleta(rutinaFinal);
+
+    const rutinaParaGuardar = armarRutinaParaGuardar({
+      rutinaFinal: rutinaFinalSaneada,
+      modoRutina,
+      datosRutinaUsuario,
+    });
+
+    if (modoRutina === "Editar") {
+      rutinaParaGuardar.id = rutinaFinal.id;
+    }
+
+    try {
+      await guardarRutinaEnBackend(rutinaParaGuardar, modoRutina);
+      const mensaje =
+        modoRutina === "Crear"
+          ? "Rutina creada correctamente"
+          : modoRutina === "Copiar"
+          ? "Rutina copiada y guardada correctamente"
+          : "Rutina editada correctamente";
+
+      showModal(mensaje, "success");
+      resetearInterfaz();
+    } catch (error) {
+      showModal("Error al guardar la rutina", "error");
+    }
+  };
+
+  // Reiniciar interfaz después de guardar
+  const resetearInterfaz = () => {
+    const rutinaNueva = crearRutinaNueva();
+    setRutinaSeleccionada(rutinaNueva);
+    setRutinaData(rutinaNueva);
+    setModoRutina("Crear");
+  };
+
+  // Render principal
+  return (
+    <>
+      <HeaderCrud title="Gestion de Rutinas" />
+
+      <SelectorRutinas
+        onSeleccionarRutina={setRutinaSeleccionada}
+        modoRutina={modoRutina}
+        setModoRutina={setModoRutina}
+      />
+
+      <RutinaUsuario
+        rutinaSeleccionada={rutinaSeleccionada}
+        rutinaEditable={rutinaData}
+        mostrarModalInfo={showModal}
+        modoRutina={modoRutina}
+        onResetearInterfaz={resetearInterfaz}
+        onDatosRutinaChange={setDatosRutinaUsuario}
+      />
+
+      
+
+      {rutinaData && (
+        
+        <RutinaVisual
+          rutina={rutinaData}
+          modoRutina={modoRutina}
+          mostrarModalInfo={showModal}
+          onRutinaEditadaChange={setRutinaFinal}
+        />
+      )}
+
+      <div className="boton-guardar-global">
+        <button className="btn-guardar-rutina-visual" onClick={handleGuardarRutina}>
+          Guardar rutina
+        </button>
+      </div>
+    </>
+  );
+}
+
+export default inicioRutina;
