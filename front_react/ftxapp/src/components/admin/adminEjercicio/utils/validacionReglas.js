@@ -24,5 +24,18 @@ export const VALIDACION_REGLAS = {
             maxSize: 'La imagen no debe pesar más de 2 MB.',
             invalidType: 'Solo se permiten imágenes JPG, JPEG, PNG o WEBP.',
         }
+    },
+    videoLink: {
+        required: false, //video no obligatorio
+        max: 200, // Límite  para una URL
+
+        // Expresión regular que cubre YouTube, Vimeo y Dailymotion
+        regex: /^(?:(?:https?:\/\/(?:www\.)?)(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})|vimeo\.com\/(\d+)|dailymotion\.com\/video\/([\w-]+))/,
+
+        messages: {
+            required: 'El link de video es obligatorio.',
+            max: 'El enlace es demasiado largo.',
+            regex: 'El formato de enlace no es válido (use YouTube, Vimeo, o Dailymotion).',
+        }
     }
 } 

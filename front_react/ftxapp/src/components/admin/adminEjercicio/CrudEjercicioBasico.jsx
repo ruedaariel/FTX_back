@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { fetchGeneral } from "../../componentsShare/utils/fetchGeneral";
 import '../../../colores.css';
 import './validacion.css';
@@ -14,32 +14,65 @@ import { getEmbedUrl } from "./utils/formatoVideo";
 
 
 const CrudEjercicioBasico = () => {
-
+    //ejercicio seleccionado (Crear -> null, Editar -> ejrcicio del backend)
     const [ejercicioSeleccionado, setEjercicioSeleccionado] = useState(null);
+    //Crear o Editar
     const [modoEjercicio, setModoEjercicio] = useState("Crear");
-    const [ejercicios, setEjercicios] = useState([]); //ejercicios que vienen del backend
-
-    const [loading, setLoading] = useState(false); //maneja delay
+    //Todos los ejercicios que vienen del backend (EjercicioBasicoEntity[])
+    const [ejercicios, setEjercicios] = useState([]); //ejercicios 
+    //maneja delay
+    // const [loading, setLoading] = useState(false);
+    //interviene en el manejo de error
     const [error, setError] = useState(null);
+    //para previsualizar el video
+    const [showVideo, setShowVideo] = useState(false);
+    //para recargar o no los ejercicios del backend
+    const [reload, setReload] = useState(false);
+    //para desseleccionar la imagen
+    const fileInputRef = useRef(null);
+
 
     const {
         ejercicioData,      // Datos del formulario
         errores,            // Errores de validación
-        isLoading,          // Estado de carga (usado en botones)
+        loading,          // Estado de carga 
+        setLoading,
         handleInputChange,  // on/Change
         handleBlur,         // onBlur
         handleSubmit,       // onSubmit
-    } = useEjercicioForm(modoEjercicio, ejercicioSeleccionado);
+        handleDeselectImg //fe para deseleccionar imagen, liberar espacio,etc
+    } = useEjercicioForm(modoEjercicio, ejercicioSeleccionado, setReload, setEjercicioSeleccionado,fileInputRef);
 
-    useEffect(() => {
+    const fetchEjercicios = () => {
         fetchGeneral({
             url: "http://localhost:8000/apiFtx/ejbasico/all",
             method: "GET",
             setLoading,
             setError,
-            onSuccess: (data) => setEjercicios(data),
+            onSuccess: (data) => {
+                setEjercicios(data);
+                setReload(false);
+            }
         });
+    }
+
+    //cuando se carga la pagina, se carga el arreglo de ejercicios desde el BE
+    useEffect(() => {
+        fetchEjercicios();
     }, []);
+
+    //se vuelve a cargar los Ejercicios cada vez que se graba
+    useEffect(() => {
+        if (reload) {
+            fetchEjercicios();
+        }
+
+    }, [reload]);
+
+    //si cambia la seleccion o el modo, no muestra el video
+    useEffect(() => {
+        setShowVideo(false);
+    }, [ejercicioSeleccionado, modoEjercicio]);
 
     const handleSeleccionarModo = (nuevoModo) => {
         setModoEjercicio(nuevoModo);
@@ -61,116 +94,169 @@ const CrudEjercicioBasico = () => {
 
     }
 
+    const handleDelete = async () => {
+        if (!ejercicioSeleccionado || !ejercicioSeleccionado.idEjercicioBasico) return;
+
+        //aca va el modal
+        const confirmDelete = window.confirm(`¿Eliminar "${ejercicioSeleccionado.nombreEjercicio}"? Esta acción no se puede deshacer.`);
+        if (!confirmDelete) return;
+
+        const url = `http://localhost:8000/apiFtx/ejbasico/delete/${ejercicioSeleccionado.idEjercicioBasico}`;
+
+        try {
+            await fetchGeneral({
+                url,
+                method: 'DELETE',
+                setLoading,     // usa el setLoading devuelto por el hook
+                setError,
+                onSuccess: () => {
+                    // Limpiar la selección y forzar recarga
+                    setEjercicioSeleccionado(null);
+                    setModoEjercicio('Crear'); // opcional
+                    setReload(true);
+                }
+            });
+        } catch (err) {
+            //modal
+            console.error("Error eliminando ejercicio:", err);
+
+        }
+    };
 
     return (
-        <div className="container">
+        < >
+
             <SelectorEjercicio
                 modoEjercicio={modoEjercicio}
                 ejercicios={ejercicios}
                 ejercicioSeleccionado={ejercicioSeleccionado}
                 onSeleccionarEjercicio={handleSeleccionarEjercicio}
                 onCambiarModo={handleSeleccionarModo}
-                loading={loading}
                 error={error}
             ></SelectorEjercicio>
 
-            <form id="ejercicioForm" onSubmit={handleSubmit}>
-                <div className="form-container">
-                    {/*columna izq - contiene la informacion basica del ej*/}
-                    <div className="columna-izq">
+            <div className="my-container">
+                <form id="ejercicioForm" onSubmit={handleSubmit}>
+                    <div className="form-container">
+                        {/*columna izq - contiene la informacion basica del ej*/}
+                        <div className="columna-izq">
 
-                        <div className="form-group">
-                            <label htmlFor="nombreEjercicio">Nombre Ejercicio:</label>
-                            <div className="input-icon-validate">
-                                <input type="text" id="nombreEjercicio" name="nombreEjercicio" className={`form-control ${errores.nombreEjercicio ? 'is-invalid' : ''}`}
-                                    required placeholder="El nombre debe ser unico, por ejemplo, sentadilla sumo"
-                                    value={ejercicioData?.nombreEjercicio || ''} onChange={handleInputChange} onBlur={handleBlur} />
-                                <span className="icon-validate" data-icon="nombreEjercicio"></span>
+                            <div className="form-group">
+                                <label htmlFor="nombreEjercicio">Nombre Ejercicio:</label>
+                                <div className="input-icon-validate">
+                                    <input type="text" id="nombreEjercicio" name="nombreEjercicio" className={`form-control ${errores.nombreEjercicio ? 'is-invalid' : ''}`}
+                                        required placeholder="El nombre debe ser unico, por ejemplo, sentadilla sumo"
+                                        value={ejercicioData?.nombreEjercicio || ''} onChange={handleInputChange} onBlur={handleBlur} />
+                                    <span className="icon-validate" data-icon="nombreEjercicio"></span>
+                                </div>
+                                {errores.nombreEjercicio && (
+                                    <div className="input-warning text-danger"   >
+                                        {errores.nombreEjercicio}
+                                    </div>
+                                )}
+
                             </div>
-                            <div className="input-warning text-danger" style={{ display: "none" }}  >
-                                {errores.nombreEjercicio}
+
+
+
+                            <div className="form-group">
+                                <label htmlFor="observaciones">Observaciones:</label>
+                                <textarea id="observaciones" name="observaciones"
+                                    className={`form-control ${errores.observaciones ? 'is-invalid' : ''}`}
+                                    value={ejercicioData.observaciones || ''} onChange={handleInputChange} onBlur={handleBlur}></textarea>
+                                {errores.observaciones && (
+                                    <div className="input-warning text-danger" style={{ display: "block" }}>
+                                        {errores.observaciones}
+                                    </div>
+                                )}
                             </div>
-                        </div>
 
+                            <div className="form-group">
+                                <label htmlFor="imagenLink">Link Imagen: </label>
+                                {ejercicioData.imagenPreviewUrl && (
+                                    <span className="etiqueta-carga"
+                                        onClick={ handleDeselectImg }>
+                                        Deseleccionar
+                                    </span>
+                                )}
+                                <input ref={fileInputRef} type="file" id="imagenLink" name="imagenLink"
+                                    className={`form-control ${errores.imagenLink ? 'is-invalid' : ''}`}
+                                    accept="image/*" onChange={handleInputChange} />
+                                {errores.imagenLink && (
+                                    <div className="input-warning text-danger" >
+                                        {errores.imagenLink}
+                                    </div>
+                                )}
+                            </div>
 
+                            <div className="form-group">
+                                <label htmlFor="videoLink">Link Video:
+                                    {ejercicioData.videoLink && !showVideo && (
+                                        <span className="etiqueta-carga"
+                                            onClick={() => { setShowVideo(true); }}>
+                                            Previsualizar video
+                                        </span>
+                                    )}
 
-                        <div className="form-group">
-                            <label htmlFor="observaciones">Observaciones:</label>
-                            <textarea id="observaciones" name="observaciones"
-                                className={`form-control ${errores.observaciones ? 'is-invalid' : ''}`}
-                                value={ejercicioData.observaciones || ''} onChange={handleInputChange} onBlur={handleBlur}></textarea>
-                            {errores.observaciones && (
-                                <div className="input-warning text-danger" style={{ display: "block" }}>
-                                    {errores.observaciones}
-                                </div>
-                            )}
-                        </div>
+                                </label>
+                                <input type="url" id="videoLink" name="videoLink"
+                                    className={`form-control ${errores.videoLink ? 'is-invalid' : ''}`}
+                                    value={ejercicioData.videoLink || ''}
+                                    onChange={handleInputChange}
+                                    onBlur={handleBlur} />
+                                {errores.videoLink && (
+                                    <div className="input-warning text-danger" style={{ display: "block" }}>
+                                        {errores.videoLink}
+                                    </div>
+                                )} </div>
 
-                        <div className="form-group">
-                            <label htmlFor="imagenLink">Link Imagen: </label>
-                            <input type="file" id="imagenLink" name="imagenLink" 
-                                className={`form-control ${errores.imagenFile ? 'is-invalid' : ''}`}
-                                accept="image/*" onChange={handleInputChange} />
-                            {errores.imagenFile && (
-                                <div className="input-warning text-danger" style={{ display: "block" }}>
-                                    {errores.imagenLink}
-                                </div>
-                            )}
-
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="videoLink">Link Video:
-                                <span className="etiqueta-carga"
-                                    onClick={() => { /* Lógica de previsualización */ }}>
-                                    Previsualizar video
-                                </span>
-                            </label>
-                            <input type="url" id="videoLink" name="videoLink"
-                                className={`form-control ${errores.videoLink ? 'is-invalid' : ''}`}
-                                value={ejercicioData.videoLink || ''}
-                                onChange={handleInputChange}
-                                onBlur={handleBlur} />
-                            {errores.videoLink && (
-                                <div className="input-warning text-danger" style={{ display: "block" }}>
-                                    {errores.videoLink}
-                                </div>
-                            )} </div>
-
-                        <div className="botones">
-                            <button type="submit" className="btn btn-primary" disabled={isLoading}>
-                                {isLoading ? 'Guardando...' : 'Guardar'}
-                            </button>
-                            {/* El botón eliminar solo se muestra en modo Editar */}
-                            {modoEjercicio === "Editar" && (
-                                <button type="button" className="btn btn-danger" disabled={isLoading}>
-                                    Eliminar
+                            <div className="botones">
+                                <button type="submit" className="btn btn-primary" disabled={loading}>
+                                    {loading ? 'Guardando...' : 'Guardar'}
                                 </button>
-                            )}
+                                {/* El botón eliminar solo se muestra en modo Editar */}
+                                {modoEjercicio === "Editar" && (
+                                    <button type="button" className="btn btn-danger" disabled={loading} onClick={handleDelete}>
+                                        Eliminar
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+
+                        { /*columna derecha: vista previa de imagen y video*/}
+                        <div className="columna-der">
+                            {/* El valor de src ahora proviene de ejercicioData.imagenLink del hook */}
+                            <div className="imagen-preview">
+                                <h4>Vista previa de la imagen</h4>
+                                <img id="imagenPreview" src={ejercicioData.imagenPreviewUrl ? ejercicioData.imagenPreviewUrl : LOGO_PLACEHOLDER}
+                                    alt="Vista previa de la imagen" style={{ maxWidth: '100%', maxHeight: '150px' }} />
+                            </div>
+                            <div className="video-preview">
+                                <h4>Vista previa del video</h4>
+
+                                <div className="video-iframe-wrapper">
+                                    <div className="video-iframe-preview">
+                                        {ejercicioData.videoLink && showVideo ? (
+                                            <iframe src={getEmbedUrl(ejercicioData.videoLink)} title="Preview" />
+                                        ) : (
+                                            <div className="video-placeholder-mensaje">
+                                                {ejercicioData.videoLink
+                                                    ? 'Presione "Previsualizar video" para cargarlo.'
+                                                    : 'No hay un enlace de video ingresado.'}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
-                </div>
-            </form >
-            { /*columna derecha: vista previa de imagen y video*/}
-            <div className="columna-der">
-                {/* El valor de src ahora proviene de ejercicioData.imagenLink del hook */}
-                <div className="imagen-preview">
-                    <h4>Vista previa de la imagen</h4>
-                    <img id="imagenPreview" src={ejercicioData.imagenPreviewUrl ? ejercicioData.imagenPreviewUrl : LOGO_PLACEHOLDER}
-                        alt="Vista previa de la imagen" style={{ maxWidth: '100%', maxHeight: '150px' }} />
-                </div>
-                <div className="video-preview">
-                    <h4>Vista previa del video</h4>
-                    <iframe id="videoPreview" src={getEmbedUrl(ejercicioData.videoLink)} className="video-iframe-preview"
-                        allowFullScreen title="Vista previa del video del ejercicio">
-                    </iframe>
+                </form >
 
-                </div>
+
             </div>
-        </div>
-
-
-
+        </ >
 
     )
 }
