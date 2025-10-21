@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { fetchGeneral } from "../../componentsShare/utils/fetchGeneral";
 import '../../../colores.css';
 import './validacion.css';
@@ -28,6 +28,9 @@ const CrudEjercicioBasico = () => {
     const [showVideo, setShowVideo] = useState(false);
     //para recargar o no los ejercicios del backend
     const [reload, setReload] = useState(false);
+    //para desseleccionar la imagen
+    const fileInputRef = useRef(null);
+
 
     const {
         ejercicioData,      // Datos del formulario
@@ -37,7 +40,8 @@ const CrudEjercicioBasico = () => {
         handleInputChange,  // on/Change
         handleBlur,         // onBlur
         handleSubmit,       // onSubmit
-    } = useEjercicioForm(modoEjercicio, ejercicioSeleccionado, setReload, setEjercicioSeleccionado);
+        handleDeselectImg //fe para deseleccionar imagen, liberar espacio,etc
+    } = useEjercicioForm(modoEjercicio, ejercicioSeleccionado, setReload, setEjercicioSeleccionado,fileInputRef);
 
     const fetchEjercicios = () => {
         fetchGeneral({
@@ -169,15 +173,20 @@ const CrudEjercicioBasico = () => {
 
                             <div className="form-group">
                                 <label htmlFor="imagenLink">Link Imagen: </label>
-                                <input type="file" id="imagenLink" name="imagenLink"
-                                    className={`form-control ${errores.imagenFile ? 'is-invalid' : ''}`}
+                                {ejercicioData.imagenPreviewUrl && (
+                                    <span className="etiqueta-carga"
+                                        onClick={ handleDeselectImg }>
+                                        Deseleccionar
+                                    </span>
+                                )}
+                                <input ref={fileInputRef} type="file" id="imagenLink" name="imagenLink"
+                                    className={`form-control ${errores.imagenLink ? 'is-invalid' : ''}`}
                                     accept="image/*" onChange={handleInputChange} />
-                                {errores.imagenFile && (
+                                {errores.imagenLink && (
                                     <div className="input-warning text-danger" >
-                                        {errores.imagenFile}
+                                        {errores.imagenLink}
                                     </div>
                                 )}
-
                             </div>
 
                             <div className="form-group">
@@ -240,26 +249,7 @@ const CrudEjercicioBasico = () => {
                                 </div>
                             </div>
 
-                            {/* <div className="video-preview">
-                                <h4>Vista previa del video</h4>
-                                {ejercicioData.videoLink && showVideo ? (
-                                    <iframe id="videoPreview" src={getEmbedUrl(ejercicioData.videoLink)} className="video-iframe-preview"
-                                        allowFullScreen title="Vista previa del video del ejercicio">
-                                    </iframe>
-                                ) : (ejercicioData.videoLink ? (
-                                    <div className="video-placeholder-mensaje video-iframe-preview">
-                                        El video no se ha cargado. Presione **"Previsualizar video"** para cargarlo.
-                                    </div>
-                                ) : (
-                                    // 3. Si no hay link, no mostramos nada del video
-                                    <div className="video-placeholder-mensaje video-iframe-preview">
-                                        No hay un enlace de video ingresado.
-                                    </div>
-                                )
-                                )}
 
-
-                            </div> */}
                         </div>
                     </div>
                 </form >

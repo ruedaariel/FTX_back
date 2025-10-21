@@ -113,6 +113,9 @@ button[type="button"] {
     text-align: center;
 }
 
+input[type="file"] {
+  overflow: hidden;
+}
 
 .etiqueta-carga {
     color: var(--color-primario-naranja);

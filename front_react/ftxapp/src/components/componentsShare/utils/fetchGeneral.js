@@ -29,10 +29,14 @@ export const fetchGeneral = async ({
 
   try {
     const response = await fetch(url, fetchOptions);
+  const data = await response.json();
 
-    if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
+    if (!response.ok) {
+      const errorMessage = data.message || `Error ${response.status}: ${response.statusText}`;
+      throw new Error(errorMessage);
+    } 
 
-    const data = await response.json();
+  
     if (onSuccess) onSuccess(data);
     if (setError) setError(null);
 
@@ -46,6 +50,7 @@ export const fetchGeneral = async ({
       });
     }
   } catch (err) {
+    console.log("error", err.message);
     if (setError) setError(err.message);
     if (onError) onError(err);
     if (setMostrarErrorAcceso) setMostrarErrorAcceso(true);

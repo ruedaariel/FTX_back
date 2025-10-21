@@ -21,6 +21,7 @@ function App() {
       <ModalProvider>
        <HeaderCrud title="Gestion de Ejercicios"></HeaderCrud>
         <CrudEjercicioBasico></CrudEjercicioBasico>
+        <ModalGlobal></ModalGlobal>
       </ModalProvider>
 
 
