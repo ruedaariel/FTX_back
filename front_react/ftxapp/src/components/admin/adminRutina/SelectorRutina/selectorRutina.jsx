@@ -6,18 +6,24 @@ import { fetchGeneral } from "./../../../componentsShare/utils/fetchGeneral.js";
 import GrupoRadios from "./../../../componentsShare/grupoRadios/grupoRadios.jsx";
 import SelectorGenerico from "./../../../componentsShare/selectorGenerico/selectorGenerico.jsx";
 
-const SelectorRutinas = ({
-  onSeleccionarRutina, // Callback para enviar rutina seleccionada al componente padre
-  modoRutina,          // Modo actual: "Crear", "Editar", "Copiar"
-  setModoRutina        // Setter para cambiar el modo
-}) => {
-  // Estados locales
-  const [rutinas, setRutinas] = useState([]);               // Lista de rutinas disponibles
-  const [loading, setLoading] = useState(false);            // Estado de carga
-  const [error, setError] = useState(null);                 // Estado de error
-  const [rutinaSeleccionada, setRutinaSeleccionada] = useState(""); // Rutina seleccionada localmente
+/**
+ * Componente que permite seleccionar una rutina existente y definir el modo de trabajo (Crear, Editar, Copiar)
+ * @param {Function} onSeleccionarRutina - Callback que envía la rutina seleccionada al componente padre
+ * @param {string} modoRutina - Modo actual de operación
+ * @param {Function} setModoRutina - Setter para cambiar el modo
+ */
+const SelectorRutinas = ({ onSeleccionarRutina, modoRutina, setModoRutina }) => {
+  // Lista de rutinas disponibles desde el backend
+  const [rutinas, setRutinas] = useState([]);
 
-  // Cargar todas las rutinas al montar el componente
+  // Estado de carga y error para el fetch
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Rutina seleccionada localmente desde el selector
+  const [rutinaSeleccionada, setRutinaSeleccionada] = useState("");
+
+  // Cargar todas las rutinas disponibles al montar el componente
   useEffect(() => {
     fetchGeneral({
       url: "http://localhost:8000/apiFtx/rutina/all",
@@ -28,7 +34,7 @@ const SelectorRutinas = ({
     });
   }, []);
 
-  // Limpiar selección al entrar en modo "Crear"
+  // Limpiar selección si el usuario cambia a modo "Crear"
   useEffect(() => {
     if (modoRutina === "Crear") {
       setRutinaSeleccionada(null);
@@ -38,7 +44,7 @@ const SelectorRutinas = ({
   return (
     <div className="selector-rutinas-container">
       <div className="selector-rutinas-visual">
-        {/* Selector de modo: Crear / Editar / Copiar */}
+        {/* Selector de modo de operación */}
         <GrupoRadios
           opciones={["Crear", "Editar", "Copiar"]}
           valorSeleccionado={modoRutina}
@@ -46,12 +52,13 @@ const SelectorRutinas = ({
           nombreGrupo="modoRutina"
         />
 
-        {/* Selector de rutina disponible */}
+        {/* Selector de rutina existente */}
         <SelectorGenerico
           opciones={rutinas}
           valueKey="idRutina"
           labelKey="nombreRutina"
           valorSeleccionado={rutinaSeleccionada}
+          disabled={modoRutina === "Crear"? true : false}
           onSeleccionar={(rutina) => {
             setRutinaSeleccionada(rutina);
             if (onSeleccionarRutina) onSeleccionarRutina(rutina);
@@ -60,10 +67,11 @@ const SelectorRutinas = ({
         />
       </div>
 
-      {/* Mensaje de error si falla la carga */}
+      {/* Mostrar mensaje de error si falla la carga */}
       {error && <p className="error-texto">Error: {error}</p>}
     </div>
   );
 };
 
 export default SelectorRutinas;
+

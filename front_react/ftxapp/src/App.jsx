@@ -1,5 +1,3 @@
-
-
 import HeaderCrud from './components/componentsShare/header/HeaderCrud.jsx'
 import CrudEjercicioBasico from './components/admin/adminEjercicio/CrudEjercicioBasico.jsx'
 import { ModalProvider } from "../src/context/ModalContext.jsx";

@@ -3,44 +3,36 @@ import SemanaRutina from "./semanaRutina/semanaRutina";
 import "./rutinaModular.css";
 import { useModal } from "../../../../context/ModalContext";
 
-
 // Utilidades para manipular la rutina
 import {
   guardarSemanaCompleta,
   agregarEjercicioEnDia,
   agregarDiaEnSemana,
   eliminarEjercicioDeDia,
-  agregarDiaEnSemanaConLimite,
   avanzarODuplicarSemana,
-  diaTieneEjercicios
 } from "./../../../componentsShare/utils/rutinaUtils";
 
-// Modales
+// Modal de confirmación
 import ModalDecision from "./../../../componentsShare/Modal/ModalDecision";
-import ModalInfoTemporizado from "./../../../componentsShare/Modal/ModalInfoTemporizado";
 
-const RutinaVisual = ({ rutina, modoRutina, mostrarModalInfo}) => {
+/**
+ * Componente visual principal para editar la rutina por semanas y días
+ * @param {Object} rutina - Rutina original recibida desde el padre
+ * @param {string} modoRutina - Modo actual: "Crear", "Editar", "Copiar"
+ * @param {Function} onRutinaEditadaChange - Callback para enviar rutina editada al padre
+ */
+const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange }) => {
   // Estado editable de la rutina
   const [rutinaEditable, setRutinaEditable] = useState(null);
 
-  // Estado de navegación y mensajes
+  // Índice de la semana actualmente expandida
   const [semanaActivaIndex, setSemanaActivaIndex] = useState(0);
+
+  // Estado para mostrar modal de decisión al alcanzar límite de semanas
   const [mostrarModalDecision, setMostrarModalDecision] = useState(false);
-  //const [mostrarModalInfo, setMostrarModalInfo] = useState(false);
-  //const [mensajeModalInfo, setMensajeModalInfo] = useState("");
 
-  // Mostrar mensaje informativo temporal
-  /* const mostrarModalInfoTemporizado = (mensaje, duracion = 3000) => {
-    setMensajeModalInfo(mensaje);
-    setMostrarModalInfo(true);
-  }; */
-
+  // Modal global para mensajes
   const { showModal } = useModal();
-
-  // Expandir o contraer una semana
-  const toggleSemanaExpandida = (index) => {
-    setSemanaActivaIndex((prevIndex) => (prevIndex === index ? null : index));
-  };
 
   // Inicializar rutina editable al recibirla
   useEffect(() => {
@@ -48,6 +40,18 @@ const RutinaVisual = ({ rutina, modoRutina, mostrarModalInfo}) => {
       setRutinaEditable(rutina);
     }
   }, [rutina]);
+
+  // Propagar rutina editada al componente padre
+  useEffect(() => {
+    if (rutinaEditable) {
+      onRutinaEditadaChange?.(rutinaEditable);
+    }
+  }, [rutinaEditable]);
+
+  // Alternar expansión de semana
+  const toggleSemanaExpandida = (index) => {
+    setSemanaActivaIndex((prevIndex) => (prevIndex === index ? null : index));
+  };
 
   // Guardar día y avanzar si corresponde
   const handleGuardarDia = (semanaIndex, diaIndex) => {
@@ -65,30 +69,26 @@ const RutinaVisual = ({ rutina, modoRutina, mostrarModalInfo}) => {
 
     if (siguienteSemanaExiste) {
       setSemanaActivaIndex(semanaIndex + 1);
-      //mostrarModalInfoTemporizado("Semana completa, pasando a la siguiente");
-      //mostrarModalInfo("Semana completa, pasando a la siguiente");
-      showModal("Semana completa, pasando a la siguiente","success");
+      showModal("Semana completa, pasando a la siguiente", "success");
       return;
     }
 
     if (rutinaTiene4Semanas) {
       setMostrarModalDecision(true);
-      //mostrarModalInfo("Se alcanzó el límite de 4 semanas");
-      showModal("Se alcanzó el límite de 4 semanas","info");
+      showModal("Se alcanzó el límite de 4 semanas", "info");
       return;
     }
 
     const nuevaRutina = avanzarODuplicarSemana(rutinaEditable, semanaIndex);
     setRutinaEditable(nuevaRutina);
     setSemanaActivaIndex(semanaIndex + 1);
-    //mostrarModalInfo("Semana completa, comenzando nueva semana");
-    showModal("Semana completa, comenzando nueva semana","success");
+    showModal("Semana completa, comenzando nueva semana", "success");
   };
 
   // Guardar semana actual (estructura lista para backend)
   const handleGuardarSemana = (semanaIndex) => {
     const payload = guardarSemanaCompleta(rutinaEditable, semanaIndex);
-    // Aquí podrías enviar el payload al backend
+    // Aquí podrías enviar el payload al backend si se desea
   };
 
   // Guardar semana y avanzar, completando días si faltan
@@ -96,6 +96,7 @@ const RutinaVisual = ({ rutina, modoRutina, mostrarModalInfo}) => {
     let nuevaRutina = { ...rutinaEditable };
     const semanaActual = nuevaRutina.semanas[semanaIndex];
 
+    // Completar hasta 7 días si faltan
     while (semanaActual.dias.length < 7) {
       semanaActual.dias.push({
         focus: "",
@@ -105,9 +106,9 @@ const RutinaVisual = ({ rutina, modoRutina, mostrarModalInfo}) => {
             repeticiones: "",
             peso: "",
             dificultad: "",
-            observaciones: ""
-          }
-        ]
+            observaciones: "",
+          },
+        ],
       });
     }
 
@@ -117,24 +118,21 @@ const RutinaVisual = ({ rutina, modoRutina, mostrarModalInfo}) => {
     if (siguienteSemanaExiste) {
       setRutinaEditable(nuevaRutina);
       setSemanaActivaIndex(semanaIndex + 1);
-      //mostrarModalInfoTemporizado("Pasando a la siguiente semana");
-      showModal("Pasando a la siguiente semana","success");
+      showModal("Pasando a la siguiente semana", "success");
       return;
     }
 
     if (rutinaTiene4Semanas) {
       setRutinaEditable(nuevaRutina);
       setMostrarModalDecision(true);
-      //mostrarModalInfoTemporizado("Se alcanzó el límite de 4 semanas");
-      showModal("Se alcanzó el límite de 4 semanas","info");
+      showModal("Se alcanzó el límite de 4 semanas", "info");
       return;
     }
 
     nuevaRutina = avanzarODuplicarSemana(nuevaRutina, semanaIndex);
     setRutinaEditable(nuevaRutina);
     setSemanaActivaIndex(semanaIndex + 1);
-    //mostrarModalInfoTemporizado("Nueva semana creada");
-    showModal("Nueva semana creada","success");
+    showModal("Nueva semana creada", "success");
   };
 
   // Actualizar un ejercicio específico
@@ -158,15 +156,14 @@ const RutinaVisual = ({ rutina, modoRutina, mostrarModalInfo}) => {
 
   // Guardar rutina completa (estructura lista para backend)
   const handleGuardarRutina = () => {
-    const payload = rutinaEditable.semanas.map((semana, index) =>
+    const payload = rutinaEditable.semanas.map((_, index) =>
       guardarSemanaCompleta(rutinaEditable, index)
     );
-
     console.log("Payload completo de rutina:", payload);
     setMostrarModalDecision(false);
   };
 
-  // Validación inicial
+  // Validación inicial: rutina sin semanas
   if (!rutinaEditable?.semanas?.length) {
     return <p>No hay semanas cargadas.</p>;
   }
@@ -191,9 +188,6 @@ const RutinaVisual = ({ rutina, modoRutina, mostrarModalInfo}) => {
         />
       )}
 
-      {/* Modal informativo temporal */}
-      
-
       {/* Render de cada semana */}
       {rutinaEditable.semanas.map((semana, index) => (
         <SemanaRutina
@@ -209,7 +203,6 @@ const RutinaVisual = ({ rutina, modoRutina, mostrarModalInfo}) => {
           onGuardarSemana={handleGuardarSemana}
           onGuardarSemanaAvanzar={handleGuardarSemanaAvanzar}
           onToggleExpand={toggleSemanaExpandida}
-          
         />
       ))}
     </div>

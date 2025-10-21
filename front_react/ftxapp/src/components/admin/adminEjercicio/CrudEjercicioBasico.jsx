@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { fetchGeneral } from "../../componentsShare/utils/fetchGeneral";
-import '../../../colores.css';
+import '../../../styles/colores.css';
 import './validacion.css';
 import './crud_ejercicio.css';
 import SelectorEjercicio from "./selectorEjercicio";

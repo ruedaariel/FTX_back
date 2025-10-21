@@ -1,9 +1,30 @@
-.rutina-visual {
+.rutina-visual{
   padding: 1rem;
   background-color: var(--color-fondo-gris-claro);
   border-radius: 8px;
-  margin: 1rem 3rem 0rem 3rem;
+  margin: .3rem 3rem 0rem 3rem;
   padding: .2rem 0 .4rem 0;
+}
+
+.boton-guardar-global{
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  background-color: var(--color-fondo-gris-claro);
+  border-radius: 8px;
+  margin: .1rem 3rem 0rem 3rem;
+  padding: .2rem 0 .4rem 0;
+}
+
+.btn-guardar-rutina-visual{
+
+  margin: .5rem auto;
+  background-color: var(--color-primario-naranja);
+  border-radius: 6px;
+  color: var(--color-texto-claro);
+  text-align: center;
+  border-color:var(--color-primario-naranja); ;
+
 }
 
 .semana-rutina {
