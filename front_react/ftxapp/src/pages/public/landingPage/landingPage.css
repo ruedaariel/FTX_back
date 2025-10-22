@@ -15,31 +15,31 @@ body {
 }
 
 /* ------------------------- Navbar ------------------------------ */
-#mainNavbar {
+.mainNavbar-header {
     background-color: var(--color-fondo-mas-oscuro-con-transp);
     border-bottom: 3px solid #ff6f00;
 }
 
 
-.navbar {
-    transition: background-color 1.0s ease-in-out, padding 1.0 ease-in-out;
+.navbar-header {
+    transition: background-color 1s ease-in-out, padding 1s ease-in-out;
     /*tarda un segundo en acomodarse cuando pasa de pc a mobile*/
 }
 
-.navbar-brand img {
+.navbar-brand-img {
     width: 50px; 
     height: auto; /* Mantiene la proporción */
 }
 
-.nav-link {
+.nav-link-header {
     color: var(--color-texto-claro);
     margin-left: 1rem;
     transition: color 0.3s ease;
     /*ease: efecto de transicion lento, rapido, lento*/
 }
 
-.nav-link:hover,
-.nav-link.active {
+.nav-link-header:hover,
+.nav-link-header.active {
     color: var(--color-primario-naranja);
 }
 
