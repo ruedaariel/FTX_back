@@ -5,6 +5,8 @@ import "./selectorRutina.css";
 import { fetchGeneral } from "./../../../componentsShare/utils/fetchGeneral.js";
 import GrupoRadios from "./../../../componentsShare/grupoRadios/grupoRadios.jsx";
 import SelectorGenerico from "./../../../componentsShare/selectorGenerico/selectorGenerico.jsx";
+import { useModal } from "../../../../context/ModalContext.jsx";
+
 
 /**
  * Componente que permite seleccionar una rutina existente y definir el modo de trabajo (Crear, Editar, Copiar)
@@ -19,6 +21,7 @@ const SelectorRutinas = ({ onSeleccionarRutina, modoRutina, setModoRutina }) => 
   // Estado de carga y error para el fetch
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { showModal } = useModal();
 
   // Rutina seleccionada localmente desde el selector
   const [rutinaSeleccionada, setRutinaSeleccionada] = useState("");
@@ -31,6 +34,7 @@ const SelectorRutinas = ({ onSeleccionarRutina, modoRutina, setModoRutina }) => 
       setLoading,
       setError,
       onSuccess: (data) => setRutinas(data),
+      showModal,
     });
   }, []);
 
@@ -68,7 +72,7 @@ const SelectorRutinas = ({ onSeleccionarRutina, modoRutina, setModoRutina }) => 
       </div>
 
       {/* Mostrar mensaje de error si falla la carga */}
-      {error && <p className="error-texto">Error: {error}</p>}
+      {/* {error && <p className="error-texto">Errorcito: {error}</p>} */}
     </div>
   );
 };

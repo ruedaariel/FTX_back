@@ -15,34 +15,37 @@ export const armarRutinaParaGuardar = ({
     nombreRutina: datosRutinaUsuario.nombreRutina,
     estadoRutina: "activa",
     semanas: semanasTransformadas,
+     
   };
+
+  /* console.log("%cmodoRutinaBase ----->","color: brown; font-weight: bold;",modoRutina);
+  console.log("%crutinaBase ----->","color: brown; font-weight: bold;",rutinaBase);
+  console.log("%cmodoRutinaFinal ----->","color: brown; font-weight: bold;",rutinaFinal); */
 
   // En modo "Copiar", el ID de usuario se deja en null
   if (modoRutina === "Copiar") {
 
-    console.log("%cmodo rutina ----->","color: red; font-weight: bold;",modoRutina);
+    /* console.log("%cmodo rutina ----->","color: red; font-weight: bold;",modoRutina);
     console.log("%cdatosRutinaUsuario.idUsuario ----->","color: red; font-weight: bold;",datosRutinaUsuario.idUsuario);
-    console.log("%cdatosRutinaUsuario ----->","color: red; font-weight: bold;",datosRutinaUsuario);
+    console.log("%cdatosRutinaUsuario ----->","color: red; font-weight: bold;",datosRutinaUsuario); */
+    
     rutinaBase.idUsuario = parseInt(datosRutinaUsuario.idUsuario);
+
     //rutinaBase.idUsuario = null;
   } else {
     // En modo "Crear" o "Editar", se asigna el ID del usuario (convertido a número)
     //rutinaBase.idUsuario = parseInt(datosRutinaUsuario.nombreUsuario);
     
-    console.log("%cmodo rutina ----->","color: yellow; font-weight: bold;",modoRutina);
+    /* console.log("%cmodo rutina ----->","color: yellow; font-weight: bold;",modoRutina);
     console.log("%cdatosRutinaUsuario.idUsuario ----->","color: yellow; font-weight: bold;",datosRutinaUsuario.idUsuario);
-    console.log("%cdatosRutinaUsuario ----->","color: yellow; font-weight: bold;",datosRutinaUsuario);
+    console.log("%cdatosRutinaUsuario ----->","color: yellow; font-weight: bold;",datosRutinaUsuario); */
 
     rutinaBase.idUsuario = datosRutinaUsuario.idUsuario===""? null: parseInt(datosRutinaUsuario.idUsuario);
     
 
   }
 
-  // En modo "Editar", también se incluye el ID de la rutina para el PUT
-  if (modoRutina === "Editar") {
-    rutinaBase.id = rutinaFinal.id;
-  }
-
+  //console.log("%crutinaBase ----->","color: red; font-weight: bold;",rutinaBase);
   // Devuelve el objeto completo listo para enviar al backend
   return rutinaBase;
 };

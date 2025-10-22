@@ -13,6 +13,7 @@ const RutinaUsuario = ({
   modoRutina,               // Modo actual: "Crear", "Editar", "Copiar"
   onResetearInterfaz,       // Callback para reiniciar la interfaz (no se usa aquí)
   onDatosRutinaChange,      // Callback para enviar cambios al componente padre
+  datosRutinaUsuario,       // Datos de la rutina (nombre y usuario)
 }) => {
   // Lista de usuarios disponibles
   const [usuarios, setUsuarios] = useState([]);
@@ -37,9 +38,17 @@ const RutinaUsuario = ({
   useEffect(() => {
     if (rutinaSeleccionada?.nombreRutina) {
       setNombreRutinaEditable(rutinaSeleccionada.nombreRutina);
-      setUsuarioSeleccionado(rutinaSeleccionada.nombreUsuario || "");
+      setUsuarioSeleccionado(rutinaSeleccionada.idUsuario || "");
     }
   }, [rutinaSeleccionada]);
+
+  useEffect(() => {
+  setNombreRutinaEditable(datosRutinaUsuario?.nombreRutina || "");
+  setUsuarioSeleccionado(datosRutinaUsuario?.idUsuario || "");
+}, [datosRutinaUsuario]);
+
+
+  
 
   // Propagar cambios al componente padre cuando cambian los campos
   useEffect(() => {
@@ -51,10 +60,13 @@ const RutinaUsuario = ({
     }
   }, [nombreRutinaEditable, usuarioSeleccionado]);
 
+  
+  // console.log("%cUsuario ----->","color: orange;font-weight: bold;",rutinaSeleccionada);
   // Handler para cambio de usuario
   const handleUsuarioChange = (e) => {
     setUsuarioSeleccionado(e.target.value);
     console.log("usuario", e.target.value);
+    
   };
 
   // Handler para cambio de nombre de rutina
@@ -122,7 +134,7 @@ const RutinaUsuario = ({
             onChange={handleUsuarioChange}
             disabled={modoRutina === "Editar"}
           >
-            <option value="">{usuarioSeleccionado}</option>
+            <option value="">{rutinaSeleccionada?.nombreUsuario || "Seleccione un usuario"}</option>
             {usuarios
               .filter((usuario) => usuario.rol === "usuario")
               .map((usuario) => (
