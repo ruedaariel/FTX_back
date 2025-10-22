@@ -1,10 +1,9 @@
-// front_react/ftxapp/src/pages/PagosAdmin/PagosAdmin.jsx
 import React, { useState } from 'react';
-
 import './PagosAdmin.css';
-import Button from '../../components/form/button/button';
-import Modal from '../../components/modal/modal';
-import PagoManualForm from '../../components/pagoManualForm/pagoManualForm';
+import Modal from '../../../components/modal';
+import PagoManualForm from '../../../components/pagoManualForm/pagoManualForm';
+import Button from '../../../components/form/button/button';
+
 
 const PagosAdmin = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,16 +23,6 @@ const PagosAdmin = () => {
     try {
       console.log('Enviando pago manual:', pagoData);
       
-      // Aquí irá la llamada al API
-      // const response = await fetch('/api/pagos/manual', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(pagoData)
-      // });
-      
-      // Simular delay de respuesta
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       console.log('Pago registrado exitosamente');
