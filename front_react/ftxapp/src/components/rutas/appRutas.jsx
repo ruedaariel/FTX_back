@@ -6,6 +6,8 @@ import UsuarioDashboard from "../../pages/usuario/usuarioDashboard/usuarioDashbo
 import InicioRutina from "../../pages/admin/adminRutinas/inicioRutina";
 import PantallaClientes from "../../pages/admin/adminClientes/PantallaClientes";
 import EnContruccion from "../../pages/public/enContruccion/EnConstruccion";
+import { PagosAdmin } from "../../pages/admin/adminPagos";
+
 
 /* import Rutina from "../pages/Rutina";
 import Usuarios from "../pages/Usuarios";
@@ -20,6 +22,7 @@ const AppRutas = () => {
       <Route path="/usuario" element={<UsuarioDashboard />} />
       <Route path="/admin/rutinas" element={<InicioRutina />} />
       <Route path="/admin/clientes" element={<PantallaClientes />} />
+      <Route path="/admin/pagos" element={<PagosAdmin />} />
       <Route path="*" element={<EnContruccion />} />
 
     {/*   <Route path="/rutina" element={<Rutina />} />
