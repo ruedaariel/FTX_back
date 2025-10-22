@@ -20,11 +20,11 @@ function landingPage() {
   return (
     <ModalProvider>
       <Header />
-      {/* <Carousel />
-      <PorqueElegirnos />
-      <TuTrainer />
+       <Carousel />
+     <PorqueElegirnos />
+       <TuTrainer />
       <Planes />
-      <Testimonios />
+     {/* <Testimonios />
       <Faq />
       <Footer /> */}
       <ModalGlobal />
