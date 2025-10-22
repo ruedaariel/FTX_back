@@ -13,18 +13,20 @@ import Planes from "../../../components/landingPage/planes.jsx"
 import Testimonios from "../../../components/landingPage/testimonios.jsx"
 import Faq from "../../../components/landingPage/faq.jsx"
 import Footer from "../../../components/landingPage/footer.jsx"
+import './landingPage.css'
+import EnConstruccion from "../enContruccion/EnConstruccion.jsx";
 
 function landingPage() {
   return (
     <ModalProvider>
       <Header />
-      <Carousel />
+      {/* <Carousel />
       <PorqueElegirnos />
       <TuTrainer />
       <Planes />
       <Testimonios />
       <Faq />
-      <Footer />
+      <Footer /> */}
       <ModalGlobal />
     </ModalProvider>
   );
