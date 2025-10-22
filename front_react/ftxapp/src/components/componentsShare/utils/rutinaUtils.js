@@ -222,14 +222,14 @@ const transformarRutinaCompleta = (rutina) =>
   rutina.semanas.map((semana, semanaIndex) => ({
     nroSemana: String(semanaIndex + 1),
     estadoSemana: semana.estadoSemana || "en proceso",
-    descripcion: semana.descripcion || "",
+    /* descripcion: semana.descripcion || "", */
     dias: semana.dias.map((dia, diaIndex) => ({
       nroDia: String(diaIndex + 1),
       focus: dia.focus || "",
       ejerciciosRutina: dia.ejerciciosRutina.map((ej) => ({
         idEjercicioBasico: ej.idEjercicioBasico,
         repeticiones: ej.repeticiones,
-        peso: ej.peso,
+        peso: parseFloat(ej.peso),
         dificultad: ej.dificultad,
         observaciones: ej.observaciones || "",
       })),

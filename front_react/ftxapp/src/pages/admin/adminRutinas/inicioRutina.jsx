@@ -75,12 +75,14 @@ function inicioRutina() {
       datosRutinaUsuario,
     });
 
+    // borra la prpiredad id que no es necesaria par backend en editar
     if (modoRutina === "Editar") {
-      rutinaParaGuardar.id = rutinaFinal.id;
+      delete rutinaParaGuardar.id ;
     }
 
+    // console.log("%crutinaFINALsANEADA ----->","color: yellow; font-weight: bold;",rutinaFinalSaneada);
     try {
-      await guardarRutinaEnBackend(rutinaParaGuardar, modoRutina);
+      await guardarRutinaEnBackend(rutinaFinalSaneada.idRutina, rutinaParaGuardar, modoRutina);
       const mensaje =
         modoRutina === "Crear"
           ? "Rutina creada correctamente"
@@ -88,10 +90,10 @@ function inicioRutina() {
           ? "Rutina copiada y guardada correctamente"
           : "Rutina editada correctamente";
 
-      showModal(mensaje, "success");
+      showModal(mensaje, "success",2000);
       resetearInterfaz();
     } catch (error) {
-      showModal("Error al guardar la rutina", "error");
+      showModal("Error al guardar la rutina", "error",0,true);
     }
   };
 
@@ -99,8 +101,10 @@ function inicioRutina() {
   const resetearInterfaz = () => {
     const rutinaNueva = crearRutinaNueva();
     setRutinaSeleccionada(rutinaNueva);
-    setRutinaData(rutinaNueva);
+    setRutinaData(null);
     setModoRutina("Crear");
+    setReiniciarRutina(!reiniciarRutina);
+    
   };
 
   // Render principal
@@ -121,6 +125,7 @@ function inicioRutina() {
         modoRutina={modoRutina}
         onResetearInterfaz={resetearInterfaz}
         onDatosRutinaChange={setDatosRutinaUsuario}
+        datosRutinaUsuario={datosRutinaUsuario}
       />
 
       
