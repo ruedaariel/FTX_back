@@ -14,8 +14,8 @@ function Planes() {
                     <div className="col-lg-4 col-md-6 mb-4">
                         <div className="card h-100 shadow border-0">
                             <div className="card-body text-center p-4">
-                                <h5 className="card-title  text-uppercase">Básico</h5>
-                                <h6 className="card-price display-4 fw-bold">$0<span className="period fs-6">/mes</span></h6>
+                                <h5 className="card-title-landing  fs-3 text-uppercase">Básico</h5>
+                                <h6 className="card-price display-6 fw-bold">$0<span className="period fs-6">/mes</span></h6>
                                 <hr className="my-4"/>
                                 <ul className="list-unstyled mb-4">
                                     <li className="mb-2"><span className="fa-li"><i
@@ -41,7 +41,7 @@ function Planes() {
                         <div className="card h-100 shadow  border-2 popular-plan">
                             <div className="card-body text-center p-4">
 
-                                <h5 className="card-title  text-uppercase">Pro</h5>
+                                <h5 className="card-title-landing fs-3 text-uppercase">Pro</h5>
                                 <h6 className="card-price display-4 fw-bold">$25<span className="period fs-6">/mes</span></h6>
                                 <hr className="my-4"/>
                                 <ul className="list-unstyled mb-4">
@@ -70,7 +70,7 @@ function Planes() {
                     <div className="col-lg-4 col-md-6 mb-4">
                         <div className="card h-100 shadow border-0">
                             <div className="card-body text-center p-4">
-                                <h5 className="card-title text-uppercase">Premiun</h5>
+                                <h5 className="card-title-landing text-uppercase">Premiun</h5>
                                 <h6 className="card-price display-4 fw-bold">$50<span className="period fs-6">/mes</span></h6>
                                 <hr className="my-4"/>
                                 <ul className="list-unstyled mb-4">
