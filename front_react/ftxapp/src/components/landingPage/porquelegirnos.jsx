@@ -13,7 +13,7 @@ function PorqueElegirnos() {
                             <div className="card-body-landing">
                                 <i className="fas fa-clock fa-3x mb-3"></i>
                                 <h5 className="card-title-landing">Flexibilidad Total</h5>
-                                <p className="card-text">Entrená cuando quieras, donde quieras. Tu rutina se adapta a tu horario, es flexible.
+                                <p className="card-text">Entrená cuando quieras, donde quieras.<br/> Tu rutina se adapta a tu horario,<br/> es flexible.
                                 </p>
                             </div>
                         </div>
@@ -23,7 +23,7 @@ function PorqueElegirnos() {
                             <div className="card-body-landing">
                                 <i className="fas fa-dumbbell fa-3x mb-3"></i>
                                 <h5 className="card-title-landing">Rutinas Personalizadas</h5>
-                                <p className="card-text">Planes pensados para tus objetivos, tu nivel, tus gustos y tu forma de entrenar.</p>
+                                <p className="card-text">Planes pensados para tus objetivos,<br/> tu nivel, tus gustos <br/> y tu forma de entrenar.</p>
                             </div>
                         </div>
                     </div>
@@ -32,7 +32,7 @@ function PorqueElegirnos() {
                             <div className="card-body-landing">
                                 <i className="fas fa-map-marked-alt fa-3x mb-3"></i>
                                 <h5 className="card-title-landing">Elige Tu Gimnasio</h5>
-                                <p className="card-text">Entrená en cualquier gimnasio sin modificar tu rutina ni cambiar tu forma de entrenar.
+                                <p className="card-text">Entrená en cualquier gimnasio <br/>sin modificar tu rutina <br/>ni cambiar tu forma de entrenar.
                                 </p>
                             </div>
                         </div>

@@ -24,9 +24,9 @@ function landingPage() {
      <PorqueElegirnos />
        <TuTrainer />
       <Planes />
-     {/* <Testimonios />
-      <Faq />
-      <Footer /> */}
+      <Testimonios />
+    <Faq />
+       <Footer /> 
       <ModalGlobal />
     </ModalProvider>
   );

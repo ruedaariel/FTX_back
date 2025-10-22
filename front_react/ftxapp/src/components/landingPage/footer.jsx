@@ -18,8 +18,8 @@ function Footer() {
                 <a href="https://www.facebook.com" className="me-2"><i className="fab fa-facebook-f"></i></a>
                 <a href="https://www.instagram.com/" className="me-2"><i className="fab fa-instagram"></i></a>
 
-                <a className="social-icon" href="https://www.linkedin.com/"><i className="fab fa-linkedin-in"></i></a>
-                <a className="social-icon" href="https://www.youtube.com/"><i className="fa-brands fa-youtube"></i></a>
+                <a  href="https://www.linkedin.com/" className="me-2"><i className="fab fa-linkedin-in"></i></a>
+                <a href="https://www.youtube.com/" className= "me-2"><i className="fa-brands fa-youtube"></i></a>
             </div>
         </div>
 
