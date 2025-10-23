@@ -1,58 +1,105 @@
 
 import logo from '../../assets/Recursos/IconosLogos/logoSinLetrasNaranja.png'
+import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 
 function Header() {
+  //controla el menu hamburguesa
+  const [open, setOpen] = useState(false);
 
-    return (
+  //pasa el callback que le indica a donde ir
+  const handleNavClick = (cb) => {
+    setOpen(false);
+    if (typeof cb === 'function') cb();
+  };
 
-        <header>
-        
-        <nav className="navbar navbar-expand-lg fixed-top navbar-dark mainNavbar-header navbar-header" id="mainNavbar" >
-            <div className="container">
-                <a className="navbar-brand" href="index.html">
-                    <img src={logo}alt="logo FTX" title="Página principal" className='navbar-brand-img'/> FTX </a>
+  return (
 
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="collapse navbar-collapse" id="navbarNav">
-                    <ul className="navbar-nav ms-auto">
-                        <li className="nav-item">
-                            <a className="nav-link active nav-link-header " aria-current="page" href="#inicio">Inicio</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link nav-link-header " href="#entrenador">Entrenador</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link nav-link-header " href="#beneficios">Beneficios</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link nav-link-header " href="#planes">Planes</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link nav-link-header " href="#testimonios">Testimonios</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link nav-link-header " href="#faq">FAQ</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link nav-link-header " href="./contacto/contacto.html">Contacto</a>
-                        </li>
-                        <li className="nav-item">
+    <Navbar
+      expand="lg"
+      className="mainNavbar-header"
+      variant="dark"
+      fixed="top"
+      expanded={open}
+    >
+      <Container>
+        <Navbar.Brand as={Link} to="/">
+          <img src={logo} alt="logo FTX" className="navbar-brand-img" /> FTX
+        </Navbar.Brand>
 
-                            <a className="nav-link nav-link-header btn btn-resaltado btn-sm"
-                                href="./loginregister/login_basico.html">Login/Registro</a>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" onClick={() => setOpen(v => !v)} />
 
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="ms-auto">
+            <Nav.Link
+              onClick={() =>
+                handleNavClick(() =>
+                  document.getElementById('inicio')?.scrollIntoView({ behavior: 'smooth' }) //el movimiento es suave
+                )
+              }
+            >
+              Inicio
+            </Nav.Link>
 
+            <Nav.Link onClick={() =>
+              handleNavClick(() =>
+                document.getElementById('beneficios')?.scrollIntoView({ behavior: 'smooth' })
+              )
+            }
+            >
+              Beneficios
+            </Nav.Link>
 
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    );
+            <Nav.Link onClick={() =>
+              handleNavClick(() =>
+                document.getElementById('planes')?.scrollIntoView({ behavior: 'smooth' })
+              )
+            }
+            >
+              Planes
+            </Nav.Link>
+
+            <Nav.Link
+              onClick={() =>
+                handleNavClick(() =>
+                  document.getElementById('entrenador')?.scrollIntoView({ behavior: 'smooth' })
+                )
+              }
+            >
+              Entrenador
+            </Nav.Link>
+
+            <Nav.Link onClick={() =>
+              handleNavClick(() =>
+                document.getElementById('testimonios')?.scrollIntoView({ behavior: 'smooth' })
+              )
+            }
+            >
+              Testimonios
+            </Nav.Link>
+
+            <Nav.Link onClick={() =>
+              handleNavClick(() =>
+                document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' })
+              )
+            }
+            >
+              FAQ
+            </Nav.Link>
+
+            <Nav.Link as={Link} to="/contacto" onClick={() => handleNavClick()}>
+              Contacto
+            </Nav.Link>
+
+            <Nav.Link href="./loginregister/login_basico.html" className="btn btn-resaltado btn-sm">
+              Login/Registro
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  );
 }
 
 export default Header;

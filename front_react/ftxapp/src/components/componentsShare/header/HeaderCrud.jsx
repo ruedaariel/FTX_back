@@ -2,14 +2,21 @@ import React from 'react'
 import logo from '../../../assets/recursos/IconosLogos/logoSinLetrasNaranja.png'
 import './HeaderCrud.css'
 //import '../../../colores.css'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 
 function HeaderCrud({ title = "Panel" }) {
-  // const navegar = useNavigate();
+  const navigate = useNavigate();
 
-  const volver = () => { console.log("Volver a la página anterior");}
+  const volver = () => { 
+     // intenta volver en el historial; si no hay historial, ir al dashboard
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/'); // Ver como ir a las home page del admin o del user 
+    }
+  }
   //   navegar(-1); // Volver a la página anterior
   // };
 
