@@ -14,6 +14,8 @@ body {
     background-color: var(--color-fondo-body);
 }
 
+
+
 /* ------------------------- Navbar ------------------------------ */
 .mainNavbar-header {
     background-color: var(--color-fondo-mas-oscuro-con-transp);
@@ -442,17 +444,22 @@ footer {
     border-top: 1px solid #495057;
 }
 
-footer a {
+.footer-a {
     color: var(--color-primario-naranja);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
-footer a:hover {
+.footer-a:hover {
     color: var(--color-texto-gris-medio);
 }
 
-.modal-body p {
+.modal-landing {
+    background-color: var(--color-fondo-mas-oscuro-con-transp) !important;
+    color: var(--color-texto-gris-medio);
+}
+
+.modal-landing p {
     text-align: left;
 }
 

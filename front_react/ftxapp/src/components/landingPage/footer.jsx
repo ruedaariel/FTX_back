@@ -1,107 +1,157 @@
-import React from 'react';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { Modal, Button } from 'react-bootstrap';
 
 function Footer() {
-   
+
+    const [showPrivacy, setShowPrivacy] = useState(false);
+    const [showTerms, setShowTerms] = useState(false);
     return (
+        <>
+            <footer>
+                <div className="container">
+                    <p>&copy; 2025 FTX Fitness. Todos los derechos reservados.</p>
+                    <p>
+                        <Link to="/" onClick={() => console.log('click Inicio')} className="footer-a">Inicio</Link> |
+                        <a href="./contacto/contacto.html" className="footer-a">Contacto</a> |
+                        <button
+                            type="button"
+                            className="btn btn-link p-0 footer-a"
+                            onClick={() => setShowPrivacy(true)}
+                            
+                        >
+                            Política de Privacidad
+                        </button>{" "}
+                        |
+                        <button
+                            type="button"
+                            className="btn btn-link p-0 footer-a"
+                            onClick={() => setShowTerms(true)}
+                        >
+                            Términos de Servicio
+                        </button>
+                    </p>
+                    <div className="footer-social">
+                        <a href="https://x.com/?lang=es" target="_blank " className="me-2 footer-a"><i className="fab fa-twitter"></i></a>
+                        <a href="https://www.facebook.com" target="_blank " className="me-2 footer-a"><i className="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/" target="_blank " className="me-2 footer-a"><i className="fab fa-instagram"></i></a>
 
-    <footer>
-        <div className="container">
-            <p>&copy; 2025 FTX Fitness. Todos los derechos reservados.</p>
-            <p>
-                <a href="index.html">Inicio</a> |
-                <a href="./contacto/contacto.html">Contacto</a> |
-                <a href="#" odata-bs-toggle="modal" data-bs-target="#terminosCondiciones">Política de Privacidad</a> |
-                <a href="#" data-bs-toggle="modal" data-bs-target="#terminosServicio">Términos de Servicio</a>
-            </p>
-            <div className="footer-social">
-                <a href="https://x.com/?lang=es" className="me-2"><i className="fab fa-twitter"></i></a>
-                <a href="https://www.facebook.com" className="me-2"><i className="fab fa-facebook-f"></i></a>
-                <a href="https://www.instagram.com/" className="me-2"><i className="fab fa-instagram"></i></a>
-
-                <a  href="https://www.linkedin.com/" className="me-2"><i className="fab fa-linkedin-in"></i></a>
-                <a href="https://www.youtube.com/" className= "me-2"><i className="fa-brands fa-youtube"></i></a>
-            </div>
-        </div>
-
-        
-
-
-        <div id="terminosServicio" className="modal fade" tabIndex="-1" role="dialog">
-            <div className="modal-dialog">
-                <div className="modal-content">
-
-                    <div className="modal-header">
-                        <h5 className="modal-title">Términos de Servicio</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div className="modal-body">
-
-                        <h5>Introducción</h5>
-                        <p>🔹 Bienvenido/a a <strong>FTX Training</strong>. Al utilizar nuestra plataforma, aceptas
-                            cumplir con los siguientes términos.</p>
-
-                        <h5>Descripción del Servicio</h5>
-                        <p>🔹 <strong>FTX Training</strong> es una plataforma de fitness que ofrece rutinas de
-                            ejercicio, seguimiento de progreso y opciones de suscripción (<em>Básico, Pro y
-                                Premium</em>).</p>
-
-                        <h5>Registro y Cuentas</h5>
-                        <p>🔹 Para acceder a ciertas funciones, debes crear una cuenta.</p>
-                        <p>🔹 La información proporcionada debe ser precisa y actualizada.</p>
-                        <p>🔹 Eres responsable de la seguridad de tu cuenta y contraseña.</p>
-
-                        <h5>Planes y Pagos</h5>
-                        <p>🔹 El plan <strong>Básico</strong> es gratuito, mientras que los planes <strong>Pro y
-                                Premium</strong> requieren un pago mensual.</p>
-                        <p>🔹 Los pagos se procesan a través de pasarelas seguras.</p>
-                        <p>🔹 No ofrecemos reembolsos excepto en casos específicos establecidos en nuestra política de
-                            cancelación.</p>
-
-                        <h5>Uso Adecuado del Servicio</h5>
-                        <p>🔹 No debes compartir, vender o usar ilegalmente el contenido de la plataforma.</p>
-                        <p>🔹 Se prohíbe el uso de lenguaje ofensivo en comentarios o interacción con otros usuarios.
-                        </p>
-                        <p>🔹 No nos hacemos responsables de lesiones o daños derivados de la aplicación de los
-                            entrenamientos. Ante la duda de cualquier ejercicio, consultar al Entreenador responsable de
-                            las mismas</p>
-
-                        <h5>Modificaciones en los Términos</h5>
-                        <p>🔹 Nos reservamos el derecho de actualizar estos términos en cualquier momento. Si hay
-                            cambios importantes, te notificaremos por correo o en la plataforma.</p>
-
-                        <h5>Privacidad y Protección de Datos</h5>
-                        <p>🔹 Consulta nuestra <a href="#" data-bs-toggle="modal"
-                                data-bs-target="#terminosCondiciones">Política de Privacidad</a> para entender cómo
-                            protegemos tu información.</p>
-
-                        <h5>Contacto</h5>
-                        <p>🔹 Si tienes dudas sobre estos términos, puedes escribirnos a <strong>[correo de soporte
-                                ACTUALIZAR]</strong>.</p>
-                    </div>
-                    <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <a href="https://www.linkedin.com/" target="_blank " className="me-2 footer-a"><i className="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.youtube.com/" target="_blank " className="me-2 footer-a"><i className="fa-brands fa-youtube"></i></a>
                     </div>
                 </div>
+            </footer>
+            <Modal contentClassName="modal-landing" show={showPrivacy} onHide={() => setShowPrivacy(false)} centered style={{ background: '#b0b0b0', color: '#232323' }}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Política de Privacidad</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Última actualización: mayo 2025</p>
+                    <h5>1. Introducción</h5>
+                    <p>Bienvenido/a a <strong>FTX Training
+                    </strong>. Nos tomamos muy en serio tu privacidad y queremos asegurarnos de que comprendas cómo recopilamos, usamos y protegemos tu información.</p>
+                    <h5>2. Información que recopilamos</h5>
+                    <p>Podemos recopilar los siguientes datos cuando utilizas nuestra app:<br />
 
+                        🔸 Datos personales (nombre, correo electrónico, edad, etc.)<br />
 
+                        🔸 Información de progreso y actividad física<br />
 
+                        🔸 Datos de pago (solo para planes Pro y Premium)<br />
 
-            </div>
-        </div>
+                        🔸 Datos técnicos y de uso (dirección IP, tipo de dispositivo, etc.)</p>
+                    <h5>3. Cómo utilizamos tu información</h5>
+                    <p>Usamos tu información para:<br />
 
+                        🔸 Personalizar tus rutinas y mostrar tu progreso<br />
 
+                        🔸 Administrar tu cuenta y el acceso a diferentes planes<br />
 
-    </footer>
+                        🔸 Mejorar nuestros servicios y realizar análisis internos<br />
 
+                        🔸 Registrar pagos de planes Pro y Premium<br />
 
+                        🔸 Enviar comunicaciones relevantes, siempre con tu consentimiento</p>
+                    <h5>4. Divulgación de Información</h5>
+                    <p>Tu información NO será vendida ni compartida con terceros sin tu consentimiento, excepto en los siguientes casos:<br />
 
+                        🔸 Cumplimiento legal<br />
 
+                        🔸 Procesadores de pago y servicios relacionados<br />
 
+                        🔸 Proveedores que nos ayudan a mejorar la plataforma</p>
+                    <h5>5. Seguridad de los datos</h5>
+                    <p>Implementamos medidas de seguridad para proteger tu información, pero ninguna plataforma es 100% segura. En caso de una brecha de seguridad, te informaremos oportunamente.</p>
+                    <h5>6. Tus derechos</h5>
+                    <p>Tienes derecho a acceder, modificar o eliminar tus datos. Para hacerlo, puedes contactarnos a [correo de soporte].</p>
+                    <h5>7. Modificaciones a la política de privacidad</h5>
+                    <p>Nos reservamos el derecho de actualizar esta política en el futuro. Cualquier cambio se notificará en nuestra web o por correo.</p>
 
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowPrivacy(false)}>
+                        Cerrar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
 
+            <Modal contentClassName="modal-landing" show={showTerms} onHide={() => setShowTerms(false)} centered style={{ background: '#b0b0b0', color: '#232323' }}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Términos de Servicio</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <h5>Introducción</h5>
+                    <p>
+                        Bienvenido/a a <strong>FTX Training</strong>. Al utilizar nuestra
+                        plataforma, aceptas cumplir con los siguientes términos.
+                    </p>
+
+                    <h5>Descripción del Servicio</h5>
+                    <p>
+                        <strong>FTX Training</strong> es una plataforma de fitness que
+                        ofrece rutinas de ejercicio, seguimiento de progreso y opciones de
+                        suscripción (<em>Básico, Pro y Premium</em>).
+                    </p>
+
+                    <h5>Registro y Cuentas</h5>
+                    <p>🔸 Para acceder a ciertas funciones, debes crear una cuenta.</p>
+                    <p>🔸 La información proporcionada debe ser precisa y actualizada.</p>
+                    <p>🔸 Eres responsable de la seguridad de tu cuenta y contraseña.</p>
+
+                    <h5>Planes y Pagos</h5>
+                    <p>
+                        El plan <strong>Básico</strong> es gratuito, mientras que los
+                        planes <strong>Pro y Premium</strong> requieren un pago mensual.
+                    </p>
+
+                    <h5>Uso Adecuado del Servicio</h5>
+                    <p>
+                        No debes compartir, vender o usar ilegalmente el contenido de la
+                        plataforma.
+                    </p>
+
+                    <h5>Modificaciones en los Términos</h5>
+                    <p>
+                        Nos reservamos el derecho de actualizar estos términos en cualquier
+                        momento.
+                    </p>
+
+                    <h5>Contacto</h5>
+                    <p>
+                        Si tienes dudas sobre estos términos, puedes escribirnos a{" "}
+                        <strong>[correo de soporte ACTUALIZAR]</strong>.
+                    </p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowTerms(false)}>
+                        Cerrar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
 
     )
 
 }
-  
-  export default Footer
+
+export default Footer
