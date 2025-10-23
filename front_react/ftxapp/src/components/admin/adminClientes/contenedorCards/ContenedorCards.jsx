@@ -57,7 +57,7 @@ function ContenedorCards({
         />
       )}
 
-      {mostrarErrorAcceso && (
+      {/* {mostrarErrorAcceso && (
         <ModalDecision
           isOpen={mostrarErrorAcceso}
           title="Error de conexión"
@@ -69,7 +69,7 @@ function ContenedorCards({
             if (respuesta) obtenerUsuarios();
           }}
         />
-      )}
+      )} */}
     </div>
   );
 }

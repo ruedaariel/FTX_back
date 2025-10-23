@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./CardUsuarioEditable.css";
 import { FaInfoCircle } from "react-icons/fa";
+import { fetchGeneral } from "../../../componentsShare/utils/fetchGeneral.js";
+import { useModal } from "../../../../context/ModalContext.jsx";
+import { data } from "react-router";
 
 // Componente principal que permite editar los datos de un usuario
 function CardUsuarioEditable({
@@ -24,6 +27,8 @@ function CardUsuarioEditable({
   // Estado que almacena los planes disponibles obtenidos del backend
   const [planesDisponibles, setPlanesDisponibles] = useState([]);
 
+  const { showModal } = useModal(); // Modal global
+
   // Estado que contiene todos los datos editables del usuario
   const [formData, setFormData] = useState({
     ...usuario,
@@ -40,9 +45,37 @@ function CardUsuarioEditable({
     plan: "",
   });
 
+  // ejemplo de llamado a fetchGeneral
+  /* fetchGeneral({
+      url,
+      method,
+      body: rutina,
+      showModal,
+      onSuccess: (data) => {
+        resultado = data;
+      },
+      onError: (err) => {
+        const mensaje = extraerMensajeError(err);
+        console.error("Error al guardar rutina:", mensaje);
+      },
+    }); */
+
+
+
+
+
   useEffect(() => {
     const obtenerPlanes = async () => {
-      try {
+
+        await fetchGeneral({
+        url: "http://localhost:8000/apiFtx/plan/all",
+        method: "GET",
+        onSuccess: (data) => setPlanesDisponibles(data),
+        //onSuccess: (data) => setPlanesDisponibles(data),
+        showModal, // solo muestra modal si hay error
+      });
+      
+      /* try {
         const response = await fetch("http://localhost:8000/apiFtx/plan/all");
         if (!response.ok) throw new Error("Error al obtener planes");
         const data = await response.json();
@@ -50,7 +83,7 @@ function CardUsuarioEditable({
         setPlanesDisponibles(data); // ← guarda el arreglo de planes
       } catch (error) {
         console.error(" Falló la carga de planes:", error);
-      }
+      } */
     };
 
     obtenerPlanes();

@@ -8,10 +8,10 @@ import { fetchGeneral } from "./../../../componentsShare/utils/fetchGeneral";
  */
 const RutinaUsuario = ({
   rutinaSeleccionada,       // Rutina actual seleccionada
-  rutinaEditable,           // Rutina editable (no se usa directamente aquí)
-  mostrarModalInfo,         // Modal para mostrar mensajes (no se usa aquí)
+  //rutinaEditable,           // Rutina editable (no se usa directamente aquí)
+  //mostrarModalInfo,         // Modal para mostrar mensajes (no se usa aquí)
   modoRutina,               // Modo actual: "Crear", "Editar", "Copiar"
-  onResetearInterfaz,       // Callback para reiniciar la interfaz (no se usa aquí)
+  //onResetearInterfaz,       // Callback para reiniciar la interfaz (no se usa aquí)
   onDatosRutinaChange,      // Callback para enviar cambios al componente padre
   datosRutinaUsuario,       // Datos de la rutina (nombre y usuario)
 }) => {
@@ -35,12 +35,12 @@ const RutinaUsuario = ({
   }, []);
 
   // Inicializar campos cuando cambia la rutina seleccionada
-  useEffect(() => {
+/*   useEffect(() => {
     if (rutinaSeleccionada?.nombreRutina) {
       setNombreRutinaEditable(rutinaSeleccionada.nombreRutina);
       setUsuarioSeleccionado(rutinaSeleccionada.idUsuario || "");
     }
-  }, [rutinaSeleccionada]);
+  }, [rutinaSeleccionada]); */
 
   useEffect(() => {
   setNombreRutinaEditable(datosRutinaUsuario?.nombreRutina || "");

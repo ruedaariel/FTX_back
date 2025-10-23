@@ -16,6 +16,7 @@ import {
   guardarSemanaCompleta,
   transformarRutinaCompleta,
 } from "../../../components/componentsShare/utils/rutinaUtils.js";
+import { extraerMensajeError } from "../../../components/componentsShare/utils/extraerMensajeError.js";
 import { armarRutinaParaGuardar } from "../../../components/componentsShare/utils/armarRutinaParaGuardar.js";
 import { validarRutinaCompleta } from "../../../components/componentsShare/utils/validarRutinaCompleta.js";
 import { sanearRutinaCompleta } from "../../../components/componentsShare/utils/sanearRutinaCompleta.js";
@@ -43,6 +44,7 @@ function inicioRutina() {
         onSuccess: (data) => {
           setRutinaData(data);
         },
+        showModal
       });
     }
   }, [rutinaSeleccionada]);
@@ -77,12 +79,19 @@ function inicioRutina() {
 
     // borra la prpiredad id que no es necesaria par backend en editar
     if (modoRutina === "Editar") {
-      delete rutinaParaGuardar.id ;
+      delete rutinaParaGuardar.id;
     }
 
     // console.log("%crutinaFINALsANEADA ----->","color: yellow; font-weight: bold;",rutinaFinalSaneada);
-    try {
-      await guardarRutinaEnBackend(rutinaFinalSaneada.idRutina, rutinaParaGuardar, modoRutina);
+    // try {
+     const data = await guardarRutinaEnBackend(
+        rutinaFinalSaneada.idRutina,
+        rutinaParaGuardar,
+        modoRutina,
+        showModal
+      );
+
+      if (data) {
       const mensaje =
         modoRutina === "Crear"
           ? "Rutina creada correctamente"
@@ -90,21 +99,24 @@ function inicioRutina() {
           ? "Rutina copiada y guardada correctamente"
           : "Rutina editada correctamente";
 
-      showModal(mensaje, "success",2000);
+      showModal(mensaje, "success", 2000);
       resetearInterfaz();
-    } catch (error) {
-      showModal("Error al guardar la rutina", "error",0,true);
-    }
+      
+    } 
+    
+    
+    
   };
 
   // Reiniciar interfaz después de guardar
   const resetearInterfaz = () => {
     const rutinaNueva = crearRutinaNueva();
+    //console.log("rutinaNueva ----->", rutinaNueva);
     setRutinaSeleccionada(rutinaNueva);
-    setRutinaData(null);
+    setRutinaData(rutinaNueva);
     setModoRutina("Crear");
-    setReiniciarRutina(!reiniciarRutina);
-    
+    //setReiniciarRutina(!reiniciarRutina);
+    //console.log("Interfaz reiniciada para nueva rutina.");
   };
 
   // Render principal
@@ -128,10 +140,7 @@ function inicioRutina() {
         datosRutinaUsuario={datosRutinaUsuario}
       />
 
-      
-
       {rutinaData && (
-        
         <RutinaVisual
           rutina={rutinaData}
           modoRutina={modoRutina}
@@ -141,7 +150,10 @@ function inicioRutina() {
       )}
 
       <div className="boton-guardar-global">
-        <button className="btn-guardar-rutina-visual" onClick={handleGuardarRutina}>
+        <button
+          className="btn-guardar-rutina-visual"
+          onClick={handleGuardarRutina}
+        >
           Guardar rutina
         </button>
       </div>

@@ -1,48 +1,40 @@
-import { id } from "date-fns/locale";
+import { fetchGeneral } from "../utils/fetchGeneral";
+import { extraerMensajeError } from "../utils/extraerMensajeError";
 
-export const guardarRutinaEnBackend = async (idRutina, rutina, modoRutina) => {
+/**
+ * Guarda una rutina en el backend, ya sea en modo "Crear" o "Editar".
+ *
+ * @param {string} idRutina - ID de la rutina (solo en modo Editar)
+ * @param {object} rutina - Objeto rutina ya transformado
+ * @param {string} modoRutina - "Crear" o "Editar"
+ * @param {function} showModal - Función del ModalContext para mostrar mensajes
+ * @returns {Promise<object|null>} - Datos de respuesta si fue exitoso, o null si falló
+ */
+export const guardarRutinaEnBackend = async (idRutina, rutina, modoRutina, showModal) => {
   const baseUrl = "http://localhost:8000/apiFtx/rutina";
-  let url = "";
-  let method = "";
-  /* console.log("************   GuardaRutinaBackend  ************");
-  console.log("********  Modo rutina:", modoRutina, "**********");
-  console.log(
-      "Payload transformado:",
-      JSON.stringify(rutina, null, 2)
-    ); */
+  const url =
+    modoRutina === "Editar"
+      ? `${baseUrl}/update/${idRutina}`
+      : `${baseUrl}/register`;
 
-  if (modoRutina === "Editar") {
-    /* console.log("Editar rutina");
-    console.log("Rutina:", rutina);
-    console.log("ID:", id); */
-    //if (!rutina.id) throw new Error("Falta el ID de rutina para editar");
-    url = `${baseUrl}/update/${idRutina}`;
-    method = "PUT";
-    
-  } else {
-    url = `${baseUrl}/register`;
-    method = "POST";
-  }
+  const method = modoRutina === "Editar" ? "PUT" : "POST";
 
-  /* console.log("URL:", url);
-  console.log("Método:", method);
-  console.log("Payload:", rutina); */
-  //console.log("Rutina lista para enviar:", JSON.stringify(rutina, null, 2));
-  const response = await fetch(url, {
+  let resultado = null;
+
+  await fetchGeneral({
+    url,
     method,
-    headers: {
-      "Content-Type": "application/json",
+    body: rutina,
+    showModal,
+    onSuccess: (data) => {
+      resultado = data;
     },
-    body: JSON.stringify(rutina),
+    onError: (err) => {
+      const mensaje = extraerMensajeError(err);
+      console.error("Error al guardar rutina:", mensaje);
+    },
   });
 
-  if (!response.ok) {
-    const responseText = await response.text();
-// console.error("Error al guardar:", response.status, responseText);
-throw new Error(responseText || "Error al guardar la rutina");
-
-    throw new Error("Error al guardar la rutina");
-  }
-
-  return await response.json();
+  return resultado;
 };
+

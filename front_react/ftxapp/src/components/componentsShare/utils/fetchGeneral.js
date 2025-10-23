@@ -1,3 +1,5 @@
+import { extraerMensajeError } from "./extraerMensajeError";
+
 export const fetchGeneral = async ({
   url,
   method = "GET",
@@ -49,14 +51,14 @@ export const fetchGeneral = async ({
     showModal("Operación exitosa", "success", 2000);
   } */
 } catch (err) {
-  //console.log("%cError atrapado en catch","color:red;", err.message);
+  const mensaje = extraerMensajeError(err);
 
-  if (setError) setError(err.message);
+  if (setError) setError(mensaje);
   if (onError) onError(err);
   if (setMostrarErrorAcceso) setMostrarErrorAcceso(true);
 
   if (showModal) {
-    showModal(err.message === "Failed to fetch" ? "Falló la conexión a la base de datos" : err.message, "error", 4000, true);
+    showModal(mensaje, "error", 4000, true);
   }
 } finally {
   if (setLoading) setLoading(false);

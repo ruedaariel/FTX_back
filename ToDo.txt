@@ -1,0 +1,13 @@
+back:
+
+
+
+
+
+
+
+
+Front:
+
+admin/rutina:   se hace el elimimar rutina?
+admin/rutina:   revisar reseeo de interfaz al volver de crear rutina exitosa, limpiar Nombre de Rutina
