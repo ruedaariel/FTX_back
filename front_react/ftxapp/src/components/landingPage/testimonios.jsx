@@ -10,19 +10,19 @@ export default function Testimonios() {
         <h2>Testimonios</h2>
       </div>
 
-      <Carousel interval={3000} indicators={false}>
+      <Carousel interval={4000} indicators={false} controls={false}>
         <Carousel.Item>
           <div className="container">
             <div className="row align-items-center ">
               <div className="col-md-5 text-center">
-                <img src={testimonio1} alt="Cliente 1" className="autor-imagen" />
+                <img src={testimonio1} alt="Cliente 1" className="autor-imagen mx-auto d-block" />
               </div>
               <div className="col-md-7">
-                <h4>
+                <h5 className="testimonio-h5">
                   Desde que empecé con <i>Santi</i>, mi energía ha aumentado y he
                   visto resultados increíbles.
-                </h4>
-                <span>Agustina</span>
+                </h5>
+                <span>Maxi</span>
                 <br />
                 <span>Miembro Premium</span>
               </div>
@@ -33,11 +33,11 @@ export default function Testimonios() {
                 <Carousel.Item>
           <div className="container">
             <div className="row align-items-center">
-              <div className="col-md-4 text-center">
-                <img src={testimonio2} alt="Cliente 2" className="autor-imagen" />
+              <div className="col-md-5 text-center">
+                <img src={testimonio2} alt="Cliente 2" className="autor-imagen mx-auto d-block" />
               </div>
-              <div className="col-md-8">
-                <h5>
+              <div className="col-md-7">
+                <h5 className="testimonio-h5">
                   La flexibilidad de horarios fue clave para mí. Puedo entrenar
                   sin estrés y las rutinas son geniales.
                 </h5>
@@ -52,11 +52,11 @@ export default function Testimonios() {
         <Carousel.Item>
           <div className="container">
             <div className="row align-items-center">
-              <div className="col-md-4 text-center">
-                <img src={testimonio3} alt="Cliente 3" className="autor-imagen" />
+              <div className="col-md-5 text-center">
+                <img src={testimonio3} alt="Cliente 3" className="autor-imagen mx-auto d-block" />
               </div>
-              <div className="col-md-8">
-                <h5>
+              <div className="col-md-7">
+                <h5 className="testimonio-h5">
                   Para mí es importante entrenar con mi entrenador. Conozco su
                   profesionalidad y logros.
                 </h5>

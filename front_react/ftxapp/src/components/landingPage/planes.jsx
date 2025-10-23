@@ -12,10 +12,10 @@ function Planes() {
                 <div className="row justify-content-center">
                     {/* <!-- Plan Gratuito --> */}
                     <div className="col-lg-4 col-md-6 mb-4">
-                        <div className="card h-100 shadow border-0">
-                            <div className="card-body text-center p-4">
+                        <div className="card h-100 shadow border-0 card-landing-hover ">
+                            <div className="card-body-landing text-center p-4 card-landing-hover ">
                                 <h5 className="card-title-landing  fs-3 text-uppercase">Básico</h5>
-                                <h6 className="card-price display-6 fw-bold">$0<span className="period fs-6">/mes</span></h6>
+                                <h6 className="card-price display-4 fw-bold">$0<span className="period fs-6">/mes</span></h6>
                                 <hr className="my-4"/>
                                 <ul className="list-unstyled mb-4">
                                     <li className="mb-2"><span className="fa-li"><i
@@ -36,10 +36,10 @@ function Planes() {
                             </div>
                         </div>
                     </div>
-                    {/* <!-- Plan Básico --> */}
+                    {/* <!-- Plan Pro --> */}
                     <div className="col-lg-4 col-md-6 mb-4">
-                        <div className="card h-100 shadow  border-2 popular-plan">
-                            <div className="card-body text-center p-4">
+                        <div className="card h-100 shadow  border-2 popular-plan card-landing-hover">
+                            <div className="card-body-landing text-center p-4 card-landing-hover">
 
                                 <h5 className="card-title-landing fs-3 text-uppercase">Pro</h5>
                                 <h6 className="card-price display-4 fw-bold">$25<span className="period fs-6">/mes</span></h6>
@@ -66,11 +66,11 @@ function Planes() {
                             </div>
                         </div>
                     </div>
-                    {/* Plan Pro */}
+                    {/* Plan Premiun */}
                     <div className="col-lg-4 col-md-6 mb-4">
-                        <div className="card h-100 shadow border-0">
-                            <div className="card-body text-center p-4">
-                                <h5 className="card-title-landing text-uppercase">Premiun</h5>
+                        <div className="card h-100 shadow border-0 card-landing-hover">
+                            <div className="card-body-landing text-center p-4 card-landing-hover">
+                                <h5 className="card-title-landing fs-3 text-uppercase">Premiun</h5>
                                 <h6 className="card-price display-4 fw-bold">$50<span className="period fs-6">/mes</span></h6>
                                 <hr className="my-4"/>
                                 <ul className="list-unstyled mb-4">
