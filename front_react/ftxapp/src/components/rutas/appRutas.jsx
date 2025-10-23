@@ -7,6 +7,8 @@ import InicioRutina from "../../pages/admin/adminRutinas/inicioRutina";
 import PantallaClientes from "../../pages/admin/adminClientes/PantallaClientes";
 import EnContruccion from "../../pages/public/enContruccion/EnConstruccion";
 import { PagosAdmin } from "../../pages/admin/adminPagos";
+import Contacto from "../../pages/public/contacto/contacto"
+import PaginaEjercicios from "../../pages/admin/adminEjercicios/paginaEjercicios";
 
 
 /* import Rutina from "../pages/Rutina";
@@ -18,11 +20,13 @@ const AppRutas = () => {
     <Routes>
 
       <Route path="/" element={<LandingPage />} />
+      <Route path="/contacto" element={<Contacto/>} />
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/usuario" element={<UsuarioDashboard />} />
       <Route path="/admin/rutinas" element={<InicioRutina />} />
       <Route path="/admin/clientes" element={<PantallaClientes />} />
       <Route path="/admin/pagos" element={<PagosAdmin />} />
+      <Route path="/admin/ejercicios" element = {<PaginaEjercicios />}/>
       <Route path="*" element={<EnContruccion />} />
 
     {/*   <Route path="/rutina" element={<Rutina />} />

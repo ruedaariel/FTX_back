@@ -75,8 +75,7 @@ function Planes() {
                                 <hr className="my-4"/>
                                 <ul className="list-unstyled mb-4">
                                     <li className="mb-2"><span className="fa-li"><i
-                                                className="fas fa-check text-success"></i></span>Acceso a rutinas
-                                        personalizadas
+                                                className="fas fa-check text-success"></i></span>Rutinas personalizadas
                                     </li>
                                     <li className="mb-2"><span className="fa-li"><i
                                                 className="fas fa-check text-success"></i></span>Seguimiento de progreso
