@@ -1,5 +1,27 @@
 import { extraerMensajeError } from "./extraerMensajeError";
 
+/**
+ * Función genérica para realizar peticiones HTTP con manejo centralizado de errores, modales y estados.
+ *
+ * ✅ ¿Cómo usarla?
+ * 
+ * import { fetchGeneral } from "./utils/fetchGeneral";
+ * import { useModal } from "../context/ModalContext";
+ * 
+ * const { showModal } = useModal();
+ * 
+ * fetchGeneral({
+ *   url: "/api/endpoint",
+ *   method: "POST",
+ *   body: datos,
+ *   setLoading,              // opcional: actualiza estado de carga
+ *   setError,                // opcional: guarda mensaje de error
+ *   onSuccess: (data) => {}, // callback en caso de éxito
+ *   onError: (err) => {},    // callback en caso de error
+ *   showModal,               // muestra modal de éxito o error
+ * });
+ */
+
 export const fetchGeneral = async ({
   url,
   method = "GET",
@@ -10,61 +32,83 @@ export const fetchGeneral = async ({
   setMostrarErrorAcceso,
   onSuccess,
   onError,
-  showModal, 
+  showModal,
 }) => {
+  // Activar estado de carga si se proporciona
   if (setLoading) setLoading(true);
 
+  // Detectar si el body es FormData
   const isFormData = body instanceof FormData;
+
+  // Configurar opciones de la petición
   const fetchOptions = {
     method,
     body: isFormData ? body : (body ? JSON.stringify(body) : null),
   };
-  if (!isFormData) fetchOptions.headers = headers;
+
+  // Solo agregar headers si no es FormData
+  if (!isFormData) {
+    fetchOptions.headers = headers;
+  }
 
   try {
-  const response = await fetch(url, fetchOptions);
-  let data;
+    // Ejecutar la petición
+    const response = await fetch(url, fetchOptions);
+    let data;
 
-  try {
-    data = await response.json();
-  } catch (jsonError) {
-    console.log("Error al parsear JSON:", jsonError.message);
-    throw new Error("Respuesta inválida del servidor.");
+    // Intentar parsear la respuesta como JSON
+    try {
+      data = await response.json();
+    } catch (jsonError) {
+      console.log("Error al parsear JSON:", jsonError.message);
+      throw new Error("Respuesta inválida del servidor.");
+    }
+
+    // Si la respuesta no fue exitosa, lanzar error con mensaje del backend
+    if (!response.ok) {
+      const errorMessage = data?.message || `Error ${response.status}: ${response.statusText}`;
+      console.log("errorMessage", errorMessage);
+
+      if (showModal) {
+        showModal(errorMessage, "error", 0, true); // Modal persistente
+      }
+
+      throw new Error(errorMessage);
+    }
+
+    // Mostrar modal de éxito si no es una petición GET
+    if (showModal && method !== "GET") {
+      showModal("Operación exitosa", "success", 2000);
+    }
+
+    // Ejecutar callback de éxito
+    if (onSuccess) onSuccess(data);
+
+    // Limpiar error si se proporciona
+    if (setError) setError(null);
+  } catch (err) {
+    // Extraer mensaje legible desde el error
+    const mensaje = extraerMensajeError(err);
+
+    // Actualizar estado de error si se proporciona
+    if (setError) setError(mensaje);
+
+    // Ejecutar callback de error si se proporciona
+    if (onError) onError(err);
+
+    // Mostrar error de acceso si corresponde
+    if (setMostrarErrorAcceso) setMostrarErrorAcceso(true);
+
+    // Mostrar modal de error
+    if (showModal) {
+      showModal(mensaje, "error", 4000, true);
+    }
+  } finally {
+    // Desactivar estado de carga
+    if (setLoading) setLoading(false);
   }
-
-  if (!response.ok) {
-    const errorMessage = data?.message || `Error ${response.status}: ${response.statusText}`;
-    console.log("errorMessage", errorMessage);
-    showModal(errorMessage, "error", 0, true);
-    throw new Error(errorMessage);
-  }
-
-  //console.log("%cOperación exitosa","color:green;", data);
-  if (showModal && method !== "GET") {
-    showModal("Operación exitosa", "success", 2000);
-  }
-
-  if (onSuccess) onSuccess(data);
-  if (setError) setError(null);
-
-  /* if (showModal && method !== "GET") {
-    showModal("Operación exitosa", "success", 2000);
-  } */
-} catch (err) {
-  const mensaje = extraerMensajeError(err);
-
-  if (setError) setError(mensaje);
-  if (onError) onError(err);
-  if (setMostrarErrorAcceso) setMostrarErrorAcceso(true);
-
-  if (showModal) {
-    showModal(mensaje, "error", 4000, true);
-  }
-} finally {
-  if (setLoading) setLoading(false);
-}
-
 };
+
 
 
 

@@ -35,17 +35,18 @@ const RutinaUsuario = ({
   }, []);
 
   // Inicializar campos cuando cambia la rutina seleccionada
-/*   useEffect(() => {
+  useEffect(() => {
     if (rutinaSeleccionada?.nombreRutina) {
       setNombreRutinaEditable(rutinaSeleccionada.nombreRutina);
       setUsuarioSeleccionado(rutinaSeleccionada.idUsuario || "");
     }
-  }, [rutinaSeleccionada]); */
+  }, [rutinaSeleccionada]);
 
-  useEffect(() => {
+
+  /* useEffect(() => {
   setNombreRutinaEditable(datosRutinaUsuario?.nombreRutina || "");
   setUsuarioSeleccionado(datosRutinaUsuario?.idUsuario || "");
-}, [datosRutinaUsuario]);
+}, [datosRutinaUsuario]); */
 
 
   
@@ -117,7 +118,7 @@ const RutinaUsuario = ({
       <div className="rutina-usuario-form-row">
         {/* Campo para nombre de rutina */}
         <div className="rutina-usuario-nombre">
-          <label>Nombre de Rutina</label>
+          <label>Nombre de Rutina </label>
           <input
             type="text"
             value={nombreRutinaEditable}

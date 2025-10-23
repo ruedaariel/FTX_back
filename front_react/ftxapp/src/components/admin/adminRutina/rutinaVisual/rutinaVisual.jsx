@@ -21,7 +21,7 @@ import ModalDecision from "./../../../componentsShare/Modal/ModalDecision";
  * @param {string} modoRutina - Modo actual: "Crear", "Editar", "Copiar"
  * @param {Function} onRutinaEditadaChange - Callback para enviar rutina editada al padre
  */
-const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange }) => {
+const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange, onGuardarRutina }) => {
   // Estado editable de la rutina
   const [rutinaEditable, setRutinaEditable] = useState(null);
 
@@ -64,7 +64,8 @@ const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange }) => {
       return;
     }
 
-    const siguienteSemanaExiste = rutinaEditable.semanas.length > semanaIndex + 1;
+    const siguienteSemanaExiste =
+      rutinaEditable.semanas.length > semanaIndex + 1;
     const rutinaTiene4Semanas = rutinaEditable.semanas.length >= 4;
 
     if (siguienteSemanaExiste) {
@@ -136,26 +137,43 @@ const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange }) => {
   };
 
   // Actualizar un ejercicio específico
-  const handleEjercicioChange = (semanaIndex, diaIndex, ejercicioIndex, nuevoEjercicio) => {
+  const handleEjercicioChange = (
+    semanaIndex,
+    diaIndex,
+    ejercicioIndex,
+    nuevoEjercicio
+  ) => {
     const nuevaRutina = { ...rutinaEditable };
-    nuevaRutina.semanas[semanaIndex].dias[diaIndex].ejerciciosRutina[ejercicioIndex] = nuevoEjercicio;
+    nuevaRutina.semanas[semanaIndex].dias[diaIndex].ejerciciosRutina[
+      ejercicioIndex
+    ] = nuevoEjercicio;
     setRutinaEditable(nuevaRutina);
   };
 
   // Agregar ejercicio en posición específica
   const handleAgregarEjercicio = (semanaIndex, diaIndex, ejercicioIndex) => {
-    const nuevaRutina = agregarEjercicioEnDia(rutinaEditable, semanaIndex, diaIndex, ejercicioIndex);
+    const nuevaRutina = agregarEjercicioEnDia(
+      rutinaEditable,
+      semanaIndex,
+      diaIndex,
+      ejercicioIndex
+    );
     setRutinaEditable(nuevaRutina);
   };
 
   // Eliminar ejercicio en posición específica
   const handleEliminarEjercicio = (semanaIndex, diaIndex, ejercicioIndex) => {
-    const nuevaRutina = eliminarEjercicioDeDia(rutinaEditable, semanaIndex, diaIndex, ejercicioIndex);
+    const nuevaRutina = eliminarEjercicioDeDia(
+      rutinaEditable,
+      semanaIndex,
+      diaIndex,
+      ejercicioIndex
+    );
     setRutinaEditable(nuevaRutina);
   };
 
   // Guardar rutina completa (estructura lista para backend)
-  const handleGuardarRutina = () => {
+  const handleGuardarRutinaV = () => {
     const payload = rutinaEditable.semanas.map((_, index) =>
       guardarSemanaCompleta(rutinaEditable, index)
     );
@@ -166,11 +184,31 @@ const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange }) => {
   // Validación inicial: rutina sin semanas
   if (!rutinaEditable?.semanas?.length) {
     return <p>No hay semanas cargadas.</p>;
+    //showModal("No hay semanas cargadas en la rutina. \nSeleccione otra rutina por favor", "error",0,true);
   }
 
   // Render principal
   return (
     <div className="rutina-visual">
+      <div className="estado-guardar-rutina-container">
+        {/* <div className="rutina-estado-container"> */}
+        <div className="estado-rutina-linea">
+          <div className="mensaje-estado-rutina">Estado de la Rutina:</div>
+          <div className="muestra-estado-rutina">{rutina.estadoRutina}</div>
+        </div>
+
+        {/* </div> */}
+
+        <div className="boton-guardar-rutina">
+          <button
+            className="btn-guardar-rutina-visual"
+            onClick={onGuardarRutina}
+          >
+            Guardar Rutina
+          </button>
+        </div>
+      </div>
+
       {/* Modal de decisión al alcanzar el límite de semanas */}
       {mostrarModalDecision && (
         <ModalDecision
@@ -180,7 +218,7 @@ const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange }) => {
           message="Se alcanzó el límite de 4 semanas. ¿Querés guardar la rutina o seguir editando?"
           onDecision={(confirmar) => {
             if (confirmar) {
-              handleGuardarRutina();
+              handleGuardarRutinaV();
             } else {
               setMostrarModalDecision(false);
             }
