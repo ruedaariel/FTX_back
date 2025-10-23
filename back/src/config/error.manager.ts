@@ -30,7 +30,7 @@ export class ErrorManager extends Error { //creo una clase  para manejo de error
 
       switch (code) {
         case 'ER_DUP_ENTRY':
-          throw new HttpException('Ya existe un registro con ese valor único', HttpStatus.BAD_REQUEST);
+          throw new HttpException('Ya existe un registro con ese valor unico', HttpStatus.BAD_REQUEST);
 
         case 'ER_BAD_DB_ERROR':
           throw new HttpException('La base de datos no existe', HttpStatus.INTERNAL_SERVER_ERROR);

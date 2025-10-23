@@ -27,6 +27,7 @@ const EjercicioRutina = ({
       url: "http://localhost:8000/apiFtx/ejbasico/all",
       method: "GET",
       onSuccess: (data) => setEjerciciosDisponibles(data),
+      showModal
     });
   }, []);
 

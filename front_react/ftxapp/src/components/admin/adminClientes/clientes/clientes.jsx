@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 
 //  Función genérica para llamadas al backend
 import { fetchGeneral } from "../../../componentsShare/utils/fetchGeneral";
+// Contexto de modal
+import { useModal } from "../../../../context/ModalContext";
 
 //  Estilos específicos del componente y colores globales
 import "./listaUsuarios.css";
@@ -30,6 +32,7 @@ const TablaUsuarios = ({ estadoFiltro, filtrosAvanzados }) => {
 
   //  Estado para modal de éxito (no usado directamente)
   const [modalExito, setModalExito] = useState(false);
+   const { showModal } = useModal(); // Modal global
 
   //  Estado para modal de información reutilizable
   const [modalConfig, setModalConfig] = useState({
@@ -106,7 +109,8 @@ const TablaUsuarios = ({ estadoFiltro, filtrosAvanzados }) => {
       setError,
       setMostrarErrorAcceso,
       onSuccess: (data) => setUsuarios(data),
-      mostrarModal, // solo muestra modal si hay error
+      //mostrarModal, // solo muestra modal si hay error
+      showModal, // para mostrar errores críticos
     });
   };
 
@@ -127,7 +131,8 @@ const TablaUsuarios = ({ estadoFiltro, filtrosAvanzados }) => {
         obtenerUsuarios(); // refrescar lista
         setUsuarioEditando(null); // cerrar modal
       },
-      mostrarModal, // muestra modal de éxito por 2 segundos
+      //mostrarModal, // muestra modal de éxito por 2 segundos
+      showModal
     });
   };
 
