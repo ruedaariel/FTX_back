@@ -5,9 +5,9 @@ const ModalError = ({ isOpen, title, message, borderClass = '', onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="modal">
-      <div className={`modal-content ${borderClass}`}>
-        <span className="close-button" onClick={onClose}>&times;</span>
+    <div className="modal-temporizado">
+      <div className={`modal-content-temporizado ${borderClass}`}>
+        <span className="close-button-temporizado" onClick={onClose}>&times;</span>
         <h1>{title}</h1>
         <p>{message}</p>
       </div>

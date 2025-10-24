@@ -38,17 +38,17 @@ const ModalInfoTemporizado = ({
   if (!isOpen) return null;
 
   return (
-    <div className="modal">
-      <div className={`modal-content ${borderClass}`}>
-        <span className="close-button" onClick={onClose}>
+    <div className="modal-temporizado">
+      <div className={`modal-content-temporizado ${borderClass}`}>
+        <span className="close-button-temporizado" onClick={onClose}>
           &times;
         </span>
         <h1>{title}</h1>
         <p>{message}</p>
         {autoCloseMs && (
-          <div className="barra-progreso">
+          <div className="barra-progreso-temporizado">
             <div
-              className="barra-progreso-fill"
+              className="barra-progreso-fill-temporizado"
               style={{ width: `${progreso}%` }}
             />
           </div>
