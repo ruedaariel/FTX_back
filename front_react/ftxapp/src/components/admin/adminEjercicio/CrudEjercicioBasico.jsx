@@ -5,12 +5,11 @@ import './validacion.css';
 import './crud_ejercicio.css';
 import SelectorEjercicio from "./selectorEjercicio";
 import LOGO_PLACEHOLDER from '../../../assets/Recursos/IconosLogos/logoblanco.png';
-import ModalInfoTemporizado from "../../componentsShare/Modal/ModalInfoTemporizado";
 import { EJERCICIO_VACIO } from './utils/ejercicio_vacio';
 import { useEjercicioForm } from "./useEjercicioForm";
 import { getEmbedUrl } from "./utils/formatoVideo";
-
-
+import { useModal } from "../../../context/ModalContext";
+import ModalDecision from "../../componentsShare/Modal/ModalDecision";
 
 
 const CrudEjercicioBasico = () => {
@@ -30,6 +29,11 @@ const CrudEjercicioBasico = () => {
     const [reload, setReload] = useState(false);
     //para desseleccionar la imagen
     const fileInputRef = useRef(null);
+    //hook `useModal()` para mostrar un mensaje
+    const { showModal } = useModal();
+    //Para el modal desicion que pregunta en el delete
+    const [mostrarDecision, setMostrarDecision] = useState(false);
+
 
 
     const {
@@ -41,7 +45,7 @@ const CrudEjercicioBasico = () => {
         handleBlur,         // onBlur
         handleSubmit,       // onSubmit
         handleDeselectImg //fe para deseleccionar imagen, liberar espacio,etc
-    } = useEjercicioForm(modoEjercicio, ejercicioSeleccionado, setReload, setEjercicioSeleccionado,fileInputRef);
+    } = useEjercicioForm(modoEjercicio, ejercicioSeleccionado, setReload, setEjercicioSeleccionado, fileInputRef);
 
     const fetchEjercicios = () => {
         fetchGeneral({
@@ -52,7 +56,8 @@ const CrudEjercicioBasico = () => {
             onSuccess: (data) => {
                 setEjercicios(data);
                 setReload(false);
-            }
+            },
+            showModal,
         });
     }
 
@@ -89,17 +94,27 @@ const CrudEjercicioBasico = () => {
         } else {
             setEjercicioSeleccionado(null);
             setModoEjercicio("Crear");
-            //VER SI MANDO ERROR O SI CARGO EJERCICIOVACIO
+            showModal("Para seleccionar un ejercicio debes hacer clic en 'Editar'", "success", 3000);
         }
 
     }
 
-    const handleDelete = async () => {
-        if (!ejercicioSeleccionado || !ejercicioSeleccionado.idEjercicioBasico) return;
+    const handleDecisionBorrado = async () => {
 
-        //aca va el modal
-        const confirmDelete = window.confirm(`¿Eliminar "${ejercicioSeleccionado.nombreEjercicio}"? Esta acción no se puede deshacer.`);
-        if (!confirmDelete) return;
+        if (!ejercicioSeleccionado || !ejercicioSeleccionado.idEjercicioBasico) {
+            showModal("Error en ejercicio seleccionado", "error", 0, true);
+            return;
+        };
+        setMostrarDecision(true);
+        console.log("%cDecision", "color:orange", mostrarDecision);
+
+    }
+
+    const handleDecisionEliminar = async () => {
+        setMostrarDecision(false);
+        if (!respuesta) return;
+
+
 
         const url = `http://localhost:8000/apiFtx/ejbasico/delete/${ejercicioSeleccionado.idEjercicioBasico}`;
 
@@ -117,7 +132,7 @@ const CrudEjercicioBasico = () => {
                 }
             });
         } catch (err) {
-            //modal
+            showModal(`Error eliminando ejercicio:${ejercicioSeleccionado.nombreEjercicio}`, error, 0, true);
             console.error("Error eliminando ejercicio:", err);
 
         }
@@ -144,7 +159,7 @@ const CrudEjercicioBasico = () => {
                             <div className="form-group-ejercicio">
                                 <label htmlFor="nombreEjercicio">Nombre Ejercicio:</label>
                                 <div className="input-icon-validate">
-                                    <input type="text" id="nombreEjercicio" name="nombreEjercicio" className={`form-control input-ejercicio ${errores.nombreEjercicio ? 'is-invalid' : ''}`}
+                                    <input type="text" id="nombreEjercicio" name="nombreEjercicio" className={`form-control-ejercicio input-ejercicio ${errores.nombreEjercicio ? 'is-invalid' : ''}`}
                                         required placeholder="El nombre debe ser unico, por ejemplo, sentadilla sumo"
                                         value={ejercicioData?.nombreEjercicio || ''} onChange={handleInputChange} onBlur={handleBlur} />
                                     <span className="icon-validate" data-icon="nombreEjercicio"></span>
@@ -175,7 +190,7 @@ const CrudEjercicioBasico = () => {
                                 <label htmlFor="imagenLink">Link Imagen: </label>
                                 {ejercicioData.imagenPreviewUrl && (
                                     <span className="etiqueta-carga-ejercicio"
-                                        onClick={ handleDeselectImg }>
+                                        onClick={handleDeselectImg}>
                                         Deseleccionar
                                     </span>
                                 )}
@@ -192,7 +207,7 @@ const CrudEjercicioBasico = () => {
                             <div className="form-group-ejercicio">
                                 <label htmlFor="videoLink">Link Video:
                                     {ejercicioData.videoLink && !showVideo && (
-                                        <span className="etiqueta-carga"
+                                        <span className="etiqueta-carga-ejercicio"
                                             onClick={() => { setShowVideo(true); }}>
                                             Previsualizar video
                                         </span>
@@ -216,7 +231,8 @@ const CrudEjercicioBasico = () => {
                                 </button>
                                 {/* El botón eliminar solo se muestra en modo Editar */}
                                 {modoEjercicio === "Editar" && (
-                                    <button type="button" className="btn btn-danger button-ejercicio" disabled={loading} onClick={handleDelete}>
+                                    <button type="button" className="btn btn-danger button-ejercicio" disabled={loading}
+                                        onClick={handleDecisionBorrado}>
                                         Eliminar
                                     </button>
                                 )}
@@ -256,6 +272,18 @@ const CrudEjercicioBasico = () => {
 
 
             </div>
+
+            {/* Modal de decisión para confirmar eliminación */}
+            {true && (
+                <ModalDecision
+                    isOpen={mostrarDecision}
+                    title="Confirmar eliminación"
+                    message={`¿Querés eliminar el ejercicio?`}
+                    borderClass="modal-error-border"
+                    onClose={() => setMostrarDecision(false)}
+                    onDecision={handleDecisionEliminar}
+                />
+            )}
         </ >
 
     )

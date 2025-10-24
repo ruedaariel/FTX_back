@@ -238,6 +238,7 @@ export const useEjercicioForm = (modoEjercicio, ejercicioSeleccionado, setReload
 
             // Si no hay campos cambiados, abortamos la petición PATCH
             if (Object.keys(dataToSend).length === 0) {
+                showModal("No hay cambios detectados para guardar.", "warning", 3000)
                 console.log("No hay cambios detectados para guardar.");
                 setLoading(false);
                 return;
@@ -296,7 +297,8 @@ export const useEjercicioForm = (modoEjercicio, ejercicioSeleccionado, setReload
                         fileInputRef.current.value = ''; //saca el nombre del input
                     }
 
-                }
+                },
+                showModal,
                 // estado para reacargar ejercicios
             });
 
