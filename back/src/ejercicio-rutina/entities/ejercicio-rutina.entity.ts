@@ -22,6 +22,9 @@ export class EjercicioRutinaEntity implements IEjercicioRutina {
         @Column({type: 'varchar', length: 255, nullable:true}) //VER 
         observaciones: string; //VER SI LO DEFINO COMO { type: 'varchar', length: 255 } o como { type: 'text' }
 
+        @Column({type: 'boolean', default: false})
+        ejercicioHecho: boolean = false;
+
         //relacion con dia - se borran los ejercicios si se borran los dias
         @ManyToOne(()=>DiaEntity, dia => dia.ejerciciosRutina,{onDelete: "CASCADE"})
         @JoinColumn()

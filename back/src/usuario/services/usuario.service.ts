@@ -24,6 +24,7 @@ import { transformarFecha } from 'src/utils/transformar-fecha';
 import { UsuarioDatosCompletosRtaDto } from '../dto/usuario-datos-completos-rta.dto';
 import { UpdateUsuarioAdmDto } from '../dto/update-Usuario-adm.dto';
 import { PlanEntity } from 'src/plan/entities/plan.entity';
+import { RutinasUsuarioRtaDto } from '../dto/rutinasUsuarioRtaDto';
 
 @Injectable()
 export class UsuarioService {
@@ -201,6 +202,29 @@ export class UsuarioService {
     } catch (err) { throw ErrorManager.handle(err) }
   }
 
+  public async findRutinasxId(id: number): Promise<RutinasUsuarioRtaDto[] | null> {
+    const unUsuario = await this.usuarioRepository.findOneBy({ id: id });
+    if (!unUsuario || unUsuario.estado === ESTADO.ARCHIVADO) {
+      throw new ErrorManager("BAD_REQUEST", `No existe el usuario ${id} `);
+    };
+    const usuarioConRutinas = await this.usuarioRepository.find({
+      where: { id: id },
+      relations: ['rutinas']
+    });
+    console.log(usuarioConRutinas);
+    if (usuarioConRutinas && usuarioConRutinas.length > 0 && usuarioConRutinas[0].rutinas) {
+      const rutinasDto: RutinasUsuarioRtaDto[] = usuarioConRutinas[0].rutinas.map((r) => ({
+        idUsuario: id,
+        idRutina: r.idRutina,
+        nombreRutina: r.nombreRutina,
+        estadoRutina: r.estadoRutina
+
+      }))
+      console.log(rutinasDto);
+      return rutinasDto
+    } else return null
+ 
+  }
   //Se llama desde el login (valida mail y contraseña)
   public async loginUsuario(body: LoginDto): Promise<LoginRtaDto> { //retorna null si no encuentra el mail para crear unnuevo ususario
     try {
@@ -229,7 +253,7 @@ export class UsuarioService {
     try {
       const usuarioGuardado = await this.usuarioRepository.findOne({
         where: { id },
-        relations: ['datosPersonales', 'datosFisicos', 'datosPersonales.plan'], 
+        relations: ['datosPersonales', 'datosFisicos', 'datosPersonales.plan'],
       });
       if (!usuarioGuardado) {
         throw new ErrorManager("NOT_FOUND", "No se encontro usuario");
@@ -251,7 +275,7 @@ export class UsuarioService {
               console.error("Error enviando mail:", error.message);
             }
           });
-          
+
         }
         Object.assign(usuarioGuardado, body.datosBasicos);
       }
@@ -387,7 +411,7 @@ export class UsuarioService {
             }
 
             if (body.estado === ESTADO.ARCHIVADO && usuarioGuardado.estado !== ESTADO.ARCHIVADO) { //usuario es borrado
-             throw new ErrorManager("BAD_REQUEST", "El nuevo estado no puede ser ARCHIVADO. PAra eliminar, ingresar por la opcion 'Eliminar'");
+              throw new ErrorManager("BAD_REQUEST", "El nuevo estado no puede ser ARCHIVADO. PAra eliminar, ingresar por la opcion 'Eliminar'");
             }
             usuarioGuardado.estado = body.estado;
 
@@ -398,7 +422,7 @@ export class UsuarioService {
 
           //no uso update porque tengo relaciones que guardar
           const usuarioUpdate = await transaccion.save(usuarioGuardado);
- 
+
           return usuarioUpdate
         } else {
           throw new ErrorManager("BAD_REQUEST", "No se reciben datos para modificar usuario")

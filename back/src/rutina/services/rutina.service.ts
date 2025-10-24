@@ -12,17 +12,18 @@ import { EjercicioRutinaEntity } from 'src/ejercicio-rutina/entities/ejercicio-r
 import { EjercicioBasicoEntity } from 'src/ejercicio-basico/entities/ejercicio-basico.entity';
 import { RtaAllRutinasDto } from '../dto/rta-all-rutinas.dto';
 import { plainToInstance } from 'class-transformer';
+import { FileImgService } from 'src/shared/file-img/file-img.service';
 
 
 
 @Injectable()
 export class RutinaService {
+
   constructor(
     @InjectRepository(UsuarioEntity) private readonly usuarioRepository: Repository<UsuarioEntity>,
     @InjectRepository(RutinaEntity) private readonly rutinaRepository: Repository<RutinaEntity>,
     @InjectRepository(EjercicioBasicoEntity) private readonly ejercicioBasicoRepository: Repository<EjercicioBasicoEntity>,
-    @InjectEntityManager() private readonly entityManager: EntityManager,
-  ) { }
+    @InjectEntityManager() private readonly entityManager: EntityManager,  private readonly fileImgService: FileImgService ) { }
 
   public async createRutina(rutinaDto: CreateRutinaDto): Promise<RutinaEntity> {
     try {
@@ -130,7 +131,13 @@ export class RutinaService {
       if (!rutina) {
         throw new ErrorManager("NOT_FOUND", `No se encontro la rutina ${id}`)
       }
-
+      rutina.semanas.map((s)=> {
+        s.dias.map((d)=> {
+          d.ejerciciosRutina.map((ej)=> (
+            ej.ejercicioBasico.imagenLink = this.fileImgService.construirUrlImagen(ej.ejercicioBasico.imagenLink, "ejercicios")
+          ))
+        })
+      })
       return rutina; //tambien puede ser null
     }
     catch (err) {

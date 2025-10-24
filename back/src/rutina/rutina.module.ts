@@ -6,10 +6,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsuarioEntity } from 'src/usuario/entities/usuario.entity';
 import { UsuarioModule } from 'src/usuario/usuario.module';
 import { EjercicioBasicoEntity } from 'src/ejercicio-basico/entities/ejercicio-basico.entity';
+import { FileImgModule } from 'src/shared/file-img/file-img.module';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([RutinaEntity,UsuarioEntity,EjercicioBasicoEntity]), UsuarioModule],
+  imports: [TypeOrmModule.forFeature([RutinaEntity,UsuarioEntity,EjercicioBasicoEntity]), UsuarioModule,FileImgModule],
   controllers: [RutinaController],
   providers: [RutinaService],
 })

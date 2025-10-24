@@ -27,6 +27,10 @@ export class UsuarioController {
     return await this.usuarioService.findUsuarioById(id);
   }
 
+  @Get('rutinas/:id')
+  public async findRutinasxId(@Param('id', ParseIntPipe) id:number) {
+    return await this.usuarioService.findRutinasxId(id);
+  }
 
   @Get('email/:mail')
   public async findUsuarioByMail(@Param('mail') mail: string) {
