@@ -135,16 +135,16 @@ const CrudEjercicioBasico = () => {
                 error={error}
             ></SelectorEjercicio>
 
-            <div className="my-container">
+            <div className="my-container-ejercicio">
                 <form id="ejercicioForm" onSubmit={handleSubmit}>
-                    <div className="form-container">
+                    <div className="form-container-ejercicio">
                         {/*columna izq - contiene la informacion basica del ej*/}
-                        <div className="columna-izq">
+                        <div className="columna-izq-ejercicio">
 
-                            <div className="form-group">
+                            <div className="form-group-ejercicio">
                                 <label htmlFor="nombreEjercicio">Nombre Ejercicio:</label>
                                 <div className="input-icon-validate">
-                                    <input type="text" id="nombreEjercicio" name="nombreEjercicio" className={`form-control ${errores.nombreEjercicio ? 'is-invalid' : ''}`}
+                                    <input type="text" id="nombreEjercicio" name="nombreEjercicio" className={`form-control input-ejercicio ${errores.nombreEjercicio ? 'is-invalid' : ''}`}
                                         required placeholder="El nombre debe ser unico, por ejemplo, sentadilla sumo"
                                         value={ejercicioData?.nombreEjercicio || ''} onChange={handleInputChange} onBlur={handleBlur} />
                                     <span className="icon-validate" data-icon="nombreEjercicio"></span>
@@ -159,10 +159,10 @@ const CrudEjercicioBasico = () => {
 
 
 
-                            <div className="form-group">
+                            <div className="form-group-ejercicio">
                                 <label htmlFor="observaciones">Observaciones:</label>
                                 <textarea id="observaciones" name="observaciones"
-                                    className={`form-control ${errores.observaciones ? 'is-invalid' : ''}`}
+                                    className={`form-control textarea-ejercicio ${errores.observaciones ? 'is-invalid' : ''}`}
                                     value={ejercicioData.observaciones || ''} onChange={handleInputChange} onBlur={handleBlur}></textarea>
                                 {errores.observaciones && (
                                     <div className="input-warning text-danger" style={{ display: "block" }}>
@@ -171,16 +171,16 @@ const CrudEjercicioBasico = () => {
                                 )}
                             </div>
 
-                            <div className="form-group">
+                            <div className="form-group-ejercicio">
                                 <label htmlFor="imagenLink">Link Imagen: </label>
                                 {ejercicioData.imagenPreviewUrl && (
-                                    <span className="etiqueta-carga"
+                                    <span className="etiqueta-carga-ejercicio"
                                         onClick={ handleDeselectImg }>
                                         Deseleccionar
                                     </span>
                                 )}
                                 <input ref={fileInputRef} type="file" id="imagenLink" name="imagenLink"
-                                    className={`form-control ${errores.imagenLink ? 'is-invalid' : ''}`}
+                                    className={`form-control input-ejercicio ${errores.imagenLink ? 'is-invalid' : ''}`}
                                     accept="image/*" onChange={handleInputChange} />
                                 {errores.imagenLink && (
                                     <div className="input-warning text-danger" >
@@ -189,7 +189,7 @@ const CrudEjercicioBasico = () => {
                                 )}
                             </div>
 
-                            <div className="form-group">
+                            <div className="form-group-ejercicio">
                                 <label htmlFor="videoLink">Link Video:
                                     {ejercicioData.videoLink && !showVideo && (
                                         <span className="etiqueta-carga"
@@ -200,7 +200,7 @@ const CrudEjercicioBasico = () => {
 
                                 </label>
                                 <input type="url" id="videoLink" name="videoLink"
-                                    className={`form-control ${errores.videoLink ? 'is-invalid' : ''}`}
+                                    className={`form-control input-ejercicio ${errores.videoLink ? 'is-invalid' : ''}`}
                                     value={ejercicioData.videoLink || ''}
                                     onChange={handleInputChange}
                                     onBlur={handleBlur} />
@@ -210,13 +210,13 @@ const CrudEjercicioBasico = () => {
                                     </div>
                                 )} </div>
 
-                            <div className="botones">
-                                <button type="submit" className="btn btn-primary" disabled={loading}>
+                            <div className="botones-ejercicio">
+                                <button type="submit" className="btn btn-primary button-ejercicio" disabled={loading}>
                                     {loading ? 'Guardando...' : 'Guardar'}
                                 </button>
                                 {/* El botón eliminar solo se muestra en modo Editar */}
                                 {modoEjercicio === "Editar" && (
-                                    <button type="button" className="btn btn-danger" disabled={loading} onClick={handleDelete}>
+                                    <button type="button" className="btn btn-danger button-ejercicio" disabled={loading} onClick={handleDelete}>
                                         Eliminar
                                     </button>
                                 )}
@@ -224,22 +224,22 @@ const CrudEjercicioBasico = () => {
                         </div>
 
                         { /*columna derecha: vista previa de imagen y video*/}
-                        <div className="columna-der">
+                        <div className="columna-der-ejercicio">
                             {/* El valor de src ahora proviene de ejercicioData.imagenLink del hook */}
-                            <div className="imagen-preview">
+                            <div className="imagen-preview-ejercicio">
                                 <h4>Vista previa de la imagen</h4>
-                                <img id="imagenPreview" src={ejercicioData.imagenPreviewUrl ? ejercicioData.imagenPreviewUrl : LOGO_PLACEHOLDER}
+                                <img id="imagenPreview-ejercicio" src={ejercicioData.imagenPreviewUrl ? ejercicioData.imagenPreviewUrl : LOGO_PLACEHOLDER}
                                     alt="Vista previa de la imagen" style={{ maxWidth: '100%', maxHeight: '150px' }} />
                             </div>
-                            <div className="video-preview">
+                            <div className="video-preview-ejercicio">
                                 <h4>Vista previa del video</h4>
 
-                                <div className="video-iframe-wrapper">
-                                    <div className="video-iframe-preview">
+                                <div className="video-iframe-wrapper-ejercicio">
+                                    <div className="video-iframe-preview-ejercicio">
                                         {ejercicioData.videoLink && showVideo ? (
                                             <iframe src={getEmbedUrl(ejercicioData.videoLink)} title="Preview" />
                                         ) : (
-                                            <div className="video-placeholder-mensaje">
+                                            <div className="video-placeholder-mensaje-ejercicio">
                                                 {ejercicioData.videoLink
                                                     ? 'Presione "Previsualizar video" para cargarlo.'
                                                     : 'No hay un enlace de video ingresado.'}

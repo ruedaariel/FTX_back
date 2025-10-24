@@ -7,7 +7,7 @@
 
 
 
-.my-container {
+.my-container-ejercicio {
     background-color: var(--color-fondo-gris-claro);
     padding: 20px;
     border-radius: 8px;
@@ -20,44 +20,44 @@
     /*deja margen para el menu*/
 }
 
-h1 {
+/* h1 {
     text-align: center;
     color: var(--color-primario-naranja);
-}
+} */
 
-label {
-    color: var(--color-primario-naranja-claro);
-    padding-top: 5px;
-}
 
-form {
+
+#ejercicioForm {
     display: flex;
     flex-direction: column;
 }
 
-.botones {
+.botones-ejercicio {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     margin-top: 20px;
 }
 
-.form-group {
+.form-group-ejercicio {
     margin-bottom: 5px;
 }
 
 
-.form-group label {
+.form-group-ejercicio label {
     font-weight: normal;
     margin-bottom: 5px;
     display: block;
+    color: var(--color-primario-naranja-claro);
+    padding-top: 5px;
+
 }
 
-input[type="text"],
-input[type="number"],
-input[type="url"],
-select,
-textarea {
+.input-ejercicio[type="text"],
+.input-ejercicio[type="number"],
+.input-ejercicio[type="url"],
+.select-ejercicio,
+.textarea-ejercicio {
     padding: 8px;
     border-radius: 4px;
     border: 1px solid var(--color-borde-input);
@@ -67,18 +67,18 @@ textarea {
     box-sizing: border-box;
 }
 
-input[type="text"]:focus,
-input[type="number"]:focus,
-input[type="url"]:focus,
-select:focus,
-textarea:focus {
+.input-ejercicio[type="text"]:focus,
+.input-ejercicio[type="number"]:focus,
+.input-ejercicio[type="url"]:focus,
+.select-ejercicio:focus,
+.textarea-ejercicio:focus {
     border-color: var(--color-borde-focus);
     outline: none;
     box-shadow: 0 0 5px var(--color-sombra-focus);
 }
 
-button[type="submit"],
-button[type="button"] {
+.button-ejercicio[type="submit"],
+.button-ejercicio[type="button"] {
     background-image: var(--gradiente-boton);
     color: var(--color-fondo-mas-oscuro);
     padding: 10px 20px;
@@ -90,11 +90,11 @@ button[type="button"] {
     text-align: center;
 }
 
-input[type="file"] {
+.input-ejercicio[type="file"] {
   overflow: hidden;
 }
 
-.etiqueta-carga {
+.etiqueta-carga-ejercicio {
     color: var(--color-primario-naranja);
     cursor: pointer;
     text-decoration: underline;
@@ -102,24 +102,23 @@ input[type="file"] {
     float: right;
 }
 
-.etiqueta-carga:hover {
+.etiqueta-carga-ejercicio:hover {
     color: var(--color-primario-naranja-claro);
 }
 
-button[type="submit"]:hover {
+.button-ejercicio[type="submit"]:hover {
     background-image: var(--gradiente-boton-hover);
     box-shadow: 0 2px 5px var(--color-sombra-boton-hover);
 }
 
-#imagenPreview,
-#videoPreview {
+#imagenPreview-ejercicio {
     margin-top: 10px;
     border: 1px solid var(--color-borde);
     border-radius: 4px;
 }
 
-.video-iframe-wrapper { display:flex; justify-content:center; width:100%; }
-.video-preview {
+.video-iframe-wrapper-ejercicio { display:flex; justify-content:center; width:100%; }
+.video-preview-ejercicio {
     width: 100%;
     margin-top: 10px;
     display: flex;
@@ -127,13 +126,13 @@ button[type="submit"]:hover {
     gap: 8px;
 }
 
-.video-iframe-preview {
+.video-iframe-preview-ejercicio {
     border: none;
     width: 100%;
 }
 
-.video-iframe-preview,
-.video-placeholder-mensaje {
+.video-iframe-preview-ejercicio,
+.video-placeholder-mensaje-ejercicio {
     width: 100%;
     max-width: 360px;
     max-height: 180px;;
@@ -153,7 +152,7 @@ button[type="submit"]:hover {
 
 /* iframe dentro de la caja ocupa todo 
 .video-iframe-preview,*/
-.video-iframe-preview iframe
+.video-iframe-preview-ejercicio iframe
  {
     width: 100%;
     height: 100%;
@@ -163,14 +162,14 @@ button[type="submit"]:hover {
 }
 
 /* mensaje placeholder: texto centrado y estilo */
-.video-placeholder-mensaje {
+.video-placeholder-mensaje-ejercicio {
     font-size: 0.95rem;
     text-align: center;
     color: var(--color-texto-claro);
 }
 
 /* Estilos para el layout de 2 columnas */
-.form-container {
+.form-container-ejercicio {
     display: flex;
     gap: 16px;
     /* separacion consistente */
@@ -180,7 +179,7 @@ button[type="submit"]:hover {
     /* en pantallas muy pequeñas permitir que se apilen */
 }
 
-.columna-izq {
+.columna-izq-ejercicio {
     flex: 0 1 40%;
     /* crecerá si hace falta, encogerá si no hay espacio */
     padding: 10px;
@@ -189,7 +188,7 @@ button[type="submit"]:hover {
     min-width: 280px;
 }
 
-.columna-der {
+.columna-der-ejercicio {
     flex: 1 1 56%;
     display: flex;
     border: 1px solid var(--color-borde);
@@ -200,17 +199,17 @@ button[type="submit"]:hover {
     min-width: 240px;
 }
 
-.imagen-preview {
+.imagen-preview-ejercicio {
     text-align: center;
     margin-bottom: 20px;
 }
 
-.columna-der h4 {
+.columna-der-ejercicio h4 {
     margin-bottom: 10px;
     text-align: center;
 }
 
-.imagen-preview img {
+.imagen-preview-ejercicio img {
     max-width: 100%;
     max-height: 500px;
     height: auto;
@@ -223,7 +222,7 @@ button[type="submit"]:hover {
 
 /* Estilos para hacer la página responsive mobile*/
 @media (max-width: 768px) {
-    .my-container {
+    .my-container-ejercicio {
         width: 100%;
         padding: 5px;
         margin-left: 0px;
@@ -232,14 +231,14 @@ button[type="submit"]:hover {
     }
 
     /* menu */
-    .logo {
+ /*    .logo {
         padding-left: 10px;
     }
 
     .logo img {
         width: 30px;
         height: auto;
-    }
+    } 
 
     .menu-title {
         font-size: 1.2rem;
@@ -249,19 +248,19 @@ button[type="submit"]:hover {
         font-size: 1.5rem;
         padding-right: 10px;
     }
-
+*/
     /* fin menu*/
-    .form-container {
+    .form-container-ejercicio {
         flex-direction: column;
     }
 
-    .columna-izq {
+    .columna-izq-ejercicio {
         width: 100%;
         padding: 5px;
         margin-bottom: 20px;
     }
 
-    .columna-der {
+    .columna-der-ejercicio {
         width: 100%;
         padding: 0;
         margin-bottom: 20px;
