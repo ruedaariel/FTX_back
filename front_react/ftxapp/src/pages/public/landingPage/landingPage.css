@@ -156,7 +156,7 @@ body {
     font-size: clamp(1.2rem, 4vw, 2.5rem);
     /*1.0rem para mobile, 4vw crece segun ancho ventana, 2.5rem para pantalla grande*/
     font-weight: bold;
-    color: var(--color-primario-naranja);
+    color: var(--color-texto-claro);
     margin-bottom: 0.75rem;
 }
 
@@ -289,7 +289,7 @@ body {
     background-attachment: fixed;
     padding: 80px 20px;
     text-align: center;
-    color: var(--color-fondo-gris-claro);
+    color: var(--color-texto-gris-medio);
 }
 
 #testimonios::before {
@@ -415,12 +415,15 @@ body {
 }
 
 /*   ------------------------------------ seccion FAQ  ------------------------------   */
-.accordion {
+.container-faq {
+    max-width: 960px !important;
+}
+.accordion-faq {
     --bs-accordion-border-color: var(--color-primario-naranja);
     /*cambia color borde exterior */
 }
 
-.accordion-button:not(.collapsed) {
+.accordion-faq .accordion-button:not(.collapsed) {
     /*formato cuando está desplegado*/
     color: var(--color-primario-naranja) !important;
     background-color: var(--color-fondo-mas-oscuro);
@@ -428,12 +431,24 @@ body {
 
 }
 
-.accordion-button:not(.collapsed)::after {
+.accordion-faq .accordion-button:not(.collapsed)::after {
     /*cambia la flecha por defecto cuando está desplegado*/
     background-image: url(../../../assets/Recursos/Imagenes/flecha-contraer.png) !important;
     transform: rotate(0deg) !important;
 }
 
+ .accordion-faq .accordion-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: transparent;
+  color: var(--color-texto-gris-medio);
+  border: 1px solid transparent; 
+  border-radius: 0.375rem;
+  box-shadow: none;
+}  
 /* ----------------------------------- Footer -------------------------------------------- */
 footer {
     background-color: var(--color-fondo-mas-oscuro);
@@ -444,8 +459,8 @@ footer {
     border-top: 1px solid #495057;
 }
 
-.footer-a {
-    color: var(--color-primario-naranja);
+footer .footer-a {
+    color: var(--color-primario-naranja) ;
     text-decoration: none;
     transition: color 0.3s ease;
 }
@@ -471,7 +486,7 @@ footer {
 section h2 {
     text-align: center;
     margin-bottom: 40px;
-    color: var(--color-secundario-naranja);
+    color: var(--color-primario-naranja);
     font-weight: bold;
 }
 
@@ -509,7 +524,7 @@ section h2 {
 
     #ppalCarousel .carousel-caption h4 {
         font-size: 2rem;
-        color: var(--color-primario-naranja)
+        color: var(--color-texto-claro)
     }
 
     .carousel-indicators [data-bs-target] {
