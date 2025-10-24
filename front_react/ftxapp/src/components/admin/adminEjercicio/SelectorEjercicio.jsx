@@ -52,7 +52,7 @@ const isDisabled = modoEjercicio === "Crear";
         />
       </div>
 
-      {error && <p className="error-texto">Error: {error}</p>}
+      {error && <p className="error-texto-ejercicio">Error: {error}</p>}
     </div>
   );
 };

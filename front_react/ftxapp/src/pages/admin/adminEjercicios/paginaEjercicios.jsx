@@ -5,11 +5,11 @@ import CrudEjercicioBasico from '../../../components/admin/adminEjercicio/CrudEj
 
 const PaginaEjercicios = () => {
     return (
-        <>
-            <HeaderCrud title="Ejercicios Básicos" />
+        <div className='container'>
+            <HeaderCrud title="Ejercicios Básicos" widthPercent={100} />
             <CrudEjercicioBasico/>
 
-        </>
+        </div>
     )
 }
 

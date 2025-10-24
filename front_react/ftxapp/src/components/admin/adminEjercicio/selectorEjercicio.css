@@ -69,11 +69,13 @@
   gap: 10px;
   background-color: var(--color-fondo-gris-claro);
   border-radius: 8px;
-  width: 100%;
+ 
   color: var(--color-texto-claro);
   flex-wrap: wrap;
-  margin: .1rem 1rem auto 2rem;
+  padding: .1rem 1rem ;
 
+ /*  width: 100%;
+ margin: .1rem 1rem auto 2rem;*/
 
 }
 
