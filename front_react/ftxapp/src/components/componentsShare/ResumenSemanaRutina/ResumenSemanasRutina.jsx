@@ -1,5 +1,5 @@
 import React from "react";
-import "./ResumenSemanasRutina.css"; // Asegurate de crear este archivo CSS
+import "./ResumenSemanasRutina.css";
 
 const ResumenSemanasRutina = ({ rutina }) => {
   if (!rutina?.semanas?.length) return null;
@@ -10,11 +10,14 @@ const ResumenSemanasRutina = ({ rutina }) => {
         <div key={semana.idSemana} className="barra-semana">
           <div className="etiqueta-semana">Semana {semana.nroSemana}</div>
           <div className="dias-semana">
-            {semana.dias.map((dia) => (
-              <div key={dia.idDia} className="cuadro-dia">
-                {dia.nroDia}
-              </div>
-            ))}
+            {semana.dias.map((dia) => {
+              const cantidadEjercicios = dia.ejerciciosRutina?.length || 0;
+              return (
+                <div key={dia.idDia} className="cuadro-dia" title={`Día ${dia.nroDia}`}>
+                  {cantidadEjercicios}
+                </div>
+              );
+            })}
           </div>
         </div>
       ))}
@@ -23,3 +26,4 @@ const ResumenSemanasRutina = ({ rutina }) => {
 };
 
 export default ResumenSemanasRutina;
+

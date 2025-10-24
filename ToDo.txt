@@ -11,3 +11,5 @@ Front:
 
 admin/rutina:   se hace el elimimar rutina?
 admin/rutina:   revisar reseeo de interfaz al volver de crear rutina exitosa, limpiar Nombre de Rutina
+landing/politicas y terminos: mudar a una pagina estatica
+landing/contacto: enviar formulario al back y que back envie el correo (opciones tarjeta)
