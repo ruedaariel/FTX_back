@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 
 
-function HeaderCrud({ title = "Panel" }) {
+function HeaderCrud({ title = "Panel", widthPercent = 90 }) {
   const navigate = useNavigate();
 
   const volver = () => { 
@@ -17,11 +17,12 @@ function HeaderCrud({ title = "Panel" }) {
       navigate('/'); // Ver como ir a las home page del admin o del user 
     }
   }
-  //   navegar(-1); // Volver a la página anterior
-  // };
+
+const computedWidth =
+    typeof widthPercent === 'number' ? `${widthPercent}%` : String(widthPercent); //% del width del componente
 
   return (
-    <nav className="top-menu">
+    <nav className="top-menu" style={{ width: computedWidth }}>
       <a href="../home_administrador.html" className="logo">
         <img src={logo} alt="logo FTX" title={title} />
       </a>
