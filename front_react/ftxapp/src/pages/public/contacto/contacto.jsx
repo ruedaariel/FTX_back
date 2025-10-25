@@ -68,25 +68,25 @@ const contacto = () => {
         <>
             <HeaderCrud title="Contacto"/>
 
-            <div className="contact-container container mt-5 pt-5">
+            <div className="contact-container container mt-0 pt-5">
                 <div className="row">
                     {/*  Columna Izquierda: Información de Contacto  */}
                     <div className="col-lg-5 mb-4 mb-lg-0">
                         <div className="contact-info-card">
                             <h2>Hablá con nosotros</h2>
-                            <div className="info-item">
+                            <div className="info-item mt-3">
                                 <i className="fas fa-map-marker-alt"></i>
                                 <p>Calle Falsa 123, Ciudad Fitness, CP 45678</p>
                             </div>
-                            <div className="info-item">
+                            <div className="info-item mt-3">
                                 <i className="fas fa-phone-alt"></i>
                                 <p>+34 900 123 456</p>
                             </div>
-                            <div className="info-item">
+                            <div className="info-item mt-3">
                                 <i className="fas fa-envelope"></i>
                                 <p>contacto@ftxfitness.com</p>
                             </div>
-                            <p className="mt-4">Estamos listos para ayudarte con tus metas de fitness. Completá el formulario o
+                            <p className="info-item mt-4">Estamos listos para ayudarte con tus metas de fitness. Completá el formulario o
                                 utilizá nuestros canales directos.</p>
                             <div className="social-icons-contact mt-3">
                                 <a className="social-icon" href="https://www.facebook.com/"><i className="fab fa-facebook-f"></i></a>

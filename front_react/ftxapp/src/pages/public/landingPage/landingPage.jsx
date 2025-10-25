@@ -17,16 +17,23 @@ import './landingPage.css'
 import EnConstruccion from "../enContruccion/EnConstruccion.jsx";
 
 function landingPage() {
+  //para manejar los links en el header y el footer
+  const [open, setOpen] = useState(false);
+
+  const handleNavClick = (cb) => {
+    setOpen(false);
+    if (typeof cb === 'function') cb();
+  };
   return (
     <ModalProvider>
-      <Header />
+      <Header open={open} setOpen={setOpen} handleNavClick={handleNavClick} />
       <Carousel />
       <PorqueElegirnos />
       <TuTrainer />
       <Planes />
       <Testimonios />
       <Faq />
-      <Footer />
+      <Footer handleNavClick={handleNavClick}/>
       <ModalGlobal />
     </ModalProvider>
   );
