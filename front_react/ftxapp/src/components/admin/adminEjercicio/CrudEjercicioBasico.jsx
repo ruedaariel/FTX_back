@@ -99,22 +99,19 @@ const CrudEjercicioBasico = () => {
 
     }
 
-    const handleDecisionBorrado = async () => {
-
-        if (!ejercicioSeleccionado || !ejercicioSeleccionado.idEjercicioBasico) {
-            showModal("Error en ejercicio seleccionado", "error", 0, true);
-            return;
-        };
-        setMostrarDecision(true);
-        console.log("%cDecision", "color:orange", mostrarDecision);
-
-    }
-
-    const handleDecisionEliminar = async () => {
-        setMostrarDecision(false);
-        if (!respuesta) return;
 
 
+    const handleEliminarEjercicio = async () => {
+
+        showModal(`¿Estás seguro que querés eliminar el ejercicio ${ejercicioSeleccionado.nombreEjercicio}?`,
+            "decision",
+            0,
+            true,
+            (respuesta) => {
+                if (!respuesta) return;
+
+            }
+        );
 
         const url = `http://localhost:8000/apiFtx/ejbasico/delete/${ejercicioSeleccionado.idEjercicioBasico}`;
 
@@ -232,7 +229,7 @@ const CrudEjercicioBasico = () => {
                                 {/* El botón eliminar solo se muestra en modo Editar */}
                                 {modoEjercicio === "Editar" && (
                                     <button type="button" className="btn btn-danger button-ejercicio" disabled={loading}
-                                        onClick={handleDecisionBorrado}>
+                                        onClick={handleEliminarEjercicio}>
                                         Eliminar
                                     </button>
                                 )}
@@ -273,17 +270,7 @@ const CrudEjercicioBasico = () => {
 
             </div>
 
-            {/* Modal de decisión para confirmar eliminación */}
-            {true && (
-                <ModalDecision
-                    isOpen={mostrarDecision}
-                    title="Confirmar eliminación"
-                    message={`¿Querés eliminar el ejercicio?`}
-                    borderClass="modal-error-border"
-                    onClose={() => setMostrarDecision(false)}
-                    onDecision={handleDecisionEliminar}
-                />
-            )}
+
         </ >
 
     )
