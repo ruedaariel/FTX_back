@@ -9,6 +9,7 @@ import EnContruccion from "../../pages/public/enContruccion/EnConstruccion";
 import { PagosAdmin } from "../../pages/admin/adminPagos";
 import Contacto from "../../pages/public/contacto/contacto"
 import PaginaEjercicios from "../../pages/admin/adminEjercicios/paginaEjercicios";
+import UsuarioRutina from "../../pages/usuario/usuarioRutina/usuarioRutina";
 
 
 /* import Rutina from "../pages/Rutina";
@@ -27,6 +28,7 @@ const AppRutas = () => {
       <Route path="/admin/clientes" element={<PantallaClientes />} />
       <Route path="/admin/pagos" element={<PagosAdmin />} />
       <Route path="/admin/ejercicios" element = {<PaginaEjercicios />}/>
+      <Route path="/usuario/rutina" element={<UsuarioRutina />} />
       <Route path="*" element={<EnContruccion />} />
 
     {/*   <Route path="/rutina" element={<Rutina />} />

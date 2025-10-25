@@ -5,30 +5,30 @@
   margin: 1rem 0;
 }
 
-.barra-semana {
+.barra-semana-resumen {
   display: flex;
   align-items: center;
   gap: 1rem;
   background-color: var(--color-sombra-gris-claro);
   padding: 0.6rem 1rem;
   border-radius: 8px;
-  box-shadow: 2px 2px 6px var(--color-sombra-container);
+  box-shadow: 2px 2px 6px var(--color-texto-claro);
 }
 
-.etiqueta-semana {
+.etiqueta-semana-resumen {
   font-weight: bold;
   font-size: 1.1rem;
   color: var(--color-texto-claro);
   min-width: 120px;
 }
 
-.dias-semana {
+.dias-semana-resumen {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
 }
 
-.cuadro-dia {
+.cuadro-dia-resumen {
   width: 28px;
   height: 28px;
   background-color: var(--color-primario-naranja);

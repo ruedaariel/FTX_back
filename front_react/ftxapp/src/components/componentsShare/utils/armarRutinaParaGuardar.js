@@ -6,6 +6,8 @@ export const armarRutinaParaGuardar = ({
   rutinaFinal,
   modoRutina,
   datosRutinaUsuario,
+  estado,
+  
 }) => {
   // Transforma las semanas de la rutina usando el helper, agregando nroSemana, nroDia, etc.
   const semanasTransformadas = transformarRutinaCompleta(rutinaFinal);
@@ -13,7 +15,7 @@ export const armarRutinaParaGuardar = ({
   // Construye la base del objeto con nombre, estado y semanas
   const rutinaBase = {
     nombreRutina: datosRutinaUsuario.nombreRutina,
-    estadoRutina: "activa",
+    estadoRutina: estado,
     semanas: semanasTransformadas,
      
   };

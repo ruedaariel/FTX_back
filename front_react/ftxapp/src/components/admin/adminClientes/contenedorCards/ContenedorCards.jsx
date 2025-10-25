@@ -1,8 +1,7 @@
-// ContenedorCards.jsx
 import React from 'react';
 import CardUsuario from '../cardUsuario/CardUsuario';
 import ModalEditarUsuario from '../../../componentsShare/Modal/modalEditarUsuario/ModalEditarUsuario';
-import ModalDecision from '../../../componentsShare/Modal/ModalDecision';
+// import ModalDecision from '../../../componentsShare/Modal/ModalDecision'; // Comentado: ahora lo maneja ModalContext
 
 function ContenedorCards({
   usuariosFiltrados,
@@ -21,8 +20,6 @@ function ContenedorCards({
   setMostrarErrorAcceso,
   obtenerUsuarios,
 }) {
-
-   
   return (
     <div className="contenedor-cards">
       {usuariosFiltrados
@@ -46,18 +43,23 @@ function ContenedorCards({
         />
       )}
 
+      {/* Modal de decisión local desactivado: ahora se usa el contexto global */}
+      {/*
       {mostrarDecision && (
         <ModalDecision
           isOpen={mostrarDecision}
           title="Confirmar eliminación"
-          message={`¿Querés eliminar a ${usuarioAEliminar.email}? todos sus datos de rutina seran eliminados`}
+          message={`¿Querés eliminar a ${usuarioAEliminar.email}? todos sus datos de rutina serán eliminados`}
           borderClass="modal-error-border"
           onClose={() => setMostrarDecision(false)}
           onDecision={handleDecision}
         />
       )}
+      */}
 
-      {/* {mostrarErrorAcceso && (
+      {/* Modal de error de conexión (también puede migrarse al contexto si lo deseás) */}
+      {/*
+      {mostrarErrorAcceso && (
         <ModalDecision
           isOpen={mostrarErrorAcceso}
           title="Error de conexión"
@@ -69,9 +71,12 @@ function ContenedorCards({
             if (respuesta) obtenerUsuarios();
           }}
         />
-      )} */}
+      )}
+      */}
     </div>
   );
 }
 
 export default ContenedorCards;
+
+

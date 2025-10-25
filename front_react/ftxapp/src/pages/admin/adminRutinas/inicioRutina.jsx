@@ -21,7 +21,7 @@ import { armarRutinaParaGuardar } from "../../../components/componentsShare/util
 import { validarRutinaCompleta } from "../../../components/componentsShare/utils/validarRutinaCompleta.js";
 import { sanearRutinaCompleta } from "../../../components/componentsShare/utils/sanearRutinaCompleta.js";
 import { crearRutinaNueva } from "../../../components/componentsShare/utils/plantillasRutina.js";
-import ModalResumenRutina from "../../../components/componentsShare/ResumenSemanaRutina/ModalResumenRutina.jsx";
+import ModalResumenRutina from "../../../components/componentsShare/ResumenSemanaRutina/MOdalresumenRutina.jsx";
 
 function inicioRutina() {
   // Estados principales
@@ -31,9 +31,8 @@ function inicioRutina() {
   const [reiniciarRutina, setReiniciarRutina] = useState(false); // Flag para reiniciar interfaz
   const { showModal } = useModal(); // Modal global
   const [mostrarResumenModal, setMostrarResumenModal] = useState(false);
-  
-const [rutinaPendienteGuardar, setRutinaPendienteGuardar] = useState(null);
 
+  const [rutinaPendienteGuardar, setRutinaPendienteGuardar] = useState(null);
 
   const [rutinaFinal, setRutinaFinal] = useState(null); // Rutina editada lista para guardar
   const [datosRutinaUsuario, setDatosRutinaUsuario] = useState({
@@ -75,31 +74,42 @@ const [rutinaPendienteGuardar, setRutinaPendienteGuardar] = useState(null);
       return;
     }
 
-    const rutinaSaneada = sanearRutinaCompleta(rutinaFinal);
-  setRutinaPendienteGuardar(rutinaSaneada);
-  setMostrarResumenModal(true); //  Mostrar modal antes de guardar
+    //console.log("Rutina Final ---->", rutinaFinal);
+    //console.log("Datos Rutina Usuario ---->", datosRutinaUsuario);
 
-  }
-    
+    const rutinaSaneada = {
+      ...sanearRutinaCompleta(rutinaFinal),
+      idUsuario: datosRutinaUsuario.idUsuario,
+    };
+    setRutinaPendienteGuardar(rutinaSaneada);
+
+    //console.log("Rutina Saneada ---->", rutinaSaneada);
+
+    setMostrarResumenModal(true); //  Mostrar modal antes de guardar
+  };
+
   // Guarda Rutina luego de confirmar en el modal
-  const guardarRutinaConfirmada = async () => {
-  setMostrarResumenModal(false);
-  const rutinaParaGuardar = armarRutinaParaGuardar({
-      rutinaFinal: rutinaFinalSaneada,
+  const guardarRutinaConfirmada = async (rutinaModificada) => {
+
+    console.log("%crutinaModificada----->","color: yellow; font-weight: bold;",rutinaModificada);
+    const rutinaParaGuardar = armarRutinaParaGuardar({
+      rutinaFinal: rutinaModificada,
       modoRutina,
       datosRutinaUsuario,
+      estado: rutinaModificada.estadoRutina,
     });
+
+    
 
     // borra la prpiredad id que no es necesaria par backend en editar
     if (modoRutina === "Editar") {
       delete rutinaParaGuardar.id;
     }
 
-    
-    // console.log("%crutinaFINALsANEADA ----->","color: yellow; font-weight: bold;",rutinaFinalSaneada);
+    console.log("%crutinaParaGuardar----->","color: yellow; font-weight: bold;",rutinaParaGuardar);
     // try {
     const data = await guardarRutinaEnBackend(
-      rutinaFinalSaneada.idRutina,
+      rutinaModificada.idRutina,
       rutinaParaGuardar,
       modoRutina,
       showModal
@@ -116,6 +126,7 @@ const [rutinaPendienteGuardar, setRutinaPendienteGuardar] = useState(null);
       showModal(mensaje, "success", 2000);
       resetearInterfaz();
     }
+    setMostrarResumenModal(false);
   };
 
   // Reiniciar interfaz después de guardar
@@ -164,7 +175,8 @@ const [rutinaPendienteGuardar, setRutinaPendienteGuardar] = useState(null);
         isOpen={mostrarResumenModal}
         onClose={() => setMostrarResumenModal(false)}
         onConfirmar={guardarRutinaConfirmada}
-        rutina={rutinaFinal}
+        rutina={rutinaPendienteGuardar}
+        modoRutina={modoRutina}
       />
 
       {/* <div className="boton-guardar-global">

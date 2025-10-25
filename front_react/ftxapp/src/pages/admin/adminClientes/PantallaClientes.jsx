@@ -21,6 +21,7 @@ const handleResetFiltro = () => {
 
   return (
     <>
+    <div className="container" >
       <HeaderCrud title="Listado Clientes"/>
       <BarraBusqueda
         estadoSeleccionado={estadoSeleccionado}
@@ -37,6 +38,8 @@ const handleResetFiltro = () => {
         onClose={() => setMostrarModalBusqueda(false)}
         onBuscar={handleBuscarAvanzado}
       />
+      </div>
+
     </>
   );
 }
