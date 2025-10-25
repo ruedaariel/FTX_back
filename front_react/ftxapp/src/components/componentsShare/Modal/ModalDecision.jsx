@@ -1,5 +1,5 @@
-import React from 'react';
-import '../Modal/modalError/ModalError.css'; // Usá tus estilos existentes
+import React, { useEffect } from 'react';
+import '../Modal/modalError/ModalError.css'; // Usa estilos existentes
 
 const ModalDecision = ({
   isOpen,
@@ -9,22 +9,28 @@ const ModalDecision = ({
   onClose,
   onDecision // función que recibe true o false
 }) => {
+  useEffect(() => {
+    console.log("ModalDecision montado");
+  }, []);
+
   if (!isOpen) return null;
 
+  console.log('ModalDecision renderizado');
+
   return (
-    <div className="modal">
-      <div className={`modal-content ${borderClass}`}>
-        {/* Botón para cerrar el modal */}
-        <span className="close-button" onClick={() => onDecision(false)}>&times;</span>
+    <div className="modal-temporizado">
+      <div className={`modal-content-temporizado ${borderClass}`}>
+        {/* Botón para cerrar el modal sin tomar decisión */}
+        <span className="close-button-temporizado" onClick={onClose}>&times;</span>
 
         {/* Título y mensaje */}
         <h1>{title}</h1>
         <p>{message}</p>
 
         {/* Botones de decisión */}
-        <div className="modal-buttons">
-          <button className="btn-confirmar" onClick={() => onDecision(true)}>Sí</button>
-          <button className="btn-cancelar" onClick={() => onDecision(false)}>No</button>
+        <div className="modal-buttons-temporizado">
+          <button className="btn-confirmar-temporizado" onClick={() => onDecision(true)}>Sí</button>
+          <button className="btn-cancelar-temporizado" onClick={() => onDecision(false)}>No</button>
         </div>
       </div>
     </div>
@@ -32,3 +38,4 @@ const ModalDecision = ({
 };
 
 export default ModalDecision;
+

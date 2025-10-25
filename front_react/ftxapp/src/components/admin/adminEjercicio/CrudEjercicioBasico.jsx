@@ -135,8 +135,23 @@ const CrudEjercicioBasico = () => {
         }
     };
 
+ console.log("%cDecision antes return", "color:green", mostrarDecision);
+
     return (
         < >
+
+            {/* Modal de decisión para confirmar eliminación */}
+            
+                <ModalDecision
+                    isOpen={mostrarDecision}
+                    title="Confirmar eliminación"
+                    message={`¿Querés eliminar el ejercicio?`}
+                    borderClass="modal-error-border"
+                    onClose={() => setMostrarDecision(false)}
+                    onDecision={handleDecisionEliminar}
+                />
+            
+
 
             <SelectorEjercicio
                 modoEjercicio={modoEjercicio}
@@ -270,9 +285,19 @@ const CrudEjercicioBasico = () => {
 
             </div>
 
-
+            {/* Modal de decisión para confirmar eliminación */}
+            {true && (
+                <ModalDecision
+                    isOpen={mostrarDecision}
+                    title="Confirmar eliminación"
+                    message={`¿Querés eliminar el ejercicio?`}
+                    borderClass="modal-error-border"
+                    onClose={() => setMostrarDecision(false)}
+                    onDecision={handleDecisionEliminar}
+                />
+            )}
         </ >
-
+        
     )
 }
 

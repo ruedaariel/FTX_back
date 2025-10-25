@@ -1,0 +1,47 @@
+import { useState, useEffect } from "react";
+
+// Componentes principales
+import HeaderCrud from "../../../components/componentsShare/header/HeaderCrud.jsx";
+
+// Contexto de modal
+import { useModal } from "../../../context/ModalContext.jsx";
+
+// Utilidades
+import { fetchGeneral } from "../../../components/componentsShare/utils/fetchGeneral.js";
+import RutinaPorSemana from "../../../components/usuario/usuarioRutina/RutinaPorSemana.jsx";
+import RutinaInteractiva from "../../../components/usuario/usuarioRutina/RutinaGenericaInteractiva.jsx";
+
+
+function UsuarioRutina() {
+  // Estados principales
+  const [rutinaUsuario, setRutinaUsuario] = useState(null); // Rutina seleccionada desde el selector
+  const { showModal } = useModal(); // Modal global
+  
+  const rutinaABuscar = 7; // ID de la rutina del usuario, esto debería venir de la sesión o contexto de usuario
+
+  // Cargar rutina desde backend al seleccionar una existente
+  useEffect(() => {
+    if (rutinaABuscar) {
+      fetchGeneral({
+        url: `http://localhost:8000/apiFtx/rutina/${rutinaABuscar}`,
+        method: "GET",
+        onSuccess: (data) => {
+          setRutinaUsuario(data);
+        },
+        showModal,
+      });
+    }
+  }, []);
+
+  console.log("%crutinaUsuario----->","color: yellow; font-weight: bold;",rutinaUsuario);
+// Render principal
+  return (
+    <>
+      <HeaderCrud title="Rutina de Usuario" />
+      <RutinaInteractiva rutina={rutinaUsuario} />
+      
+    </>
+  );
+}
+
+export default UsuarioRutina;

@@ -80,11 +80,19 @@ export class EjercicioBasicoService {
     //en ese caso, no deberia dejarlo borrar
     try {
       //controlo que exista
-      const ejercicioGuardado = await this.ejercicioBasicoRepository.findOneBy({ idEjercicioBasico: id });
+      const ejercicioGuardado = await this.ejercicioBasicoRepository.findOne({
+        where: { idEjercicioBasico: id },
+        relations: ['ejerciciosRutina']
+      });
       if (!ejercicioGuardado) {
         throw new ErrorManager("BAD_REQUEST", "No se encontro el ejercicio");
       }
 
+      //tiene relaciones activas
+      console.log("ejercicioguardado.rutinas", ejercicioGuardado.ejerciciosRutina);
+      if (ejercicioGuardado.ejerciciosRutina && ejercicioGuardado.ejerciciosRutina.length > 0) {
+        throw new ErrorManager("CONFLICT", "No se puede borrar el ejercicio, \n hay rutinas que estan utilizando")
+      }
       //borro el ejercicio
       const ejercicioBorrado = await this.ejercicioBasicoRepository.delete({ idEjercicioBasico: id });
       if (ejercicioBorrado.affected === 0) {
@@ -138,7 +146,7 @@ export class EjercicioBasicoService {
     try {
       const ejercicios = await this.ejercicioBasicoRepository.find();
 
-      return plainToInstance(RtaNombreEjercicioBasicoDto,ejercicios, { excludeExtraneousValues: true } );
+      return plainToInstance(RtaNombreEjercicioBasicoDto, ejercicios, { excludeExtraneousValues: true });
     } catch (err) {
       throw ErrorManager.handle(err);
     }
