@@ -300,9 +300,14 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.6);
+   
     /*opacidad*/
     z-index: 1;
+     background-color: var(--color-fondo-mas-oscuro);
+    color: var(--color-texto-secundario);
+    box-shadow: 0px -10px 20px rgba(0, 0, 0, 0.2),
+        /* Sombra superior */
+        0px 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 #testimonios .container {

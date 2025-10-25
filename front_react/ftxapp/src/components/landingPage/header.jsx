@@ -1,18 +1,11 @@
 
 import logo from '../../assets/Recursos/IconosLogos/logoSinLetrasNaranja.png'
 import { Navbar, Nav, Container } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 
-function Header() {
-  //controla el menu hamburguesa
-  const [open, setOpen] = useState(false);
-
-  //pasa el callback que le indica a donde ir
-  const handleNavClick = (cb) => {
-    setOpen(false);
-    if (typeof cb === 'function') cb();
-  };
+function Header({ open, setOpen, handleNavClick }) {
+ 
 
   return (
 

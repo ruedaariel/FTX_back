@@ -58,6 +58,7 @@
     font-size: 1.1rem;
     margin-right: 0.8rem;
     margin-left: 0;
+    color : var(--color-primario-naranja);
 }
 
 /* Columna Derecha: Formulario de Contacto */

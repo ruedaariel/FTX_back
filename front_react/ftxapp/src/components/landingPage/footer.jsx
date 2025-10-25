@@ -12,14 +12,16 @@ function Footer() {
                 <div className="container">
                     <p>&copy; 2025 FTX Fitness. Todos los derechos reservados.</p>
                     <p>
-                        <Link to="/" onClick={() => console.log('click Inicio')} className="footer-a">Inicio</Link> | 
-                        <a href="./contacto/contacto.html" className="footer-a">Contacto</a> | 
+                        <Link to="/" onClick={() => {
+                            window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+                        }} className="footer-a">Inicio</Link> |
+                        <Link to="/contacto" className="footer-a" onClick={() => handleNavClick()}>Contacto</Link> |
 
-                        <a role="button" onClick={() => setShowPrivacy(true)} className="footer-a">Política de Privacidad</a> | 
+                        <a role="button" onClick={() => setShowPrivacy(true)} className="footer-a">Política de Privacidad</a> |
 
-                       <a role="button" onClick={() => setShowTerms(true)} className="footer-a">Terminos de Servicio</a>
+                        <a role="button" onClick={() => setShowTerms(true)} className="footer-a">Terminos de Servicio</a>
 
-            
+
                     </p>
                     <div className="footer-social">
                         <a href="https://x.com/?lang=es" target="_blank " className="me-2 footer-a"><i className="fab fa-twitter"></i></a>
