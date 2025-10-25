@@ -128,8 +128,9 @@
   animation: fadeIn 0.3s ease;
 }
 .semana-rutina.activa {
-  border: 8px outset var(--color-texto-claro-con-transp);
-  box-shadow: 0 0 20px var(--color-primario-naranja);
+  border: 3px solid var(--color-texto-claro-con-transp);
+  /* box-shadow: 0 0 10px var(--color-primario-naranja); */
+  box-shadow: 0 6px 10px var(--color-primario-naranja);;
   transition: box-shadow 0.3s ease;
 }
 

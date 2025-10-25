@@ -32,7 +32,7 @@ const TablaUsuarios = ({ estadoFiltro, filtrosAvanzados }) => {
 
   //  Estado para modal de éxito (no usado directamente)
   const [modalExito, setModalExito] = useState(false);
-   const { showModal } = useModal(); // Modal global
+  const { showModal } = useModal(); // Modal global
 
   //  Estado para modal de información reutilizable
   const [modalConfig, setModalConfig] = useState({
@@ -66,21 +66,33 @@ const TablaUsuarios = ({ estadoFiltro, filtrosAvanzados }) => {
 
     const coincideEmail =
       !filtrosAvanzados.email ||
-      usuario.email.toLowerCase().includes(filtrosAvanzados.email.toLowerCase());
+      usuario.email
+        .toLowerCase()
+        .includes(filtrosAvanzados.email.toLowerCase());
 
     const coincideApellido =
       !filtrosAvanzados.apellido ||
-      usuario.datosPersonales?.apellido?.toLowerCase().includes(filtrosAvanzados.apellido.toLowerCase());
+      usuario.datosPersonales?.apellido
+        ?.toLowerCase()
+        .includes(filtrosAvanzados.apellido.toLowerCase());
 
     const coincideNombre =
       !filtrosAvanzados.nombre ||
-      usuario.datosPersonales?.nombre?.toLowerCase().includes(filtrosAvanzados.nombre.toLowerCase());
+      usuario.datosPersonales?.nombre
+        ?.toLowerCase()
+        .includes(filtrosAvanzados.nombre.toLowerCase());
 
     const coincideEstadoAvanzado =
       !filtrosAvanzados.estado ||
       usuario.estado.toLowerCase() === filtrosAvanzados.estado;
 
-    return coincideEstado && coincideEmail && coincideApellido && coincideNombre && coincideEstadoAvanzado;
+    return (
+      coincideEstado &&
+      coincideEmail &&
+      coincideApellido &&
+      coincideNombre &&
+      coincideEstadoAvanzado
+    );
   });
 
   //  Efecto para inicializar pestañas activas por usuario
@@ -132,18 +144,18 @@ const TablaUsuarios = ({ estadoFiltro, filtrosAvanzados }) => {
         setUsuarioEditando(null); // cerrar modal
       },
       //mostrarModal, // muestra modal de éxito por 2 segundos
-      showModal
+      showModal,
     });
   };
 
   //  Función para iniciar eliminación de usuario
-  const handleEliminarClick = (usuario) => {
+  /* const handleEliminarClick = (usuario) => {
     setUsuarioAEliminar(usuario);
     setMostrarDecision(true);
-  };
+  }; */
 
   //  Función que maneja la decisión del modal de confirmación
-  const handleDecision = (respuesta) => {
+  /* const handleDecision = (respuesta) => {
     setMostrarDecision(false);
     if (!respuesta || !usuarioAEliminar) return;
 
@@ -154,6 +166,37 @@ const TablaUsuarios = ({ estadoFiltro, filtrosAvanzados }) => {
     );
 
     setUsuarioAEliminar(null);
+  }; */
+
+  // funcion con showmodal para preguntar si se elimia usuario
+
+  // Función para iniciar eliminación de usuario
+  const handleEliminarClick = (usuario) => {
+    setUsuarioAEliminar(usuario);
+
+    /* showModal("¿Confirmás la acción?", "decision", 0, true, (respuesta) => {
+  console.log("Respuesta del usuario:", respuesta);
+}); */
+
+    showModal(
+      `¿Estás seguro que querés eliminar a ${
+        usuario.datosPersonales?.nombre || "—"
+      } ${usuario.datosPersonales?.apellido || "—"}?`,
+      "decision",
+      0,
+      true,
+      (respuesta) => {
+        if (!respuesta) return;
+
+        eliminarUsuario(
+          usuario.id,
+          usuario.datosPersonales?.nombre || "—",
+          usuario.datosPersonales?.apellido || "—"
+        );
+
+        setUsuarioAEliminar(null);
+      }
+    );
   };
 
   //  Función que elimina el usuario y muestra feedback
@@ -163,14 +206,17 @@ const TablaUsuarios = ({ estadoFiltro, filtrosAvanzados }) => {
       method: "DELETE",
       onSuccess: () => {
         obtenerUsuarios();
-        mostrarModal({
+
+        showModal(`El usuario "${nombre} ${apellido}" ha sido eliminado correctamente.`, "success", 2000);
+
+        /* mostrarModal({
           title: "Usuario eliminado",
           message: `El usuario "${nombre} ${apellido}" ha sido eliminado correctamente.`,
           borderClass: "modal-success-border",
           autoCloseMs: 2000,
-        });
+        }); */
       },
-      mostrarModal,
+      //mostrarModal,
     });
   };
 
@@ -186,10 +232,10 @@ const TablaUsuarios = ({ estadoFiltro, filtrosAvanzados }) => {
         usuarioEditando={usuarioEditando}
         setUsuarioEditando={setUsuarioEditando}
         handleGuardarCambios={handleGuardarCambios}
-        mostrarDecision={mostrarDecision}
-        setMostrarDecision={setMostrarDecision}
+        //mostrarDecision={mostrarDecision}
+        //setMostrarDecision={setMostrarDecision}
         usuarioAEliminar={usuarioAEliminar}
-        handleDecision={handleDecision}
+        //handleDecision={handleDecision}
         mostrarErrorAcceso={mostrarErrorAcceso}
         setMostrarErrorAcceso={setMostrarErrorAcceso}
         obtenerUsuarios={obtenerUsuarios}

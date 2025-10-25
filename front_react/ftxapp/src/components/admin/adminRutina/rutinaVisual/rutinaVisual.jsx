@@ -13,7 +13,7 @@ import {
 } from "./../../../componentsShare/utils/rutinaUtils";
 
 // Modal de confirmación
-import ModalDecision from "./../../../componentsShare/Modal/ModalDecision";
+//import ModalDecision from "./../../../componentsShare/Modal/ModalDecision";
 
 /**
  * Componente visual principal para editar la rutina por semanas y días
@@ -29,7 +29,7 @@ const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange, onGuardarRuti
   const [semanaActivaIndex, setSemanaActivaIndex] = useState(0);
 
   // Estado para mostrar modal de decisión al alcanzar límite de semanas
-  const [mostrarModalDecision, setMostrarModalDecision] = useState(false);
+  //const [mostrarModalDecision, setMostrarModalDecision] = useState(false);
 
   // Modal global para mensajes
   const { showModal } = useModal();
@@ -173,13 +173,13 @@ const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange, onGuardarRuti
   };
 
   // Guardar rutina completa (estructura lista para backend)
-  const handleGuardarRutinaV = () => {
+ /*  const handleGuardarRutinaV = () => {
     const payload = rutinaEditable.semanas.map((_, index) =>
       guardarSemanaCompleta(rutinaEditable, index)
     );
     console.log("Payload completo de rutina:", payload);
     setMostrarModalDecision(false);
-  };
+  }; */
 
   // Validación inicial: rutina sin semanas
   if (!rutinaEditable?.semanas?.length) {
@@ -210,7 +210,7 @@ const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange, onGuardarRuti
       </div>
 
       {/* Modal de decisión al alcanzar el límite de semanas */}
-      {mostrarModalDecision && (
+      {/* {mostrarModalDecision && (
         <ModalDecision
           isOpen={mostrarModalDecision}
           borderClass="modal-info-border"
@@ -224,7 +224,7 @@ const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange, onGuardarRuti
             }
           }}
         />
-      )}
+      )} */}
 
       {/* Render de cada semana */}
       {rutinaEditable.semanas.map((semana, index) => (
