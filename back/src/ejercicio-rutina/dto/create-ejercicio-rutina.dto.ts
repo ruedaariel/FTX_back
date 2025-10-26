@@ -11,6 +11,7 @@ import {
   IsPositive,
   Min,
   Max,
+  IsBoolean,
 } from 'class-validator';
 
 export class CreateEjercicioRutinaDto {
@@ -33,6 +34,10 @@ export class CreateEjercicioRutinaDto {
   @IsString()
   @IsOptional() // Se marca como opcional porque en la entidad es nullable
   observaciones?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  ejercicioHecho?:boolean;
 
   @IsNumber()
   @IsNotEmpty({ message: 'El ID del ejercicio básico no puede estar vacío.' })
