@@ -43,6 +43,33 @@
     margin-bottom: 5px;
 }
 
+/* Para que desaparezca o no el texto del selector de archivos */
+/* Estado normal: mostrar todo */
+.form-group-ejercicio input[type="file"] {
+  font-size: 1rem; 
+}
+
+/* Cuando existe preview: ocultar el nombre poniendo font-size:0 en el input,
+   pero restaurar la fuente solo en el botón del file selector */
+.form-group-ejercicio.con-preview input[type="file"] {
+  font-size: 0;            /* oculta el texto del filename */
+  color: transparent;      /* refuerzo por si algún navegador muestra texto */
+}
+
+/* Restaurar tamaño de fuente para el botón nativo (Chrome, Edge, Opera y Firefox) */
+.form-group-ejercicio.con-preview input[type="file"]::file-selector-button {
+  font-size: 0.9rem;       /* texto del botón visible */
+  color: inherit;
+  padding: .375rem .75rem;
+  cursor: pointer;
+}
+
+/* Compatibilidad con WebKit más antigua */
+.form-group-ejercicio.con-preview input[type="file"]::-webkit-file-upload-button {
+  font-size: 0.9rem;
+}
+/*  fin de selector de archivos */
+
 
 .form-group-ejercicio label {
     font-weight: normal;

@@ -181,7 +181,7 @@ const CrudEjercicioBasico = () => {
                                 )}
                             </div>
 
-                            <div className="form-group-ejercicio">
+                            <div className={`form-group-ejercicio ${ejercicioData.imagenPreviewUrl ? 'con-preview' : ''}`}>
                                 <label htmlFor="imagenLink">Link Imagen: </label>
                                 {ejercicioData.imagenPreviewUrl && (
                                     <span className="etiqueta-carga-ejercicio"
