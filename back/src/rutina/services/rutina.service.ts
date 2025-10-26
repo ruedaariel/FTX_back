@@ -96,21 +96,6 @@ export class RutinaService {
     return rtaDto;
   }
 
-  //todas las rutinas con todos los datos anidados
-  //  public async findAllRutinas(): Promise<RutinaEntity[]> { 
-  //     //no se usa eager = true (en las entitys) para que traiga todos los datos anidados pq cuando quiero todos los nombre de rutina no necesito todos los datos
-  //     const rutinas = await this.rutinaRepository.find({
-  //       relations: {
-  //         semanas: {
-  //           dias: {
-  //             ejerciciosRutina: {
-  //               ejercicioBasico: true
-  //             } //true, la relacion debe incluirse en el resultado
-  //           }
-  //         }
-  //       }
-  //     })
-  //     return rutinas;
 
   public async findRutinaById(id: number): Promise<RutinaEntity> {
     try {

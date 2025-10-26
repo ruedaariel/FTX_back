@@ -25,6 +25,7 @@ import { UsuarioDatosCompletosRtaDto } from '../dto/usuario-datos-completos-rta.
 import { UpdateUsuarioAdmDto } from '../dto/update-Usuario-adm.dto';
 import { PlanEntity } from 'src/plan/entities/plan.entity';
 import { RutinasUsuarioRtaDto } from '../dto/rutinasUsuarioRtaDto';
+import { UpdateUsuarioAdmRtaDto } from '../dto/update-Usuario-adm-rta.dto';
 
 @Injectable()
 export class UsuarioService {
@@ -249,7 +250,9 @@ export class UsuarioService {
 
   //Actualiza todos los datos de un usuario.
   //se llama: desde perfil_usuario
-  public async updateUsuario(id: number, body: UpdateUsuarioDto): Promise<UsuarioEntity> {
+
+
+  public async updateUsuario(id: number, body: UpdateUsuarioDto): Promise<Boolean> {
     try {
       const usuarioGuardado = await this.usuarioRepository.findOne({
         where: { id },
@@ -312,10 +315,10 @@ export class UsuarioService {
       //no uso update porque tengo relaciones que guardar
       const usuarioUpdate = await this.usuarioRepository.save(usuarioGuardado);
       if (!usuarioUpdate) {
-        throw new ErrorManager("BAD_REQUEST", `No se pudo actualizar los datos del usuario ${usuarioGuardado.id} `);
+        throw new ErrorManager("BAD_REQUEST", `No se pudo actualizar los datos del usuario ${usuarioGuardado.datosPersonales?.apellido.trim()}+${usuarioGuardado.datosPersonales?.nombre.trim()} `);
       }
 
-      return usuarioUpdate
+      return true
     } catch (err) {
       throw ErrorManager.handle(err)
     }
@@ -362,7 +365,7 @@ export class UsuarioService {
 
   //Actualiza todos los datos BASICOS de un usuario.
   //se llama: desde crud usuario (admin)
-  public async updateUsuarioBasico(id: number, body: UpdateUsuarioAdmDto): Promise<UsuarioEntity> {
+  public async updateUsuarioBasico(id: number, body: UpdateUsuarioAdmDto): Promise<UpdateUsuarioAdmRtaDto> {
     try {
 
       return await this.entityManager.transaction(async (transaccion) => {
@@ -411,7 +414,7 @@ export class UsuarioService {
             }
 
             if (body.estado === ESTADO.ARCHIVADO && usuarioGuardado.estado !== ESTADO.ARCHIVADO) { //usuario es borrado
-              throw new ErrorManager("BAD_REQUEST", "El nuevo estado no puede ser ARCHIVADO. PAra eliminar, ingresar por la opcion 'Eliminar'");
+              throw new ErrorManager("BAD_REQUEST", "El nuevo estado no puede ser ARCHIVADO. \n Para eliminar, ingresar por la opcion 'Eliminar'");
             }
             usuarioGuardado.estado = body.estado;
 
@@ -422,13 +425,17 @@ export class UsuarioService {
 
           //no uso update porque tengo relaciones que guardar
           const usuarioUpdate = await transaccion.save(usuarioGuardado);
+          return  {
+            id: usuarioUpdate.id,
+            email : usuarioUpdate.email,
+            estado : usuarioUpdate.estado,
+            idPlan : usuarioUpdate.datosPersonales?.plan?.idPlan
+          }
 
-          return usuarioUpdate
         } else {
           throw new ErrorManager("BAD_REQUEST", "No se reciben datos para modificar usuario")
         }
       })
-
 
     } catch (err) {
       throw ErrorManager.handle(err)
