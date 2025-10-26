@@ -18,7 +18,7 @@ export const extraerMensajeError = (error) => {
 
   // Detectar error de red
   if (mensajeOriginal.includes("Failed to fetch")) {
-    return "No se pudo conectar con el servidor. Verificá tu conexión o intentá más tarde.";
+    return "No se pudo conectar con el servidor. \n Verificá tu conexión o intentá más tarde.";
   }
 
   // Intentar parsear como JSON

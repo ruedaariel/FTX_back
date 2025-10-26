@@ -99,10 +99,25 @@ const CrudEjercicioBasico = () => {
 
     }
 
-
+    const ejecutarBorrado = async () => {
+        const url = `http://localhost:8000/apiFtx/ejbasico/delete/${ejercicioSeleccionado.idEjercicioBasico}`;
+        try {
+            await fetchGeneral({
+                url, method: 'DELETE', setLoading, setError, onSuccess: () => {
+                    setEjercicioSeleccionado(null);
+                    setModoEjercicio('Crear');
+                    setReload(true);
+                },
+                 showModal,
+            });
+        } catch (err) {
+            showModal(`Error eliminando ejercicio: ${ejercicioSeleccionado.nombreEjercicio}`, err.message ?? err, 0, true);
+            console.error(err);
+        }
+    };
 
     const handleEliminarEjercicio = async () => {
-
+//pregunta si borra o no, si -> llama a ejecutar borrado
         showModal(`¿Estás seguro que querés eliminar el ejercicio ${ejercicioSeleccionado.nombreEjercicio}?`,
             "decision",
             0,
@@ -110,49 +125,17 @@ const CrudEjercicioBasico = () => {
             (respuesta) => {
                 if (!respuesta) return;
 
+                ejecutarBorrado();
             }
         );
 
-        const url = `http://localhost:8000/apiFtx/ejbasico/delete/${ejercicioSeleccionado.idEjercicioBasico}`;
 
-        try {
-            await fetchGeneral({
-                url,
-                method: 'DELETE',
-                setLoading,     // usa el setLoading devuelto por el hook
-                setError,
-                onSuccess: () => {
-                    // Limpiar la selección y forzar recarga
-                    setEjercicioSeleccionado(null);
-                    setModoEjercicio('Crear'); // opcional
-                    setReload(true);
-                }
-            });
-        } catch (err) {
-            showModal(`Error eliminando ejercicio:${ejercicioSeleccionado.nombreEjercicio}`, error, 0, true);
-            console.error("Error eliminando ejercicio:", err);
-
-        }
     };
 
- console.log("%cDecision antes return", "color:green", mostrarDecision);
+
 
     return (
         < >
-
-            {/* Modal de decisión para confirmar eliminación */}
-            
-                <ModalDecision
-                    isOpen={mostrarDecision}
-                    title="Confirmar eliminación"
-                    message={`¿Querés eliminar el ejercicio?`}
-                    borderClass="modal-error-border"
-                    onClose={() => setMostrarDecision(false)}
-                    onDecision={handleDecisionEliminar}
-                />
-            
-
-
             <SelectorEjercicio
                 modoEjercicio={modoEjercicio}
                 ejercicios={ejercicios}
@@ -285,19 +268,9 @@ const CrudEjercicioBasico = () => {
 
             </div>
 
-            {/* Modal de decisión para confirmar eliminación */}
-            {true && (
-                <ModalDecision
-                    isOpen={mostrarDecision}
-                    title="Confirmar eliminación"
-                    message={`¿Querés eliminar el ejercicio?`}
-                    borderClass="modal-error-border"
-                    onClose={() => setMostrarDecision(false)}
-                    onDecision={handleDecisionEliminar}
-                />
-            )}
+
         </ >
-        
+
     )
 }
 

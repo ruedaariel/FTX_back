@@ -163,7 +163,6 @@ export const useEjercicioForm = (modoEjercicio, ejercicioSeleccionado, setReload
             changedFields.imagenLink = ejercicioData.imagenFile; // 
         }
 
-        console.log("campos modificados ", changedFields);
         return changedFields;
     };
 
@@ -177,7 +176,7 @@ export const useEjercicioForm = (modoEjercicio, ejercicioSeleccionado, setReload
 
     const handleDeselectImg = (e) => {
         e?.preventDefault();
-        console.log("en handledeselect, imagenPreview", ejercicioData.imagenPreviewUrl);
+
         // Revoke URL, si existe
         setEjercicioData(prev => {
 
@@ -190,17 +189,15 @@ export const useEjercicioForm = (modoEjercicio, ejercicioSeleccionado, setReload
                 imagenFile: null,
             };
         });
-        console.log("fileInputRef", fileInputRef);
+
         // Limpiar input type="file" para permitir volver a seleccionar el mismo archivo si se quiere
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
         }
 
-        console.log("errores antes del set", errores);
         // Limpiar error asociado
         setErrores(prev => ({ ...prev, imagenLink: '' }));
 
-        console.log("errores despues del set", errores);
         return {}
     };
 
@@ -239,7 +236,6 @@ export const useEjercicioForm = (modoEjercicio, ejercicioSeleccionado, setReload
             // Si no hay campos cambiados, abortamos la petición PATCH
             if (Object.keys(dataToSend).length === 0) {
                 showModal("No hay cambios detectados para guardar.", "warning", 3000)
-                console.log("No hay cambios detectados para guardar.");
                 setLoading(false);
                 return;
             }
@@ -247,16 +243,6 @@ export const useEjercicioForm = (modoEjercicio, ejercicioSeleccionado, setReload
 
         //construccion del formData
         const formData = new FormData();
-
-        // for (const key in dataToSend) {
-
-        //     if (key === 'imagenLink' && dataToSend.imagenLink instanceof File) {
-        //         //  Adjuntamos el objeto File usando la clave que espera el backend ('imagenLink')
-        //         formData.append('imagenLink', dataToSend.imagenLink);
-        //     } else if (dataToSend[key] !== null && dataToSend[key] !== undefined) {
-        //         formData.append(key, dataToSend[key]);
-        //     }
-        // }
 
         for (const key in dataToSend) {
             const value = dataToSend[key];
