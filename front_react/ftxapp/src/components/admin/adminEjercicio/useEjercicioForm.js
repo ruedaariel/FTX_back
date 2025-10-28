@@ -121,7 +121,7 @@ export const useEjercicioForm = (modoEjercicio, ejercicioSeleccionado, setReload
             return;
         }
 
-        const transformedValue = name === 'nombreEjercicio' ? value.trim().replace(/\s+/g, ' ') : value;
+       const transformedValue = name === 'nombreEjercicio' ? value.replace(/\s{2,}/g, ' ') : value;
         setEjercicioData(prevData => ({
             ...prevData, [name]: transformedValue,
         }));
@@ -295,6 +295,7 @@ export const useEjercicioForm = (modoEjercicio, ejercicioSeleccionado, setReload
 
     }
 
+    //carga el ejercicio seleccionado en modo edicion o un ejercicio vacio en modo crear
     useEffect(() => {
 
         if (ejercicioSeleccionado && modoEjercicio !== 'Crear') {

@@ -38,8 +38,9 @@ export class EjercicioBasicoService {
 
         //VER SI ANDA CON EL TRANSFORM DEL DTO
         // ejercicioCreado.imagenLink = this.fileImgService.construirUrlImagen(ejercicioCreado.imagenLink, "ejercicios");
-
+console.log("ejercicio Creado --->", ejercicioCreado);
         const rtaEjercicioDto = plainToInstance(RtaEjercicioBasicoDto, ejercicioCreado, { excludeExtraneousValues: true });
+        console.log("ejercicio RTA --->", rtaEjercicioDto);
         return rtaEjercicioDto //es enviado con solo el nombre de la imagen, no la url completa
       } else {
         throw new ErrorManager("BAD_REQUEST", "ya existe el mismo nombre de ejercicio")
@@ -134,8 +135,12 @@ export class EjercicioBasicoService {
       //VER SI ANDA CON EL TRANSFORM DEL DTO
       //unEjercicio.imagenLink = this.fileImgService.construirUrlImagen(unEjercicio.imagenLink, "ejercicios");
 
-      const rtaEjercicioDto = plainToInstance(RtaEjercicioBasicoDto, unEjercicio, { excludeExtraneousValues: true });
-      return rtaEjercicioDto;
+      //ATENCION: EL PLAINTOINSTANCE ME HACE PASAR 2 VECES POR EL TRANSFORM del DTO 
+// (tengo en el main el ClassSerializerInterceptor y el ValidationPipe con transform: true, lo cual
+//  debería aplicar los decoradores como @Expose() y @Transform() automaticamente)
+     const rtaEjercicioDto = plainToInstance(RtaEjercicioBasicoDto, unEjercicio, { excludeExtraneousValues: true });
+     return rtaEjercicioDto;
+    
     } catch (err) {
       throw ErrorManager.handle(err);
     }

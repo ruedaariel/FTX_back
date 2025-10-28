@@ -17,3 +17,4 @@ landing/contacto: enviar formulario al back y que back envie el correo (opciones
 admin/rutina: alguardar semana/dia/ verificar que no haya ejercicios vacios/diasvacioas/semanas ya hay una funcion que lo hace.
 Usar Toast para mensajes sin interaccion con el usuario
 Evitar tantas recargas desde el backend (evitar recargas cada vez que se hace un post, update o delete)
+admin/ejercicio: agregar categoria y agregar filtro por nombre / categoria

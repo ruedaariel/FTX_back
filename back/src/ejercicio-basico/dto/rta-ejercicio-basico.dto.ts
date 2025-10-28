@@ -16,7 +16,9 @@ export class RtaEjercicioBasicoDto {
         const port = process.env.PORT || '8000';
         const host = process.env.HOST || 'localhost';
         const baseUrl = `http://${host}:${port}/uploads/ejercicios/`;
-        return value ? baseUrl + value : "";
+        if (!value) return "";
+        if (value.startsWith(baseUrl)) return value;
+        return baseUrl + value;
     })
     imagenLink: string;
 
