@@ -1,6 +1,7 @@
 
 import { Module } from '@nestjs/common';
-import { DatabaseModule } from 'src/modulo-database/database.module';
+//import { DatabaseModule } from 'src/modulo-database/database.module';
+import { DatabaseModule } from './modulo-database/database.module';
 
 import { UsuarioModule } from './usuario/usuario.module';
 import { DatosPersonalesModule } from './usuario-datos-personales/datos-personales.module';

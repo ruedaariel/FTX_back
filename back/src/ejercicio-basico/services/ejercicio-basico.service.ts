@@ -4,14 +4,15 @@ import { UpdateEjercicioBasicoDto } from '../dto/update-ejercicio-basico.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EjercicioBasicoEntity } from '../entities/ejercicio-basico.entity';
 import { Not, Repository } from 'typeorm';
-import { ErrorManager } from 'src/config/error.manager';
+import { ErrorManager } from '../../config/error.manager';
 import * as path from 'path';
 import * as fs from 'fs';
 import { ConfigService } from '@nestjs/config';
-import { normalizarSinEspacios } from 'src/utils/normalizar-string';
-import { FileImgService } from 'src/shared/file-img/file-img.service';
+import { normalizarSinEspacios } from '../../utils/normalizar-string';
+import { FileImgService } from '../../shared/file-img/file-img.service';
 import { RtaNombreEjercicioBasicoDto } from '../dto/rta-nombre-ejercicio-basico.dto';
 import { plainToInstance } from 'class-transformer';
+import { RtaEjercicioBasicoDto } from '../dto/rta-ejercicio-basico.dto';
 
 
 @Injectable()
@@ -21,7 +22,7 @@ export class EjercicioBasicoService {
     private readonly configService: ConfigService,
     private readonly fileImgService: FileImgService) { }
 
-  async createEjercicioBasico(ejercicioBasicoDto: CreateEjercicioBasicoDto) {
+  async createEjercicioBasico(ejercicioBasicoDto: CreateEjercicioBasicoDto): Promise<RtaEjercicioBasicoDto> {
     try {
       //controlo si ya existe (por nombre)
       const ejercicioGuardado = await this.existName(ejercicioBasicoDto.nombreEjercicio);
@@ -34,8 +35,12 @@ export class EjercicioBasicoService {
         //   throw new ErrorManager("BAD_REQUEST", "no se pudo crear ejercicio")
         // }
         //para ver que trae
-        ejercicioCreado.imagenLink = this.fileImgService.construirUrlImagen(ejercicioCreado.imagenLink, "ejercicios");
-        return ejercicioCreado //es enviado con solo el nombre de la imagen, no la url completa
+
+        //VER SI ANDA CON EL TRANSFORM DEL DTO
+        // ejercicioCreado.imagenLink = this.fileImgService.construirUrlImagen(ejercicioCreado.imagenLink, "ejercicios");
+
+        const rtaEjercicioDto = plainToInstance(RtaEjercicioBasicoDto, ejercicioCreado, { excludeExtraneousValues: true });
+        return rtaEjercicioDto //es enviado con solo el nombre de la imagen, no la url completa
       } else {
         throw new ErrorManager("BAD_REQUEST", "ya existe el mismo nombre de ejercicio")
       }
@@ -46,7 +51,7 @@ export class EjercicioBasicoService {
 
   }
 
-  public async findByName(nombreEj: string): Promise<EjercicioBasicoEntity> {
+  public async findByName(nombreEj: string): Promise<RtaEjercicioBasicoDto> {
     try {
 
       const unEjercicio = await this.ejercicioBasicoRepository.findOne({ where: { nombreEjercicio: normalizarSinEspacios(nombreEj) }, });
@@ -54,7 +59,11 @@ export class EjercicioBasicoService {
       if (!unEjercicio) {
         throw new ErrorManager("BAD_REQUEST", `no se encontró ejercicio con nombre ${nombreEj}`);
       }
-      unEjercicio.imagenLink = this.fileImgService.construirUrlImagen(unEjercicio.imagenLink, "ejercicios");
+
+      //VER SI ANDA CON EL TRANSFORM DEL DTO
+      // unEjercicio.imagenLink = this.fileImgService.construirUrlImagen(unEjercicio.imagenLink, "ejercicios");
+
+      const rtaEjercicioDto = plainToInstance(RtaEjercicioBasicoDto, unEjercicio, { excludeExtraneousValues: true });
       return unEjercicio;
     } catch (err) {
       throw ErrorManager.handle(err)
@@ -89,7 +98,6 @@ export class EjercicioBasicoService {
       }
 
       //tiene relaciones activas
-      console.log("ejercicioguardado.rutinas", ejercicioGuardado.ejerciciosRutina);
       if (ejercicioGuardado.ejerciciosRutina && ejercicioGuardado.ejerciciosRutina.length > 0) {
         throw new ErrorManager("CONFLICT", "No se puede borrar el ejercicio, \n hay rutinas que estan utilizando")
       }
@@ -116,26 +124,31 @@ export class EjercicioBasicoService {
     //el borrado es fisico, pero si esta conectado a rutina, no se podrá borrar. Cuanto se establezcan las relaciones, hacer.
   }
 
-  public async findOne(id: number): Promise<EjercicioBasicoEntity> {
+  public async findOne(id: number): Promise<RtaEjercicioBasicoDto> {
     try {
       const unEjercicio = await this.ejercicioBasicoRepository.findOneBy({ idEjercicioBasico: id });
       if (!unEjercicio) {
         throw new ErrorManager("BAD_REQUEST", `No se encontro el ejercicio id ${id}`);
       }
       //ojo, recordar que estoy modificando el campo imagenLink, aunque NO en la b/d
-      unEjercicio.imagenLink = this.fileImgService.construirUrlImagen(unEjercicio.imagenLink, "ejercicios");
-      return unEjercicio;
+      //VER SI ANDA CON EL TRANSFORM DEL DTO
+      //unEjercicio.imagenLink = this.fileImgService.construirUrlImagen(unEjercicio.imagenLink, "ejercicios");
+
+      const rtaEjercicioDto = plainToInstance(RtaEjercicioBasicoDto, unEjercicio, { excludeExtraneousValues: true });
+      return rtaEjercicioDto;
     } catch (err) {
       throw ErrorManager.handle(err);
     }
   }
 
-  public async findAll(): Promise<EjercicioBasicoEntity[]> {
+  public async findAll(): Promise<RtaEjercicioBasicoDto[]> {
     try {
       const ejercicios = await this.ejercicioBasicoRepository.find();
       //ojo, recordar que estoy modificando el campo imagenLink, aunque NO en la b/d
-      ejercicios.forEach(ej => { ej.imagenLink = this.fileImgService.construirUrlImagen(ej.imagenLink, "ejercicios"); });
-      return ejercicios;
+     //VER SI ANDA CON EL TRANSFORM DEL DTO
+      // ejercicios.forEach(ej => { ej.imagenLink = this.fileImgService.construirUrlImagen(ej.imagenLink, "ejercicios"); });
+     const rtaEjerciciosDto = plainToInstance(RtaEjercicioBasicoDto, ejercicios, { excludeExtraneousValues: true });
+      return rtaEjerciciosDto;
     } catch (err) {
       throw ErrorManager.handle(err);
     }
@@ -154,7 +167,7 @@ export class EjercicioBasicoService {
   }
 
 
-  public async update(id: number, updateEjercicioBasicoDto: UpdateEjercicioBasicoDto): Promise<EjercicioBasicoEntity> {
+  public async update(id: number, updateEjercicioBasicoDto: UpdateEjercicioBasicoDto): Promise<RtaEjercicioBasicoDto> {
     try {
       //busco el ejercicio a actualizar
       const ejercicioGuardado = await this.ejercicioBasicoRepository.findOneBy({ idEjercicioBasico: id });
@@ -197,38 +210,12 @@ export class EjercicioBasicoService {
           console.log(`No existe la imagen ${ejercicioGuardado.imagenLink}`)
         }
       }
-      return ejercicioModif;
+      return  plainToInstance(RtaEjercicioBasicoDto, ejercicioModif, { excludeExtraneousValues: true });
+      
     } catch (err) {
       throw ErrorManager.handle(err);
     }
   }
 
-  // private construirUrlImagen(nombreArchivo: string): string {
-  //   //para mandar al front, construyo la ruta+nombreArchivo
-  //   const port = this.configService.get<string>('PORT') || '8000';
-  //   const host = this.configService.get<string>('HOST') || 'localhost';
-  //   const baseUrl = `http://${host}:${port}/uploads/ejercicios/`;
-  //   return nombreArchivo ? baseUrl + nombreArchivo : "";
-  // }
-
-  // private async borrarImagen(nombreArchivo: string): Promise<boolean> {
-  //   //true: si se borra
-  //   //false si no existe el nombre
-  //   //error si no lo puede borrar (x causa)
-
-  //   if (nombreArchivo) {
-
-  //     const rutaBaseProyecto = process.cwd();
-  //     const rutaImagen = path.join(rutaBaseProyecto, 'uploads', 'ejercicios', nombreArchivo);
-
-  //     try {
-  //       await fs.promises.unlink(rutaImagen);
-  //       return true;
-  //     } catch (err) {
-  //       throw ErrorManager.handle(err);
-  //     }
-  //   }
-  //   return false;
-  // }
 
 }

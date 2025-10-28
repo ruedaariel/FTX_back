@@ -1,6 +1,8 @@
 import { IRutina } from "src/interfaces/rutina.interface";
-import { SemanaEntity } from "src/semana/entities/semana.entity";
-import { UsuarioEntity } from "src/usuario/entities/usuario.entity";
+//import { SemanaEntity } from "src/semana/entities/semana.entity";
+import { SemanaEntity } from "../../semana/entities/semana.entity";
+//import { UsuarioEntity } from "src/usuario/entities/usuario.entity";
+import { UsuarioEntity } from "../../usuario/entities/usuario.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 export enum ESTADORUTINA {

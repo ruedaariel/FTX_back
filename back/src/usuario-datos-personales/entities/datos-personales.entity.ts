@@ -1,6 +1,7 @@
-import { ESTADO } from "src/constantes/estado.enum";
+//import { ESTADO } from "src/constantes/estado.enum";
+import { ESTADO } from "../../constantes/estado.enum";
 import { IDatosPersonales } from "src/interfaces/datos-personales.interface";
-import { PlanEntity } from "src/plan/entities/plan.entity";
+import { PlanEntity } from "../../plan/entities/plan.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 
 

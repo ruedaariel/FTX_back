@@ -1,4 +1,4 @@
-import { ESTADORUTINA } from "src/rutina/entities/rutina.entity";
+import { ESTADORUTINA } from "../../rutina/entities/rutina.entity";
 
 export interface RutinasUsuarioRtaDto {
     idUsuario: number;

@@ -1,6 +1,8 @@
-import { DiaEntity } from "src/dia/entities/dia.entity";
+//import { DiaEntity } from "src/dia/entities/dia.entity";
+import { DiaEntity } from "../../dia/entities/dia.entity";
 import { ISemana } from "src/interfaces/semana.interface";
-import { RutinaEntity } from "src/rutina/entities/rutina.entity";
+//import { RutinaEntity } from "src/rutina/entities/rutina.entity";
+import { RutinaEntity } from "../../rutina/entities/rutina.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 export enum ESTADOSEMANA {

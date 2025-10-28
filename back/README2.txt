@@ -48,6 +48,9 @@ npm install --save bcrypt
 # Tipos de TypeScript para bcrypt (buena práctica)
 npm install --save-dev @types/bcrypt
 
+#Para el token
+ npm i jsonwebtoken
+ 
 # Para el mail
 npm install nodemailer
 npm install @nestjs-modules/mailer

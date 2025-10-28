@@ -1,5 +1,6 @@
 import { IPlan } from "src/interfaces/plan.interface";
-import { DatosPersonalesEntity } from "src/usuario-datos-personales/entities/datos-personales.entity";
+//import { DatosPersonalesEntity } from "src/usuario-datos-personales/entities/datos-personales.entity";
+import { DatosPersonalesEntity } from "../../usuario-datos-personales/entities/datos-personales.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { HistoricoPlanEntity } from "./historico-plan.entity";
 

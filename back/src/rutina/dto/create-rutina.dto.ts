@@ -1,7 +1,7 @@
 import { IsArray, IsEnum, IsInt, IsNotEmpty, IsOptional, Matches, Min, ValidateNested } from "class-validator";
 import { ESTADORUTINA } from "../entities/rutina.entity";
 import { Type } from "class-transformer";
-import { CreateSemanaDto } from "src/semana/dto/create-semana.dto";
+import { CreateSemanaDto } from "../../semana/dto/create-semana.dto";
 
 export class CreateRutinaDto {
     @IsNotEmpty({ message: 'El nombre no puede estar vacío' })
@@ -16,8 +16,9 @@ export class CreateRutinaDto {
     @Min(0,{message: 'el id debe ser un numero positivo'})
     idUsuario:number | null;
 
+    @IsOptional()
     @ValidateNested({each : true}) //aplica la validacion a cada elemento del arreglo
     @IsArray()
     @Type(()=> CreateSemanaDto)
-    semanas: CreateSemanaDto[];
+    semanas?: CreateSemanaDto[];
 }

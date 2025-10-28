@@ -1,7 +1,8 @@
 back:
-
-
-
+revisar el CORS (main.ts cuando se pase a produccion)
+En etapa de produccion pasar el main.ts por ia para ver recomendaciones
+Buscar una solucion para las rutas (no acepta desde scr, y se hace dificil entender en que directorio estan)
+Manejar el warning de punycode que esta señalado como deprecated. Es usada por una dependencia llamada whatwg-url. Se podria actualizar el paquete (npm ls whatwg-url), pero mas adelante
 
 
 

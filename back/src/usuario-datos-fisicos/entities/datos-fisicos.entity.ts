@@ -1,4 +1,5 @@
-import { ESTADO } from "src/constantes/estado.enum";
+//import { ESTADO } from "src/constantes/estado.enum";
+import { ESTADO } from "../../constantes/estado.enum";
 import { IDatosFisicos } from "src/interfaces/datos-fisicos.interface";
 import { Column, Entity, PrimaryColumn } from "typeorm";
 

@@ -1,8 +1,8 @@
 import { format } from "date-fns";
 import { GENERO } from "../entities/datos-personales.entity";
 import { Exclude, Expose, Transform, Type } from "class-transformer";
-import { ESTADO } from "src/constantes/estado.enum";
-import { PlanRtaDto } from "src/plan/dto/plan-rta.dto";
+import { ESTADO } from "../../constantes/estado.enum";
+import { PlanRtaDto } from "../../plan/dto/plan-rta.dto";
 
 
 export class DatosPersonalesRtaDto {

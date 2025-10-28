@@ -10,8 +10,9 @@ import {
   Matches,
   ValidateNested,
   IsArray,
+  IsOptional,
 } from 'class-validator';
-import { CreateEjercicioRutinaDto } from 'src/ejercicio-rutina/dto/create-ejercicio-rutina.dto';
+import { CreateEjercicioRutinaDto } from '../../ejercicio-rutina/dto/create-ejercicio-rutina.dto';
 
 export class CreateDiaDto {
   @IsString({ message: 'El número de día debe ser un texto.' })
@@ -24,8 +25,9 @@ export class CreateDiaDto {
   @IsNotEmpty({ message: 'El focus no puede estar vacío.' })
   focus: string;
 
+  @IsOptional()
   @ValidateNested({ each: true })
   @IsArray()
   @Type(() => CreateEjercicioRutinaDto)
-  ejerciciosRutina: CreateEjercicioRutinaDto[];
+  ejerciciosRutina?: CreateEjercicioRutinaDto[];
 }
