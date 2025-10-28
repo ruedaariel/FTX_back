@@ -3,16 +3,17 @@ import { CreateRutinaDto } from '../dto/create-rutina.dto';
 import { UpdateRutinaDto } from '../dto/update-rutina.dto';
 import { RutinaEntity } from '../entities/rutina.entity';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
-import { UsuarioEntity } from 'src/usuario/entities/usuario.entity';
+import { UsuarioEntity } from '../../usuario/entities/usuario.entity';
 import { EntityManager, Not, Repository } from 'typeorm';
-import { ErrorManager } from 'src/config/error.manager';
-import { SemanaEntity } from 'src/semana/entities/semana.entity';
-import { DiaEntity } from 'src/dia/entities/dia.entity';
-import { EjercicioRutinaEntity } from 'src/ejercicio-rutina/entities/ejercicio-rutina.entity';
-import { EjercicioBasicoEntity } from 'src/ejercicio-basico/entities/ejercicio-basico.entity';
+import { ErrorManager } from '../../config/error.manager';
+import { SemanaEntity } from '../../semana/entities/semana.entity';
+import { DiaEntity } from '../../dia/entities/dia.entity';
+import { EjercicioRutinaEntity } from '../../ejercicio-rutina/entities/ejercicio-rutina.entity';
+import { EjercicioBasicoEntity } from '../../ejercicio-basico/entities/ejercicio-basico.entity';
 import { RtaAllRutinasDto } from '../dto/rta-all-rutinas.dto';
 import { plainToInstance } from 'class-transformer';
-import { FileImgService } from 'src/shared/file-img/file-img.service';
+import { FileImgService } from '../../shared/file-img/file-img.service';
+import { RtaRutinaDto } from '../dto/rta-rutina.dto';
 
 
 
@@ -25,7 +26,7 @@ export class RutinaService {
     @InjectRepository(EjercicioBasicoEntity) private readonly ejercicioBasicoRepository: Repository<EjercicioBasicoEntity>,
     @InjectEntityManager() private readonly entityManager: EntityManager,  private readonly fileImgService: FileImgService ) { }
 
-  public async createRutina(rutinaDto: CreateRutinaDto): Promise<RutinaEntity> {
+  public async createRutina(rutinaDto: CreateRutinaDto): Promise<RtaRutinaDto> {
     try {
       let usuario: UsuarioEntity | null = null;
       if (rutinaDto.idUsuario) {
@@ -41,17 +42,18 @@ export class RutinaService {
       nuevaRutina.estadoRutina = rutinaDto.estadoRutina;
       nuevaRutina.usuario = usuario;
       //las fechas se inicializan automaticamente
-
+      
       nuevaRutina.semanas = await Promise.all( //si alguna promesa falla, fallan todas
-        rutinaDto.semanas.map(async (semanaDto) => {
+        //si semanas es undefined o null, usa el arreglo vacio
+        (rutinaDto.semanas ?? []).map(async (semanaDto) => {
           const nuevaSemana = Object.assign(new SemanaEntity(), semanaDto);
 
           nuevaSemana.dias = await Promise.all(
-            semanaDto.dias.map(async (diaDto) => {
+            (semanaDto.dias ?? []).map(async (diaDto) => {
               const nuevoDia = Object.assign(new DiaEntity(), diaDto);
 
               nuevoDia.ejerciciosRutina = await Promise.all(
-                diaDto.ejerciciosRutina.map(async (ejercicioDto) => {
+                (diaDto.ejerciciosRutina ?? []).map(async (ejercicioDto) => {
                   const nuevoEjercicio = Object.assign(new EjercicioRutinaEntity(), ejercicioDto);
 
                   const ejercicioBasico = await this.ejercicioBasicoRepository.findOneBy({ idEjercicioBasico: nuevoEjercicio.idEjercicioBasico });
@@ -68,13 +70,14 @@ export class RutinaService {
           );
           return nuevaSemana;
         })
+        
       );
 
       const rutinaCreada = await this.rutinaRepository.save(nuevaRutina);
       if (!rutinaCreada) {
         throw new ErrorManager("BAD_REQUEST", `No se pudo crear la rutina ${rutinaDto.nombreRutina}`);
       }
-      return rutinaCreada;
+      return plainToInstance(RtaRutinaDto,rutinaCreada, { excludeExtraneousValues: true });
     } catch (err) {
       throw ErrorManager.handle(err);
     }
@@ -97,7 +100,7 @@ export class RutinaService {
   }
 
 
-  public async findRutinaById(id: number): Promise<RutinaEntity> {
+  public async findRutinaById(id: number): Promise<RtaRutinaDto> {
     try {
       //no se puede usar findOneBy pq tengo relaciones anidadas
       const rutina = await this.rutinaRepository.findOne({
@@ -116,21 +119,24 @@ export class RutinaService {
       if (!rutina) {
         throw new ErrorManager("NOT_FOUND", `No se encontro la rutina ${id}`)
       }
-      rutina.semanas.map((s)=> {
+
+      //VER SI AND BIEN EL PLAINTOINSTANCE ANIDADO
+     /*  rutina.semanas.map((s)=> {
         s.dias.map((d)=> {
           d.ejerciciosRutina.map((ej)=> (
             ej.ejercicioBasico.imagenLink = this.fileImgService.construirUrlImagen(ej.ejercicioBasico.imagenLink, "ejercicios")
           ))
         })
-      })
-      return rutina; //tambien puede ser null
+      }) */
+     return plainToInstance(RtaRutinaDto,rutina, { excludeExtraneousValues: true });
+      //return rutina; //tambien puede ser null
     }
     catch (err) {
       throw ErrorManager.handle(err)
     }
   }
 
-
+//VER SI LA USO EN ALGUN LADO, si la uso, hacer el dto
   public async findRutinaByName(nombre: string): Promise<RutinaEntity | null> {
     try {
       console.log("entre a finbyname");
@@ -144,7 +150,7 @@ export class RutinaService {
     }
   }
 
-  public async updateRutina(id: number, rutinaDto: CreateRutinaDto): Promise<RutinaEntity> {
+  public async updateRutina(id: number, rutinaDto: CreateRutinaDto): Promise<RtaRutinaDto> {
     //se borra todos los registros relacionados (semana, dia,etc)  y 
     // se crea nuevamente (pero se conserva el registro de rutina original)
 
@@ -152,7 +158,7 @@ export class RutinaService {
     try {
 
       //se pone en una misma transaccion para que, si se borra la rutina, pero falla la creacion, haga roll back
-      return await this.entityManager.transaction(async (transaccion) => {
+      return plainToInstance( RtaRutinaDto, await this.entityManager.transaction(async (transaccion) => {
         const rutinaExistente = await transaccion.findOne(RutinaEntity, {
           where: { idRutina: id },
           relations: {
@@ -180,21 +186,22 @@ export class RutinaService {
         //se mantiene rutina, solo se actualizan los campos
         rutinaExistente.nombreRutina = rutinaDto.nombreRutina;
         rutinaExistente.estadoRutina = rutinaDto.estadoRutina;
-
+//PREGUNTAR POR Si querés que las semanas se borren al eliminar la rutina, pon onDelete: 'CASCADE' en la ManyToOne
         //se borra desde semana
         await transaccion.delete(SemanaEntity, { rutina: { idRutina: id } });//es como si hiciera: DELETE FROM semana WHERE rutinaId = id;
        
         //se crea las nuevas relaciones de rutina con todos los datos
         rutinaExistente.semanas = await Promise.all(
-          rutinaDto.semanas.map(async (semanaDto) => {
+          (rutinaDto.semanas ?? []).map(async (semanaDto) => {
+            console.log("semanadto -------->", semanaDto);
             const nuevaSemana = Object.assign(new SemanaEntity(), semanaDto);
-           
+           console.log("nuevaSemana ------------>",nuevaSemana);
             nuevaSemana.dias = await Promise.all(
-              semanaDto.dias.map(async (diaDto) => {
+              (semanaDto.dias ?? []).map(async (diaDto) => {
                 const nuevoDia = Object.assign(new DiaEntity(), diaDto);
                
                 nuevoDia.ejerciciosRutina = await Promise.all(
-                  diaDto.ejerciciosRutina.map(async (ejercicioDto) => {
+                  (diaDto.ejerciciosRutina ?? []).map(async (ejercicioDto) => {
                     const nuevoEjercicio = Object.assign(new EjercicioRutinaEntity(), ejercicioDto);
                     
                     const ejercicioBasico = await transaccion.findOne(EjercicioBasicoEntity, { where: { idEjercicioBasico: ejercicioDto.idEjercicioBasico } });
@@ -214,7 +221,7 @@ export class RutinaService {
 
         const rutinaActualizada = await transaccion.save(rutinaExistente);
         return rutinaActualizada;
-      });
+      }), {excludeExtraneousValues:true})
     }
     catch (error) {
       throw ErrorManager.handle(error);

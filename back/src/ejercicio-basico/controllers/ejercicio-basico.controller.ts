@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, Upl
 import { EjercicioBasicoService } from '../services/ejercicio-basico.service';
 import { CreateEjercicioBasicoDto } from '../dto/create-ejercicio-basico.dto';
 import { UpdateEjercicioBasicoDto } from '../dto/update-ejercicio-basico.dto';
-import { imagenEjercicioInterceptor } from 'src/interceptors/imagen-ejercicio.interceptor';
+import { imagenEjercicioInterceptor } from '../../interceptors/imagen-ejercicio.interceptor';
 
 
 

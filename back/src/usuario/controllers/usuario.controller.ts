@@ -3,8 +3,8 @@ import { UsuarioService } from '../services/usuario.service';
 import { CreateUsuarioDto } from '../dto/create-usuario.dto';
 import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
 import { LoginDto } from '../dto/login.dto';
-import { imagenPerfilInterceptor } from 'src/interceptors/imagen-perfil.interceptor';
-import { ErrorManager } from 'src/config/error.manager';
+import { imagenPerfilInterceptor } from '../../interceptors/imagen-perfil.interceptor';
+import { ErrorManager } from '../../config/error.manager';
 import { UpdateUsuarioAdmDto } from '../dto/update-Usuario-adm.dto';
 
 

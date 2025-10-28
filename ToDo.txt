@@ -1,7 +1,8 @@
 back:
-
-
-
+revisar el CORS (main.ts cuando se pase a produccion)
+En etapa de produccion pasar el main.ts por ia para ver recomendaciones
+Buscar una solucion para las rutas (no acepta desde scr, y se hace dificil entender en que directorio estan)
+Manejar el warning de punycode que esta señalado como deprecated. Es usada por una dependencia llamada whatwg-url. Se podria actualizar el paquete (npm ls whatwg-url), pero mas adelante
 
 
 
@@ -16,3 +17,4 @@ landing/contacto: enviar formulario al back y que back envie el correo (opciones
 admin/rutina: alguardar semana/dia/ verificar que no haya ejercicios vacios/diasvacioas/semanas ya hay una funcion que lo hace.
 Usar Toast para mensajes sin interaccion con el usuario
 Evitar tantas recargas desde el backend (evitar recargas cada vez que se hace un post, update o delete)
+admin/ejercicio: agregar categoria y agregar filtro por nombre / categoria

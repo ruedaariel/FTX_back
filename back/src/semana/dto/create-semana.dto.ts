@@ -2,10 +2,10 @@
 // En la carpeta src/semana/dto/create-semana.dto.ts
 
 
-import { IsArray, IsEnum, IsNotEmpty, IsString, Length, Matches, ValidateNested } from "class-validator";
+import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString, Length, Matches, ValidateNested } from "class-validator";
 import { ESTADOSEMANA } from "../entities/semana.entity";
 import { Type } from "class-transformer";
-import { CreateDiaDto } from "src/dia/dto/create-dia.dto";
+import { CreateDiaDto } from "../../dia/dto/create-dia.dto";
 
 export class CreateSemanaDto {
 
@@ -19,10 +19,11 @@ export class CreateSemanaDto {
     @IsEnum(ESTADOSEMANA, { message: "Debe ser un estado valido (para la semana)" })
     estadoSemana: ESTADOSEMANA;
 
+    @IsOptional()
     @ValidateNested({ each: true })
     @IsArray()
     @Type(() => CreateDiaDto)
-    dias: CreateDiaDto[];
+    dias?: CreateDiaDto[];
 }
 
 

@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import * as path from 'path';
 import * as fs from 'fs';
-import { ErrorManager } from "src/config/error.manager";
+import { ErrorManager } from "../../config/error.manager";
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()

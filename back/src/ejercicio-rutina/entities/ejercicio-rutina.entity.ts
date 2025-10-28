@@ -1,5 +1,7 @@
-import { DiaEntity } from "src/dia/entities/dia.entity";
-import { EjercicioBasicoEntity } from "src/ejercicio-basico/entities/ejercicio-basico.entity";
+//import { DiaEntity } from "src/dia/entities/dia.entity";
+import { DiaEntity } from "../../dia/entities/dia.entity";
+//import { EjercicioBasicoEntity } from "src/ejercicio-basico/entities/ejercicio-basico.entity";
+import { EjercicioBasicoEntity } from "../../ejercicio-basico/entities/ejercicio-basico.entity";
 import { IEjercicioRutina } from "src/interfaces/ejercicio-rutina.interface";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 

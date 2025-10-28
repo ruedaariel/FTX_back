@@ -142,7 +142,7 @@ const CrudEjercicioBasico = () => {
                 ejercicioSeleccionado={ejercicioSeleccionado}
                 onSeleccionarEjercicio={handleSeleccionarEjercicio}
                 onCambiarModo={handleSeleccionarModo}
-                error={error}
+                // error={error}
             ></SelectorEjercicio>
 
             <div className="my-container-ejercicio">
@@ -172,6 +172,7 @@ const CrudEjercicioBasico = () => {
                             <div className="form-group-ejercicio">
                                 <label htmlFor="observaciones">Observaciones:</label>
                                 <textarea id="observaciones" name="observaciones"
+                                rows={ejercicioData.observaciones?.trim() ? 4 : 2}
                                     className={`form-control textarea-ejercicio ${errores.observaciones ? 'is-invalid' : ''}`}
                                     value={ejercicioData.observaciones || ''} onChange={handleInputChange} onBlur={handleBlur}></textarea>
                                 {errores.observaciones && (

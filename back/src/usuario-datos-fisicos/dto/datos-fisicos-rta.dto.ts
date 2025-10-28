@@ -1,6 +1,6 @@
 import { Exclude, Expose } from "class-transformer";
 import { IsNotEmpty, IsNumber, IsOptional, IsString, Matches, Max, Min } from "class-validator";
-import { ESTADO } from "src/constantes/estado.enum";
+import { ESTADO } from "../../constantes/estado.enum";
 
 export class DatosFisicosRtaDto {
   @Exclude()

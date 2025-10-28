@@ -1,6 +1,8 @@
-import { EjercicioRutinaEntity } from "src/ejercicio-rutina/entities/ejercicio-rutina.entity";
+//import { EjercicioRutinaEntity } from "src/ejercicio-rutina/entities/ejercicio-rutina.entity";
+import { EjercicioRutinaEntity } from "../../ejercicio-rutina/entities/ejercicio-rutina.entity";
 import { IDia } from "src/interfaces/dia.interface";
-import { SemanaEntity } from "src/semana/entities/semana.entity";
+//import { SemanaEntity } from "src/semana/entities/semana.entity";
+import { SemanaEntity } from "../../semana/entities/semana.entity";
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'dia' })

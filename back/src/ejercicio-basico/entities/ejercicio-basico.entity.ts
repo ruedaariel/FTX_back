@@ -1,4 +1,5 @@
-import { EjercicioRutinaEntity } from "src/ejercicio-rutina/entities/ejercicio-rutina.entity";
+//import { EjercicioRutinaEntity } from "src/ejercicio-rutina/entities/ejercicio-rutina.entity";
+import { EjercicioRutinaEntity } from "../../ejercicio-rutina/entities/ejercicio-rutina.entity";
 import { IEjercicioBasico } from "src/interfaces/ejercicio-basico";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 

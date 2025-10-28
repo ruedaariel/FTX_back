@@ -1,9 +1,15 @@
-import { ESTADO } from "src/constantes/estado.enum";
+//import { ESTADO } from "src/constantes/estado.enum";
+import { ESTADO } from '../../constantes/estado.enum';
+
 import { IUsuario } from "src/interfaces/usuario.interface";
-import { PagoEntity } from "src/pagos/entity/pago.entity";
-import { RutinaEntity } from "src/rutina/entities/rutina.entity";
-import { DatosFisicosEntity } from "src/usuario-datos-fisicos/entities/datos-fisicos.entity";
-import { DatosPersonalesEntity } from "src/usuario-datos-personales/entities/datos-personales.entity";
+//import { PagoEntity } from "src/pagos/entity/pago.entity";
+import { PagoEntity } from '../../pagos/entity/pago.entity';
+
+//import { RutinaEntity } from "src/rutina/entities/rutina.entity";
+import { RutinaEntity } from "../../rutina/entities/rutina.entity";
+
+import { DatosFisicosEntity } from "../../usuario-datos-fisicos/entities/datos-fisicos.entity";
+import { DatosPersonalesEntity } from "../../usuario-datos-personales/entities/datos-personales.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 

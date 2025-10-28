@@ -1,6 +1,6 @@
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
-import { ErrorManager } from "src/config/error.manager";
+import { ErrorManager } from "../config/error.manager";
 
 export const imagenEjercicioInterceptor = () =>
   FileInterceptor('imagenLink', {

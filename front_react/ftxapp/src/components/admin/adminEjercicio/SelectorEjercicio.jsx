@@ -7,26 +7,15 @@ import "../../componentsShare/selectorGenerico/selectorGenerico.css";
 import GrupoRadios from "../../componentsShare/grupoRadios/grupoRadios.jsx"; // ajustá la ruta según tu estructura
 import SelectorGenerico from "../../componentsShare/selectorGenerico/selectorGenerico.jsx";
 
-const SelectorEjercicio = ({ modoEjercicio, ejercicios,ejercicioSeleccionado, onSeleccionarEjercicio,onCambiarModo, error }) => {
+const SelectorEjercicio = ({ modoEjercicio, ejercicios,ejercicioSeleccionado, onSeleccionarEjercicio,onCambiarModo }) => {
   
  
   // const [error, setError] = useState(null);
   //const [ejercicioSeleccionado, setEjercicioSeleccionado] = useState("");
  // const [modoEjercicio, setModoEjercicio] = useState("Crear");
 
- // 💡 Nuevo useEffect para depuración
-  useEffect(() => {
-    if (ejercicioSeleccionado) {
-      console.log("--- DEBUG EJERCICIO ---");
-      console.log("Objeto seleccionado:", ejercicioSeleccionado);
-      // Asegurate de que la clave exista y no sea nula
-      console.log("Valor de idEjercicioBasico:", ejercicioSeleccionado['idEjercicioBasico']); 
-      console.log("Tipo de idEjercicioBasico:", typeof ejercicioSeleccionado['idEjercicioBasico']);
-      console.log("-----------------------");
-    } else {console.log("no teine nada", ejercicioSeleccionado)}
-  }, [ejercicioSeleccionado]);
-  
-const isDisabled = modoEjercicio === "Crear";
+
+// const isDisabled = modoEjercicio === "Crear";
 
   return (
     <div className="selector-ejercicios-container">
@@ -40,7 +29,7 @@ const isDisabled = modoEjercicio === "Crear";
         />
 
         {/* Selector a la derecha */}
-        <SelectorGenerico
+      {/*   <SelectorGenerico
           opciones={ejercicios}
           valueKey="idEjercicioBasico"
           labelKey="nombreEjercicio"
@@ -49,10 +38,21 @@ const isDisabled = modoEjercicio === "Crear";
           onSeleccionar={onSeleccionarEjercicio}
           labelTexto="Seleccione Ejercicio"
           disabled = {isDisabled}
-        />
+        /> */}
+        {modoEjercicio === "Editar" && (
+  <SelectorGenerico
+    opciones={ejercicios}
+    valueKey="idEjercicioBasico"
+    labelKey="nombreEjercicio"
+    valorSeleccionado={ejercicioSeleccionado}
+    onSeleccionar={onSeleccionarEjercicio}
+    labelTexto="Seleccione Ejercicio"
+  />
+)}
+
       </div>
 
-      {error && <p className="error-texto-ejercicio">Error: {error}</p>}
+      {/* {error && <p className="error-texto-ejercicio">Error: {error}</p>} */}
     </div>
   );
 };
