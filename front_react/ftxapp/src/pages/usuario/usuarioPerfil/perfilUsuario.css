@@ -1,0 +1,102 @@
+
+
+.btn-guardar-tab {
+  align-self: flex-end;
+  background-color: var(--boton-primario);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+.perfil-usuario-container {
+  background-color: var(--fondo-principal);
+  width: 100%;
+  color: var(--texto-claro);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 3px solid var(--color-primario-naranja);
+}
+
+.perfil-tabs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-guardar-cambios {
+  background-color: var(--boton-primario);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin-left: auto;
+}
+
+.perfil-usuario-container {
+  background-color: var(--fondo-principal);
+  color: var(--texto-claro);
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.perfil-usuario-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.btn-guardar-cambios {
+  background-color: var(--boton-primario);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+.perfil-tab-contenido {
+  background-color: var(--fondo-secundario);
+  padding: 1.5rem;
+  border-radius: 10px;
+}
+
+.perfil-tabs {
+  display: flex;
+  gap: 1rem;
+}
+
+.perfil-tabs button {
+  background-color: var(--fondo-secundario);
+  color: var(--texto-claro);
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.tab-activa {
+  background-color: var(--boton-primario);
+  color: white;
+}
+
+.btn-guardar-cambios {
+  background-color: var(--boton-primario);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+.perfil-tab-contenido {
+  background-color: var(--fondo-secundario);
+  padding: 1.5rem;
+  border-radius: 10px;
+}

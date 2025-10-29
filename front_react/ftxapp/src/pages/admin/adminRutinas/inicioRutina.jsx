@@ -161,7 +161,7 @@ function inicioRutina() {
         datosRutinaUsuario={datosRutinaUsuario}
       />
 
-      {rutinaData && (
+      {rutinaData?.semanas?.length > 0 && (
         <RutinaVisual
           rutina={rutinaData}
           modoRutina={modoRutina}

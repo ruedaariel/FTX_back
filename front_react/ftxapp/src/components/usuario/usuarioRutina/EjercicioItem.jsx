@@ -3,17 +3,13 @@ import "./EjercicioPorDia.css";
 
 const EjercicioItem = ({ ejercicio }) => {
   const [expandido, setExpandido] = useState(false);
-  const [hecho, setHecho] = useState(false);
+  const [hecho, setHecho] = useState(ejercicio.ejercicioHecho ?? false);
 
   const toggleExpandido = () => setExpandido(!expandido);
   const toggleHecho = () => setHecho(!hecho);
 
   const { ejercicioBasico } = ejercicio;
 
-  // Depuración
-  console.log("Renderizando ejercicio:", ejercicioBasico?.nombreEjercicio);
-
-  // Si no hay datos básicos, mostrar mensaje
   if (!ejercicioBasico) {
     return (
       <div className="ejercicio-item ejercicio-incompleto">
@@ -23,7 +19,7 @@ const EjercicioItem = ({ ejercicio }) => {
   }
 
   return (
-    <div className={`ejercicio-item ${expandido ? "expandido" : ""}`}>
+    <div className={`ejercicio-item ${expandido ? "expandido" : ""} ${hecho ? "hecho" : ""}`}>
       <div className="ejercicio-header" onClick={toggleExpandido}>
         <input
           type="checkbox"
@@ -43,9 +39,9 @@ const EjercicioItem = ({ ejercicio }) => {
           <p><strong>Dificultad:</strong> {ejercicio.dificultad || "—"}</p>
           <p><strong>Observaciones:</strong> {ejercicio.observaciones || "—"}</p>
           <p><strong>Tips:</strong> {ejercicioBasico.observaciones || "—"}</p>
-          {ejercicioBasico.videoLink ? (
+          {typeof ejercicioBasico.videoLink === "string" && ejercicioBasico.videoLink.trim() !== "" ? (
             <a href={ejercicioBasico.videoLink} target="_blank" rel="noopener noreferrer">
-              Ver explicación
+              <i className="fa-brands fa-youtube social-icon-dia"></i> Ver explicación en Youtube
             </a>
           ) : (
             <p className="video-faltante">No hay video disponible</p>
@@ -57,4 +53,5 @@ const EjercicioItem = ({ ejercicio }) => {
 };
 
 export default EjercicioItem;
+
 

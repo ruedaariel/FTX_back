@@ -135,6 +135,9 @@ const EjercicioRutina = ({
         ...ejerciciosDisponibles,
       ];
 
+      console.log("EjercicioRutina - Ejercicio recibido:", ejercicio);
+
+
   return (
     <div className="ejercicio-rutina-row">
       {/* Selector de ejercicio */}

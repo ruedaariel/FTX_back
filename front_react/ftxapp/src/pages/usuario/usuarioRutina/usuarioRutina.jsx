@@ -17,7 +17,7 @@ function UsuarioRutina() {
   const [rutinaUsuario, setRutinaUsuario] = useState(null); // Rutina seleccionada desde el selector
   const { showModal } = useModal(); // Modal global
   
-  const rutinaABuscar = 7; // ID de la rutina del usuario, esto debería venir de la sesión o contexto de usuario
+  const rutinaABuscar = 129; // ID de la rutina del usuario, esto debería venir de la sesión o contexto de usuario
 
   // Cargar rutina desde backend al seleccionar una existente
   useEffect(() => {
@@ -38,7 +38,11 @@ function UsuarioRutina() {
   return (
     <>
       <HeaderCrud title="Rutina de Usuario" />
+    {rutinaUsuario ? (
       <RutinaInteractiva rutina={rutinaUsuario} />
+    ) : (
+      <p className="mensaje-cargando">Cargando rutina...</p>
+    )}
       
     </>
   );

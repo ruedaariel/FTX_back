@@ -21,6 +21,7 @@ const DiaRutina = ({
   onGuardarDia,
 }) => {
 
+  console.log("DiaRutina - Dia recibida:", dia);
 
 
   return (

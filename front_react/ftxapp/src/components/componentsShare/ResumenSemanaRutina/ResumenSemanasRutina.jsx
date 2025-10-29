@@ -4,7 +4,7 @@ import "./ResumenSemanasRutina.css";
 const ResumenSemanasRutina = ({ rutina }) => {
   if (!rutina?.semanas?.length) return null;
 
-  //console.log("ResumenSemanasRutina - Rutina recibida:", rutina);
+  console.log("ResumenSemanasRutina - Rutina recibida:", rutina);
 
   return (
     <div className="resumen-semanas-container">
