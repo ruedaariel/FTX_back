@@ -106,6 +106,7 @@ export class RutinaService {
       const rutina = await this.rutinaRepository.findOne({
         where: { idRutina: id },
         relations: {
+          usuario:true,
           semanas: {
             dias: {
               ejerciciosRutina: {
@@ -128,6 +129,7 @@ export class RutinaService {
           ))
         })
       }) */
+     console.log("rutina.usuario.id",rutina.usuario?.id);
      return plainToInstance(RtaRutinaDto,rutina, { excludeExtraneousValues: true });
       //return rutina; //tambien puede ser null
     }
