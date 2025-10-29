@@ -46,6 +46,9 @@ const SemanaRutina = ({
     );
   });
 
+  console.log("SemanaRutina - Semana recibida:", semana);
+
+
   return (
     <div className={`semana-rutina ${esActiva ? "activa" : ""}`}>
       {/* Encabezado de semana con resumen visual y botón de guardar */}

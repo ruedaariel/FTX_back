@@ -36,10 +36,25 @@ const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange, onGuardarRuti
 
   // Inicializar rutina editable al recibirla
   useEffect(() => {
-    if (rutina) {
-      setRutinaEditable(rutina);
-    }
-  }, [rutina]);
+  if (rutina && rutina.semanas?.length > 0) {
+    const rutinaClonada = JSON.parse(JSON.stringify(rutina));
+
+    rutinaClonada.semanas.forEach((semana) => {
+      semana.dias.forEach((dia) => {
+        dia.ejerciciosRutina.forEach((ej) => {
+          if (!ej.idEjercicioBasico && ej.ejercicioBasico?.idEjercicioBasico) {
+            ej.idEjercicioBasico = ej.ejercicioBasico.idEjercicioBasico;
+          }
+        });
+      });
+    });
+
+    setRutinaEditable(rutinaClonada);
+  }
+}, [rutina]);
+
+
+  
 
   // Propagar rutina editada al componente padre
   useEffect(() => {
@@ -187,6 +202,7 @@ const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange, onGuardarRuti
     //showModal("No hay semanas cargadas en la rutina. \nSeleccione otra rutina por favor", "error",0,true);
   }
 
+  console.log("RutinaEditable:", rutinaEditable);
   // Render principal
   return (
     <div className="rutina-visual">

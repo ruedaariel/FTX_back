@@ -1,8 +1,14 @@
 import React, { useState } from "react";
 import DiaItem from "./DiaItem";
 import "./RutinaInteractiva.css";
+import {useModal} from "../../../context/ModalContext";
 
-const RutinaInteractiva = ({ rutina }) => {
+
+const RutinaInteractiva = ({ rutina: rutinaInicial }) => {
+  const [rutina, setRutina] = useState(() => rutinaInicial || { semanas: [] });
+
+  
+  
   const [semanaSeleccionada, setSemanaSeleccionada] = useState(0);
   const [diaSeleccionado, setDiaSeleccionado] = useState(0);
 
@@ -12,14 +18,55 @@ const RutinaInteractiva = ({ rutina }) => {
   const diaActual = dias[diaSeleccionado] || null;
   const [ejercicioSeleccionado, setEjercicioSeleccionado] = useState(null);
 
+  // Modal global para mensajes
+    const { showModal } = useModal();
+
   const handleSeleccionEjercicio = (ejercicio) => {
-  if (ejercicioSeleccionado?.idEjercicioRutina === ejercicio.idEjercicioRutina) {
-    setEjercicioSeleccionado(null); // contraer si ya está seleccionado
-  } else {
-    setEjercicioSeleccionado(ejercicio); // expandir si es otro
-  }
+    if (
+      ejercicioSeleccionado?.idEjercicioRutina === ejercicio.idEjercicioRutina
+    ) {
+      setEjercicioSeleccionado(null); // contraer si ya está seleccionado
+    } else {
+      setEjercicioSeleccionado(ejercicio); // expandir si es otro
+    }
+  };
+
+const handleToggleEjercicioHecho = (idEjercicioRutina) => {
+
+
+showModal(
+      `¿Quieres marcar este ejercicio como hecho?`,
+      "decision",
+      0,
+      true,
+      (respuesta) => {
+        if (!respuesta) return;
+
+    setRutina((prevRutina) => {
+      const nuevaRutina = {
+      ...prevRutina,
+        semanas: prevRutina.semanas.map((semana) => ({
+          ...semana,
+          dias: semana.dias.map((dia) => ({
+            ...dia,
+            ejerciciosRutina: dia.ejerciciosRutina.map((ej) =>
+            ej.idEjercicioRutina === idEjercicioRutina && !ej.ejercicioHecho
+              ? { ...ej, ejercicioHecho: true }
+              : ej
+          ),
+        })),
+      })),
+    };
+    console.log("%cRutina actualizada:", "color: blue; font-weight: bold;", nuevaRutina);
+    return nuevaRutina;
+  });
+      }
+    );
+    
 };
 
+
+console.log("Rutina actualizada:", rutina);
 
 
   return (
@@ -70,7 +117,7 @@ const RutinaInteractiva = ({ rutina }) => {
                 dia={diaActual}
                 onSeleccionEjercicio={handleSeleccionEjercicio}
                 ejercicioSeleccionado={ejercicioSeleccionado}
-              
+                onToggleEjercicioHecho={handleToggleEjercicioHecho}
               />
               {/* <DiaItem dia={diaActual}  /> */}
             </div>
@@ -81,6 +128,8 @@ const RutinaInteractiva = ({ rutina }) => {
           )}
 
           <div className="contenido-dia-focus-imagen">
+            
+
             {ejercicioSeleccionado?.ejercicioBasico?.imagenLink ? (
               <img
                 src={ejercicioSeleccionado.ejercicioBasico.imagenLink}
@@ -88,8 +137,7 @@ const RutinaInteractiva = ({ rutina }) => {
                 className="imagen-ejercicio"
               />
             ) : (
-              <p>Seleccioná un ejercicio para ver su datos e 
-                imagen.</p>
+              <p>Seleccioná un ejercicio para ver su datos e imagen.</p>
             )}
           </div>
         </div>

@@ -5,6 +5,9 @@ import './usuarioDashboard.css';
 import DashboardGrid from '../../../components/dashboardGrid/dashboardGrid';
 import DashboardCard from '../../../components/dashboardCard/dashboardCard';
 import HeaderAdmin from '../../../components/headerAdmin/headerAdmin';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const UsuarioDashboard = () => {
   const handleLogout = () => {
@@ -13,27 +16,30 @@ const UsuarioDashboard = () => {
     // Aquí podrías redirigir al login o limpiar el localStorage
   };
 
+  const Navigate = useNavigate();
+
   const dashboardItems = [
     {
       id: 'rutina',
       icon: '✏️',
       title: 'Rutina',
       description: 'Mira tus rutinas de entranamiento',
-      onClick: () => console.log('Navegando a Rutinas...')
+      onClick: () => Navigate("/usuario/rutina")
     },
     {
       id: 'clientes',
-      icon: '👥',
+      icon: '🏋️',
       title: 'Perfil',
       description: 'Modifica Tus datos de Perfil',
-      onClick: () => console.log('Navegando a Clientes...')
+      onClick: () => Navigate("/usuario/perfil")
     },
     {
+      //icon: '📈' → más enfocado en evolución o rendimiento
       id: 'Estadisticas',
-      icon: '💰',
+      icon: '📈',
       title: 'Estadisticas',
       description: 'Mira tus avances con las rutinas.',
-      onClick: () => console.log('Navegando a Precios...')
+      onClick: () => Navigate("/usuario/estadisticas")
     }
     
   ];

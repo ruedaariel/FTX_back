@@ -21,6 +21,9 @@ const ModalResumenRutina = ({
   // Si el modal no está abierto, no renderizar nada
   if (!isOpen) return null;
 
+  console.log("ModalResumenRutina - Rutina recibida:", rutina);
+
+
   /**
    * handleConfirmar
    * Lógica que se ejecuta al confirmar el guardado desde el modal.

@@ -1,0 +1,83 @@
+/* Estilos formularios datos personales y fisicos */
+.formulario-personales {
+  background-color: var(--fondo-secundario);
+  padding: 1.5rem;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  border: 3px solid var(--color-primario-naranja);
+}
+
+.campo-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.campo-form label {
+  font-weight: bold;
+  color: var(--texto-claro);
+  margin-bottom: 0.3rem;
+}
+
+.campo-form input,
+.campo-form select,
+.campo-form textarea {
+  background-color: var(--color-primario-naranja);
+  color: var(--texto-claro);
+  border: 1px solid var(--borde-input);
+  padding: 0.6rem;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.nombre-apellido {
+  display: flex;
+  gap: 1rem;
+  }
+
+  .nombre-apellido .campo-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.nombre-apellido input  {
+  background-color: var(--color-texto-claro);
+  color: var(--texto-claro);
+  
+  }
+
+  .mail-telefono {
+  display: flex;
+  gap: 1rem;
+  }
+
+  .mail-telefono .campo-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.mail-telefono input {
+  background-color: var(--color-texto-claro);
+  color: var(--texto-claro);
+  
+  }
+
+  .nacimiento-genero {
+  display: flex;
+  gap: 1rem;
+  }
+
+  .nacimiento-genero.campo-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.nacimiento-genero input select {
+  background-color: var(--color-texto-claro);
+  color: var(--texto-claro);
+  
+  }
