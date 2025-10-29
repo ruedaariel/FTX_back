@@ -22,9 +22,28 @@ export class DatosPersonalesRtaDto {
   @Type(() => PlanRtaDto)
   plan: PlanRtaDto;
   @Expose()
-  @Transform(({ value }) => value ? format(value, 'dd/MM/yyyy') : null) //transforma a string con formato y tambien acepta null
+  @Transform(({ value }) => {
+    if (value == null) return null;               // null | undefined
+    if (typeof value === 'string') return value;  // ya formateado o cadena -> devolver tal cual
+    if (value instanceof Date && !isNaN(value.getTime())) {
+      return format(value, 'dd/MM/yyyy');
+    }
+    if (typeof value === 'number') {               // timestamp
+      const d = new Date(value);
+      if (!isNaN(d.getTime())) return format(d, 'dd/MM/yyyy');
+    }
+    return null;
+  }) //transforma a string con formato y tambien acepta null
   fNacimiento: string;
   @Expose()
+   @Transform(({ value }) => {
+        const port = process.env.PORT || '8000';
+        const host = process.env.HOST || 'localhost';
+        const baseUrl = `http://${host}:${port}/uploads/perfiles/`;
+        if (!value) return "";
+        if (value.startsWith(baseUrl)) return value;
+        return baseUrl + value;
+    })
   imagenPerfil: string;
   @Exclude()
   estado: ESTADO;
