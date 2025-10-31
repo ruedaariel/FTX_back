@@ -2,7 +2,7 @@ import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe
 import { UsuarioService } from '../services/usuario.service';
 import { CreateUsuarioDto } from '../dto/create-usuario.dto';
 import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
-import { LoginDto } from '../dto/login.dto';
+//import { LoginDto } from '../dto/login.dto';
 import { imagenPerfilInterceptor } from '../../interceptors/imagen-perfil.interceptor';
 import { ErrorManager } from '../../config/error.manager';
 import { UpdateUsuarioAdmDto } from '../dto/update-Usuario-adm.dto';
@@ -74,9 +74,9 @@ public async updateImagenPerfil(
     return await this.usuarioService.deleteUsuario(+id);
   }
 
-  @Post('login')
+ /*  @Post('login')
   public async login(@Body() body: LoginDto) {
     return await this.usuarioService.loginUsuario(body);
-  }
+  } */
 
 }

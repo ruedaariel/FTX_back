@@ -17,6 +17,7 @@ import { EjercicioRutinaModule } from './ejercicio-rutina/ejercicio-rutina.modul
 import { PlanModule } from './plan/plan.module';
 import { EmailModule } from './shared/email/email.module';
 import { PagosModule } from './pagos/pagos.module';
+import { AuthModule } from './auth/auth.module';
 
 
 
@@ -55,7 +56,9 @@ import { PagosModule } from './pagos/pagos.module';
    
     EmailModule,
    
-    PagosModule]
+    PagosModule,
+   
+    AuthModule]
 
 })
 export class AppModule {

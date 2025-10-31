@@ -1,7 +1,7 @@
 
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource, InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
-import { ROL, UsuarioEntity } from '../entities/usuario.entity';
+import { UsuarioEntity } from '../entities/usuario.entity';
 import { CreateUsuarioDto } from '../dto/create-usuario.dto';
 import { Repository, EntityManager, DataSource, Not } from 'typeorm';
 import { ErrorManager } from '../../config/error.manager';
@@ -14,8 +14,8 @@ import { RutinaEntity } from '../../rutina/entities/rutina.entity';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from '../../shared/email/email.service';
 import { generateRandomPassword } from '../../utils/random-password';
-import { LoginDto } from '../dto/login.dto';
-import { LoginRtaDto } from '../dto/login-rta.dto';
+/* import { LoginDto } from '../../auth/dto/login.dto';
+import { LoginRtaDto } from '../../auth/dto/login-rta.dto'; */
 import { UsuarioRtaDto } from '../dto/usuario-rta.dto';
 import { format } from 'date-fns';
 import { plainToInstance } from 'class-transformer';
@@ -26,6 +26,7 @@ import { UpdateUsuarioAdmDto } from '../dto/update-Usuario-adm.dto';
 import { PlanEntity } from '../../plan/entities/plan.entity';
 import { RutinasUsuarioRtaDto } from '../dto/rutinasUsuarioRtaDto';
 import { UpdateUsuarioAdmRtaDto } from '../dto/update-Usuario-adm-rta.dto';
+import { ROL } from '../../constantes/rol';
 
 @Injectable()
 export class UsuarioService {
@@ -69,7 +70,7 @@ export class UsuarioService {
 
       //Generar contraseña y encriptar
       const contrasenaGenerada = generateRandomPassword();
-      const contrasenaHasheada = await bcrypt.hash(contrasenaGenerada, 10);
+      const contrasenaHasheada = await bcrypt.hash(contrasenaGenerada, +process.env.HASH_SALT);
 
       const usuarioBasico = this.usuarioRepository.create({ ...body.datosBasicos, password: contrasenaHasheada }); //crea la instancia como si fuera un new UsuarioEntity, agrega el password
       const usuarioCreado = await queryRunner.manager.save(UsuarioEntity, usuarioBasico);
@@ -193,7 +194,7 @@ export class UsuarioService {
 
 
   //encuentra un usuario por mail (solo datos basicos)
-  //se llama desde usuarioService.createUsuario (Se puede llamar  otro lado)
+  //se llama desde auth/services (login) y desde createUsuario
   public async findUsuarioByMail(mail: string): Promise<UsuarioEntity | null> { //retorna null si no encuentra el mail para crear unnuevo ususario
     try {
 
@@ -227,7 +228,7 @@ export class UsuarioService {
  
   }
   //Se llama desde el login (valida mail y contraseña)
-  public async loginUsuario(body: LoginDto): Promise<LoginRtaDto> { //retorna null si no encuentra el mail para crear unnuevo ususario
+  /* public async loginUsuario(body: LoginDto): Promise<LoginRtaDto> { //retorna null si no encuentra el mail para crear unnuevo ususario
     try {
 
       const unUsuario = await this.usuarioRepository.findOneBy({ email: body.email }); //necesito el null para usarlo en el createUsuario
@@ -246,7 +247,7 @@ export class UsuarioService {
 
       return usuarioRtaDto;
     } catch (err) { throw ErrorManager.handle(err) }
-  }
+  } */
 
   //Actualiza todos los datos de un usuario.
   //se llama: desde perfil_usuario
@@ -266,7 +267,7 @@ export class UsuarioService {
       }
       if (body.datosBasicos && Object.keys(body.datosBasicos).length > 0) { //que no sea null o undefined y que no sea vacio
         if (body.datosBasicos.password) {
-          usuarioGuardado.password = await bcrypt.hash(body.datosBasicos.password, 10);
+          usuarioGuardado.password = await bcrypt.hash(body.datosBasicos.password, +process.env.HASH_SALT);
 
           delete body.datosBasicos.password;
           setImmediate(async () => {

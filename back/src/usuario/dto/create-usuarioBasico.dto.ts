@@ -1,5 +1,6 @@
 import { IsEmail, IsEnum, IsNotEmpty, Matches } from "class-validator";
-import { ROL } from "../entities/usuario.entity";
+import { ROL } from "src/constantes/rol";
+
 
 export class CreateUsuarioBasicoDto {
     @IsNotEmpty({ message: 'El correo no puede ser vacio' })
