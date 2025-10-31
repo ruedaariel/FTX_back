@@ -50,6 +50,7 @@ npm install --save-dev @types/bcrypt
 
 #Para el token
  npm i jsonwebtoken
+ npm i --save-dev @types/jsonwebtoken
  
 # Para el mail
 npm install nodemailer

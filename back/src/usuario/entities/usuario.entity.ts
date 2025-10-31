@@ -11,14 +11,7 @@ import { RutinaEntity } from "../../rutina/entities/rutina.entity";
 import { DatosFisicosEntity } from "../../usuario-datos-fisicos/entities/datos-fisicos.entity";
 import { DatosPersonalesEntity } from "../../usuario-datos-personales/entities/datos-personales.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-
-
-
-export enum ROL {
-    USUARIO = 'usuario',
-    ADMIN = 'admin',
-}
-
+import { ROL } from '../../constantes/rol';
 
 
 @Entity({ name: 'usuario' })

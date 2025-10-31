@@ -19,6 +19,7 @@ import { FileImgModule } from '../shared/file-img/file-img.module';
   imports: [TypeOrmModule.forFeature([UsuarioEntity, DatosPersonalesEntity, DatosFisicosEntity, PlanEntity, RutinaEntity]), DatosFisicosModule,DatosPersonalesModule, PlanModule, EmailModule, FileImgModule],
   controllers: [UsuarioController],
   providers: [UsuarioService],
+  exports : [UsuarioService, TypeOrmModule]
  
 })
 export class UsuarioModule {}

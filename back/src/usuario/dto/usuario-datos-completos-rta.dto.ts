@@ -1,8 +1,9 @@
 import { Exclude, Expose, Type } from "class-transformer";
 import { DatosPersonalesRtaDto } from "../../usuario-datos-personales/dto/datos-personales-rta.dto";
 import { DatosFisicosRtaDto } from "../../usuario-datos-fisicos/dto/datos-fisicos-rta.dto";
-import { ROL } from "../entities/usuario.entity";
+
 import { ESTADO } from "../../constantes/estado.enum";
+import { ROL } from "src/constantes/rol";
 
 export class UsuarioDatosCompletosRtaDto {
     @Expose()

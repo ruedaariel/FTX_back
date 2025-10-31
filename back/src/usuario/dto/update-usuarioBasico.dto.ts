@@ -1,7 +1,8 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateUsuarioBasicoDto } from './create-usuarioBasico.dto';
 import { IsEmail, IsEnum, IsOptional, Matches } from 'class-validator';
-import { ROL } from '../entities/usuario.entity';
+import { ROL } from 'src/constantes/rol';
+
 
 export class UpdateUsuarioBasicoDto  {
     //no se pudo usar el PartialType, porque enel Creat no esta el password

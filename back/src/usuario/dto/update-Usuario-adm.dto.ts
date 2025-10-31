@@ -1,7 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateUsuarioBasicoDto } from './create-usuarioBasico.dto';
 import { IsEmail, IsEnum, IsInt, IsOptional, Matches } from 'class-validator';
-import { ROL } from '../entities/usuario.entity';
 import { ESTADO } from '../../constantes/estado.enum';
 
 export class UpdateUsuarioAdmDto  {
