@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import { EJERCICIO_VACIO } from './utils/ejercicio_vacio';
 import { VALIDACION_REGLAS } from './utils/validacionReglas';
-import { fetchGeneral } from "../../componentsShare/utils/fetchGeneral";
-import { useModal } from "../../../context/ModalContext";
+import { fetchGeneral } from "../../../../components/componentsShare/utils/fetchGeneral";
+import { useModal } from "../../../../context/ModalContext";
 
 export const useEjercicioForm = (modoEjercicio, ejercicioSeleccionado, setReload, setEjecicioSeleccionado, fileInputRef) => {
     //ejercicio del form (vacio o lleno )
@@ -246,7 +246,7 @@ export const useEjercicioForm = (modoEjercicio, ejercicioSeleccionado, setReload
 
         for (const key in dataToSend) {
             const value = dataToSend[key];
-
+            
             if (key === 'imagenFile' && value instanceof File) {
                 formData.append('imagenLink', value); // ← enviar con el nombre que espera el backend
                 continue;
@@ -258,7 +258,7 @@ export const useEjercicioForm = (modoEjercicio, ejercicioSeleccionado, setReload
                 continue;
             }
 
-            if (value !== null && value !== undefined) {
+            if (value !== null && value !== undefined && key !== 'imagenPreviewUrl') {
                 formData.append(key, value);
             }
         }

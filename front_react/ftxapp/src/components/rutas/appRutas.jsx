@@ -11,6 +11,7 @@ import Contacto from "../../pages/public/contacto/contacto"
 import PaginaEjercicios from "../../pages/admin/adminEjercicios/paginaEjercicios";
 import UsuarioRutina from "../../pages/usuario/usuarioRutina/usuarioRutina";
 import PerfilUsuario from "../../pages/usuario/usuarioPerfil/PerfilUsuario";
+import LoginPage from "../../pages/public/loginPage/LoginPage";
 
 /* import Rutina from "../pages/Rutina";
 import Usuarios from "../pages/Usuarios";
@@ -23,6 +24,7 @@ const AppRutas = () => {
       <Route path="/" element={<LandingPage />} />
       <Route path="/contacto" element={<Contacto/>} />
       <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/login" element= {<LoginPage/>}/>
       <Route path="/usuario" element={<UsuarioDashboard />} />
       <Route path="/admin/rutinas" element={<InicioRutina />} />
       <Route path="/admin/clientes" element={<PantallaClientes />} />
