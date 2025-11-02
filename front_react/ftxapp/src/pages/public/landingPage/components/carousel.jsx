@@ -2,10 +2,10 @@ import Carousel from 'react-bootstrap/Carousel';
 
 // Asegúrate de que las imágenes estén en la carpeta `src` para poder importarlas
 // Por ejemplo, en `src/assets/`
-import imagen1 from '../../assets/Recursos/Imagenes/FTX_4.jpg';
-import imagen2 from '../../assets/Recursos/Imagenes/FTX_5.jpg';
-import imagen3 from '../../assets/Recursos/Imagenes/FTX_6.jpg';
-import imagen4 from '../../assets/Recursos/Imagenes/FTX_7.jpg';
+import imagen1 from '../../../../assets/Recursos/Imagenes/FTX_4.jpg';
+import imagen2 from '../../../../assets/Recursos/Imagenes/FTX_5.jpg';
+import imagen3 from '../../../../assets/Recursos/Imagenes/FTX_6.jpg';
+import imagen4 from '../../../../assets/Recursos/Imagenes/FTX_7.jpg';
 
 
 function PpalCarousel() { // Cambié el nombre para evitar conflicto con el import

@@ -1,5 +1,5 @@
 
-import logo from '../../assets/Recursos/IconosLogos/logoSinLetrasNaranja.png'
+import logo from '../../../../assets/Recursos/IconosLogos/logoSinLetrasNaranja.png'
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link,useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
