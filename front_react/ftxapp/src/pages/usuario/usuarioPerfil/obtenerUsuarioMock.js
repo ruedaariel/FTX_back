@@ -16,7 +16,7 @@ function obtenerUsuarioMock() {
         precio: "30000.00"
       },
       fNacimiento: "10/09/2015",
-      imagenPerfil: "usuario.png"
+      imagenPerfil: "http://localhost:8000/uploads/perfiles/usuario.png"
     },
     datosFisicos: {
       actividadDiaria: "Gimnasio 3 veces por semana",

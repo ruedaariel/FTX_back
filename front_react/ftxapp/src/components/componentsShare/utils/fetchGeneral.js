@@ -44,7 +44,19 @@ export const fetchGeneral = async ({
   const fetchOptions = {
     method,
     body: isFormData ? body : (body ? JSON.stringify(body) : null),
+    headers: headers, // <-- Inicialmente, usa las cabeceras pasadas
   };
+
+  // ⚠️ Importante: Si es FormData, el navegador debe establecer Content-Type
+  // Elimina Content-Type de las cabeceras para que el navegador lo establezca correctamente
+  if (isFormData && fetchOptions.headers["Content-Type"]) {
+      delete fetchOptions.headers["Content-Type"];
+  }
+
+  // const fetchOptions = {
+  //   method,
+  //   body: isFormData ? body : (body ? JSON.stringify(body) : null),
+  // };
 
   // Solo agregar headers si no es FormData
   if (!isFormData) {
