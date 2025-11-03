@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./selectorEjercicio.css";
-import "../../componentsShare/grupoRadios/grupoRadios.css";
-import "../../componentsShare/selectorGenerico/selectorGenerico.css";
+import "../../../../components/componentsShare/grupoRadios/grupoRadios.css"
+import "../../../../components/componentsShare/selectorGenerico/selectorGenerico.css";
 //  Función genérica para llamadas al backend
 
-import GrupoRadios from "../../componentsShare/grupoRadios/grupoRadios.jsx"; // ajustá la ruta según tu estructura
-import SelectorGenerico from "../../componentsShare/selectorGenerico/selectorGenerico.jsx";
+import GrupoRadios from "../../../../components/componentsShare/grupoRadios/grupoRadios.jsx"; // ajustá la ruta según tu estructura
+import SelectorGenerico from "../../../../components/componentsShare/selectorGenerico/selectorGenerico.jsx";
 
 const SelectorEjercicio = ({ modoEjercicio, ejercicios,ejercicioSeleccionado, onSeleccionarEjercicio,onCambiarModo }) => {
   

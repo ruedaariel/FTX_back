@@ -1,15 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
-import { fetchGeneral } from "../../componentsShare/utils/fetchGeneral";
-import '../../../styles/colores.css';
+import { fetchGeneral } from "../../../../components/componentsShare/utils/fetchGeneral";
+//import '../../../styles/colores.css';
+import '../../../../styles/colores.css'
 import './validacion.css';
 import './crud_ejercicio.css';
-import SelectorEjercicio from "./selectorEjercicio";
-import LOGO_PLACEHOLDER from '../../../assets/Recursos/IconosLogos/logoblanco.png';
+import SelectorEjercicio from "./SelectorEjercicio";
+import LOGO_PLACEHOLDER from '../../../../assets/Recursos/IconosLogos/logoblanco.png';
+
 import { EJERCICIO_VACIO } from './utils/ejercicio_vacio';
 import { useEjercicioForm } from "./useEjercicioForm";
 import { getEmbedUrl } from "./utils/formatoVideo";
-import { useModal } from "../../../context/ModalContext";
-import ModalDecision from "../../componentsShare/Modal/ModalDecision";
+import { useModal } from "../../../../context/ModalContext";
+import ModalDecision from "../../../../components/componentsShare/Modal/ModalDecision";
 
 
 const CrudEjercicioBasico = () => {
@@ -157,6 +159,7 @@ const CrudEjercicioBasico = () => {
                                     <input type="text" id="nombreEjercicio" name="nombreEjercicio" className={`form-control-ejercicio input-ejercicio ${errores.nombreEjercicio ? 'is-invalid' : ''}`}
                                         required placeholder="El nombre debe ser unico, por ejemplo, sentadilla sumo"
                                         value={ejercicioData?.nombreEjercicio || ''} onChange={handleInputChange} onBlur={handleBlur} />
+                                   
                                     <span className="icon-validate" data-icon="nombreEjercicio"></span>
                                 </div>
                                 {errores.nombreEjercicio && (

@@ -3,16 +3,17 @@ import { useState, useEffect } from "react";
 
 // src/componentsShare/Modal/ModalGlobal.jsx
 
-import { ModalProvider } from "../../../context/ModalContext.jsx";
-import ModalGlobal from "../../../components/componentsShare/Modal/ModalGlobal.jsx";
-import Header from "../../../components/landingPage/header.jsx"
-import Carousel from "../../../components/landingPage/carousel.jsx"
-import PorqueElegirnos from "../../../components/landingPage/porquelegirnos.jsx"
-import TuTrainer from "../../../components/landingPage/tutrainner.jsx"
-import Planes from "../../../components/landingPage/planes.jsx"
-import Testimonios from "../../../components/landingPage/testimonios.jsx"
-import Faq from "../../../components/landingPage/faq.jsx"
-import Footer from "../../../components/landingPage/footer.jsx"
+
+import { ModalProvider } from "../../../context/ModalContext.jsx"
+import ModalGlobal from "../../../components/componentsShare/Modal/ModalGlobal.jsx"
+import Header from "./components/header.jsx"
+import Carousel from "./components/carousel.jsx"
+import PorqueElegirnos from "./components/porquelegirnos.jsx"
+import TuTrainer from "./components/tutrainner.jsx"
+import Planes from "./components/planes.jsx"
+import Testimonios from "./components/testimonios.jsx"
+import Faq from "./components/faq.jsx"
+import Footer from "./components/footer.jsx"
 import './landingPage.css'
 import EnConstruccion from "../enContruccion/EnConstruccion.jsx";
 
