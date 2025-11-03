@@ -11,10 +11,10 @@ const LoginPage = () => {
   return (
     <div className="container-fluid login-container p-0">
       <div className="row g-0 min-vh-100">
-        {/* Left side: imagen (solo en desktop) */}
-        <div className="col-lg-6 d-none d-lg-block">
+        {/* Left side: imagen (solo en desktop) 
+        <div className="col-lg-6 d-none d-lg-block">*/}
           <HeroImageSection image={ftxImage13} logo={logoNaranja} />
-        </div>
+       {/*  </div>*/}
 
         {/* Right side: formulario */}
         <div className="col-12 col-lg-6 d-flex align-items-center">
