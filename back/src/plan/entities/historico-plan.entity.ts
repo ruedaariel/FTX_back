@@ -2,7 +2,7 @@ import { IHistoricoPlan } from "src/interfaces/historico-plan.interface";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { PlanEntity } from "./plan.entity";
 
-@Entity({name: 'historico_plan'})
+@Entity({ name: 'historico_plan' })
 export class HistoricoPlanEntity implements IHistoricoPlan {
     @PrimaryGeneratedColumn()
     idPlanHistorico: number;
@@ -16,21 +16,24 @@ export class HistoricoPlanEntity implements IHistoricoPlan {
     @Column({ type: 'varchar' })
     descripcion: string;
 
+    @Column({ type: 'varchar' })
+    beneficios: string;
+
     @Column({ type: 'decimal', precision: 8, scale: 2 })
     precio: number;
 
     @Column({ type: 'timestamp' })
     fCambioInicio: Date;
 
-    @CreateDateColumn({  type: 'timestamp'    })
+    @CreateDateColumn({ type: 'timestamp' })
     fCambioFin: Date;
 
-    @Column({type:'varchar'})
+    @Column({ type: 'varchar' })
     detalleCambio: string;
 
-   //Relacion con Plan
-   @ManyToOne(()=>PlanEntity, plan => plan.historicoPlanes, {nullable: true,  onDelete: 'SET NULL', })
-   @JoinColumn()
-   plan?: PlanEntity | null;
+    //Relacion con Plan
+    @ManyToOne(() => PlanEntity, plan => plan.historicoPlanes, { nullable: true, onDelete: 'SET NULL', })
+    @JoinColumn()
+    plan?: PlanEntity | null;
 
 }

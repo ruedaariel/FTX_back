@@ -152,6 +152,7 @@ export class PlanService {
           idPlanOrigen: planExistente.idPlan,
           nombrePlan: planExistente.nombrePlan,
           descripcion: planExistente.descripcion,
+          beneficios: planExistente.beneficios,
           precio: planExistente.precio,
           fCambioInicio: planExistente.fCambio, // O la fecha de inicio del plan
           detalleCambio: `Eliminación del plan ${planExistente.nombrePlan}, id: ${id}`,
