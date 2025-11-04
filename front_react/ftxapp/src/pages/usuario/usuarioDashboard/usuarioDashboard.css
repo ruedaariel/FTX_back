@@ -1,16 +1,17 @@
 /* front_react/ftxapp/src/pages/AdminDashboard/AdminDashboard.css */
 .admin-dashboard {
   min-height: 100vh;
-  background-color: var(--color-fondo-body);
+  background-color: var(--color-fondo-gris-claro);
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
 }
 
-.dashboard-main {
+/* .dashboard-main {
   flex: 1;
   padding-top: 2rem;
   padding-bottom: 2rem;
-}
+} */
 
 /* Animaciones de entrada */
 .admin-dashboard {

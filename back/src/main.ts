@@ -47,6 +47,12 @@ async function bootstrap() {
   const port = configService.get<number>('PORT') || 3000;
 
   app.enableCors(CORS);
+  // Habilitar CORS
+
+  
+
+
+
 
   //establece un prefijo para toda la aplicacion y evita que se mezclen rutas de be y fe
   app.setGlobalPrefix('apiFtx');

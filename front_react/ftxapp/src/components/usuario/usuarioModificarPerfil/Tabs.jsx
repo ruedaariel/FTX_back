@@ -1,4 +1,4 @@
-import './perfilDatos.css';
+import '../../../pages/usuario/usuarioPerfil/perfilUsuario.css';
 
 const Tabs = ({ activeTab, onTabChange }) => (
   <div className="perfil-tabs">

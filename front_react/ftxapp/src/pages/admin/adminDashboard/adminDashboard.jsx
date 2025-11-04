@@ -7,6 +7,7 @@ import DashboardCard from '../../../components/dashboardCard/dashboardCard';
 import HeaderAdmin from '../../../components/headerAdmin/headerAdmin';
 import { useNavigate } from 'react-router-dom';
 
+
 const AdminDashboard = () => {
   const handleLogout = () => {
     // Lógica para cerrar sesión
@@ -36,28 +37,28 @@ const AdminDashboard = () => {
       icon: '💰',
       title: 'Lista de Precios',
       description: 'Modificar precio de los planes vigentes.',
-      onClick: () => console.log('Navegando a Precios...')
+      onClick: () => Navigate("/admin/precios")
     },
     {
       id: 'ejercicios',
       icon: '🏋️',
       title: 'Ejercicios',
       description: 'Editar ejercicios que luego se usan en las Rutinas',
-      onClick: () => console.log('Navegando a Ejercicios...')
+      onClick: () => Navigate("/admin/ejercicios")
     },
     {
       id: 'planes',
       icon: '📋',
       title: 'Planes',
       description: 'Editar planes de entrenamiento',
-      onClick: () => console.log('Navegando a Planes...')
+      onClick: () => Navigate("/admin/planes")
     },
     {
       id: 'pagos',
       icon: '💳',
       title: 'Pagos',
       description: 'Gestionar pagos y métodos de pago de los clientes',
-      onClick: () => console.log('Navegando a Pagos...')
+      onClick: () => Navigate("/admin/pagos")
     }
   ];
 

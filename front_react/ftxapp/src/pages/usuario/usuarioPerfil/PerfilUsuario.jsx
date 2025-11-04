@@ -1,101 +1,157 @@
-import React, { useState, useEffect } from 'react';
-import './perfilUsuario.css';
+// Importación de React y hooks
+import React, { useState, useEffect } from "react";
+// Estilos específicos para esta vista
+import "./perfilUsuario.css";
+// Hook de formularios
+import { useForm } from "react-hook-form";
+// Header reutilizable
+import HeaderCrud from "../../../components/componentsShare/header/HeaderCrud.jsx";
+// Tabs y secciones del perfil
+import Tabs from "../../../components/usuario/usuarioModificarPerfil/Tabs";
+import ImagenTab from "../../../components/usuario/usuarioModificarPerfil/imagensuscripcion/imagenTab";
+import DatosPersonalesTab from "../../../components/usuario/usuarioModificarPerfil/datospersonales/datosPersonales";
+import DatosFisicosTab from "../../../components/usuario/usuarioModificarPerfil/datosfisicos/datosFisicos";
+import SeguridadTab from "../../../components/usuario/usuarioModificarPerfil/seguridad/seguridadTab.jsx";
+// Mock de datos de usuario
+import obtenerUsuarioMock from "./obtenerUsuarioMock";
 
-import Tabs from '../../../components/usuario/usuarioModificarPerfil/Tabs';
-import ImagenTab from '../../../components/usuario/usuarioModificarPerfil/imagensuscripcion/imagenTab';
-import DatosPersonalesTab from '../../../components/usuario/usuarioModificarPerfil/datospersonales/datosPersonales';
-import DatosFisicosTab from '../../../components/usuario/usuarioModificarPerfil/datosfisicos/datosFisicos';
-import  obtenerUsuarioMock  from './obtenerUsuarioMock'; // Asegurate de tener esta función
-
+// Componente principal que carga los datos del usuario
 function PaginaPerfil() {
   const [usuario, setUsuario] = useState(null);
 
-  useEffect(function () {
+  // Simula la carga de datos al montar el componente
+  useEffect(() => {
     const datos = obtenerUsuarioMock();
     setUsuario(datos);
   }, []);
 
-  if (!usuario) {
-    return <p>Cargando perfil...</p>;
-  }
+  // Mientras se cargan los datos, se muestra un mensaje
+  if (!usuario) return <p>Cargando perfil...</p>;
 
+  // Una vez cargado, se renderiza el componente principal
   return <PerfilUsuario usuario={usuario} />;
 }
 
+// Componente que gestiona el formulario completo del perfil
 function PerfilUsuario({ usuario }) {
-  const [activeTab, setActiveTab] = useState('imagen');
-  const [datosEditados, setDatosEditados] = useState(usuario);
+  const [activeTab, setActiveTab] = useState("imagen"); // Estado para controlar la pestaña activa
 
-  function actualizarSeccion(seccion, nuevosDatos) {
-    const copia = Object.assign({}, datosEditados);
-    copia[seccion] = Object.assign({}, datosEditados[seccion], nuevosDatos);
-    setDatosEditados(copia);
-  }
+  // Hook de react-hook-form con valores iniciales
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      datosPersonales: {
+        ...usuario.datosPersonales,
+        email: usuario.email,
+        idUsuario: usuario.id,
+        
+      },
+      datosFisicos: usuario.datosFisicos,
+    },
+    mode: "onBlur", // valida al salir del campo
+  });
 
-  function handleGuardarCambios() {
-    console.log('Perfil actualizado:', datosEditados);
-    // Aquí iría la lógica para enviar al backend
-  }
+  // Función que se ejecuta al enviar el formulario
+  const onSubmit = (formData) => {
+    console.log("Datos enviados:", formData);
+    // Aquí iría la lógica para enviar los datos al backend
+  };
+
+  console.log("usuario", usuario);
 
   return (
-    <div className="perfil-usuario-container">
+
+    <div className='container'>
+            <HeaderCrud title="Perfil de Usuario" widthPercent={100} />
+            
+
+
+    // Formulario único que engloba todas las secciones
+    <form
+      className="perfil-usuario-container"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      {/* Header opcional */}
+      {/* <HeaderCrud title="Gestion de Rutinas" /> */}
+
+      {/* Navegación por pestañas */}
       <div className="perfil-usuario-header">
         <div className="perfil-tabs">
           <button
-            className={activeTab === 'imagen' ? 'tab-activa' : ''}
-            onClick={() => setActiveTab('imagen')}
+            className={`tab-base ${
+              activeTab === "imagen" ? "tab-activa sin-borde-inferior" : ""
+            }`}
+            onClick={() => setActiveTab("imagen")}
           >
             Imagen y Suscripción
           </button>
           <button
-            className={activeTab === 'personales' ? 'tab-activa' : ''}
-            onClick={() => setActiveTab('personales')}
+            className={`tab-base ${
+              activeTab === "personales" ? "tab-activa sin-borde-inferior" : ""
+            }`}
+            onClick={() => setActiveTab("personales")}
           >
             Datos Personales
           </button>
           <button
-            className={activeTab === 'fisicos' ? 'tab-activa' : ''}
-            onClick={() => setActiveTab('fisicos')}
+            className={`tab-base ${
+              activeTab === "fisicos" ? "tab-activa sin-borde-inferior" : ""
+            }`}
+            onClick={() => setActiveTab("fisicos")}
           >
             Datos Físicos
           </button>
+          <button
+            className={`tab-base ${
+              activeTab === "seguridad" ? "tab-activa sin-borde-inferior" : ""
+            }`}
+            onClick={() => setActiveTab("seguridad")}
+          >
+            Seguridad
+          </button>
         </div>
-
-        <button className="btn-guardar-cambios" onClick={handleGuardarCambios}>
-          Guardar cambios
-        </button>
       </div>
 
+      {/* Contenido de la pestaña activa */}
       <div className="perfil-tab-contenido">
-        {activeTab === 'imagen' && (
+        {activeTab === "imagen" && (
           <ImagenTab
-            imagenPerfil={datosEditados.datosPersonales.imagenPerfil}
-            plan={datosEditados.datosPersonales.plan}
-            onChange={function (nuevaImagen) {
-              actualizarSeccion('datosPersonales', { imagenPerfil: nuevaImagen });
-            }}
+            register={register}
+            setValue={setValue}
+            watch={watch}
+            errors={errors}
           />
         )}
 
-        {activeTab === 'personales' && (
-          <DatosPersonalesTab
-            datos={datosEditados.datosPersonales}
-            onChange={function (nuevosDatos) {
-              actualizarSeccion('datosPersonales', nuevosDatos);
-            }}
-          />
+        {activeTab === "personales" && (
+          <DatosPersonalesTab register={register}  errors={errors} />
         )}
 
-        {activeTab === 'fisicos' && (
-          <DatosFisicosTab
-            datos={datosEditados.datosFisicos}
-            onChange={function (nuevosDatos) {
-              actualizarSeccion('datosFisicos', nuevosDatos);
-            }}
-          />
+        {activeTab === "fisicos" && (
+          <DatosFisicosTab register={register} errors={errors} />
+        )}
+
+        {activeTab === "seguridad" && (
+          <SeguridadTab register={register} errors={errors} watch={watch} />
         )}
       </div>
-    </div>
+
+        <div className="boton-guardar-perfil">
+      {/* Botón de guardado general */}
+      <button type="submit" className="btn-guardar-cambios">
+        Guardar cambios
+      </button>
+      </div>
+    </form>
+
+    
+
+        </div>
   );
 }
 

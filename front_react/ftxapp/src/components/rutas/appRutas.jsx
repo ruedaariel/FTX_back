@@ -12,6 +12,7 @@ import PaginaEjercicios from "../../pages/admin/adminEjercicios/paginaEjercicios
 import UsuarioRutina from "../../pages/usuario/usuarioRutina/usuarioRutina";
 import PerfilUsuario from "../../pages/usuario/usuarioPerfil/PerfilUsuario";
 import LoginPage from "../../pages/public/loginPage/LoginPage";
+import UsuarioEstadistica from "../../pages/usuario/usuarioEstadistica/usuarioEstadistica";
 //import {   ReseteoPassword } from '../../pages/public/login/logins';
 //import  LoginBasico  from '../../pages/public/login/LoginBasico';
 //import PagosAdmin from '../../pages/admin/adminPagos/pagosAdmin'
@@ -40,6 +41,7 @@ const AppRutas = () => {
       <Route path="/admin/ejercicios" element = {<PaginaEjercicios />}/>
       <Route path="/usuario/rutina" element={<UsuarioRutina />} />
       <Route path="/usuario/perfil" element={<PerfilUsuario />} />
+      <Route path="/usuario/estadistica" element={<UsuarioEstadistica />} />
       <Route path="*" element={<EnContruccion />} />
 
     {/*   <Route path="/rutina" element={<Rutina />} />

@@ -6,6 +6,9 @@ import DashboardGrid from '../../../components/dashboardGrid/dashboardGrid';
 import DashboardCard from '../../../components/dashboardCard/dashboardCard';
 import HeaderAdmin from '../../../components/headerAdmin/headerAdmin';
 import { useNavigate } from 'react-router-dom';
+import HeaderCrud from '../../../components/componentsShare/header/HeaderCrud';
+import { IoPeopleSharp } from "react-icons/io5";
+
 
 
 
@@ -21,14 +24,14 @@ const UsuarioDashboard = () => {
   const dashboardItems = [
     {
       id: 'rutina',
-      icon: '✏️',
+      icon: '🏋️',
       title: 'Rutina',
       description: 'Mira tus rutinas de entranamiento',
       onClick: () => Navigate("/usuario/rutina")
     },
     {
       id: 'clientes',
-      icon: '🏋️',
+      icon: <IoPeopleSharp />,
       title: 'Perfil',
       description: 'Modifica Tus datos de Perfil',
       onClick: () => Navigate("/usuario/perfil")
@@ -39,19 +42,30 @@ const UsuarioDashboard = () => {
       icon: '📈',
       title: 'Estadisticas',
       description: 'Mira tus avances con las rutinas.',
-      onClick: () => Navigate("/usuario/estadisticas")
+      onClick: () => Navigate("/usuario/estadistica")
+    },
+    {
+      //icon: '📈' → más enfocado en evolución o rendimiento
+      id: 'Pagos',
+      icon: '💳',
+      title: 'Pagos',
+      description: 'Gestiona tus pagos',
+      onClick: () => Navigate("/usuario/pagos")
     }
     
   ];
 
   return (
+
+    <div className="container">
+      <HeaderCrud title="Perfil de Usuario" widthPercent={100} />
     <div className="admin-dashboard">
-      <HeaderAdmin 
+      {/* <HeaderAdmin 
         logo="FTX"
         title="Panel usuario"
         onLogout={handleLogout}
         logoutText="Cerrar Sesión"
-      />
+      /> */}
       
       <main className="dashboard-main">
         <DashboardGrid columns={3} gap="2rem">
@@ -67,6 +81,7 @@ const UsuarioDashboard = () => {
           ))}
         </DashboardGrid>
       </main>
+    </div>
     </div>
   );
 };

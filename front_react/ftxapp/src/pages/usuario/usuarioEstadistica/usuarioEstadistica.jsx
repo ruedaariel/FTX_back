@@ -8,8 +8,9 @@ import { useModal } from "../../../context/ModalContext.jsx";
 
 // Utilidades
 import { fetchGeneral } from "../../../components/componentsShare/utils/fetchGeneral.js";
-import RutinaPorSemana from "../../../components/usuario/usuarioRutina/RutinaPorSemana.jsx";
-import RutinaInteractiva from "../../../components/usuario/usuarioRutina/RutinaGenericaInteractiva.jsx";
+import AvanceRutina from "./avanceRutina.jsx";
+
+
 
 
 function UsuarioRutina() {
@@ -38,9 +39,10 @@ function UsuarioRutina() {
   return (
     <>
     <div className="container">
-      <HeaderCrud title="Rutina de Usuario" widthPercent={100}/>
+      <HeaderCrud title="Estadisticas de Usuario" widthPercent={100}/>
     {rutinaUsuario ? (
-      <RutinaInteractiva rutina={rutinaUsuario} />
+      <AvanceRutina rutina={rutinaUsuario} />
+
     ) : (
       <p className="mensaje-cargando">Cargando rutina...</p>
     )}
