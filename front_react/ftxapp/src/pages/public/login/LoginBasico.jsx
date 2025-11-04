@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 import './LoginBasico.css';
 // import '@fortawesome/fontawesome-free/css/all.min.css';
-import Logo from '../../assets/Recursos/IconosLogos/logoSinLetrasNaranja.png';
-import video from '../../assets/Recursos/Videos/competenciaNeuquen.mp4';
+import Logo from '../../../assets/Recursos/IconosLogos/logoSinLetrasNaranja.png';
+import video from '../../../assets/Recursos/Videos/competenciaNeuquen.mp4';
 
 
 

@@ -15,6 +15,9 @@ export class PlanRtaCompletaDto {
   @Expose()
   descripcion: string;
 
+  @Expose()
+  beneficios: string;
+
   @Exclude()
   fCambio: Date;
 }

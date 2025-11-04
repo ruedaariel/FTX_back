@@ -14,6 +14,11 @@ export class CreateHistoricoPlanDto {
   @IsString({ message: 'la descripcion del Plan debe ser un string' })
   descripcion: string;
 
+  @IsNotEmpty({ message: 'Llos beneficios del plan no debe ser vacio' })
+  @IsString({ message: 'Los beneficios del Plan debe ser un string' })
+  @MaxLength(255, { message: 'El campo beneficios no puede superar los 255 caracteres' })
+  beneficios: string;
+
   @IsNotEmpty()
   @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0, { message: 'El precio del plan debe ser mayor o igual a 0' })
