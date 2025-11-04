@@ -1,7 +1,7 @@
 import { Carousel } from "react-bootstrap";
-import testimonio1 from "../../assets/Recursos/Imagenes/FTX_13.jpg";
-import testimonio2 from "../../assets/Recursos/Imagenes/Imagen2.png";
-import testimonio3 from "../../assets/Recursos/Imagenes/testimonioLea.jpeg";
+import testimonio1 from "../../../../assets/Recursos/Imagenes/FTX_13.jpg";
+import testimonio2 from "../../../../assets/Recursos/Imagenes/Imagen2.png";
+import testimonio3 from "../../../../assets/Recursos/Imagenes/testimonioLea.jpeg";
 
 export default function Testimonios() {
   return (

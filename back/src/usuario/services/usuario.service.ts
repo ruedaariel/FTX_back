@@ -57,9 +57,15 @@ export class UsuarioService {
 
     try {
       //validar la existencia del plan, se llama al metodo de Plan.service. Devuelve null si no lo encuentra
-      const unPlan = await this.planService.findOneById(body.datosPersonales.idPlan);
-      if (!unPlan) {
-        throw new ErrorManager("NOT_FOUND", `No existe el plan ${body.datosPersonales.idPlan}`);
+      const unPlan = null;
+      if (body.datosPersonales) {
+        if (body.datosPersonales.idPlan) {
+          const unPlan = await this.planService.findOneById(body.datosPersonales.idPlan);
+          if (!unPlan) {
+            throw new ErrorManager("NOT_FOUND", `No existe el plan ${body.datosPersonales.idPlan}`);
+          }
+        }
+
       }
 
       //controlar que mail no exista
@@ -92,6 +98,7 @@ export class UsuarioService {
           Object.assign(datosPersonales, restoDatos); // copiar propiedades en datosPersonales
 
           //agrega el plan
+
           datosPersonales.plan = unPlan;//agrego los datos del plan (relacion)
           usuarioCreado.datosPersonales = datosPersonales;
         }
@@ -225,7 +232,7 @@ export class UsuarioService {
       console.log(rutinasDto);
       return rutinasDto
     } else return null
- 
+
   }
   //Se llama desde el login (valida mail y contraseña)
   /* public async loginUsuario(body: LoginDto): Promise<LoginRtaDto> { //retorna null si no encuentra el mail para crear unnuevo ususario
@@ -426,11 +433,11 @@ export class UsuarioService {
 
           //no uso update porque tengo relaciones que guardar
           const usuarioUpdate = await transaccion.save(usuarioGuardado);
-          return  {
+          return {
             id: usuarioUpdate.id,
-            email : usuarioUpdate.email,
-            estado : usuarioUpdate.estado,
-            idPlan : usuarioUpdate.datosPersonales?.plan?.idPlan
+            email: usuarioUpdate.email,
+            estado: usuarioUpdate.estado,
+            idPlan: usuarioUpdate.datosPersonales?.plan?.idPlan
           }
 
         } else {

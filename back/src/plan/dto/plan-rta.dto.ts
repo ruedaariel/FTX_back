@@ -18,5 +18,8 @@ export class PlanRtaDto {
   descripcion: string;
 
   @Exclude()
+  beneficios: string;
+
+  @Exclude()
   fCambio: Date;
 }

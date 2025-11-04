@@ -1,6 +1,6 @@
 import React from 'react'
 import HeaderCrud from '../../../components/componentsShare/header/HeaderCrud.jsx';
-import CrudEjercicioBasico from '../../../components/admin/adminEjercicio/CrudEjercicioBasico.jsx';
+import CrudEjercicioBasico from './components/CrudEjercicioBasico.jsx';
 
 const PaginaEjercicios = () => {
     return (

@@ -6,11 +6,15 @@ import UsuarioDashboard from "../../pages/usuario/usuarioDashboard/usuarioDashbo
 import InicioRutina from "../../pages/admin/adminRutinas/inicioRutina";
 import PantallaClientes from "../../pages/admin/adminClientes/PantallaClientes";
 import EnContruccion from "../../pages/public/enContruccion/EnConstruccion";
-import { PagosAdmin } from "../../pages/admin/adminPagos";
+//import { PagosAdmin } from "../../pages/admin/adminPagos";
 import Contacto from "../../pages/public/contacto/contacto"
 import PaginaEjercicios from "../../pages/admin/adminEjercicios/paginaEjercicios";
 import UsuarioRutina from "../../pages/usuario/usuarioRutina/usuarioRutina";
 import PerfilUsuario from "../../pages/usuario/usuarioPerfil/PerfilUsuario";
+import LoginPage from "../../pages/public/loginPage/LoginPage";
+//import {   ReseteoPassword } from '../../pages/public/login/logins';
+//import  LoginBasico  from '../../pages/public/login/LoginBasico';
+//import PagosAdmin from '../../pages/admin/adminPagos/pagosAdmin'
 
 /* import Rutina from "../pages/Rutina";
 import Usuarios from "../pages/Usuarios";
@@ -23,10 +27,16 @@ const AppRutas = () => {
       <Route path="/" element={<LandingPage />} />
       <Route path="/contacto" element={<Contacto/>} />
       <Route path="/admin" element={<AdminDashboard />} />
+      <Route path="/login" element= {<LoginPage/>}/>
+      {/* <Route path="/login2" element={<LoginBasico />} /> 
+                <Route path="/login-perfil" element={<LoginPerfil />} />
+                <Route path="/suscripcion" element={<LoginSuscripcion />} />
+                <Route path="/reseteo-password" element={<ReseteoPassword />} />*/}
       <Route path="/usuario" element={<UsuarioDashboard />} />
       <Route path="/admin/rutinas" element={<InicioRutina />} />
+      
       <Route path="/admin/clientes" element={<PantallaClientes />} />
-      <Route path="/admin/pagos" element={<PagosAdmin />} />
+    {/*   <Route path="/admin/pagos" element={<PagosAdmin />} /> */}
       <Route path="/admin/ejercicios" element = {<PaginaEjercicios />}/>
       <Route path="/usuario/rutina" element={<UsuarioRutina />} />
       <Route path="/usuario/perfil" element={<PerfilUsuario />} />

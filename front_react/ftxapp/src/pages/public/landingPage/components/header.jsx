@@ -1,5 +1,5 @@
 
-import logo from '../../assets/Recursos/IconosLogos/logoSinLetrasNaranja.png'
+import logo from '../../../../assets/Recursos/IconosLogos/logoSinLetrasNaranja.png'
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { Link,useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
@@ -85,7 +85,7 @@ function Header({ open, setOpen, handleNavClick }) {
               Contacto
             </Nav.Link>
 
-            <Nav.Link href="./loginregister/login_basico.html" className="btn btn-resaltado btn-sm">
+            <Nav.Link as={Link} to="./login" className="btn btn-resaltado btn-sm">
               Login/Registro
             </Nav.Link>
           </Nav>

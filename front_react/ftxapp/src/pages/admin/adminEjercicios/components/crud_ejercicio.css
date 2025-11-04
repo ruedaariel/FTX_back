@@ -226,6 +226,7 @@
     padding: 10px;
     min-width: 240px;
      border-radius: 8px;
+     color: var(--color-texto-gris-medio);
 }
 
 .imagen-preview-ejercicio {

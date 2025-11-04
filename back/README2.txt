@@ -62,3 +62,13 @@ npm install date-fns
 
 //para mercado pago
 npm install mercadopago
+
+//REACT instalacion de ZOD para usar con react-hook-form
+npm install zod
+npm install @hookform/resolvers
+
+//para movimientos en react
+npm install framer-motion
+
+//para iconos en React
+npm install lucide-react
