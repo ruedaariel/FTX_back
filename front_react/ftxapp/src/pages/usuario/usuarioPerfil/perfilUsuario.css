@@ -1,13 +1,13 @@
 
 
 .perfil-usuario-container {
-  background-color: var(--color-fondo-body);
+  background-color: var(--color-fondo-gris-claro);
   width: 100%;
   color: var(--texto-claro);
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 12px;
-  border: 3px solid var(--color-primario-naranja);
   
+  /* border: 1px solid var(--color-primario-naranja); */
 }
 
 .perfil-tabs {
@@ -15,7 +15,7 @@
   justify-content: space-around;
   align-items: center;
   gap: .5rem;
- background-color: var(--color-fondo-body);
+ background-color: var(--color-fondo-gris-claro);
  
   
 }
@@ -51,7 +51,7 @@
 }
 
 .perfil-tabs button {
-  background-color: var(--color-fondo-body);
+  background-color: var(--color-fondo-gris-claro);
   color: var(--color-texto-claro);
   border: none;
   padding: 0.6rem 1rem;

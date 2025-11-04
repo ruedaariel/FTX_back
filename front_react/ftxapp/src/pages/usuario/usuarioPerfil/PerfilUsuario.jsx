@@ -65,6 +65,12 @@ function PerfilUsuario({ usuario }) {
   console.log("usuario", usuario);
 
   return (
+
+    <div className='container'>
+            <HeaderCrud title="Perfil de Usuario" widthPercent={100} />
+            
+
+
     // Formulario único que engloba todas las secciones
     <form
       className="perfil-usuario-container"
@@ -142,6 +148,10 @@ function PerfilUsuario({ usuario }) {
       </button>
       </div>
     </form>
+
+    
+
+        </div>
   );
 }
 
