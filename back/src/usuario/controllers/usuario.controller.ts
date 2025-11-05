@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UsuarioService } from '../services/usuario.service';
 import { CreateUsuarioDto } from '../dto/create-usuario.dto';
 import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
@@ -6,9 +6,11 @@ import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
 import { imagenPerfilInterceptor } from '../../interceptors/imagen-perfil.interceptor';
 import { ErrorManager } from '../../config/error.manager';
 import { UpdateUsuarioAdmDto } from '../dto/update-Usuario-adm.dto';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 
 @Controller('usuario')
+//@UseGuards(AuthGuard)
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService
   ) { }

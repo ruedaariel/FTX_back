@@ -13,18 +13,18 @@ export const useToken = (token: string): IuseToken | string => {
             'rol' in decoded
         ) {
             const payload = decoded as IauthTokenResult;
-             const currentDate = new Date();
-        const expiresDate = new Date(payload.exp);
-        return {
-            sub:payload.sub,
-            email: payload.email,
-            rol: payload.rol,
-            isExpired: +expiresDate <= +currentDate/1000 // /1000 parea convertir la fecha a seg
-        }
+            const currentDate = new Date();
+            const expiresDate = new Date(payload.exp);
+            return {
+                sub: payload.sub,
+                email: payload.email,
+                rol: payload.rol,
+                isExpired: +expiresDate <= +currentDate / 1000 // /1000 para convertir la fecha a seg
+            }
         } else {
             throw new Error('Token inválido o incompleto');
         }
-       
+
 
     } catch (error) {
         return 'Token invalido'
