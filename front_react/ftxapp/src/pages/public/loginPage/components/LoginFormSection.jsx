@@ -65,6 +65,7 @@ const LoginFormSection = ({ logo }) => {
 
                     showModal("Error en permisos de acceso.\n Contactate con el administrador", "error", 3000)
                     setLoading(false);
+                    
                     showModal("Error, credenciales invalidas", "error", 3000);
                     reset({ email: '', password: '' });
                 },
