@@ -170,11 +170,11 @@ export class UsuarioService {
       }
 
       const usuariosDto = plainToInstance(UsuarioDatosCompletosRtaDto, usuarios);
-      usuariosDto.forEach((usuario) => {
+     /*  usuariosDto.forEach((usuario) => {
         if (usuario.datosPersonales?.imagenPerfil) {
           usuario.datosPersonales.imagenPerfil = this.fileImgService.construirUrlImagen(usuario.datosPersonales.imagenPerfil, "perfiles");
         }
-      })
+      }) */
 
       return usuariosDto
     } catch (err) {
