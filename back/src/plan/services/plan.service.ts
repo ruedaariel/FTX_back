@@ -93,6 +93,7 @@ export class PlanService {
           precio: planViejo.precio,
           fCambioInicio: planViejo.fCambio, // O la fecha de inicio del plan
           detalleCambio: camposModif.join(';'),
+          beneficios : planViejo.beneficios,
           plan: planExistente
         });
         await transaccion.save(HistoricoPlanEntity, historico);
