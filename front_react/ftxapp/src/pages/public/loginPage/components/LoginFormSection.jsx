@@ -9,6 +9,7 @@ import { useModal } from '../../../../context/ModalContext'
 import { useNavigate } from 'react-router-dom';
 import { fetchGeneral } from "../../../../components/componentsShare/utils/fetchGeneral";
 import { useEffect } from 'react';
+import { saveToken } from '../../../../auth/token';
 
 
 const LoginFormSection = ({ logo }) => {
@@ -56,6 +57,11 @@ const LoginFormSection = ({ logo }) => {
                 setLoading,
                 setError,
                 onSuccess: (data) => {
+                    if (!data.token) {
+                        showModal("Error, credenciales invalidas \n Contactate con el administrador \n Error de token", "error", 3000);
+                    reset({ email: '', password: '' });
+                    }
+                    saveToken(data.token);
                     if (data.rol === 'admin') {
                         navigate('/admin', { replace: true }); // replace evita back al login
                     }
@@ -65,7 +71,7 @@ const LoginFormSection = ({ logo }) => {
 
                     showModal("Error en permisos de acceso.\n Contactate con el administrador", "error", 3000)
                     setLoading(false);
-                    
+
                     showModal("Error, credenciales invalidas", "error", 3000);
                     reset({ email: '', password: '' });
                 },
