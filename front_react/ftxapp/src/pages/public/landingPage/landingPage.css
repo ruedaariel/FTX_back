@@ -148,7 +148,7 @@ body {
 .carousel-item.active .carousel-caption {
     opacity: 1;
     /* se hace visible cuando esta activo */
-    animation: fadeInUp 1s ease-out forwards;
+  /*   animation: fadeInUp 1s ease-out forwards; ESTO ME DESTRUYE EL PRIMER CAROUSEL */
     /* se aplica animacion para texto */
 }
 
