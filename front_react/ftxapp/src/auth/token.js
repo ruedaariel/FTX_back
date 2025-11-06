@@ -11,6 +11,7 @@ export function getToken() {
   return sessionStorage.getItem(KEY); // string | null
 }
 
+
 export function clearToken() {
   sessionStorage.removeItem(KEY);
 }

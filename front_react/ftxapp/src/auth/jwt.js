@@ -2,6 +2,13 @@
 // src/auth/jwt.js
 import jwtDecode from 'jwt-decode';
 
+/*    const payload = {
+                   sub: unUsuario.id,
+                   email: unUsuario.email,
+                   rol: unUsuario.rol,
+               }; */
+
+               
 // Decodifica payload
 export function decodeToken(token) {
   try {
