@@ -21,9 +21,7 @@ const SeguridadTab = ({ register, errors, watch }) => {
               required: "La contraseña actual es obligatoria"
             })}
           />
-          <button type="button" onClick={() => setShowActual(!showActual)}>
-            {showActual ? "🙈" : "👁️"}
-          </button>
+          ´+
         </div>
         {errors?.datosPersonales?.passwordActual && (
           <span className="error">{errors.datosPersonales.passwordActual.message}</span>
@@ -77,3 +75,4 @@ const SeguridadTab = ({ register, errors, watch }) => {
 };
 
 export default SeguridadTab;
+

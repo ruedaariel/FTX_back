@@ -29,8 +29,8 @@
   
 }
 
-.btn-guardar-cambios {
-  background-color: var(--color-seuncdario-naranja);
+.btn-guardar-perfil-usuario {
+  background-color: var(--color-secundario-naranja);
   color: var(--color-texto-claro);
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
@@ -40,6 +40,11 @@
   max-width: 250px;
   align-self: flex-end;
   margin-bottom: .1rem;
+}
+
+.btn-guardar-perfil-usuario:hover {
+  background-color: var(--color-primario-naranja);
+  color: var(--color-texto-oscuro);
 }
 
 .perfil-tab-contenido {
@@ -84,6 +89,9 @@ flex-direction: row;
 justify-content: right;
 
 }
+
+
+
 @media screen and (max-width: 768px) {
 
   /* 🧩 Contenedor general */
@@ -107,7 +115,7 @@ justify-content: right;
     padding: 0.5rem;
   }
 
-  .btn-guardar-cambios,
+  
   .btn-guardar-tab {
     width: 100%;
     max-width: none;

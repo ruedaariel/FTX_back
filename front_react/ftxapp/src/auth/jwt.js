@@ -1,6 +1,6 @@
 
 // src/auth/jwt.js
-import jwtDecode from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 
 /*    const payload = {
                    sub: unUsuario.id,

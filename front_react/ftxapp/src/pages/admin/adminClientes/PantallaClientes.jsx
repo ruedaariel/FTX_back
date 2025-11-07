@@ -22,7 +22,7 @@ const handleResetFiltro = () => {
   return (
     <>
     <div className="container" >
-      <HeaderCrud title="Listado Clientes"/>
+      <HeaderCrud title="Listado de Clientes" widthPercent={100} />
       <BarraBusqueda
         estadoSeleccionado={estadoSeleccionado}
         onEstadoChange={setEstadoSeleccionado}

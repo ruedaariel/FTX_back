@@ -4,7 +4,8 @@ import React from 'react';
 function CardUsuario({ usuario, activeTab, setActiveTab, handleEditar, handleEliminarClick }) {
   const tab = activeTab[usuario.id];
 
-  
+  console.log ("ImagemPerfil:",usuario.datosPersonales.imagenPerfil);
+
   return (
     <div className="card-usuario">
       <div className="tabs-usuario">
@@ -23,11 +24,11 @@ function CardUsuario({ usuario, activeTab, setActiveTab, handleEditar, handleEli
         {tab === 'basicos' && (
           <div className="basicos-grid">
             <div className="col-imagen">
-              <div className="juego-box">
+              <div className="imagen-box">
                 <img
-                  src={usuario.datosPersonales?.imagenPerfil || '/img/default-juego.png'}
-                  alt="Imagen de juego"
-                  className="juego-imagen"
+                  src={usuario.datosPersonales?.imagenPerfil || 'http://localhost:8000/uploads/perfiles/usuario.png'}
+                  alt="Imagen no Disponible"
+                  className="formato-imagen"
                 />
               </div>
             </div>

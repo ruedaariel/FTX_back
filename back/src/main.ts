@@ -50,10 +50,6 @@ async function bootstrap() {
   // Habilitar CORS
 
   
-
-
-
-
   //establece un prefijo para toda la aplicacion y evita que se mezclen rutas de be y fe
   app.setGlobalPrefix('apiFtx');
 
