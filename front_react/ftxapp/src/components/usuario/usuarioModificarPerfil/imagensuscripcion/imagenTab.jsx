@@ -1,179 +1,218 @@
-// Importación de React y estilos específicos del tab
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./datosImagenSuscripcion.css";
 import { fetchGeneral } from "../../../componentsShare/utils/fetchGeneral";
-import {useModal} from "../../../../context/ModalContext";
+import { useModal } from "../../../../context/ModalContext";
 import { extraerMensajeError } from "../../../componentsShare/utils/extraerMensajeError";
 
-
-
-// Componente que representa la pestaña "Imagen y Suscripción"
 const ImagenTab = ({ register, setValue, watch, errors }) => {
-  
-const [previewImagen, setPreviewImagen] = useState(watch("datosPersonales.imagenPerfil"));
+  // Estado para la imagen de perfil
+  const [previewImagen, setPreviewImagen] = useState(
+    watch("datosPersonales.imagenPerfil")
+  );
+  const [imagenSeleccionada, setImagenSeleccionada] = useState(null);
 
+  // Estado para los planes disponibles y el plan seleccionado
+  const [planesDisponibles, setPlanesDisponibles] = useState([]);
+  const [planSeleccionado, setPlanSeleccionado] = useState("");
 
-  // Obtenemos el plan actual del usuario desde el formulario global
-  const plan = watch("datosPersonales.plan");
+  // Acceso al modal global
   const { showModal } = useModal();
 
+  // Obtener el plan actual del formulario
+  const plan = watch("datosPersonales.plan");
+  const idPlanActual = watch("datosPersonales.plan.idPlan");
 
+  // Buscar el plan actual en la lista de planes disponibles, o usar el que viene del backend
+  const planActual =
+    planesDisponibles.find((p) => p.idPlan === parseInt(idPlanActual)) || plan;
 
-console.log("imagen:", previewImagen);
-console.log("id usuario", watch("datosPersonales.idUsuario"));
+  // Cargar los planes disponibles desde el backend al montar el componente
+  useEffect(() => {
+    fetchGeneral({
+      url: `http://localhost:8000/apiFtx/plan/all`,
+      method: "GET",
+      onSuccess: (data) => {
+        setPlanesDisponibles(data);
+      },
+      showModal,
+    });
+  }, []);
 
+  //showModal("Guardado exitoso", "success", 3000); // temporizado
+  //showModal("Error al guardar", "error", 0, true); // persistente
 
-const [imagenSeleccionada, setImagenSeleccionada] = useState(null);
-// Obtenemos el valor actual de la imagen de perfil desde el formulario global
-const imagenPerfil = watch("datosPersonales.imagenPerfil");
+  // Manejar el cambio de imagen de perfil
+  const handleImagenChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
+    const tiposPermitidos = ["image/jpeg", "image/png"];
+    const tamañoMaximo = 5 * 1024 * 1024; // 5MB
 
-const handleImagenChange = (e) => {
-  const file = e.target.files[0];
-  if (file) {
+    if (!tiposPermitidos.includes(file.type)) {
+      showModal(
+        "Formato inválido. Solo se permiten imágenes JPG o PNG.",
+        "error",
+        0,
+        true
+      );
+      return;
+    }
+
+    if (file.size > tamañoMaximo) {
+      showModal("La imagen excede el tamaño máximo de 5MB.", "error", 0, true);
+      return;
+    }
+
+    // Si pasa la validación, se actualiza el preview y se guarda automáticamente
     setImagenSeleccionada(file);
     const previewURL = URL.createObjectURL(file);
-    setPreviewImagen(previewURL); // ← para mostrar en <img>
-    setValue("datosPersonales.imagenPerfil", previewURL); // ← si querés que el formulario lo registre
-  }
-};
+    setPreviewImagen(previewURL);
+    setValue("datosPersonales.imagenPerfil", previewURL);
 
+    const idUsuario = watch("datosBasicos.idUsuario");
+    console.log(" typeoff de idUsuario", typeof idUsuario, idUsuario);
 
-const handleGuardarImagen = async () => {
-  if (!imagenSeleccionada) return;
+    const url = `http://localhost:8000/apiFtx/usuario/${idUsuario}/imagen-perfil`;
+    const method = "PATCH";
 
-  
-  
+    const formData = new FormData();
+    formData.append("imagenPerfil", file);
 
-  const url = `http://localhost:8000/apiFtx/usuario/${watch("datosPersonales.idUsuario")}/imagen-perfil`;
-  const method = "Patch";
-  const body = imagenSeleccionada;
+    await fetchGeneral({
+      url,
+      method,
+      body: formData,
+      showModal,
+      onSuccess: () => {
+        showModal("Imagen actualizada correctamente", "success", 2000);
+      },
+      onError: (err) => {
+        const mensaje = extraerMensajeError(err);
+        console.error("Error al guardar Imagen:", mensaje);
+        // showModal("error", mensaje);
+      },
+    });
+  };
 
-  // 🔹 Crear FormData y adjuntar la imagen
-  const formData = new FormData();
-  formData.append("imagenPerfil", imagenSeleccionada);
+  // Enviar imagen al backend
+  const handleGuardarImagen = async () => {
+    if (!imagenSeleccionada) return;
 
-  console.log("url --->", url);
-  console.log("method--->", method);
-  console.log("body--->", body);
-  console.log("formData--->", formData);
+    const idUsuario = watch("datosPersonales.idUsuario");
+    const url = `http://localhost:8000/apiFtx/usuario/${idUsuario}/imagen-perfil`;
+    const method = "PATCH";
 
-  let resultado;
+    const formData = new FormData();
+    formData.append("imagenPerfil", imagenSeleccionada);
 
-  await fetchGeneral({
+    await fetchGeneral({
       url,
       method,
       body: formData,
       showModal,
       onSuccess: (data) => {
-        resultado = data;
+        // Imagen guardada exitosamente
       },
       onError: (err) => {
         const mensaje = extraerMensajeError(err);
-        console.error("Error al guardar rutina:", mensaje);
+        console.error("Error al guardar Imagen:", mensaje);
       },
     });
-
-  // try {
-  //   const response = await fetch("/api/usuario/imagen", {
-  //     method: "POST",
-  //     body: imagenSeleccionada, // ← se envía el archivo directamente
-  //     headers: {
-  //       "Content-Type": imagenSeleccionada.type, // ej: "image/jpeg"
-  //       Authorization: `Bearer ${token}` // si usás autenticación
-  //     }
-  //   });
-
-  //   const resultado = await response.json();
-  //   console.log("Imagen subida:", resultado);
-  // } catch (error) {
-  //   console.error("Error al subir imagen:", error);
-  // }
-};
-
+  };
 
   return (
     <div className="imagen-tab">
-      {/* Sección izquierda: imagen de perfil y carga */}
       <div className="imagen-plan-precio">
+        {/* Sección izquierda: imagen de perfil */}
         <div className="imagen-perfil-container">
-  {/* Imagen actual del perfil */}
-  {/* <img src={imagenPerfil} alt="Perfil" className="imagen-perfil" /> */}
-  {/* <img src={previewImagen || "/default.png"} alt="Perfil" className="imagen-perfil" /> */}
-    <img src={previewImagen} alt="Perfil" className="imagen-perfil" />
+          <h4 className="h4-cambiar-imagen">Cambiar Imagen</h4>
+          <img src={previewImagen} alt="Perfil" className="imagen-perfil" />
 
-
-  <div className="input-mensaje">
-    <div className="fila-imagen-acciones">
-      {/* Input de archivo estilizado como botón */}
-      <label className="custom-file-upload">
-        <input
-          type="file"
-          accept=".jpg,.png"
-          onChange={handleImagenChange}
-        />
-        
-      </label>
-
-      {/* Botón que aparece solo si hay imagen seleccionada */}
-      {imagenSeleccionada && (
-        <button
-          type="button"
-          className="btn-guardar-imagen"
-          onClick={handleGuardarImagen}
-        >
-          Guardar imagen
-        </button>
-      )}
-    </div>
-
-    {/* Texto informativo sobre formatos permitidos */}
-    <p className="formato-imagen"> Seleccionar imagen con formato JPG, PNG. Máx: 5MB</p>
-  </div>
-</div>
-
-
-        {/* Sección derecha: formulario de cambio de contraseña */}
-        <div className="div-password">
-          <div className="plan-precio">
-            <div className="plan-descripcion">
-              <h1>{plan?.nombrePlan}</h1>
-              <p>Acceso completo a todas las funciones</p>
-            </div>
-
-            <div className="precio">
-              <h1>${plan?.precio}</h1>
-              <p>por mes</p>
+          <div className="input-mensaje">
+            <div className="fila-imagen-acciones">
+              <label className="custom-file-upload">
+                <input
+                  type="file"
+                  accept=".jpg,.png"
+                  onChange={handleImagenChange}
+                />
+                Seleccionar archivo
+              </label>
+                       <p className="formato-imagen">
+              Seleccionar imagen con formato JPG, PNG. Máx: 5MB
+            </p>     
             </div>
             
           </div>
-          {/* Botones de acción relacionados al plan */}
-            <div className="botones-plan">
-              <button className="btn-cambiar-plan">Cambiar plan</button>
-              {/* <button className="btn-ver-facturacion">Ver facturación</button> */}
+        </div>
+
+        {/* Sección derecha: información del plan */}
+        <div className="div-password">
+          <div className="plan-precio">
+            <div className="plan-descripcion">
+              <h1>{planActual.nombrePlan}</h1>
+              <p>
+                <strong>Descripción:</strong> {planActual.descripcion}
+              </p>
             </div>
+            <div className="precio">
+              <h1>${parseFloat(planActual.precio).toLocaleString("es-AR")}</h1>
+              <p>por mes</p>
+            </div>
+          </div>
+
+          {/* Selector de nuevo plan */}
+          <div className="selector-plan">
+            <label className="label-selector-plan">
+              Selecciona tu nuevo plan:
+            </label>
+            <select
+              id="plan"
+              className="dropdown-plan"
+              value={planSeleccionado}
+              onChange={(e) => {
+                const id = parseInt(e.target.value);
+                setPlanSeleccionado(id);
+
+                const nuevoPlan = planesDisponibles.find(
+                  (p) => p.idPlan === id
+                );
+                if (nuevoPlan) {
+                  setValue("datosPersonales.plan", nuevoPlan);
+                }
+              }}
+            >
+              <option value="">-- Elegí un plan --</option>
+              {planesDisponibles.map((plan) => (
+                <option key={plan.idPlan} value={plan.idPlan}>
+                  {`${plan.nombrePlan}  <->   $ ${parseFloat(
+                    plan.precio
+                  ).toLocaleString("es-AR")}`}
+                </option>
+              ))}
+            </select>
+
+            {/* Detalle del plan seleccionado */}
+            {planSeleccionado && (
+              <div className="detalle-plan">
+                {planesDisponibles
+                  .filter((p) => p.idPlan === parseInt(planSeleccionado))
+                  .map((p) => (
+                    <div key={p.idPlan}>
+                      <p className="planes-descripcion">
+                        <strong>Descripción:</strong> {p.descripcion}
+                      </p>
+                      <p className="planes-descripcion">
+                        <strong>Beneficios:</strong> {p.beneficios}
+                      </p>
+                    </div>
+                  ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
-
-      {/* Sección inferior: información del plan */}
-      {/* <div className="plan-info"> */}
-        {/* <div className="plan-precio">
-          <div className="plan-descripcion">
-            <h2>{plan?.nombrePlan}</h2>
-            <p>Acceso completo a todas las funciones</p>
-          </div>
-
-          <div className="precio">
-            <h2>${plan?.precio}</h2>
-            <p>por mes</p>
-          </div>
-        </div> */}
-        {/* Botones de acción relacionados al plan */}
-        {/* <div className="botones-plan">
-          <button className="btn-cambiar-plan">Cambiar plan</button>
-          <button className="btn-ver-facturacion">Ver facturación</button>
-        </div> */}
-      {/* </div> */}
     </div>
   );
 };

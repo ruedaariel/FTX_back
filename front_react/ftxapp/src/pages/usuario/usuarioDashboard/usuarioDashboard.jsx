@@ -1,18 +1,56 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 
 
 import './usuarioDashboard.css';
 import DashboardGrid from '../../../components/dashboardGrid/dashboardGrid';
 import DashboardCard from '../../../components/dashboardCard/dashboardCard';
-import HeaderAdmin from '../../../components/headerAdmin/headerAdmin';
 import { useNavigate } from 'react-router-dom';
 import HeaderCrud from '../../../components/componentsShare/header/HeaderCrud';
 import { IoPeopleSharp } from "react-icons/io5";
-
-
+import { useModal } from "../../../context/ModalContext";
+import { fetchGeneral } from "../../../components/componentsShare/utils/fetchGeneral";
+import { getToken } from "../../../auth/token";
+import { decodeToken } from "../../../auth/jwt";
 
 
 const UsuarioDashboard = () => {
+
+  const navigate = useNavigate();
+  const [tokenUsuario, setTokenUsuario] = useState(null);
+  const [usuario, setUsuario] = useState(null);
+  const { showModal } = useModal();
+
+  useEffect(() => {
+    const token = getToken("ftxAccessToken");
+    if (token) {
+      const datos = decodeToken(token);
+      setTokenUsuario(datos);
+      console.log("tokenUsuario",tokenUsuario);
+    }
+  }, []);
+  
+  
+
+  // busco el usuario en backend pero antes espero a que se haya caragado el token
+        
+  useEffect(() => {
+  if (tokenUsuario?.sub) {
+    fetchGeneral({
+      url: `http://localhost:8000/apiFtx/usuario/${tokenUsuario.sub}`,
+      method: "GET",
+      onSuccess: (data) => {
+        setUsuario(data);
+      },
+      showModal,
+    });
+  }
+}, [tokenUsuario]);
+
+    
+  console.log("usuario",usuario);
+
+
+
   const handleLogout = () => {
     // Lógica para cerrar sesión
     console.log('Cerrando sesión...');
@@ -27,14 +65,14 @@ const UsuarioDashboard = () => {
       icon: '🏋️',
       title: 'Rutina',
       description: 'Mira tus rutinas de entranamiento',
-      onClick: () => Navigate("/usuario/rutina")
+      onClick: () => navigate("/usuario/rutina", { state: { usuario } })
     },
     {
       id: 'clientes',
       icon: <IoPeopleSharp />,
       title: 'Perfil',
       description: 'Modifica Tus datos de Perfil',
-      onClick: () => Navigate("/usuario/perfil")
+      onClick: () => navigate("/usuario/perfil", { state: { usuario } })
     },
     {
       //icon: '📈' → más enfocado en evolución o rendimiento
@@ -42,7 +80,7 @@ const UsuarioDashboard = () => {
       icon: '📈',
       title: 'Estadisticas',
       description: 'Mira tus avances con las rutinas.',
-      onClick: () => Navigate("/usuario/estadistica")
+      onClick: () => navigate("/usuario/estadistica", { state: { usuario } })
     },
     {
       //icon: '📈' → más enfocado en evolución o rendimiento
@@ -54,6 +92,10 @@ const UsuarioDashboard = () => {
     }
     
   ];
+
+
+
+
 
   return (
 

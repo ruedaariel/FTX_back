@@ -15,7 +15,7 @@ function obtenerUsuarioMock() {
         nombrePlan: "Plan Pro",
         precio: "30000.00"
       },
-      fNacimiento: "10/09/2015",
+      fNacimiento: "09/10/1991",
       imagenPerfil: "http://localhost:8000/uploads/perfiles/usuario.png"
     },
     datosFisicos: {

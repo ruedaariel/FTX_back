@@ -1,14 +1,21 @@
 // Importación de React y los estilos específicos del tab
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "./datosPersonales.css";
 
 // Componente que representa la pestaña "Datos Personales"
 // Recibe props desde el formulario global: register (para vincular campos) y errors (para mostrar validaciones)
-const DatosPersonalesTab = ({ register, errors}) => {
+const DatosPersonalesTab = ({ register, watch, setValue, errors}) => {
 
+  const emailActual = watch("datosBasicos.email"); // valor original del formulario
+  const [nuevoEmail, setNuevoEmail] = useState(emailActual || "");
+  const [confirmacion, setConfirmacion] = useState("");
 
-
-
+  // Si coinciden, actualiza el campo real del formulario
+  useEffect(() => {
+    if (nuevoEmail && confirmacion && nuevoEmail === confirmacion) {
+      setValue("datosBasicos.email", nuevoEmail);
+    }
+  }, [nuevoEmail, confirmacion, setValue]);
   
   return (
     <div className="formulario-personales">
@@ -31,6 +38,8 @@ const DatosPersonalesTab = ({ register, errors}) => {
             </span>
           )}
         </div>
+
+        
 
         <div className="campo-form">
           <label>Apellido</label>
@@ -77,25 +86,40 @@ const DatosPersonalesTab = ({ register, errors}) => {
 
       {/* Sección: Email y Teléfono */}
       <div className="mail-telefono">
-        <div className="campo-form">
-          <label>Email</label>
-          <input
-            type="email"
-            {...register("datosPersonales.email", {
-              required: "El email es obligatorio",
-              pattern: {
-                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: "Formato de email inválido",
-              },
-            })}
-          />
-          {errors?.datosPersonales?.email && (
-            <span className="error">
-              {errors.datosPersonales.email.message}
-            </span>
-          )}
-        </div>
+      {/* Campo editable sin register */}
+      <div className="campo-form">
+        <label>Nuevo Email</label>
+        <input
+          type="email"
+          value={nuevoEmail}
+          onChange={(e) => setNuevoEmail(e.target.value)}
+        />
+      </div>
 
+      {/* Confirmación */}
+      <div className="campo-form">
+        <label>Confirmar Email</label>
+        <input
+          type="email"
+          value={confirmacion}
+          onChange={(e) => setConfirmacion(e.target.value)}
+        />
+
+        {/* Feedback visual */}
+      {nuevoEmail && confirmacion && nuevoEmail !== confirmacion && (
+        <p className="error">Los correos no coinciden</p>
+      )}
+      {nuevoEmail && nuevoEmail === confirmacion && (
+        <p className="ok">Los correos coinciden</p>
+      )}
+      </div>
+
+      
+    </div>
+  
+
+      {/* Sección: Fecha de nacimiento y Género */}
+      <div className="nacimiento-genero">
         <div className="campo-form">
           <label>Teléfono</label>
           <input
@@ -113,10 +137,6 @@ const DatosPersonalesTab = ({ register, errors}) => {
             </span>
           )}
         </div>
-      </div>
-
-      {/* Sección: Fecha de nacimiento y Género */}
-      <div className="nacimiento-genero">
         <div className="campo-form">
           <label>Fecha de nacimiento</label>
           <input

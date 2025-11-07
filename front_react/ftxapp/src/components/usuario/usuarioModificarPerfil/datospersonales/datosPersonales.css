@@ -28,7 +28,7 @@
   /* border: 2px solid var(--color-primario-naranja); */
   padding: .5rem;
   border-radius: 8px;
-  margin: 1rem .3rem;
+  margin: .2rem .3rem;
   }
 
   .nombre-apellido .campo-form {
@@ -51,7 +51,7 @@
   */
   padding: .5rem;
   border-radius: 8px;
-  margin: 1rem .3rem;
+  margin: .2rem .3rem;
   }
 
   .mail-telefono .campo-form {
@@ -75,7 +75,7 @@
   padding: .5rem;
 
   border-radius: 8px;
-  margin: 1rem .3rem;
+  margin: .2rem .3rem;
   }
 
   .nacimiento-genero.campo-form {
@@ -211,5 +211,11 @@
 .error {
 
 color: red;
+
+}
+
+.ok {
+
+color: var(--color-primario-naranja);
 
 }

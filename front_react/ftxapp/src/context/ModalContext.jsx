@@ -110,7 +110,7 @@ const showModal = (
 const renderModal = () => {
   if (!visible) return null;
 
-  console.log("Renderizando modal tipo:", type, "visible:", visible);
+  // console.log("Renderizando modal tipo:", type, "visible:", visible);
 
 
   switch (type) {
@@ -150,7 +150,7 @@ const renderModal = () => {
         <ModalInfoTemporizado
           isOpen={visible}
           message={message}
-          title={type === "info" ? "Info" : "Success"}
+          title={type === "info" ? "Info" : "Exito"}
           type={type}
           borderClass={
             type === "info" ? "modal-info-border" : "modal-success-border"
