@@ -27,6 +27,8 @@
 .table-responsive {
   width: 100%;
   overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 .comparison-table {
@@ -196,9 +198,11 @@
   }
 
   .check-icon,
-  .cross-icon {
-    font-size: 1rem;
-  }
+.cross-icon {
+  font-size: 0.9rem;
+  margin: 0 auto;
+}
+
 
   .price-value {
     font-size: 1rem;
@@ -215,11 +219,22 @@
     min-width: 60px;
   }
 
-  .feature-cell,
+  /* .feature-cell,
   .plan-cell {
     padding: 0.4rem 0.2rem;
     font-size: 0.8rem;
-  }
+  } */
+
+.feature-cell,
+.plan-cell {
+  min-height: 48px;
+}
+
+.feature-cell {
+  display: flex;
+  align-items: center;
+}
+
 
   .comparison-table thead th {
     padding: 0.4rem 0.2rem;
@@ -227,6 +242,13 @@
   }
 
   .price-value {
-    font-size: 0.9rem;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .plan-column:nth-child(n+3),
+  .plan-cell:nth-child(n+3) {
+    display: none;
   }
 }

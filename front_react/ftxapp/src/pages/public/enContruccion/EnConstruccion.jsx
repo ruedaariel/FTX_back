@@ -5,8 +5,12 @@ import logo from '../../../assets/Recursos/IconosLogos/logo.png';
 import iconofacebook from '../../../assets/Recursos/IconosLogos/Logo_facebook.png';
 import iconoinstagram from '../../../assets/Recursos/IconosLogos/logo_instagram.png';
 import iconox from '../../../assets/Recursos/IconosLogos/logo_x.png';
+import HeaderCrud from '../../../components/componentsShare/header/HeaderCrud';
 const EnConstruccion = () => {
   return (
+
+    <div className="container">
+      <HeaderCrud title="Seguimos trabajando ..." widthPercent={100} />
     <div className="container-en-construccion">
       <header className="header-en-construccion">
         <img
@@ -49,6 +53,7 @@ const EnConstruccion = () => {
       <footer className=".footer-en-construccion">
         <p className=".footer-p-en-construccion">FTX &copy; 2025 — Todos los derechos reservados</p>
       </footer>
+    </div>
     </div>
   );
 };

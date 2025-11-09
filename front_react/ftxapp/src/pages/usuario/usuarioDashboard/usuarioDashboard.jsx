@@ -20,14 +20,41 @@ const UsuarioDashboard = () => {
   const [usuario, setUsuario] = useState(null);
   const { showModal } = useModal();
 
+  function isTokenExpired(token) {
+  if (!token?.exp) return true;
+  const now = Math.floor(Date.now() / 1000); // tiempo actual en segundos
+  return token.exp < now;
+}
+
+  // useEffect(() => {
+  //   const token = getToken("ftxAccessToken");
+  //   if (token) {
+  //     const datos = decodeToken(token);
+  //     setTokenUsuario(datos);
+  //     console.log("tokenUsuario",tokenUsuario);
+  //   }
+  // }, []);
+
   useEffect(() => {
-    const token = getToken("ftxAccessToken");
-    if (token) {
-      const datos = decodeToken(token);
-      setTokenUsuario(datos);
-      console.log("tokenUsuario",tokenUsuario);
+  const token = getToken("ftxAccessToken");
+  if (token) {
+    const datos = decodeToken(token);
+
+    if (isTokenExpired(datos)) {
+      sessionStorage.removeItem("ftxAccessToken");
+      showModal("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.", "error", 3000);
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+      return;
     }
-  }, []);
+
+    setTokenUsuario(datos);
+  } else {
+    navigate("/login");
+  }
+}, []);
+
   
   
 
@@ -83,14 +110,22 @@ const UsuarioDashboard = () => {
       onClick: () => navigate("/usuario/estadistica", { state: { usuario } })
     },
     {
-      //icon: '📈' → más enfocado en evolución o rendimiento
+      
       id: 'Pagos',
       icon: '💳',
       title: 'Pagos',
       description: 'Gestiona tus pagos',
       onClick: () => Navigate("/usuario/pagos")
-    }
+    },
     
+    {
+      
+      id: 'Planes',
+      icon: '📋',
+      title: 'Planes',
+      description: 'Quires ver los planes?',
+      onClick: () => Navigate("/admin/planes")
+    }
   ];
 
 

@@ -4,6 +4,7 @@ import { PlanService } from "../../../services/planService";
 import PlanCard from "../../../components/planCard/planCard";
 import PlanComparison from "../../../components/planComparison/planComparison";
 import { ordenarPlanesPorPrecio } from "../../../utils/planUtils";
+import HeaderCrud from "../../../components/componentsShare/header/HeaderCrud";
 import "./planes.css";
 
 const Planes = () => {
@@ -86,8 +87,11 @@ const Planes = () => {
   const planPopularIndex = determinarPlanPopular(planes);
 
   return (
+    <div className="container">
+      <HeaderCrud title=" Planes Disponibles" widthPercent={100} />
     <div className="planes-page">
       <div className="container py-5">
+
         {/* Encabezado */}
         <header className="planes-header">
           <h1 className="planes-title">Elige tu Plan Ideal</h1>
@@ -131,6 +135,7 @@ const Planes = () => {
         {/* Tabla Comparativa */}
         {planes.length > 0 && <PlanComparison planes={planes} />}
       </div>
+    </div>
     </div>
   );
 };
