@@ -99,6 +99,7 @@ const LoginFormSection = ({ logo }) => {
 
     const handleRegister = () => {
         console.log('Register clicked');
+        navigate('/public/registro', { replace: true });
     };
 
     useEffect(() => {

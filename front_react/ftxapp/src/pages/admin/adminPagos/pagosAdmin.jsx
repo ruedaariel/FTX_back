@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import './PagosAdmin.css';
-import Modal from '../../../components/modal';
+import Modal from '../../../components/modal/modal';
 import PagoManualForm from '../../../components/pagoManualForm/pagoManualForm';
 import Button from '../../../components/form/button/button';
+import HeaderCrud from '../../../components/componentsShare/header/HeaderCrud';
 
 
 const PagosAdmin = () => {
@@ -10,6 +11,7 @@ const PagosAdmin = () => {
   const [loading, setLoading] = useState(false);
 
   const handleOpenModal = () => {
+    console.log("voy a abrir modal");
     setIsModalOpen(true);
   };
 
@@ -38,6 +40,8 @@ const PagosAdmin = () => {
   };
 
   return (
+    <div className="container">
+      <HeaderCrud title="Gestion de Pagos" widthPercent={100} />
     <div className="pagos-admin">
       <div className="pagos-admin-header">
         <h1 className="page-title">Gestión de Pagos</h1>
@@ -117,6 +121,7 @@ const PagosAdmin = () => {
           loading={loading}
         />
       </Modal>
+    </div>
     </div>
   );
 };
