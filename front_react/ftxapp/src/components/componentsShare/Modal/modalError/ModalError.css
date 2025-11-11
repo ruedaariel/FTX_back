@@ -1,9 +1,10 @@
 /* Modal Styles */
 .modal-temporizado {
-    position: fixed;
+    /* position: fixed;
     z-index: 2000;
     left: 0;
     top: 0;
+    max-width: 600px;
     width: 100%;
     height: 100%;
     overflow: auto;
@@ -11,6 +12,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
+     white-space: pre-wrap; 
+  word-wrap: break-word;
+  line-height: 1.5; */
+   position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.6); /* oscurece fondo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 
@@ -39,7 +53,7 @@
 
 .modal-content-temporizado {
     /* background-color: var(--color-fondo-gris-claro); */
-    background-color: var(--color-fondo-mas-oscuro);
+    /* background-color: var(--color-fondo-mas-oscuro);
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 5px 20px var(--color-sombra-container);
@@ -48,7 +62,16 @@
     min-width: 280px;
     max-width: 90%;
     text-align: center;
-    position: relative;
+    position: relative; */
+    background-color: var(--color-fondo-mas-oscuro);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 5px 20px var(--color-sombra-container);
+  color: var(--color-texto-claro);
+  max-width: 600px;
+  width: 90%;
+  text-align: center;
+  position: relative;
 }
 
 .modal-content-temporizado h1 {

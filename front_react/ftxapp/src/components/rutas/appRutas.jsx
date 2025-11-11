@@ -16,9 +16,11 @@ import UsuarioEstadistica from "../../pages/usuario/usuarioEstadistica/usuarioEs
 import Planes from "../../pages/public/planes";
 import RegistroUsuario from "../../pages/public/registro/RegistroUsuario";
 
+
 //import {   ReseteoPassword } from '../../pages/public/login/logins';
 //import  LoginBasico  from '../../pages/public/login/LoginBasico';
 import PagosAdmin from '../../pages/admin/adminPagos/pagosAdmin'
+import ResetPasswordPage from "../../pages/public/passwordReset/ResetePasswordPage";
 
 /* import Rutina from "../pages/Rutina";
 import Usuarios from "../pages/Usuarios";
@@ -34,6 +36,7 @@ const AppRutas = () => {
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/public/registro" element={<RegistroUsuario />} />
+      <Route path="/public/passwordReset" element={<ResetPasswordPage />} />
       {/* <Route path="/login2" element={<LoginBasico />} /> 
                 <Route path="/login-perfil" element={<LoginPerfil />} />
                 <Route path="/suscripcion" element={<LoginSuscripcion />} />

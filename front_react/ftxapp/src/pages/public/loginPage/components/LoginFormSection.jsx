@@ -95,6 +95,7 @@ const LoginFormSection = ({ logo }) => {
 
     const handleForgotPassword = () => {
         console.log('Forgot password clicked');
+        navigate('/public/passwordReset');
     };
 
     const handleRegister = () => {
