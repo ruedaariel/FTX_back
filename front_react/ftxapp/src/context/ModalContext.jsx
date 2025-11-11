@@ -119,7 +119,7 @@ const renderModal = () => {
         return (
           <ModalError
             isOpen={visible}
-            title="Error"
+            title="Se ha producido un Error"
             message={message}
             onClose={closeModal}
             borderClass="modal-error-border"
@@ -150,7 +150,7 @@ const renderModal = () => {
         <ModalInfoTemporizado
           isOpen={visible}
           message={message}
-          title={type === "info" ? "Info" : "Exito"}
+          title={type === "info" ? "Información" : "Operacion exitosa"}
           type={type}
           borderClass={
             type === "info" ? "modal-info-border" : "modal-success-border"

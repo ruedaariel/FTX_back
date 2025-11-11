@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import './modalError/modalError.css'; // Usá tus estilos existentes
+import "./modalError/modalError.css"; // Usá tus estilos existentes
 
 const ModalInfoTemporizado = ({
   isOpen,
@@ -44,7 +44,9 @@ const ModalInfoTemporizado = ({
           &times;
         </span>
         <h1>{title}</h1>
-        <p>{message}</p>
+        {message.split(", ").map((linea, index) => (
+          <p key={index}>{linea}</p>
+        ))}
         {autoCloseMs && (
           <div className="barra-progreso-temporizado">
             <div

@@ -73,17 +73,22 @@ function RegistroUsuario() {
       datosPersonales: {
         ...datos.datosPersonales,
         idPlan: parseInt(datos.datosPersonales.idPlan),
+        
+        
       },
       datosFisicos: datos.datosFisicos,
     };
 
+    console.log("payload", payload);
+
+
     await fetchGeneral({
-      url: "http://localhost:8000/apiFtx/auth/registro",
+      url: "http://localhost:8000/apiFtx/usuario/register",
       method: "POST",
       body: payload,
       showModal,
       onSuccess: () => {
-        showModal("Registro exitoso", "success", 2000);
+        showModal("¡Felicitaciones!  por dar este primer paso. \n \n Recibirás instrucciones en tu correo", "success", 2000);
       },
     });
   };
@@ -105,7 +110,20 @@ function RegistroUsuario() {
 
       <form
         className="registro-usuario-container"
-        onSubmit={handleSubmit(handleRegistro)}
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const valido = await trigger(); // valida todos los campos registrados
+
+          if (valido) {
+            handleRegistro(); // si todo está bien, se envía
+          } else {
+            showModal(
+              "Completa todos los campos obligatorios antes de crear tu cuenta",
+              "error",
+              2500
+            );
+          }
+        }}
       >
         {/* Navegación por pasos */}
         <div className="registro-tabs">
@@ -141,7 +159,9 @@ function RegistroUsuario() {
           {activeStep === "plan" && (
             <div className="fila-plan">
               <div className="campo-select-plan">
-                <label className="label-selector-planes-registro">Selecciona tu plan</label>
+                <label className="label-selector-planes-registro">
+                  Selecciona tu plan
+                </label>
                 <select
                   {...register("datosPersonales.idPlan", { required: true })}
                 >
@@ -158,10 +178,7 @@ function RegistroUsuario() {
               </div>
 
               <div className="boton-ver-detalles">
-                <button
-                  type="button"
-                  onClick={() => navigate("/admin/planes")}
-                >
+                <button type="button" onClick={() => navigate("/admin/planes")}>
                   Ver detalles de planes
                 </button>
               </div>
