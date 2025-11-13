@@ -4,11 +4,15 @@ import Modal from '../../../components/modal/modal';
 import PagoManualForm from '../../../components/pagoManualForm/pagoManualForm';
 import Button from '../../../components/form/button/button';
 import HeaderCrud from '../../../components/componentsShare/header/HeaderCrud';
+import { useModal } from "../../../context/ModalContext";
+
 
 
 const PagosAdmin = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const { showModal } = useModal();
 
   const handleOpenModal = () => {
     console.log("voy a abrir modal");
@@ -28,12 +32,15 @@ const PagosAdmin = () => {
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       console.log('Pago registrado exitosamente');
-      alert('Pago registrado exitosamente');
+      showModal("Pago registrado exitosamente", "success", 2000);
+      
+      // alert('Pago registrado exitosamente');
       
       setIsModalOpen(false);
     } catch (error) {
       console.error('Error al registrar pago:', error);
-      alert('Error al registrar el pago');
+      showModal("Error al registrar el pago", "error", 2000);
+      // alert('Error al registrar el pago');
     } finally {
       setLoading(false);
     }

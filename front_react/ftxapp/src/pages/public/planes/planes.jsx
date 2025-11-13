@@ -6,11 +6,13 @@ import PlanComparison from "../../../components/planComparison/planComparison";
 import { ordenarPlanesPorPrecio } from "../../../utils/planUtils";
 import HeaderCrud from "../../../components/componentsShare/header/HeaderCrud";
 import "./planes.css";
+import { useModal } from "../../../context/ModalContext";
 
 const Planes = () => {
   const [planes, setPlanes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { showModal } = useModal();
 
   useEffect(() => {
     cargarPlanes();
@@ -37,7 +39,8 @@ const Planes = () => {
     console.log("Plan seleccionado:", plan);
     // Aquí puedes agregar lógica para navegar a otra página o abrir un modal
     // Por ejemplo: navigate('/checkout', { state: { plan } });
-    alert(`Has seleccionado el plan: ${plan.nombrePlan}`);
+    showModal(`Has seleccionado el plan: ${plan.nombrePlan}`, "success", 2000);
+    // alert(`Has seleccionado el plan: ${plan.nombrePlan}`);
   };
 
   const determinarPlanPopular = (planes) => {

@@ -37,15 +37,21 @@ const AdminDashboard = () => {
   
       if (isTokenExpired(datos)) {
         sessionStorage.removeItem("ftxAccessToken");
+        console.log("Sesión expirada, token vencido");
         showModal("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.", "error", 3000);
         setTimeout(() => {
           navigate("/login");
-        }, 3000);
+        }, 5000);
         return;
       }
   
       setTokenUsuario(datos);
     } else {
+      console.log("Sesión expirada no hay token");
+      showModal("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.", "info", 3000);
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
       navigate("/login");
     }
   }, []);

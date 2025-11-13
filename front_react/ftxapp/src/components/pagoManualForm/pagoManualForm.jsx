@@ -96,7 +96,7 @@ const PagoManualForm = ({ onSubmit, onCancel }) => {
       
     } catch (error) {
       console.error('❌ Error al procesar el pago:', error);
-      alert(`❌ Error: ${error.message}`);
+      // alert(`❌ Error: ${error.message}`);
     } finally {
       setIsSubmitting(false);
     }
