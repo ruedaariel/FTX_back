@@ -4,7 +4,7 @@ import React from 'react';
 function CardUsuario({ usuario, activeTab, setActiveTab, handleEditar, handleEliminarClick }) {
   const tab = activeTab[usuario.id];
 
-  console.log ("ImagemPerfil:",usuario.datosPersonales.imagenPerfil);
+  // console.log ("ImagemPerfil:",usuario.datosPersonales.imagenPerfil);
 
   return (
     <div className="card-usuario">

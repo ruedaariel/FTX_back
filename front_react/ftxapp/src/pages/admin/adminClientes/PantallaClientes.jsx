@@ -19,6 +19,7 @@ const handleResetFiltro = () => {
     setEstadoSeleccionado("activo");
   };
 
+  // console.log("setMostrarModalBUasqueda",mostrarModalBusqueda);
   return (
     <>
     <div className="container" >

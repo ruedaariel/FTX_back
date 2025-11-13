@@ -48,16 +48,16 @@ const TablaUsuarios = ({ estadoFiltro, filtrosAvanzados }) => {
     obtenerUsuarios();
   }, []);
 
-  //  Función para mostrar el modal informativo con cierre automático
-  const mostrarModal = ({ title, message, borderClass, autoCloseMs }) => {
-    setModalConfig({ isOpen: true, title, message, borderClass, autoCloseMs });
+  // //  Función para mostrar el modal informativo con cierre automático
+  // const mostrarModal = ({ title, message, borderClass, autoCloseMs }) => {
+  //   setModalConfig({ isOpen: true, title, message, borderClass, autoCloseMs });
 
-    if (autoCloseMs) {
-      setTimeout(() => {
-        setModalConfig((prev) => ({ ...prev, isOpen: false }));
-      }, autoCloseMs);
-    }
-  };
+  //   if (autoCloseMs) {
+  //     setTimeout(() => {
+  //       setModalConfig((prev) => ({ ...prev, isOpen: false }));
+  //     }, autoCloseMs);
+  //   }
+  // };
 
   //  Filtro avanzado aplicado sobre la lista de usuarios
   const usuariosFiltrados = usuarios.filter((usuario) => {

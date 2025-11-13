@@ -15,7 +15,7 @@ function ModalEditarUsuario({ usuario, onClose, onGuardar }) {
 });
 
 
-
+// console.log("Renderizando ModalEditarUsuario con datos:", formData)
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -53,9 +53,9 @@ function ModalEditarUsuario({ usuario, onClose, onGuardar }) {
   // console.log("Renderizando ModalEditarUsuario con datos:", formData);
 
   return (
-    <div className="modal-overlay">
-  <div className="modal-overlay">
-  <div className="modal-contenido" ref={modalRef}>
+    <div className="modal-overlay-editar">
+  <div className="modal-overlay-editar">
+  <div className="modal-contenido-editar" ref={modalRef}>
     <CardUsuarioEditable
       usuario={usuario}
       activeTab={activeTab}
@@ -69,8 +69,8 @@ function ModalEditarUsuario({ usuario, onClose, onGuardar }) {
         alert("Eliminar desde el modal no está habilitado.");
       }}
     />
-    <div className="modal-botones">
-      <button type="button" className="btn-cerrar-modal" onClick={onClose}>Cerrar</button>
+    <div className="modal-botones-editar">
+      <button type="button" className="btn-cerrar-modal-editar" onClick={onClose}>Cerrar</button>
     </div>
   </div>
 </div>

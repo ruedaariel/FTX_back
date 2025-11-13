@@ -1,4 +1,4 @@
-.modal-overlay {
+.modal-overlay-editar {
   position: fixed;
   top: 1rem;
   width: 100vw;
@@ -13,8 +13,8 @@
   padding: 1rem;
 }
 
-.modal-contenido {
-  background-color: var(--color-secundario-naranja-opaco);
+.modal-contenido-editar {
+  background-color: var(--color-fondo-mas-oscuro);
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -27,7 +27,7 @@
   box-sizing: border-box;
 }
 
-.modal-contenido h2 {
+.modal-contenido-editar h2 {
   font-size: 1.6rem;
   margin-bottom: 1rem;
   text-align: center;
@@ -73,7 +73,7 @@
   margin-right: auto;
 }
 
-.modal-botones {
+.modal-botones-editar {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
@@ -82,7 +82,7 @@
 }
 
 .btn-guardar-cambios,
-.btn-cerrar-modal {
+.btn-cerrar-modal-editar {
   flex: 1;
   padding: 0.6rem 1rem;
   border: none;
@@ -100,11 +100,11 @@
   background-image: var(--gradiente-boton-hover);
 }
 
-.btn-cerrar-modal {
+.btn-cerrar-modal-editar {
   background-color: var(--color-fondo-mas-oscuro);
 }
 
-.btn-cerrar-modal:hover {
+.btn-cerrar-modal-editar:hover {
   background-color: var(--color-secundario-naranja)
 }
 
@@ -132,7 +132,7 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .modal-contenido {
+  .modal-contenido-editar {
     width: 95vw;
     max-height: 90vh;
     overflow-y: auto;
@@ -140,13 +140,13 @@
     padding: 1rem;
   }
 
-  .modal-botones {
+  .modal-botones-editar {
     flex-direction: column;
     align-items: stretch;
   }
 
   .btn-guardar-cambios,
-  .btn-cerrar-modal {
+  .btn-cerrar-modal-editar {
     width: 100%;
     min-width: unset;
   }
@@ -165,12 +165,12 @@
 }
 
 @media (max-width: 480px) {
-  .modal-contenido {
+  .modal-contenido-editar {
     padding: 0.8rem;
     font-size: 0.95rem;
   }
 
-  .modal-contenido h2 {
+  .modal-contenido-editar h2 {
     font-size: 1.3rem;
   }
 

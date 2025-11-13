@@ -69,7 +69,7 @@ const ResetPasswordPage = () => {
               <span className="error">{errors.email.message}</span>
             )}
 
-            <button type="submit">Enviar instrucciones</button>
+            <button type="submit">Enviar</button>
           </form>
 
           <div className="reset-links">

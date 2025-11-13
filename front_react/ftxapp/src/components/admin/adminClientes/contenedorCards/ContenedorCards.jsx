@@ -20,6 +20,11 @@ function ContenedorCards({
   setMostrarErrorAcceso,
   obtenerUsuarios,
 }) {
+
+
+  // console.log("Renderizando ContenedorCards con datos:",usuariosFiltrados);
+  
+
   return (
     <div className="contenedor-cards">
       {usuariosFiltrados

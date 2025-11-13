@@ -4,7 +4,7 @@
   border: 1px solid var(--color-borde);
   border-radius: 12px;
   padding: 1rem;
-  box-shadow: 0 4px 10px var(--color-sombra-container);
+  box-shadow: 0 4px 10px var(--color-primario-naranja);
   color: var(--color-texto-claro);
   font-family: 'Segoe UI', sans-serif;
   position: relative;
@@ -62,7 +62,7 @@
   display: grid;
   grid-template-columns: 140px 1fr 120px;
   grid-template-rows: auto auto auto;
-  gap: 1rem;
+  gap: .5rem;
   background-color: var(--color-fondo-gris-claro);
   padding: 1rem;
   border-radius: 10px;

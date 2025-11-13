@@ -7,23 +7,25 @@ function ModalBusqueda({ isOpen, onClose, onBuscar }) {
   const [apellido, setApellido] = useState('');
   const [nombre, setNombre] = useState('');
 
+  // console.log("isOpen",isOpen);
+
   if (!isOpen) return null;
 
   const handleSubmit = () => {
   if (!email && !dni && !apellido && !nombre) {
-    // Si no hay criterios, podrías mostrar un aviso o simplemente cerrar
+    // Si no hay criterios, se cierra sin hacer nada
     onClose();
     return;
   }
-  console.log('Criterios:', { email, dni, apellido, nombre });
+  // console.log('Criterios:', { email, dni, apellido, nombre });
   onBuscar({ email, dni, apellido, nombre});
   onClose();
 };
 
   return (
-    <div className="modal">
-      <div className="modal-content modal-info-border">
-        <span className="close-button" onClick={onClose}>&times;</span>
+    <div className="modal-busqueda">
+      <div className="modal-content-busqueda modal-info-border-busqueda">
+        {/* <span className="close-button" onClick={onClose}>&times;</span> */}
         <h2>Buscar clientes</h2>
 
         <div className="campo-busqueda">
