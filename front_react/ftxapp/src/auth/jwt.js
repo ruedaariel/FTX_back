@@ -8,13 +8,16 @@ import jwtDecode from 'jwt-decode';
                    rol: unUsuario.rol,
                }; */
 
-               
+
 // Decodifica payload
 export function decodeToken(token) {
   try {
     return jwtDecode(token); // payload
   } catch {
     return null;
+
+
+    
   }
 }
 

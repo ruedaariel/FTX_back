@@ -57,10 +57,10 @@ export class UsuarioService {
 
     try {
       //validar la existencia del plan, se llama al metodo de Plan.service. Devuelve null si no lo encuentra
-      const unPlan = null;
+     let unPlan: PlanEntity | null = null;
       if (body.datosPersonales) {
         if (body.datosPersonales.idPlan) {
-          const unPlan = await this.planService.findOneById(body.datosPersonales.idPlan);
+          unPlan = await this.planService.findOneById(body.datosPersonales.idPlan);
           if (!unPlan) {
             throw new ErrorManager("NOT_FOUND", `No existe el plan ${body.datosPersonales.idPlan}`);
           }
