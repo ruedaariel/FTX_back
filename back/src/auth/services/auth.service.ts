@@ -6,6 +6,7 @@ import * as bcrypt from 'bcrypt';
 import { ErrorManager } from '../../config/error.manager';
 import { plainToInstance } from 'class-transformer';
 import * as jwt from 'jsonwebtoken';
+import type { JwtPayload, Secret, SignOptions } from 'jsonwebtoken';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsuarioEntity } from 'src/usuario/entities/usuario.entity';
 import { Repository } from 'typeorm';
@@ -22,8 +23,12 @@ export class AuthService {
             //no uso em metodo del service porque tengo que impoertar tooodo del usuario :(
             const unUsuario = await this.usuarioRepository.findOneBy({ email: body.email });
 
-            if (!unUsuario || unUsuario.estado === ESTADO.ARCHIVADO) {
+            if (!unUsuario) {
                 throw new ErrorManager('UNAUTHORIZED', 'Email incorrecto');
+            }
+
+            if (unUsuario.estado === ESTADO.ARCHIVADO) {
+                throw new ErrorManager('UNAUTHORIZED', 'Tu cuenta está inactiva.\nContactá al administrador para reactivarla.');
             }
 
             const passwordValida = await bcrypt.compare(body.password, unUsuario.password);
@@ -38,11 +43,6 @@ export class AuthService {
                }; */
 
 
-            /* const secret = process.env.JWT_SECRET;
-            if (!secret) throw new Error('JWT_SECRET no definido en variables de entorno'); */
-
-            /* const token = jwt.sign(payload, secret, { expiresIn: '1h' });
- */
             const token = await this.generateJWT(unUsuario)
             const usuarioRtaDto = plainToInstance(LoginRtaDto, {
                 ...unUsuario, token
@@ -54,10 +54,6 @@ export class AuthService {
         } catch (err) { throw ErrorManager.handle(err) }
     }
 
-    /* public signJWT({
-        payload,secret,expires, }: {payload:jwt.JwtPayload; secret: string; expires: number | string}) {
-            return jwt.sign(payload, secret, {expiresIn: expires});
-        } */
 
     public async generateJWT(usuario: UsuarioEntity): Promise<string> {
 
@@ -68,8 +64,8 @@ export class AuthService {
         };
         const secret = process.env.JWT_SECRET;
         if (!secret) throw new Error('JWT_SECRET no definido en variables de entorno');
-
-        return jwt.sign(payload, secret, { expiresIn: '1h' });
+ 
+        return jwt.sign(payload, secret, { expiresIn: '2h' });
 
     }
 

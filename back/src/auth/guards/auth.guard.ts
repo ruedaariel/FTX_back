@@ -1,10 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
-import { Observable } from 'rxjs';
 import { PUBLIC_KEY } from 'src/constantes/key-decorators';
 import { IuseToken } from 'src/interfaces/auth.interface';
-import { UsuarioService } from 'src/usuario/services/usuario.service';
 import { useToken } from 'src/utils/use-token';
 
 @Injectable()
@@ -44,15 +42,7 @@ export class AuthGuard implements CanActivate {
     }
 
     const {sub} = manageToken;
- /*    const user = await this.usuarioService.findUsuarioById(sub);
-
-    if (!user) {
-      throw new UnauthorizedException('Usuario invalido');
-    }
-//Asigna req.idUser = user.id y req.rolUser = user.rol para que controladores  puedan acceder al id y rol del usuario autenticado.
-    req.idUser = user.id
-    req.rolUser = user.rol */
-
+ 
     const { rol } = manageToken;
     req.idUser = String(sub);
     req.rolUser = String(rol);

@@ -4,7 +4,8 @@ import * as jwt from 'jsonwebtoken';
 export const useToken = (token: string): IuseToken | string => {
     try {
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET!) as unknown; //sino daba error, recibe cualquier cosa
+        const decoded = jwt.verify(token, process.env.JWT_SECRET!, {
+    ignoreExpiration: true }) as unknown; //sino daba error, recibe cualquier cosa
 
         if (
             typeof decoded === 'object' &&
@@ -13,13 +14,13 @@ export const useToken = (token: string): IuseToken | string => {
             'rol' in decoded
         ) {
             const payload = decoded as IauthTokenResult;
-            const currentDate = new Date();
-            const expiresDate = new Date(payload.exp);
+            const currentDateMs = new Date().getTime();
+            const expiresDateMs = payload.exp*1000; //exp esta en seg y new Date espera miliseg --> convertimos a miliseg
             return {
                 sub: payload.sub,
                 email: payload.email,
                 rol: payload.rol,
-                isExpired: +expiresDate <= +currentDate / 1000 // /1000 para convertir la fecha a seg
+                isExpired: expiresDateMs <= currentDateMs 
             }
         } else {
             throw new Error('Token inválido o incompleto');
@@ -27,6 +28,6 @@ export const useToken = (token: string): IuseToken | string => {
 
 
     } catch (error) {
-        return 'Token invalido'
+        return 'Token invalido de usetoken'
     }
 }

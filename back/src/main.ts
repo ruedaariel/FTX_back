@@ -4,7 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import { CORS } from './constantes';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import * as express from 'express';
-import 'reflect-metadata';
+//import 'reflect-metadata';
+
 /* import { Logger } from '@nestjs/common';
 
 const logger = new Logger('Bootstrap');
@@ -21,10 +22,6 @@ process.on('unhandledRejection', (reason) => {
 async function bootstrap() {
 
   const app = await NestFactory.create(AppModule);
-
-  
-
-  
 
   app.useGlobalPipes(new ValidationPipe({ //convierte automaticamente de cadena a numero o de cadena a boolean
     transformOptions: {

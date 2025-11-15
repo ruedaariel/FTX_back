@@ -10,7 +10,7 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 
 @Controller('usuario')
-//@UseGuards(AuthGuard)
+@UseGuards(AuthGuard)
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService
   ) { }
@@ -76,9 +76,6 @@ public async updateImagenPerfil(
     return await this.usuarioService.deleteUsuario(+id);
   }
 
- /*  @Post('login')
-  public async login(@Body() body: LoginDto) {
-    return await this.usuarioService.loginUsuario(body);
-  } */
+
 
 }
