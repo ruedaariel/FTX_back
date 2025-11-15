@@ -145,7 +145,11 @@ const renderModal = () => {
 
     case "info":
     case "success":
+
     default:
+
+      if(duration > 0 && !persistente) {
+
       return (
         <ModalInfoTemporizado
           isOpen={visible}
@@ -159,8 +163,24 @@ const renderModal = () => {
           autoCloseMs={duration}
         />
       );
-  }
+    } else {
 
+      return (
+        <ModalError
+          isOpen={visible}
+          message={message}
+          title={type === "info" ? "Información" : "Operacion exitosa"}
+          type={type}
+          borderClass={
+            type === "info" ? "modal-info-border" : "modal-success-border"
+          }
+          onClose={closeModal}
+          autoCloseMs={duration}
+        />
+      );
+
+    }
+  }
   return null;
 };
 

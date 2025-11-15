@@ -38,6 +38,7 @@ const UsuarioDashboard = () => {
   useEffect(() => {
   const token = getToken("ftxAccessToken");
   if (token) {
+    console.log("token", token);
     const datos = decodeToken(token);
 
     if (isTokenExpired(datos)) {
@@ -80,7 +81,7 @@ const UsuarioDashboard = () => {
 }, [tokenUsuario]);
 
     
-  console.log("usuario",usuario);
+  // console.log("usuario",usuario);
 
 
 

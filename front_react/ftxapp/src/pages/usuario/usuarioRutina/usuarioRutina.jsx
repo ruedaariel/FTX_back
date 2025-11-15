@@ -11,8 +11,8 @@ import { useModal } from "../../../context/ModalContext.jsx";
 
 // Utilidades
 import { fetchGeneral } from "../../../components/componentsShare/utils/fetchGeneral.js";
-import RutinaPorSemana from "../../../components/usuario/usuarioRutina/RutinaPorSemana.jsx";
-import RutinaInteractiva from "../../../components/usuario/usuarioRutina/RutinaGenericaInteractiva.jsx";
+// import RutinaPorSemana from "../../../components/usuario/usuarioRutina/RutinaPorSemana.jsx";
+import RutinaInteractiva from "./components/RutinaGenericaInteractiva.jsx";
 
 
 function UsuarioRutina() {
