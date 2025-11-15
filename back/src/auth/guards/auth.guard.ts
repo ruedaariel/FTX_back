@@ -42,10 +42,11 @@ export class AuthGuard implements CanActivate {
     }
 
     const {sub} = manageToken;
- 
+    const { email } = manageToken;
     const { rol } = manageToken;
     req.idUser = String(sub);
     req.rolUser = String(rol);
+    req.emailUser = String(email);
     return true;
   }
 }
