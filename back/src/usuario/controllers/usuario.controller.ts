@@ -7,10 +7,14 @@ import { imagenPerfilInterceptor } from '../../interceptors/imagen-perfil.interc
 import { ErrorManager } from '../../config/error.manager';
 import { UpdateUsuarioAdmDto } from '../dto/update-Usuario-adm.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { Rol } from 'src/auth/decorators/roles.decorator';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { AdminAccess } from 'src/auth/decorators/admin.decorator';
+
 
 
 @Controller('usuario')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService
   ) { }
@@ -24,13 +28,15 @@ export class UsuarioController {
     return await this.usuarioService.findAllUsuarios();
   }
 
+ // @Rol('ADMIN')
   @Get(':id') //si en @Param no uso 'id', la variable id:number lo toma como objeto y se debe desestructurar en el curpo del controller
   public async findUsuarioById(@Param('id', ParseIntPipe) id: number) { //controla si llega un entero y lanza el error
     return await this.usuarioService.findUsuarioById(id);
   }
 
+ // @AdminAccess()
   @Get('rutinas/:id')
-  public async findRutinasxId(@Param('id', ParseIntPipe) id:number) {
+  public async findRutinasxId(@Param('id', ParseIntPipe) id: number) {
     return await this.usuarioService.findRutinasxId(id);
   }
 
@@ -41,31 +47,31 @@ export class UsuarioController {
 
 
   @Patch('update/:id')
-   public async update(
+  public async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUsuarioDto: UpdateUsuarioDto,) {
     return await this.usuarioService.updateUsuario(id, updateUsuarioDto);
   }
 
   // usuario.controller.ts
-@Patch(':id/imagen-perfil') // Nuevo endpoint solo para la imagen
-@UseInterceptors(imagenPerfilInterceptor())
-public async updateImagenPerfil(
-  @Param('id', ParseIntPipe) id: number,
-  @UploadedFile() file: Express.Multer.File,
-) {
-  if (!file) {
-    throw new ErrorManager('BAD_REQUEST', 'No se ha subido ningún archivo.');
+  @Patch(':id/imagen-perfil') // Nuevo endpoint solo para la imagen
+  @UseInterceptors(imagenPerfilInterceptor())
+  public async updateImagenPerfil(
+    @Param('id', ParseIntPipe) id: number,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    if (!file) {
+      throw new ErrorManager('BAD_REQUEST', 'No se ha subido ningún archivo.');
+    }
+
+    // Llama a un nuevo método en tu servicio para actualizar solo la imagen de perfil
+    const imagenActualizada = await this.usuarioService.updateImagenPerfil(id, file.filename);
+
+    return imagenActualizada;
   }
-  
-  // Llama a un nuevo método en tu servicio para actualizar solo la imagen de perfil
-  const imagenActualizada = await this.usuarioService.updateImagenPerfil(id, file.filename);
-  
-  return imagenActualizada;
-}
 
   @Patch('update-basico/:id')
-   public async updateBasico(
+  public async updateBasico(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUsuarioAdmDto: UpdateUsuarioAdmDto,) {
     return await this.usuarioService.updateUsuarioBasico(id, updateUsuarioAdmDto);
