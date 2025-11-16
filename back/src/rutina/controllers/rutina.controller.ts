@@ -5,6 +5,7 @@ import { UpdateRutinaDto } from '../dto/update-rutina.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Rol } from 'src/auth/decorators/roles.decorator';
+import { EstadoDto } from '../dto/estado.dto';
 
 
 @Controller('rutina')
@@ -47,5 +48,12 @@ export class RutinaController {
   @Delete('delete/:id')
   public async deleteRutina(@Param('id', ParseIntPipe) id: number) {
     return this.rutinaService.deleteRutina(id);
+  }
+
+  @Rol('USUARIO')
+  @Put('updateEstado/:id')
+  public async updateEstado(@Param('id', ParseIntPipe) id: number, @Body() body: EstadoDto) {
+    //uso CreateRutinaDto para obligar a que traiga todos los campos como si estuviera creando una nueva rutina
+    return this.rutinaService.updateEstado(id, body);
   }
 }
