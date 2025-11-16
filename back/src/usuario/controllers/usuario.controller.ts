@@ -10,11 +10,13 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { Rol } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { AdminAccess } from 'src/auth/decorators/admin.decorator';
+import { AccessLevelGuard } from 'src/auth/guards/access-level.guard';
+import { AccessLevel } from 'src/auth/decorators/access-level.decorator';
 
 
 
 @Controller('usuario')
-@UseGuards(AuthGuard, RolesGuard)
+@UseGuards(AuthGuard, RolesGuard, AccessLevelGuard)
 export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService
   ) { }
@@ -29,6 +31,7 @@ export class UsuarioController {
   }
 
  // @Rol('ADMIN')
+ @AccessLevel(30)
   @Get(':id') //si en @Param no uso 'id', la variable id:number lo toma como objeto y se debe desestructurar en el curpo del controller
   public async findUsuarioById(@Param('id', ParseIntPipe) id: number) { //controla si llega un entero y lanza el error
     return await this.usuarioService.findUsuarioById(id);
@@ -70,12 +73,14 @@ export class UsuarioController {
     return imagenActualizada;
   }
 
+  //update que viene del admin
   @Patch('update-basico/:id')
   public async updateBasico(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUsuarioAdmDto: UpdateUsuarioAdmDto,) {
     return await this.usuarioService.updateUsuarioBasico(id, updateUsuarioAdmDto);
   }
+
 
   @Delete('delete/:id')
   public async deleteUsuario(@Param('id') id: string) {

@@ -31,6 +31,19 @@ export class UsuarioEntity implements IUsuario {
     @Column({ type: 'enum', enum: ESTADO, default: ESTADO.ACTIVO })
     estado: ESTADO;
 
+    // Fecha en que se cambió la contraseña por última vez
+    @Column({ type: 'timestamp', name: 'password_changed_at', nullable: true , default: null})
+    passwordChangedAt: Date | null;
+
+    // Nivel entre 0 y 100
+    //level 0: primera vez
+    //level: 1 no pago
+    //level: 10, 20, 30, etc accessos segun el plan (pago)
+    //level 90 ->admin
+    //level 100 -> superadmin
+    @Column({ type: 'smallint', default: 0 })
+    level: number;
+
     @Column({ type: 'timestamp', name: 'f_baja', nullable: true }) //para borrado logico
     fBaja: Date | null;
 
