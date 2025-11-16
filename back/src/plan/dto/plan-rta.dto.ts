@@ -8,7 +8,7 @@ export class PlanRtaDto {
   nombrePlan: string;
 
   // Otros campos que quieras exponer, como el precio
- // @Exclude()
+  // @Exclude()
   @Expose()
   precio: number;
 
@@ -19,6 +19,9 @@ export class PlanRtaDto {
 
   @Exclude()
   beneficios: string;
+
+  // @Exclude()
+  // level: number;
 
   @Exclude()
   fCambio: Date;

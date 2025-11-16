@@ -10,7 +10,7 @@ import { DatosPersonalesEntity } from '../../usuario-datos-personales/entities/d
 import { DatosFisicosEntity } from '../../usuario-datos-fisicos/entities/datos-fisicos.entity';
 import { PlanService } from '../../plan/services/plan.service';
 import { ESTADO } from '../../constantes/estado.enum';
-import { RutinaEntity } from '../../rutina/entities/rutina.entity';
+import { ESTADORUTINA, RutinaEntity } from '../../rutina/entities/rutina.entity';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from '../../shared/email/email.service';
 import { generateRandomPassword } from '../../utils/random-password';
@@ -57,7 +57,7 @@ export class UsuarioService {
 
     try {
       //validar la existencia del plan, se llama al metodo de Plan.service. Devuelve null si no lo encuentra
-     let unPlan: PlanEntity | null = null;
+      let unPlan: PlanEntity | null = null;
       if (body.datosPersonales) {
         if (body.datosPersonales.idPlan) {
           unPlan = await this.planService.findOneById(body.datosPersonales.idPlan);
@@ -170,11 +170,11 @@ export class UsuarioService {
       }
 
       const usuariosDto = plainToInstance(UsuarioDatosCompletosRtaDto, usuarios);
-     /*  usuariosDto.forEach((usuario) => {
-        if (usuario.datosPersonales?.imagenPerfil) {
-          usuario.datosPersonales.imagenPerfil = this.fileImgService.construirUrlImagen(usuario.datosPersonales.imagenPerfil, "perfiles");
-        }
-      }) */
+      /*  usuariosDto.forEach((usuario) => {
+         if (usuario.datosPersonales?.imagenPerfil) {
+           usuario.datosPersonales.imagenPerfil = this.fileImgService.construirUrlImagen(usuario.datosPersonales.imagenPerfil, "perfiles");
+         }
+       }) */
 
       return usuariosDto
     } catch (err) {
@@ -220,7 +220,6 @@ export class UsuarioService {
       where: { id: id },
       relations: ['rutinas']
     });
-    console.log(usuarioConRutinas);
     if (usuarioConRutinas && usuarioConRutinas.length > 0 && usuarioConRutinas[0].rutinas) {
       const rutinasDto: RutinasUsuarioRtaDto[] = usuarioConRutinas[0].rutinas.map((r) => ({
         idUsuario: id,
@@ -231,6 +230,8 @@ export class UsuarioService {
       }))
       console.log(rutinasDto);
       return rutinasDto
+
+
     } else return null
 
   }

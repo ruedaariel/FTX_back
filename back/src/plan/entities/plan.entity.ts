@@ -21,6 +21,15 @@ export class PlanEntity implements IPlan {
     @Column({ type: 'decimal', precision: 8, scale: 2 })
     precio: number;
 
+     // Nivel entre 0 y 100
+    //level 0: primera vez
+    //level: 1 no pago
+    //level: 10, 20, 30, etc accessos segun el plan (pago)
+    //level 90 ->admin
+    //level 100 -> superadmin
+    // @Column({ type: 'smallint', default: 0 })
+    // level: number;
+
     @CreateDateColumn({ //agrega automaticamente la fecha-hora del servidor, el name permite la creacion en la bd con snakeCase
         type: 'timestamp'
     })

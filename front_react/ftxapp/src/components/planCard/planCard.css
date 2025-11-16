@@ -60,10 +60,14 @@
 }
 
 .plan-card__title {
-  color: var(--color-texto-claro);
+  color: var(--color-primario-naranja);
   font-size: 1.5rem;
   margin-bottom: 1rem;
   font-weight: 500;
+}
+
+.plan-card__header h2.text-muted {
+  color: var(--color-secundario-naranja-claro)!important;
 }
 
 .plan-card--popular .plan-card__title {
@@ -71,7 +75,7 @@
 }
 
 .plan-card__price {
-  font-size: 3rem;
+  font-size: 2.75rem;
   font-weight: 700;
   color: var(--color-texto-claro);
   margin-bottom: 0.5rem;
