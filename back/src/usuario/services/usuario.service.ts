@@ -272,8 +272,11 @@ export class UsuarioService {
       if (usuarioGuardado.estado == ESTADO.ARCHIVADO) {
         throw new ErrorManager("BAD_REQUEST", "El usuario esta dado de baja");
       }
+
+      console.log("body", body);
       if (body.datosBasicos && Object.keys(body.datosBasicos).length > 0) { //que no sea null o undefined y que no sea vacio
         if (body.datosBasicos.password) {
+          console.log("password nuevo",body.datosBasicos.password);
           usuarioGuardado.password = await bcrypt.hash(body.datosBasicos.password, +process.env.HASH_SALT);
 
           delete body.datosBasicos.password;

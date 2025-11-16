@@ -1,6 +1,6 @@
 
 // src/auth/token.js
-const KEY = 'ftxAccessToken';
+const KEY = 'ftx_token';
 
 export function saveToken(token) {
   if (!token) return;

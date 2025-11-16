@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate {
 
    //lee la cabecera
     const token = req.headers['ftx_token']
-
+   
     if (!token || Array.isArray(token)) {
       throw new UnauthorizedException('Token invalido')
     }

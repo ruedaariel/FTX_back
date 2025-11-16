@@ -1,4 +1,5 @@
 import { extraerMensajeError } from "./extraerMensajeError";
+import { getToken } from "../../../auth/token";
 
 /**
  * Función genérica para realizar peticiones HTTP con manejo centralizado de errores, modales y estados.
@@ -40,6 +41,15 @@ export const fetchGeneral = async ({
   // Detectar si el body es FormData
   const isFormData = body instanceof FormData;
 
+
+  const token = getToken();
+
+  // console.log("token en fetchGeneral", token);
+  if (token) {
+  headers["ftx_token"] = token;
+}
+
+
   // Configurar opciones de la petición
   const fetchOptions = {
     method,
@@ -62,6 +72,9 @@ export const fetchGeneral = async ({
   if (!isFormData) {
     fetchOptions.headers = headers;
   }
+
+  // console.log("fetchOptions", fetchOptions);
+
 
   try {
     // Ejecutar la petición

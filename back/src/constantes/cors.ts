@@ -5,7 +5,7 @@ export const CORS: CorsOptions = {
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
   credentials: true,
   // 
-  allowedHeaders: ['Content-Type', 'Accept', 'Authorization'], // ✅ correcto
+  allowedHeaders: ['Content-Type', 'Accept', 'Authorization', 'ftx_token'], 
 
 };
 

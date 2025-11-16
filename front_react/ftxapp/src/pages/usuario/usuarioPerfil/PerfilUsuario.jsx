@@ -94,12 +94,19 @@ function PerfilUsuario() {
   
   const handleGuardarPerfil = async (data) => {
     const datosTransformados = mapearFormularioParaBackend(data);
+
+    
     const cambios = extraerCambios(original, datosTransformados);
+    // console.log("datostransformados",datosTransformados);
+    
+
+    // console.log("cambios-----",cambios);
 
     // Normaliza fecha si fue modificada
-    if (cambios.datosPersonales.fNacimiento) {
+    if (cambios.datosPersonales?.fNacimiento)  {
       cambios.datosPersonales.fNacimiento = normalizarFechaParaBackend(cambios.datosPersonales.fNacimiento);
     }
+
 
     // Enviar al backend
     await fetchGeneral({
