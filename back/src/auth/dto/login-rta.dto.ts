@@ -18,13 +18,13 @@ export class LoginRtaDto {
 
     @Exclude()
     password: string;
-    
-       @Exclude()
+
+    @Exclude()
     level: number;
 
     @Exclude()
     passwordChangedAt: Date | null;
-    
+
     @Exclude()
     fBaja: Date;
 
@@ -33,6 +33,10 @@ export class LoginRtaDto {
 
     @Exclude()
     fUltimoAcceso: Date;
-    
+
+    @Expose()
     token: string;
+
+    @Expose()
+    message: string;
 }

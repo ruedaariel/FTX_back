@@ -21,7 +21,13 @@ export class AuthService {
         try {
 
             //no uso em metodo del service porque tengo que impoertar tooodo del usuario :(
-            const unUsuario = await this.usuarioRepository.findOneBy({ email: body.email });
+            const unUsuario = await this.usuarioRepository.findOne({
+                where: { email: body.email },
+                relations: ['datosPersonales', 'datosPersonales.plan', 'pagos']
+            }
+            );
+
+            console.log("unusuario ---->", unUsuario);
 
             if (!unUsuario) {
                 throw new ErrorManager('UNAUTHORIZED', 'Email incorrecto');
@@ -48,7 +54,10 @@ export class AuthService {
                 ...unUsuario, token
                 , // agregás el token al DTO
             })
-
+            if (unUsuario.level === 0) {
+             //   cambiar el label por el label del plan
+           //     unUsuario.level = unUsuario.datosPersonales?.plan?.
+            }
             return usuarioRtaDto;
 
         } catch (err) { throw ErrorManager.handle(err) }
@@ -64,7 +73,7 @@ export class AuthService {
         };
         const secret = process.env.JWT_SECRET;
         if (!secret) throw new Error('JWT_SECRET no definido en variables de entorno');
- 
+
         return jwt.sign(payload, secret, { expiresIn: '2h' });
 
     }
