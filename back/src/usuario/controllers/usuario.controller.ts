@@ -12,8 +12,9 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { AdminAccess } from 'src/auth/decorators/admin.decorator';
 import { AccessLevelGuard } from 'src/auth/guards/access-level.guard';
 import { AccessLevel } from 'src/auth/decorators/access-level.decorator';
+import { PublicAccess } from 'src/auth/decorators/public.decorator';
 
-
+//@AccessLevel(30)
 
 @Controller('usuario')
 @UseGuards(AuthGuard, RolesGuard, AccessLevelGuard)
@@ -21,34 +22,36 @@ export class UsuarioController {
   constructor(private readonly usuarioService: UsuarioService
   ) { }
 
+  @PublicAccess()
   @Post('register')
   public async registerUsuario(@Body() body: CreateUsuarioDto) {
     return await this.usuarioService.createUsuario(body);
   }
+
+  @Rol('ADMIN')
   @Get('all')
   public async findAllUsuarios() {
     return await this.usuarioService.findAllUsuarios();
   }
 
- // @Rol('ADMIN')
- @AccessLevel(30)
   @Get(':id') //si en @Param no uso 'id', la variable id:number lo toma como objeto y se debe desestructurar en el curpo del controller
   public async findUsuarioById(@Param('id', ParseIntPipe) id: number) { //controla si llega un entero y lanza el error
     return await this.usuarioService.findUsuarioById(id);
   }
 
- // @AdminAccess()
+  //??????????????????????????????????????????????????????????????????????????????
   @Get('rutinas/:id')
   public async findRutinasxId(@Param('id', ParseIntPipe) id: number) {
     return await this.usuarioService.findRutinasxId(id);
   }
 
-  @Get('email/:mail')
-  public async findUsuarioByMail(@Param('mail') mail: string) {
-    return await this.usuarioService.findUsuarioByMail(mail);
-  }
+  //ver si esta bien comentariado
+  /*  @Get('email/:mail')
+   public async findUsuarioByMail(@Param('mail') mail: string) {
+     return await this.usuarioService.findUsuarioByMail(mail);
+   } */
 
-
+  @Rol('USUARIO')
   @Patch('update/:id')
   public async update(
     @Param('id', ParseIntPipe) id: number,
@@ -56,8 +59,9 @@ export class UsuarioController {
     return await this.usuarioService.updateUsuario(id, updateUsuarioDto);
   }
 
-  // usuario.controller.ts
-  @Patch(':id/imagen-perfil') // Nuevo endpoint solo para la imagen
+  // Nuevo endpoint solo para la imagen
+  @Rol('USUARIO')
+  @Patch(':id/imagen-perfil')
   @UseInterceptors(imagenPerfilInterceptor())
   public async updateImagenPerfil(
     @Param('id', ParseIntPipe) id: number,
@@ -74,6 +78,7 @@ export class UsuarioController {
   }
 
   //update que viene del admin
+  @Rol('ADMIN')
   @Patch('update-basico/:id')
   public async updateBasico(
     @Param('id', ParseIntPipe) id: number,
@@ -81,7 +86,7 @@ export class UsuarioController {
     return await this.usuarioService.updateUsuarioBasico(id, updateUsuarioAdmDto);
   }
 
-
+  @Rol('ADMIN')
   @Delete('delete/:id')
   public async deleteUsuario(@Param('id') id: string) {
     return await this.usuarioService.deleteUsuario(+id);
