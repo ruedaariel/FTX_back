@@ -8,7 +8,7 @@ import { ROL } from "src/constantes/rol";
 export class UsuarioDatosCompletosRtaDto {
     @Expose()
     id: number;
-    
+
     @Expose()
     email: string;
 
@@ -20,6 +20,12 @@ export class UsuarioDatosCompletosRtaDto {
 
     @Exclude()
     password: string;
+
+    @Exclude()
+    level: number;
+
+    @Exclude()
+    passwordChangedAt: Date | null;
 
     @Expose()
     fBaja: Date;
@@ -34,7 +40,11 @@ export class UsuarioDatosCompletosRtaDto {
     @Type(() => DatosPersonalesRtaDto)
     datosPersonales?: DatosPersonalesRtaDto;
 
-@Expose()
+    @Expose()
     @Type(() => DatosFisicosRtaDto)
     datosFisicos?: DatosFisicosRtaDto;
+
+    //no es parte la entity
+    @Expose()
+    message: string = '';
 }

@@ -10,7 +10,7 @@ export class AuthController {
 
   constructor(private readonly authService: AuthService) { }
 
- @PublicAccess()
+  @PublicAccess()
   @Post('login')
   public async login(@Body() body: LoginDto) {
     return await this.authService.loginUsuario(body);
