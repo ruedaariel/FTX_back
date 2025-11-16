@@ -19,6 +19,12 @@ export class LoginRtaDto {
     @Exclude()
     password: string;
     
+       @Exclude()
+    level: number;
+
+    @Exclude()
+    passwordChangedAt: Date | null;
+    
     @Exclude()
     fBaja: Date;
 

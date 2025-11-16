@@ -21,6 +21,12 @@ export class UsuarioRtaDto {
     @Exclude()
     password: string;
 
+     @Exclude()
+    level: number;
+
+    @Exclude()
+    passwordChangedAt: Date | null;
+
     @Exclude()
     fBaja: Date;
 
@@ -37,4 +43,8 @@ export class UsuarioRtaDto {
     @Expose()
     @Type(() => DatosFisicosRtaDto)
     datosFisicos?: DatosFisicosRtaDto;
+
+     //no es parte la entity
+    @Expose()
+    message: string = '';
 }
