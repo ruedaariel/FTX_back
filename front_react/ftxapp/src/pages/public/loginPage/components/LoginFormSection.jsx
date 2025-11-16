@@ -62,6 +62,7 @@ const LoginFormSection = ({ logo }) => {
                     reset({ email: '', password: '' });
                     }
                     saveToken(data.token);
+                    console.log("data -- login", data);
                     if (data.rol === 'admin') {
                         navigate('/admin', { replace: true }); // replace evita back al login
                     }

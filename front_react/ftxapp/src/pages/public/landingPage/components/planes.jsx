@@ -116,7 +116,7 @@ function Planes() {
               return (
                 <div key={plan.idPlan} className="col-lg-4 col-md-6 mb-4">
                   <div
-                    className={`card h-100 shadow ${
+                    className={`card h-100  ${
                       isPopular ? "border-2 popular-plan" : "border-0"
                     } card-landing-hover`}
                   >

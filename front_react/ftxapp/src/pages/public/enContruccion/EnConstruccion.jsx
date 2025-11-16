@@ -50,8 +50,8 @@ const EnConstruccion = () => {
         </div>
       </main>
 
-      <footer className=".footer-en-construccion">
-        <p className=".footer-p-en-construccion">FTX &copy; 2025 — Todos los derechos reservados</p>
+      <footer className="footer-en-construccion">
+        <p className="footer-p-en-construccion">FTX &copy; 2025 — Todos los derechos reservados</p>
       </footer>
     </div>
     </div>

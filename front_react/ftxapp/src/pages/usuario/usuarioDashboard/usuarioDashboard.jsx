@@ -36,13 +36,19 @@ const UsuarioDashboard = () => {
   // }, []);
 
   useEffect(() => {
-  const token = getToken("ftxAccessToken");
+  const token = getToken("ftx_token");
+  sessionStorage.setItem("ftx_token", token);
+
+
+
   if (token) {
+    // console.log("token", token);
     const datos = decodeToken(token);
 
     if (isTokenExpired(datos)) {
-      sessionStorage.removeItem("ftxAccessToken");
-      showModal("Tu sesión ha expirado. Por favor, inicia sesión nuevamente.", "error", 3000);
+      sessionStorage.removeItem("ftx_token");
+      console.log("Sesión expirada token vencido");
+      showModal("Tu sesión ha expirado. Inicia sesión nuevamente.", "info", 3000);
       setTimeout(() => {
         navigate("/login");
       }, 3000);
@@ -51,6 +57,11 @@ const UsuarioDashboard = () => {
 
     setTokenUsuario(datos);
   } else {
+    console.log("Sesión expirada no hay token");
+      showModal("Tu sesión ha expirado.Inicia sesión nuevamente.", "info", 3000);
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
     navigate("/login");
   }
 }, []);
@@ -69,12 +80,21 @@ const UsuarioDashboard = () => {
         setUsuario(data);
       },
       showModal,
+      onError: () => {
+
+      sessionStorage.removeItem("ftx_token");
+      console.log("Sesión expirada token vencido");
+      
+        navigate("/login");
+      
+       
+      },
     });
   }
 }, [tokenUsuario]);
 
     
-  console.log("usuario",usuario);
+  // console.log("usuario",usuario);
 
 
 

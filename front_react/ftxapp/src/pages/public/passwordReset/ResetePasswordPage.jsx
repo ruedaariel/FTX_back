@@ -20,7 +20,7 @@ const ResetPasswordPage = () => {
   console.log("Email para resetear:", data.email);
 
   // Ejemplo de feedback visual
-  showModal("Si el correo está registrado, recibirás instrucciones ", "success", 3000);
+  showModal("Verificaremos tu correo electrónico. Si es correcto recibiras instruciones para el reseteo de tu contraseña.", "info",0,true);
 };
 
 
@@ -69,7 +69,7 @@ const ResetPasswordPage = () => {
               <span className="error">{errors.email.message}</span>
             )}
 
-            <button type="submit">Enviar instrucciones</button>
+            <button type="submit">Enviar</button>
           </form>
 
           <div className="reset-links">

@@ -128,7 +128,7 @@
 
 .login-btn-password-toggle:focus-visible {
     outline: none;
-    box-shadow: 0 0 0 .15rem rgba(255, 153, 51, 0.15);
+    box-shadow: 0 0 0 .15rem var(--color-primario-naranja);
     /* ejemplo color foco naranja */
     border-radius: 4px;
 }

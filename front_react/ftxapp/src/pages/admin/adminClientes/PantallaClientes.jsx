@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import HeaderCrud from '../../../components/componentsShare/header/HeaderCrud.jsx';
-import BarraBusqueda from '../../../components/admin/adminClientes/barraBusqueda/BarraBusqueda';
-import TablaUsuarios from '../../../components/admin/adminClientes/clientes/clientes';
-import ModalBusqueda from '../../../components/componentsShare/Modal/modalBusqueda/ModalBusqueda';
+import HeaderCrud from '../../../components/componentsShare/header/HeaderCrud';
+import BarraBusqueda from '../adminClientes/components/barraBusqueda/BarraBusqueda';
+import TablaUsuarios from '../adminClientes/components/clientes/clientes.jsx';
+import ModalBusqueda from './components/modalBusqueda/ModalBusqueda.jsx';
 import './PantallaClientes.css';
 
 function PantallaClientes() {
@@ -19,6 +19,7 @@ const handleResetFiltro = () => {
     setEstadoSeleccionado("activo");
   };
 
+  // console.log("setMostrarModalBUasqueda",mostrarModalBusqueda);
   return (
     <>
     <div className="container" >

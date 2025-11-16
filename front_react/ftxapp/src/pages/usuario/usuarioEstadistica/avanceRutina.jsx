@@ -144,7 +144,7 @@ const AvanceRutina = ({ rutina }) => {
   return (
     <div className="avance-rutina">
       {/* Título principal con nombre de rutina */}
-      <h2 className="h2-estadisticas">{`${rutina.nombre} este es tu Avance`}</h2>
+      {/* <h2 className="h2-estadisticas">{`${rutina.nombre} este es tu Avance`}</h2> */}
 
       {/*  Gráficos generales */}
       <div className="graficos">

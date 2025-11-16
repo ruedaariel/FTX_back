@@ -44,7 +44,7 @@ const ModalInfoTemporizado = ({
           &times;
         </span>
         <h1>{title}</h1>
-        {message.split(", ").map((linea, index) => (
+        {message.split(". ").map((linea, index) => (
           <p key={index}>{linea}</p>
         ))}
         {autoCloseMs && (

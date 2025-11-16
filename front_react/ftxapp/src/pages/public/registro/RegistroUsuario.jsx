@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import HeaderCrud from "../../../components/componentsShare/header/HeaderCrud.jsx";
-import DatosPersonalesTab from "../../../components/usuario/usuarioModificarPerfil/datospersonales/datosPersonales";
-import DatosFisicosTab from "../../../components/usuario/usuarioModificarPerfil/datosfisicos/datosFisicos";
+import DatosPersonalesTab from "../../usuario/usuarioPerfil/components/datospersonales/datosPersonales.jsx";
+import DatosFisicosTab from "../../usuario/usuarioPerfil/components/datosfisicos/datosFisicos.jsx";
 import { fetchGeneral } from "../../../components/componentsShare/utils/fetchGeneral.js";
 import { useModal } from "../../../context/ModalContext.jsx";
 import { useNavigate } from "react-router-dom";

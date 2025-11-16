@@ -56,6 +56,8 @@ export function mapearFormularioParaBackend(formulario) {
   const datosPersonalesOriginal = formulario.datosPersonales || {};
   const datosFisicosOriginal = formulario.datosFisicos || {};
 
+  console.log("formulario.datosPersonales", formulario.datosPersonales);
+
   // Construir datosPersonales con idPlan plano
   const datosPersonales = {
     nombre: datosPersonalesOriginal.nombre || "",
@@ -83,10 +85,11 @@ export function mapearFormularioParaBackend(formulario) {
     email: formulario.datosBasicos?.email || "",
     // rol: formulario.datosBasicos?.rol || "",
     // estado: formulario.datosBasicos.estado || "",
-    password: formulario.datosBasicos.password || "" // asegurarse que venga desde algún input
+    password: formulario.datosPersonales.passwordNueva || "" // asegurarse que venga desde algún input
   };
 
   
+  console.log("datosBasicos en perfilutils", datosBasicos);
 
   // Retornar el objeto final con la estructura que espera el backend
   return {

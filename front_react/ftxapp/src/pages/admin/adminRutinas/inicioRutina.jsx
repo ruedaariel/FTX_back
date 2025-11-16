@@ -2,26 +2,26 @@ import { useState, useEffect } from "react";
 
 // Componentes principales
 import HeaderCrud from "../../../components/componentsShare/header/HeaderCrud.jsx";
-import SelectorRutinas from "../../../components/admin/adminRutina/SelectorRutina/selectorRutina.jsx";
-import RutinaUsuario from "../../../components/admin/adminRutina/rutinaUsuario/rutinaUsario.jsx";
-import RutinaVisual from "../../../components/admin/adminRutina/rutinaVisual/rutinaVisual.jsx";
+import SelectorRutinas from "./components/SelectorRutina/selectorRutina.jsx";
+import RutinaUsuario from "./components/rutinaUsuario/rutinaUsario.jsx";
+import RutinaVisual from "./components/rutinaVisual/rutinaVisual.jsx";
 
 // Contexto de modal
 import { useModal } from "../../../context/ModalContext.jsx";
 
 // Utilidades
 import { fetchGeneral } from "../../../components/componentsShare/utils/fetchGeneral.js";
-import { guardarRutinaEnBackend } from "../../../components/componentsShare/utils/guardarRutina.js";
+import { guardarRutinaEnBackend } from "./utils/guardarRutina.js";
 import {
   guardarSemanaCompleta,
   transformarRutinaCompleta,
-} from "../../../components/componentsShare/utils/rutinaUtils.js";
-import { extraerMensajeError } from "../../../components/componentsShare/utils/extraerMensajeError.js";
-import { armarRutinaParaGuardar } from "../../../components/componentsShare/utils/armarRutinaParaGuardar.js";
-import { validarRutinaCompleta } from "../../../components/componentsShare/utils/validarRutinaCompleta.js";
-import { sanearRutinaCompleta } from "../../../components/componentsShare/utils/sanearRutinaCompleta.js";
-import { crearRutinaNueva } from "../../../components/componentsShare/utils/plantillasRutina.js";
-import ModalResumenRutina from "../../../components/componentsShare/ResumenSemanaRutina/MOdalresumenRutina.jsx";
+} from "./utils/rutinaUtils.js";
+// import { extraerMensajeError } from "../../../components/componentsShare/utils/extraerMensajeError.js";
+import { armarRutinaParaGuardar } from "./utils/armarRutinaParaGuardar.js";
+//import { validarRutinaCompleta } from "../../../components/componentsShare/utils/validarRutinaCompleta.js";
+import { sanearRutinaCompleta } from "./utils/sanearRutinaCompleta.js";
+import { crearRutinaNueva } from "./utils/plantillasRutina.js";
+import ModalResumenRutina from "./components/ResumenSemanaRutina/ModalResumenRutina.jsx";
 
 function inicioRutina() {
   // Estados principales
@@ -142,7 +142,8 @@ function inicioRutina() {
 
   // Render principal
   return (
-    <>
+    
+      <div className="container">
       <HeaderCrud title="Gestion de Rutinas" />
 
       <SelectorRutinas
@@ -187,7 +188,8 @@ function inicioRutina() {
           Guardar rutina
         </button>
       </div> */}
-    </>
+      </div>
+    
   );
 }
 

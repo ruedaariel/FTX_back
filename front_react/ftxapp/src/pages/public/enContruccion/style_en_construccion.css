@@ -20,7 +20,7 @@ body {
 
 .container-en-construccion {
     background-color: var(--color-fondo-mas-oscuro);
-    padding: 40px;
+    /* padding: 40px; */
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     max-width: 600px;
@@ -30,7 +30,7 @@ body {
 }
 
 .header-en-construccion {
-    margin-bottom: 30px;
+    margin-bottom: .3rem;
     text-align: center;
 }
 
@@ -51,7 +51,8 @@ body {
     font-size: 1.1em;
     color: var(--color-texto-secundario);
     line-height: 1.6;
-    margin-bottom: 30px;
+    margin-bottom: .6rem;
+    text-align: center;
 }
 
 .progress-bar-container-en-construccion {
@@ -86,7 +87,7 @@ body {
     font-size: 1.1em;
     color: var(--color-primario-naranja);
     font-weight: 700;
-    margin-bottom: 30px;
+    margin-bottom: .5rem;
     text-align: center;
 }
 
@@ -97,6 +98,7 @@ body {
 .contact-info-p-en-construccion {
     font-size: 1em;
     color: var(--color-texto-secundario);
+    text-align: center;
 }
 
 .social-icons-en-construccion {
@@ -130,7 +132,7 @@ body {
 }
 
 .footer-en-construccion {
-    margin-top: 40px;
+    margin-top: .8rem;
     padding-top: 20px;
     border-top: 1px solid var(--color-texto-gris-medio);
 }

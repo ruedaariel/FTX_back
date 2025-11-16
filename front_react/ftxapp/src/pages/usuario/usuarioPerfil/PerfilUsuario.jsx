@@ -13,11 +13,11 @@ import { useForm } from "react-hook-form";
 import HeaderCrud from "../../../components/componentsShare/header/HeaderCrud.jsx";
 
 // Secciones del perfil
-import Tabs from "../../../components/usuario/usuarioModificarPerfil/Tabs";
-import ImagenTab from "../../../components/usuario/usuarioModificarPerfil/imagensuscripcion/imagenTab";
-import DatosPersonalesTab from "../../../components/usuario/usuarioModificarPerfil/datospersonales/datosPersonales";
-import DatosFisicosTab from "../../../components/usuario/usuarioModificarPerfil/datosfisicos/datosFisicos";
-import SeguridadTab from "../../../components/usuario/usuarioModificarPerfil/seguridad/seguridadTab.jsx";
+//import Tabs from "../../../components/usuario/usuarioModificarPerfil/Tabs";
+import ImagenTab from "./components/imagensuscripcion/imagenTab.jsx";
+import DatosPersonalesTab from "./components/datospersonales/datosPersonales.jsx";
+import DatosFisicosTab from "./components/datosfisicos/datosFisicos";
+import SeguridadTab from "./components/seguridad/seguridadTab.jsx";
 
 // Datos simulados del usuario
 import obtenerUsuarioMock from "./obtenerUsuarioMock";
@@ -89,15 +89,24 @@ function PerfilUsuario() {
   };
 
   // Función que guarda los cambios del perfil
-  const handleGuardarPerfil = async () => {
-    const actual = getValues();
-    const datosTransformados = mapearFormularioParaBackend(actual);
+  // const handleGuardarPerfil = async () => {
+  //   const actual = getValues();
+  
+  const handleGuardarPerfil = async (data) => {
+    const datosTransformados = mapearFormularioParaBackend(data);
+
+    
     const cambios = extraerCambios(original, datosTransformados);
+    // console.log("datostransformados",datosTransformados);
+    
+
+    // console.log("cambios-----",cambios);
 
     // Normaliza fecha si fue modificada
-    if (cambios.datosPersonales.fNacimiento) {
+    if (cambios.datosPersonales?.fNacimiento)  {
       cambios.datosPersonales.fNacimiento = normalizarFechaParaBackend(cambios.datosPersonales.fNacimiento);
     }
+
 
     // Enviar al backend
     await fetchGeneral({
