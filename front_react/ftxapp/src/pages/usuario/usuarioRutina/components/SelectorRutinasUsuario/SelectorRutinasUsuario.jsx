@@ -47,7 +47,7 @@ const SelectorRutinasUsuario = ({
         <h2 className="selector-usuario-label">{labelTexto} estas son tus rutinas: </h2>
 
         {/* Selector principal */}
-        <select
+        <select className="select-selector-rutinas"
           id="selector-rutinas"
           value={valorSelectInterno}
           onChange={handleChange}

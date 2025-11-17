@@ -62,6 +62,28 @@ function RegistroUsuario() {
     }
   };
 
+  const handleValidarFisicosYRegistrar = async () => {
+    const camposFisicos = [
+      "datosFisicos.peso",
+      "datosFisicos.estatura",
+      "datosFisicos.actividadDiaria",
+      "datosFisicos.metas",
+      "datosFisicos.observaciones",
+      // agregá los campos que realmente están en DatosFisicosTab
+    ];
+
+    const valido = await trigger(camposFisicos);
+    if (valido) {
+      handleRegistro();
+    } else {
+      showModal(
+        "Completa los campos obligatorios antes de crear tu cuenta",
+        "error",
+        2500
+      );
+    }
+  };
+
   const handleRegistro = async () => {
     const datos = getValues();
 
@@ -73,14 +95,11 @@ function RegistroUsuario() {
       datosPersonales: {
         ...datos.datosPersonales,
         idPlan: parseInt(datos.datosPersonales.idPlan),
-        
-        
       },
       datosFisicos: datos.datosFisicos,
     };
 
     console.log("payload", payload);
-
 
     await fetchGeneral({
       url: "http://localhost:8000/apiFtx/usuario/register",
@@ -88,7 +107,11 @@ function RegistroUsuario() {
       body: payload,
       showModal,
       onSuccess: () => {
-        showModal("¡Felicitaciones!  por dar este primer paso. \n \n Recibirás instrucciones en tu correo", "success", 2000);
+        showModal(
+          "¡Felicitaciones!  por dar este primer paso. \n \n Recibirás instrucciones en tu correo",
+          "success",
+          2000
+        );
       },
     });
   };
@@ -101,12 +124,25 @@ function RegistroUsuario() {
           1. Plan
         </div>
         <div className={`paso ${activeStep === "personales" ? "activo" : ""}`}>
-          2. Datos Personales
+          2. Personales
         </div>
         <div className={`paso ${activeStep === "fisicos" ? "activo" : ""}`}>
-          3. Datos Físicos
+          3. Físicos
         </div>
       </div>
+      {/* <div className="registro-progreso">
+        <div className={`paso ${activeStep === "plan" ? "activo" : ""}`}>
+          {activeStep === "plan" ? "🟠" : "⚪"}  Plan
+        </div>
+        <div className={`paso ${activeStep === "personales" ? "activo" : ""}`}>
+          {activeStep === "personales" ? "🟠" : "⚪"}  Datos Personales
+        </div>
+        <div className={`paso ${activeStep === "fisicos" ? "activo" : ""}`}>
+          {activeStep === "fisicos" ? "🟠" : "⚪"}  Datos Físicos
+        </div>
+      </div> */}
+
+     
 
       <form
         className="registro-usuario-container"
@@ -202,7 +238,11 @@ function RegistroUsuario() {
         {/* Botón de registro */}
         <div className="boton-guardar-registro">
           {activeStep === "fisicos" ? (
-            <button type="submit" className="btn-guardar-registro">
+            <button
+              type="button"
+              className="btn-guardar-registro"
+              onClick={handleValidarFisicosYRegistrar}
+            >
               Crear cuenta
             </button>
           ) : (

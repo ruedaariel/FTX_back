@@ -38,7 +38,7 @@ export class AuthGuard implements CanActivate {
     }
 
     if (manageToken.isExpired) {
-     throw new UnauthorizedException('Token expirado')
+     throw new UnauthorizedException('Tu sesion ha expirado. Inicia sesión nuevamente')
     }
 
     const {sub} = manageToken;

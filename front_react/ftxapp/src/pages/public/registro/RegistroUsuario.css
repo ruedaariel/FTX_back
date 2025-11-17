@@ -87,6 +87,7 @@
   color: var(--color-primario-naranja);
   opacity: 1;
   font-weight: 700;
+  
 }
 
 .fila-plan {
@@ -99,9 +100,11 @@
 
 .label-selector-planes-registro {
   color: var(--color-texto-claro);
+  margin-top: .3rem;
+  margin-bottom: .3rem;
+  
+  
 }
-
-
 
 .campo-select-plan,
 .boton-ver-detalles {
@@ -135,6 +138,18 @@
 
 
 @media screen and (max-width: 768px) {
+
+  .fila-plan {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+}
+
+.campo-select-plan,
+.boton-ver-detalles {
+  width: 100%;
+}
+
   .registro-usuario-container {
     padding: 1rem;
     border-radius: 8px;
@@ -182,4 +197,32 @@
   .formulario-fisicos {
     padding: 1rem;
   }
+
+  .paso {
+  flex: 1;
+  text-align: center;
+  font-weight: 500;
+  color: var(--color-texto-claro);
+  opacity: 0.5;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+ 
+}
+
+.paso.activo {
+  color: var(--color-primario-naranja);
+  opacity: 1;
+  font-weight: 700;
+}
+  .registro-progreso {
+  flex-wrap: nowrap;
+  gap: .2rem;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+
+
+
 }
