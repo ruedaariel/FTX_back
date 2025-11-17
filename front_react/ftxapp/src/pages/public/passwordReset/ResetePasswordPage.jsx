@@ -20,7 +20,7 @@ const ResetPasswordPage = () => {
   console.log("Email para resetear:", data.email);
 
   // Ejemplo de feedback visual
-  showModal("Verificaremos tu correo electrónico. Si es correcto recibiras instruciones para el reseteo de tu contraseña.", "info",0,true);
+  showModal("Verificaremos tu correo electrónico. Si es correcto recibiras instrucciones para el reseteo de tu contraseña.", "info",0,true);
 };
 
 
