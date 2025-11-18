@@ -1,25 +1,30 @@
-import React from 'react'
-import logo from '../../../assets/recursos/IconosLogos/logoSinLetrasNaranja.png'
-import './HeaderCrud.css'
-//import '../../../colores.css'
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import logo from '../../../assets/recursos/IconosLogos/logoSinLetrasNaranja.png';
+import './HeaderCrud.css';
+import { useNavigate } from 'react-router-dom';
 
-
-
-function HeaderCrud({ title = "Panel", widthPercent = 90 }) {
+function HeaderCrud({ 
+  title = "Panel", 
+  widthPercent = 90, 
+  MostrarCerrarSesion = false // 👈 nuevo prop
+}) {
   const navigate = useNavigate();
 
   const volver = () => { 
-     // intenta volver en el historial; si no hay historial, ir al dashboard
     if (window.history.length > 1) {
       navigate(-1);
     } else {
-      navigate('/'); // Ver como ir a las home page del admin o del user 
+      navigate('/'); 
     }
-  }
+  };
 
-const computedWidth =
-    typeof widthPercent === 'number' ? `${widthPercent}%` : String(widthPercent); //% del width del componente
+  const cerrarSesion = () => {
+    sessionStorage.removeItem("ftx_token"); // o localStorage según tu flujo
+    navigate('/');
+  };
+
+  const computedWidth =
+    typeof widthPercent === 'number' ? `${widthPercent}%` : String(widthPercent);
 
   return (
     <nav className="top-menu" style={{ width: computedWidth }}>
@@ -27,12 +32,20 @@ const computedWidth =
         <img src={logo} alt="logo FTX" title={title} />
       </a>
       <h1 className="menu-title">{title}</h1>
-      <button className="close-app" onClick={volver}>✖</button>
+
+      {MostrarCerrarSesion ? (
+        <button className="btn-logout" onClick={cerrarSesion}>
+          Cerrar sesión
+        </button>
+      ) : (
+        <button className="close-app" onClick={volver}>✖</button>
+      )}
     </nav>
   );
 }
 
-export default HeaderCrud
+export default HeaderCrud;
+
 
 
 

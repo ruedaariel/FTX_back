@@ -155,7 +155,7 @@ const UsuarioDashboard = () => {
   return (
 
     <div className="container">
-      <HeaderCrud title="Perfil de Usuario" widthPercent={100} />
+      <HeaderCrud title="Perfil de Usuario" widthPercent={100} MostrarCerrarSesion={true} />
     <div className="admin-dashboard">
       {/* <HeaderAdmin 
         logo="FTX"

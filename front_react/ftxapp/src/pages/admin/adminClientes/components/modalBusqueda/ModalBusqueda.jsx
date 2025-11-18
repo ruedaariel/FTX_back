@@ -9,16 +9,25 @@ function ModalBusqueda({ isOpen, onClose, onBuscar }) {
 
   // console.log("isOpen",isOpen);
 
+  const resetCampos = () => {
+  setEmail('');
+  setDNI('');
+  setApellido('');
+  setNombre('');
+};
+
   if (!isOpen) return null;
 
   const handleSubmit = () => {
   if (!email && !dni && !apellido && !nombre) {
     // Si no hay criterios, se cierra sin hacer nada
+    resetCampos();
     onClose();
     return;
   }
   // console.log('Criterios:', { email, dni, apellido, nombre });
   onBuscar({ email, dni, apellido, nombre});
+  resetCampos();
   onClose();
 };
 
@@ -59,7 +68,7 @@ function ModalBusqueda({ isOpen, onClose, onBuscar }) {
 
         <div className="botones-modal">
           <button className="btn-confirmar" onClick={handleSubmit}> Buscar </button>
-          <button className="btn-cancelar" onClick={onClose}>Cerrar</button>
+          <button className="btn-cancelar" onClick={() => {resetCampos();onClose();}}>Cerrar</button>
         </div>
       </div>
     </div>

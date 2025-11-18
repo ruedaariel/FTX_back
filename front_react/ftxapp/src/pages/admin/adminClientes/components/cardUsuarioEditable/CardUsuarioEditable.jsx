@@ -11,7 +11,6 @@ function CardUsuarioEditable({
   activeTab, // Pestaña activa por usuario
   setActiveTab, // Función para cambiar la pestaña activa
   onGuardar, // Función que se ejecuta al guardar cambios
-  
 }) {
   const tab = activeTab[usuario.id]; // Pestaña activa para este usuario
   // Estado para controlar errores de validación
@@ -23,7 +22,6 @@ function CardUsuarioEditable({
   // Estado para mostrar/ocultar el tooltip del ícono de información
   const [mostrarTooltip, setMostrarTooltip] = useState(false);
 
-  
   // Estado que almacena los planes disponibles obtenidos del backend
   const [planesDisponibles, setPlanesDisponibles] = useState([]);
 
@@ -60,21 +58,16 @@ function CardUsuarioEditable({
       },
     }); */
 
-
-
-
-
   useEffect(() => {
     const obtenerPlanes = async () => {
-
-        await fetchGeneral({
+      await fetchGeneral({
         url: "http://localhost:8000/apiFtx/plan/all",
         method: "GET",
         onSuccess: (data) => setPlanesDisponibles(data),
         //onSuccess: (data) => setPlanesDisponibles(data),
         showModal, // solo muestra modal si hay error
       });
-      
+
       /* try {
         const response = await fetch("http://localhost:8000/apiFtx/plan/all");
         if (!response.ok) throw new Error("Error al obtener planes");
@@ -96,7 +89,6 @@ function CardUsuarioEditable({
     setPlanActual(planSeleccionado?.nombrePlan || "—");
   }, [formData.planId, planesDisponibles]);
 
-  
   // Estado para mostrar el nombre del plan actual
   const [planActual, setPlanActual] = useState(formData.plan);
 
@@ -135,7 +127,6 @@ function CardUsuarioEditable({
     return resultado;
   };
 
-  
   // Función que valida el formato del email
   const validarEmail = (email) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -156,9 +147,7 @@ function CardUsuarioEditable({
 
     setErrores({ email: false });
 
-    
     onGuardar(filtrarCamposNoVacios(bodyCambios));
-    
   };
 
   // Renderizado principal del componente
@@ -235,6 +224,10 @@ function CardUsuarioEditable({
                     setBodyCambios((prev) => ({ ...prev, [name]: value }));
                   }}
                 >
+                  {/* Opción por defecto - Asegúrate de que formData.estado sea "" inicialmente */}
+                  <option value="" >
+                    Seleccione un estado
+                  </option>
                   <option value="activo">Activo</option>
                   <option value="inactivo">Inactivo</option>
                   {/* <option value="archivado">Archivado</option> */}
@@ -311,7 +304,7 @@ function CardUsuarioEditable({
           </div>
         )}
 
-            {tab === "personales" && (
+        {tab === "personales" && (
           <>
             <div className="dato-linea-personales-editable">
               <strong>DNI:</strong> {usuario.datosPersonales?.dni || "—"}
@@ -327,9 +320,9 @@ function CardUsuarioEditable({
               {usuario.datosPersonales?.fNacimiento || "—"}
             </div>
           </>
-        )} 
+        )}
 
-         {tab === "fisicos" && (
+        {tab === "fisicos" && (
           <>
             <div className="dato-linea-personales-editable">
               <strong>Peso (Kg.):</strong> {usuario.datosFisicos?.peso || "—"}
@@ -350,7 +343,7 @@ function CardUsuarioEditable({
               {usuario.datosFisicos?.observaciones || "—"}
             </div>
           </>
-        )} 
+        )}
       </div>
 
       <div className="acciones-card-editable">
