@@ -43,3 +43,9 @@ export function calcularFechaVencimiento(fechaPago: Date, fechaPagoEsDateOnly = 
   return fechaVencimiento;
 }
 
+// normaliza un Date a medianoche local (quita la parte de hora)
+export function toLocalDateOnly(d: Date): Date {
+  const dt = new Date(d); // clon
+  dt.setHours(0, 0, 0, 0);
+  return dt;
+}

@@ -12,15 +12,20 @@ import { UsuarioEntity } from 'src/usuario/entities/usuario.entity';
 import { Repository } from 'typeorm';
 import { IpayloadToken } from 'src/interfaces/auth.interface';
 import { PagoEntity } from 'src/pagos/entity/pago.entity';
+import { toLocalDateOnly } from 'src/utils/transformar-fecha';
 
 @Injectable()
 export class AuthService {
     constructor(@InjectRepository(UsuarioEntity)
     private readonly usuarioRepository: Repository<UsuarioEntity>,
-        @InjectRepository(UsuarioEntity)
+        @InjectRepository(PagoEntity)
         private readonly pagoRepository: Repository<PagoEntity>) { }
 
+  
+
     public async loginUsuario(body: LoginDto): Promise<LoginRtaDto> { //retorna null si no encuentra el mail para crear unnuevo ususario
+         const diasProximos = 3;
+       
         try {
 
             //no uso em metodo del service porque tengo que impoertar tooodo del usuario :(
@@ -30,7 +35,6 @@ export class AuthService {
             }
             );
 
-            console.log("unusuario ---->", unUsuario);
 
             if (!unUsuario) {
                 throw new ErrorManager('UNAUTHORIZED', 'Email incorrecto');
@@ -54,26 +58,59 @@ export class AuthService {
             // REVISAR LOS PAGOS y ver si pago o no y agregar a message
 
             let message = "";
-            const ultimoPago = await this.pagoRepository.findOne({
-                where: { usuario: {id: unUsuario.id}  },
-                order: { fechaPago: 'DESC' } // o la columna que define "último"
-            });
-           /*  if (!ultimoPago) {
-                message = message + "impago ,"
-            } else {
-                if 
-            } */
-            if (unUsuario.level === 0) {
-                unUsuario.level = unUsuario.datosPersonales?.plan?.level ? unUsuario.datosPersonales?.plan?.level : 10; //o el nivel mas basico definido
-                message = message + " primera vez , ";
+            if (unUsuario.rol === "usuario") {
+                console.log("entro a usuario", unUsuario.id);
+
+                const ultimoPago = await this.pagoRepository.findOne({
+                    where: { usuarioId: unUsuario.id },
+                    order: { fechaPago: 'DESC' } // o la columna que define "último"
+                });
+
+                /* 
+                const ultimoPago = await this.pagoRepository
+                  .createQueryBuilder('p')
+                  .where('p.usuarioId = :id', { id: unUsuario.id })
+                  .orderBy('p.fechaPago', 'DESC')
+                  .limit(1)
+                  .getOne();
+                 */
+
+
+
+                
+                if (!ultimoPago) {
+                    message = message + "impago ,"
+                } else {
+                    const fVencimientoDateOnly = toLocalDateOnly(ultimoPago.fechaVencimiento);  
+                    const hoyDateOnly = toLocalDateOnly(new Date()); //hoy
+
+                    if (fVencimientoDateOnly.getTime() < hoyDateOnly.getTime()) {
+                        message = message + "impago ,"
+                    } else {
+                        const fProxima = new Date(fVencimientoDateOnly.getTime());
+                        fProxima.setDate(fProxima.getDate() - diasProximos);
+
+                        if (fProxima.getTime() < hoyDateOnly.getTime()) {
+                            message = message + "proximo a vencer ,"
+                         }
+                    }
+                }
+                if (unUsuario.level === 0) {
+                    unUsuario.level = unUsuario.datosPersonales?.plan?.level ? unUsuario.datosPersonales?.plan?.level : 10; //o el nivel mas basico definido
+                    message = message + " primera vez , ";
+                }
             }
+
             const usuarioRtaDto = plainToInstance(LoginRtaDto, {
                 ...unUsuario, token, message  // agregás el token al DTO
             }, { excludeExtraneousValues: true })
 
             return usuarioRtaDto;
 
-        } catch (err) { throw ErrorManager.handle(err) }
+        } catch (err) {
+            console.error('Error al buscar ultimoPago', err.message, err.stack);
+            throw ErrorManager.handle(err)
+        }
     }
 
 
