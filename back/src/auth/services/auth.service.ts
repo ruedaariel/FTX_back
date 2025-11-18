@@ -48,16 +48,18 @@ export class AuthService {
                    rol: unUsuario.rol,
                }; */
 
-
-            const token = await this.generateJWT(unUsuario)
-            const usuarioRtaDto = plainToInstance(LoginRtaDto, {
-                ...unUsuario, token
-                , // agregás el token al DTO
-            })
+            let message = "";
+            const token = await this.generateJWT(unUsuario);
+            // REVISAR LOS PAGOS y ver si pago o no y agregar a message
             if (unUsuario.level === 0) {
-             //   cambiar el label por el label del plan
-           //     unUsuario.level = unUsuario.datosPersonales?.plan?.
+                //   cambiar el label por el label del plan
+                //     unUsuario.level = unUsuario.datosPersonales?.plan?.level 
+                message = message + " Primera vez ";
             }
+            const usuarioRtaDto = plainToInstance(LoginRtaDto, {
+                ...unUsuario, token, message  // agregás el token al DTO
+            }, { excludeExtraneousValues: true })
+
             return usuarioRtaDto;
 
         } catch (err) { throw ErrorManager.handle(err) }
