@@ -27,11 +27,11 @@ const PagosAdmin = () => {
     setLoading(true);
     
     try {
-      console.log('Enviando pago manual:', pagoData);
+      // console.log('Enviando pago manual:', pagoData);
       
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      console.log('Pago registrado exitosamente');
+      // console.log('Pago registrado exitosamente');
       showModal("Pago registrado exitosamente", "success", 2000);
       
       // alert('Pago registrado exitosamente');

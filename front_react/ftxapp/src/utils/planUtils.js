@@ -22,8 +22,8 @@ export const parsearBeneficios = (beneficiosString) => {
  * @returns {string} Precio formateado
  */
 export const formatearPrecio = (precio) => {
-  console.log("precio en formatearPrecio en PlanUtils.js", precio);
-  console.log(typeof precio);
+  // console.log("precio en formatearPrecio en PlanUtils.js", precio);
+  // console.log(typeof precio);
   if (!precio || typeof +precio !== "number") {
     return "$0";
   }

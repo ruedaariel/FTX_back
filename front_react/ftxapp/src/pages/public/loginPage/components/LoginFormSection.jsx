@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { fetchGeneral } from "../../../../components/componentsShare/utils/fetchGeneral";
 import { useEffect } from 'react';
 import { saveToken } from '../../../../auth/token';
+import { storageService } from '../components/utils/storageService';
 
 
 const LoginFormSection = ({ logo }) => {
@@ -62,6 +63,7 @@ const LoginFormSection = ({ logo }) => {
                     reset({ email: '', password: '' });
                     }
                     saveToken(data.token);
+                    storageService.setItem("usuario", data);
                     console.log("data -- login", data);
                     if (data.rol === 'admin') {
                         navigate('/admin', { replace: true }); // replace evita back al login

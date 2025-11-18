@@ -86,6 +86,9 @@ const PagoManualForm = ({ onSubmit, onCancel }) => {
       newErrors.monto = "El monto debe ser un número positivo";
     }
 
+    // Asignar valor por defecto si está vacío
+    formData.diasAdicionales = formData.diasAdicionales || "5"; // Si está vacío, asignar "0"
+
     if (
       !formData.diasAdicionales ||
       isNaN(formData.diasAdicionales) ||
@@ -107,6 +110,7 @@ const PagoManualForm = ({ onSubmit, onCancel }) => {
       newErrors.external_reference = "La referencia externa es requerida";
     }
 
+    // console.log("📋 Errores de validación:", newErrors);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -123,6 +127,8 @@ const PagoManualForm = ({ onSubmit, onCancel }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+      //  console.log("📤 entro a handleSubmit");
+
     if (!validateForm()) return;
 
     setIsSubmitting(true);
@@ -138,12 +144,12 @@ const PagoManualForm = ({ onSubmit, onCancel }) => {
         external_reference: formData.external_reference.trim(),
       };
 
-      console.log("📤 Enviando pago manual:", dataToSend);
+      // console.log("📤 Enviando pago manual:", dataToSend);
 
       // ✨ Usar Axios - mucho más simple!
       const result = await PagosService.registrarPagoManual(dataToSend);
 
-      console.log("✅ Respuesta del servidor:", result);
+      // console.log("✅ Respuesta del servidor:", result);
 
       if (onSubmit) {
         onSubmit(result);
