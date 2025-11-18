@@ -18,9 +18,9 @@ export class PlanEntity implements IPlan {
     @Column({ type: 'varchar' })
     beneficios: string;
 
- /*    @Column({ type: 'varchar' })
+    @Column({ type: 'varchar' })
     noIncluye: string;
- */
+
     @Column({ type: 'decimal', precision: 8, scale: 2 })
     precio: number;
 
@@ -30,8 +30,8 @@ export class PlanEntity implements IPlan {
     //level: 10, 20, 30, etc accessos segun el plan (pago)
     //level 90 ->admin
     //level 100 -> superadmin
-    // @Column({ type: 'smallint', default: 0 })
-    // level: number;
+    @Column({ type: 'smallint', default: 0 })
+    level: number;
 
     @CreateDateColumn({ //agrega automaticamente la fecha-hora del servidor, el name permite la creacion en la bd con snakeCase
         type: 'timestamp'

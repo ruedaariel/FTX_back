@@ -94,7 +94,9 @@ export class PlanService {
           fCambioInicio: planViejo.fCambio, // O la fecha de inicio del plan
           detalleCambio: camposModif.join(';'),
           beneficios : planViejo.beneficios,
-          plan: planExistente
+          plan: planExistente,
+          noIncluye : planViejo.noIncluye,
+          level : planViejo.level
         });
         await transaccion.save(HistoricoPlanEntity, historico);
 
@@ -155,6 +157,8 @@ export class PlanService {
           descripcion: planExistente.descripcion,
           beneficios: planExistente.beneficios,
           precio: planExistente.precio,
+          noIncluye: planExistente.noIncluye,
+          level: planExistente.level,
           fCambioInicio: planExistente.fCambio, // O la fecha de inicio del plan
           detalleCambio: `Eliminación del plan ${planExistente.nombrePlan}, id: ${id}`,
           plan: null

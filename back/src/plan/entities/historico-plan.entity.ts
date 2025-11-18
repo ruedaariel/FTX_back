@@ -19,8 +19,8 @@ export class HistoricoPlanEntity implements IHistoricoPlan {
     @Column({ type: 'varchar' })
     beneficios: string;
 
-    /*    @Column({ type: 'varchar' })
-    noIncluye: string; */
+       @Column({ type: 'varchar' })
+    noIncluye: string;
 
     @Column({ type: 'decimal', precision: 8, scale: 2 })
     precio: number;
@@ -31,8 +31,8 @@ export class HistoricoPlanEntity implements IHistoricoPlan {
     //level: 10, 20, 30, etc accessos segun el plan (pago)
     //level 90 ->admin
     //level 100 -> superadmin
-    // @Column({ type: 'smallint', default: 0 })
-    // level: number;
+    @Column({ type: 'smallint', default: 0 })
+    level: number;
 
     @Column({ type: 'timestamp' })
     fCambioInicio: Date;
