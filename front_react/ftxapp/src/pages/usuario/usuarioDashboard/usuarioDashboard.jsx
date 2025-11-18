@@ -1,184 +1,188 @@
 import React, { useState, useEffect } from "react";
+import "./usuarioDashboard.css";
 
-
-import './usuarioDashboard.css';
-import DashboardGrid from '../../../components/dashboardGrid/dashboardGrid';
-import DashboardCard from '../../../components/dashboardCard/dashboardCard';
-import { useNavigate } from 'react-router-dom';
-import HeaderCrud from '../../../components/componentsShare/header/HeaderCrud';
+import DashboardGrid from "../../../components/dashboardGrid/dashboardGrid";
+import DashboardCard from "../../../components/dashboardCard/dashboardCard";
+import { useNavigate } from "react-router-dom";
+import HeaderCrud from "../../../components/componentsShare/header/HeaderCrud";
 import { IoPeopleSharp } from "react-icons/io5";
 import { useModal } from "../../../context/ModalContext";
 import { fetchGeneral } from "../../../components/componentsShare/utils/fetchGeneral";
 import { getToken } from "../../../auth/token";
 import { decodeToken } from "../../../auth/jwt";
-
+import { storageService } from "../../public/loginPage/components/utils/storageService";
 
 const UsuarioDashboard = () => {
-
   const navigate = useNavigate();
-  const [tokenUsuario, setTokenUsuario] = useState(null);
-  const [usuario, setUsuario] = useState(null);
   const { showModal } = useModal();
 
+  // Estados principales
+  const [tokenUsuario, setTokenUsuario] = useState(null);   // token decodificado
+  const [usuario, setUsuario] = useState(null);             // datos del usuario desde backend
+  const [validarUsuario, setValidarUsuario] = useState(null); // datos del usuario desde sessionStorage
+
+  // Función para validar expiración del token
   function isTokenExpired(token) {
-  if (!token?.exp) return true;
-  const now = Math.floor(Date.now() / 1000); // tiempo actual en segundos
-  return token.exp < now;
-}
+    if (!token?.exp) return true;
+    const now = Math.floor(Date.now() / 1000);
+    return token.exp < now;
+  }
 
-  // useEffect(() => {
-  //   const token = getToken("ftxAccessToken");
-  //   if (token) {
-  //     const datos = decodeToken(token);
-  //     setTokenUsuario(datos);
-  //     console.log("tokenUsuario",tokenUsuario);
-  //   }
-  // }, []);
-
+  // Recupero usuario desde sessionStorage al montar el componente
   useEffect(() => {
-  const token = getToken("ftx_token");
-  sessionStorage.setItem("ftx_token", token);
+    const sesionUsuario = storageService.getItem("usuario");
+    if (sesionUsuario) {
+      setValidarUsuario(sesionUsuario);
+    } else {
+      console.log("No hay usuario en sessionStorage");
+    }
+  }, []);
 
+  // Muestro mensajes de aviso (solo una vez por sesión)
+  useEffect(() => {
+    const yaMostrado = sessionStorage.getItem("mensajeMostrado");
+    if (yaMostrado) return; // si ya se mostró, no repetir
 
-
-  if (token) {
-    // console.log("token", token);
-    const datos = decodeToken(token);
-
-    if (isTokenExpired(datos)) {
-      sessionStorage.removeItem("ftx_token");
-      console.log("Sesión expirada token vencido");
-      showModal("Tu sesión ha expirado. Inicia sesión nuevamente.", "info", 3000);
-      setTimeout(() => {
-        navigate("/login");
-      }, 3000);
-      return;
+    if (validarUsuario?.message?.includes("primera")) {
+      showModal("Este es tu primer Ingreso. Debes cambiar la contraseña", "info", 0, true);
+      navigate("/public/primerCambioPassword");
+      sessionStorage.setItem("mensajeMostrado", "true");
     }
 
-    setTokenUsuario(datos);
-  } else {
-    console.log("Sesión expirada no hay token");
-      showModal("Tu sesión ha expirado.Inicia sesión nuevamente.", "info", 3000);
-      setTimeout(() => {
-        navigate("/login");
-      }, 3000);
-    navigate("/login");
-  }
-}, []);
+    if (validarUsuario?.message?.includes("proximo")) {
+      showModal("Tu plan está próximo a vencer. Contacta a tu Trainer.", "info", 0, true);
+      sessionStorage.setItem("mensajeMostrado", "true");
+    }
 
-  
-  
+    if (validarUsuario?.message?.includes("impago")) {
+      showModal("Tu plan está impago. Contacta a tu Trainer.", "info", 0, true);
+      sessionStorage.setItem("mensajeMostrado", "true");
+    }
+  }, [validarUsuario]);
 
-  // busco el usuario en backend pero antes espero a que se haya caragado el token
-        
+  // Función para habilitar/deshabilitar funcionalidades
+  const habilitarFunciones = () =>
+    validarUsuario?.message?.includes("impago") ? true : false;
+
+  // Valido token al montar
   useEffect(() => {
-  if (tokenUsuario?.sub) {
-    fetchGeneral({
-      url: `http://localhost:8000/apiFtx/usuario/${tokenUsuario.sub}`,
-      method: "GET",
-      onSuccess: (data) => {
-        setUsuario(data);
-      },
-      showModal,
-      onError: () => {
+    const token = getToken("ftx_token");
+    sessionStorage.setItem("ftx_token", token);
 
-      sessionStorage.removeItem("ftx_token");
-      console.log("Sesión expirada token vencido");
-      
-        navigate("/login");
-      
-       
-      },
-    });
-  }
-}, [tokenUsuario]);
+    if (token) {
+      const datos = decodeToken(token);
 
-    
-  // console.log("usuario",usuario);
+      if (isTokenExpired(datos)) {
+        sessionStorage.removeItem("ftx_token");
+        showModal("Tu sesión ha expirado. Inicia sesión nuevamente.", "info", 3000);
+        setTimeout(() => navigate("/login"), 3000);
+        return;
+      }
 
+      setTokenUsuario(datos);
+    } else {
+      showModal("Tu sesión ha expirado. Inicia sesión nuevamente.", "info", 3000);
+      setTimeout(() => navigate("/login"), 3000);
+      navigate("/login");
+    }
+  }, []);
 
+  // Busco usuario en backend cuando tengo token válido
+  useEffect(() => {
+    if (tokenUsuario?.sub) {
+      fetchGeneral({
+        url: `http://localhost:8000/apiFtx/usuario/${tokenUsuario.sub}`,
+        method: "GET",
+        onSuccess: (data) => setUsuario(data),
+        showModal,
+        onError: () => {
+          sessionStorage.removeItem("ftx_token");
+          navigate("/login");
+        },
+      });
+    }
+  }, [tokenUsuario]);
 
-  const handleLogout = () => {
-    // Lógica para cerrar sesión
-    console.log('Cerrando sesión...');
-    // Aquí podrías redirigir al login o limpiar el localStorage
-  };
-
-  const Navigate = useNavigate();
-
+  // Items del dashboard
   const dashboardItems = [
     {
-      id: 'rutina',
-      icon: '🏋️',
-      title: 'Rutina',
-      description: 'Mira tus rutinas de entranamiento',
-      onClick: () => navigate("/usuario/rutina", { state: { usuario } })
+      id: "rutina",
+      icon: "🏋️",
+      title: "Rutina",
+      description: "Mira tus rutinas de entrenamiento",
+      onClick: habilitarFunciones()
+        ? undefined
+        : () => navigate("/usuario/rutina", { state: { usuario } }),
     },
     {
-      id: 'clientes',
+      id: "clientes",
       icon: <IoPeopleSharp />,
-      title: 'Perfil',
-      description: 'Modifica Tus datos de Perfil',
-      onClick: () => navigate("/usuario/perfil", { state: { usuario } })
+      title: "Perfil",
+      description: "Modifica tus datos de Perfil",
+      onClick: habilitarFunciones()
+        ? undefined
+        : () => navigate("/usuario/perfil", { state: { usuario } }),
     },
     {
-      //icon: '📈' → más enfocado en evolución o rendimiento
-      id: 'Estadisticas',
-      icon: '📈',
-      title: 'Estadisticas',
-      description: 'Mira tus avances con las rutinas.',
-      onClick: () => navigate("/usuario/estadistica", { state: { usuario } })
+      id: "Estadisticas",
+      icon: "📈",
+      title: "Estadisticas",
+      description: "Mira tus avances con las rutinas.",
+      onClick: habilitarFunciones()
+        ? undefined
+        : () => navigate("/usuario/estadistica", { state: { usuario } }),
     },
     {
-      
-      id: 'Pagos',
-      icon: '💳',
-      title: 'Pagos',
-      description: 'Gestiona tus pagos',
-      onClick: () => Navigate("/usuario/pagos")
+      id: "Pagos",
+      icon: "💳",
+      title: "Pagos",
+      description: "Gestiona tus pagos",
+      onClick: () => navigate("/usuario/pagos"),
     },
-    
     {
-      
-      id: 'Planes',
-      icon: '📋',
-      title: 'Planes',
-      description: 'Quires ver los planes?',
-      onClick: () => Navigate("/admin/planes")
-    }
+      id: "Planes",
+      icon: "📋",
+      title: "Planes",
+      description: "Quieres ver los planes?",
+      onClick: () => navigate("/admin/planes"),
+    },
   ];
 
-
-
-
-
   return (
-
     <div className="container">
+      {/* Header con botón de cerrar sesión */}
       <HeaderCrud title="Perfil de Usuario" widthPercent={100} MostrarCerrarSesion={true} />
-    <div className="admin-dashboard">
-      {/* <HeaderAdmin 
-        logo="FTX"
-        title="Panel usuario"
-        onLogout={handleLogout}
-        logoutText="Cerrar Sesión"
-      /> */}
-      
-      <main className="dashboard-main">
-        <DashboardGrid columns={3} gap="2rem">
-          {dashboardItems.map((item) => (
-            <DashboardCard
-              key={item.id}
-              icon={item.icon}
-              title={item.title}
-              description={item.description}
-              onClick={item.onClick}
-              variant="default"
-            />
-          ))}
-        </DashboardGrid>
-      </main>
-    </div>
+
+      {/* Avisos legales según estado del usuario */}
+      {validarUsuario?.message?.includes("proximo") && (
+        <div className="aviso-legal">
+          <p>Tu plan está próximo a vencer. Contacta a tu Trainer.</p>
+        </div>
+      )}
+
+      {validarUsuario?.message?.includes("impago") && (
+        <div className="aviso-legal">
+          <p>Pagos atrasados. Algunas características no estarán disponibles. Contacta a tu Trainer.</p>
+        </div>
+      )}
+
+      {/* Dashboard principal */}
+      <div className="admin-dashboard">
+        <main className="dashboard-main">
+          <DashboardGrid columns={3} gap="2rem">
+            {dashboardItems.map((item) => (
+              <DashboardCard
+                key={item.id}
+                icon={item.icon}
+                title={item.title}
+                description={item.description}
+                onClick={item.onClick}
+                variant="default"
+              />
+            ))}
+          </DashboardGrid>
+        </main>
+      </div>
     </div>
   );
 };

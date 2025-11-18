@@ -47,6 +47,8 @@ api.interceptors.response.use(
 export class PagosService {
   // Registrar pago manual
   static async registrarPagoManual(pagoData) {
+
+    // console.log("entro a pagosService", pagoData);
     try {
       const response = await api.post('/pagos/manual', pagoData);
       return response.data;

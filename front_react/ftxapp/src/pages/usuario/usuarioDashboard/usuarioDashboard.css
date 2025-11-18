@@ -7,6 +7,23 @@
   flex-direction: column;
 }
 
+.aviso-legal{
+
+/* border: 2px solid var(--color-primario-naranja);
+border-radius: 6px; */
+margin-bottom: .2rem;
+
+text-align: center;
+justify-content: center;
+
+}
+
+.aviso-legal p{
+color: var(--color-texto-claro);
+text-align: center;
+margin-bottom: 0;
+
+}
 /* .dashboard-main {
   flex: 1;
   padding-top: 2rem;

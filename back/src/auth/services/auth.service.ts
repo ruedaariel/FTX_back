@@ -79,19 +79,19 @@ export class AuthService {
 
                 
                 if (!ultimoPago) {
-                    message = message + "impago ,"
+                    message = message + " impago ,"
                 } else {
                     const fVencimientoDateOnly = toLocalDateOnly(ultimoPago.fechaVencimiento);  
                     const hoyDateOnly = toLocalDateOnly(new Date()); //hoy
 
                     if (fVencimientoDateOnly.getTime() < hoyDateOnly.getTime()) {
-                        message = message + "impago ,"
+                        message = message + " impago ,"
                     } else {
                         const fProxima = new Date(fVencimientoDateOnly.getTime());
                         fProxima.setDate(fProxima.getDate() - diasProximos);
 
                         if (fProxima.getTime() < hoyDateOnly.getTime()) {
-                            message = message + "proximo a vencer ,"
+                            message = message + " proximo a vencer ,"
                          }
                     }
                 }
