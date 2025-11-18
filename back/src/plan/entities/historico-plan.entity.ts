@@ -19,6 +19,9 @@ export class HistoricoPlanEntity implements IHistoricoPlan {
     @Column({ type: 'varchar' })
     beneficios: string;
 
+    /*    @Column({ type: 'varchar' })
+    noIncluye: string; */
+
     @Column({ type: 'decimal', precision: 8, scale: 2 })
     precio: number;
 

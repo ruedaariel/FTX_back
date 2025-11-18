@@ -20,6 +20,9 @@ export class PlanRtaDto {
   @Exclude()
   beneficios: string;
 
+   /* @Exclude()
+  noIncluye: string;
+ */
   // @Exclude()
   // level: number;
 
