@@ -6,16 +6,19 @@ import * as bcrypt from 'bcrypt';
 import { ErrorManager } from '../../config/error.manager';
 import { plainToInstance } from 'class-transformer';
 import * as jwt from 'jsonwebtoken';
-import type { JwtPayload, Secret, SignOptions } from 'jsonwebtoken';
+//import type { JwtPayload, Secret, SignOptions } from 'jsonwebtoken';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsuarioEntity } from 'src/usuario/entities/usuario.entity';
 import { Repository } from 'typeorm';
 import { IpayloadToken } from 'src/interfaces/auth.interface';
+import { PagoEntity } from 'src/pagos/entity/pago.entity';
 
 @Injectable()
 export class AuthService {
     constructor(@InjectRepository(UsuarioEntity)
-    private readonly usuarioRepository: Repository<UsuarioEntity>) { }
+    private readonly usuarioRepository: Repository<UsuarioEntity>,
+        @InjectRepository(UsuarioEntity)
+        private readonly pagoRepository: Repository<PagoEntity>) { }
 
     public async loginUsuario(body: LoginDto): Promise<LoginRtaDto> { //retorna null si no encuentra el mail para crear unnuevo ususario
         try {
@@ -23,7 +26,7 @@ export class AuthService {
             //no uso em metodo del service porque tengo que impoertar tooodo del usuario :(
             const unUsuario = await this.usuarioRepository.findOne({
                 where: { email: body.email },
-                relations: ['datosPersonales', 'datosPersonales.plan', 'pagos']
+                relations: ['datosPersonales', 'datosPersonales.plan']
             }
             );
 
@@ -47,14 +50,22 @@ export class AuthService {
                    email: unUsuario.email,
                    rol: unUsuario.rol,
                }; */
-
-            let message = "";
             const token = await this.generateJWT(unUsuario);
             // REVISAR LOS PAGOS y ver si pago o no y agregar a message
+
+            let message = "";
+            const ultimoPago = await this.pagoRepository.findOne({
+                where: { usuario: {id: unUsuario.id}  },
+                order: { fechaPago: 'DESC' } // o la columna que define "último"
+            });
+           /*  if (!ultimoPago) {
+                message = message + "impago ,"
+            } else {
+                if 
+            } */
             if (unUsuario.level === 0) {
-                //   cambiar el label por el label del plan
-                //     unUsuario.level = unUsuario.datosPersonales?.plan?.level 
-                message = message + " Primera vez ";
+                unUsuario.level = unUsuario.datosPersonales?.plan?.level ? unUsuario.datosPersonales?.plan?.level : 10; //o el nivel mas basico definido
+                message = message + " primera vez , ";
             }
             const usuarioRtaDto = plainToInstance(LoginRtaDto, {
                 ...unUsuario, token, message  // agregás el token al DTO

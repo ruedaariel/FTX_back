@@ -15,11 +15,11 @@ export class CreatePlanDto {
    @MaxLength(255, { message: 'El campo beneficios no puede superar los 255 caracteres' })
   beneficios: string;
 
-   /* @IsOptional()
+   @IsOptional()
   @IsString({ message: 'Los beneficios del Plan debe ser un string' })
    @MaxLength(255, { message: 'El campo beneficios no puede superar los 255 caracteres' })
   noIncluye: string;
- */
+
   @IsNotEmpty({ message: "El precio del plan no debe ser vacio" })
   @IsNumber({ maxDecimalPlaces: 2 }, { message: "El precio del plan debe ser un numero (0 como mínimo)" })
   @Min(0, { message: "El precio del plan debe ser 0 como mínimo" })

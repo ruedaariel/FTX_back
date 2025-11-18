@@ -20,11 +20,11 @@ export class PlanRtaDto {
   @Exclude()
   beneficios: string;
 
-   /* @Exclude()
+  @Exclude()
   noIncluye: string;
- */
-  // @Exclude()
-  // level: number;
+
+  @Exclude()
+  level: number;
 
   @Exclude()
   fCambio: Date;

@@ -5,6 +5,7 @@ import { CreatePagoDto, IniciarPagoDto } from '../dto/create-pago.dto';
 import { PagoEntity, METODODEPAGO } from '../entity/pago.entity';
 import { UsuarioEntity } from '../../usuario/entities/usuario.entity';
 import { MercadoPagoService } from './mercadopago.service';
+import { calcularFechaVencimiento } from '../../utils/transformar-fecha';
 
 @Injectable()
 export class PagosService {
@@ -57,18 +58,20 @@ export class PagosService {
         `Usuario con ID ${createPagoDto.usuarioId} no encontrado`,
       );
     }
-
-    const pago = this.pagoRepository.create({
-      fechaPago: createPagoDto.fechaPago
+    const fPago= createPagoDto.fechaPago
         ? new Date(createPagoDto.fechaPago)
-        : new Date(),
+        : new Date()
+    const fVencimiento=  calcularFechaVencimiento(fPago,  true); /*fechaPagoEsDateOnly=*/
+    const pago = this.pagoRepository.create({
+      fechaPago: fPago,
+      fechaVencimiento : fVencimiento,
       estado: createPagoDto.estado,
       diasAdicionales: createPagoDto.diasAdicionales,
       metodoDePago: createPagoDto.metodoDePago,
       monto: createPagoDto.monto,
       usuario: usuario,
     });
-
+console.log("pago",pago);
     return await this.pagoRepository.save(pago);
   }
 
