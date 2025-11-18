@@ -27,7 +27,7 @@ function BarraBusqueda({
         <button id="btnResetFiltro" onClick={onResetFiltro}>
           Borrar Filtro
         </button>
-        <button id="btnNuevoCliente">Agregar Cliente</button>
+        {/* <button id="btnNuevoCliente">Agregar Cliente</button> */}
       </div>
     </div>
   );

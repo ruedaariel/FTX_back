@@ -79,6 +79,8 @@ const ImagenTab = ({ register, setValue, watch, errors }) => {
     const formData = new FormData();
     formData.append("imagenPerfil", file);
 
+    console.log("Enviando imagen al backend...", file.name);
+
     await fetchGeneral({
       url,
       method,
@@ -96,30 +98,30 @@ const ImagenTab = ({ register, setValue, watch, errors }) => {
   };
 
   // Enviar imagen al backend
-  const handleGuardarImagen = async () => {
-    if (!imagenSeleccionada) return;
+  // const handleGuardarImagen = async () => {
+  //   if (!imagenSeleccionada) return;
 
-    const idUsuario = watch("datosPersonales.idUsuario");
-    const url = `http://localhost:8000/apiFtx/usuario/${idUsuario}/imagen-perfil`;
-    const method = "PATCH";
+  //   const idUsuario = watch("datosPersonales.idUsuario");
+  //   const url = `http://localhost:8000/apiFtx/usuario/${idUsuario}/imagen-perfil`;
+  //   const method = "PATCH";
 
-    const formData = new FormData();
-    formData.append("imagenPerfil", imagenSeleccionada);
+  //   const formData = new FormData();
+  //   formData.append("imagenPerfil", imagenSeleccionada);
 
-    await fetchGeneral({
-      url,
-      method,
-      body: formData,
-      showModal,
-      onSuccess: (data) => {
-        // Imagen guardada exitosamente
-      },
-      onError: (err) => {
-        const mensaje = extraerMensajeError(err);
-        console.error("Error al guardar Imagen:", mensaje);
-      },
-    });
-  };
+  //   await fetchGeneral({
+  //     url,
+  //     method,
+  //     body: formData,
+  //     showModal,
+  //     onSuccess: (data) => {
+  //       // Imagen guardada exitosamente
+  //     },
+  //     onError: (err) => {
+  //       const mensaje = extraerMensajeError(err);
+  //       console.error("Error al guardar Imagen:", mensaje);
+  //     },
+  //   });
+  // };
 
   return (
     <div className="imagen-tab">

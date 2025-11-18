@@ -76,6 +76,12 @@ const TablaUsuarios = ({ estadoFiltro, filtrosAvanzados }) => {
         ?.toLowerCase()
         .includes(filtrosAvanzados.apellido.toLowerCase());
 
+    const coincideDni =
+      !filtrosAvanzados.dni ||
+      usuario.datosPersonales?.dni
+        ?.toLowerCase()
+        .includes(filtrosAvanzados.dni);    
+
     const coincideNombre =
       !filtrosAvanzados.nombre ||
       usuario.datosPersonales?.nombre
@@ -91,6 +97,7 @@ const TablaUsuarios = ({ estadoFiltro, filtrosAvanzados }) => {
       coincideEmail &&
       coincideApellido &&
       coincideNombre &&
+      coincideDni &&
       coincideEstadoAvanzado
     );
   });

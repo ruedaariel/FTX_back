@@ -1,55 +1,110 @@
 // front_react/ftxapp/src/components/pagoManualForm/pagoManualForm.jsx
-import React, { useState } from 'react';
-import FormField from '../form/formField';
-import Button from '../form/button/button';
+import React, { useState, useEffect } from "react";
+import FormField from "../form/formField";
+import Button from "../form/button/button";
+import { fetchGeneral } from "../componentsShare/utils/fetchGeneral";
+import { useModal } from "../../context/ModalContext";
 
-import './pagoManualForm.css';
-import PagosService from '../../services/pagoManualService';
+import "./pagoManualForm.css";
+import PagosService from "../../services/pagoManualService";
 
 const PagoManualForm = ({ onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
-    usuarioId: '',
-    monto: '',
-    diasAdicionales: '',
-    metodoDePago: '',
-    estado: 'approved',
+    usuarioId: "",
+    monto: "",
+    diasAdicionales: "",
+    metodoDePago: "",
+    estado: "approved",
     fechaPago: new Date().toISOString().slice(0, 16),
-    external_reference: ''
+    external_reference: "",
   });
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [usuarios, setUsuarios] = useState([]);
+  const { showModal } = useModal(); // Modal global
 
   const metodoDePagoOptions = [
-    { value: 'efectivo', label: 'Efectivo' },
-    { value: 'transferencia', label: 'Transferencia Bancaria' }
+    { value: "efectivo", label: "Efectivo" },
+    { value: "transferencia", label: "Transferencia Bancaria" },
   ];
+
+  //  Efecto inicial para obtener usuarios al montar el componente
+  useEffect(() => {
+    obtenerUsuarios();
+  }, []);
+
+  // con map() hacemos listado de clientes para pasar al select
+  const listaDeUsuarios = usuarios.map((usuario) => {
+    // Verificamos si datosPersonales existe para evitar errores
+    const nombre = usuario.datosPersonales
+      ? usuario.datosPersonales.nombre
+      : "Sin Nombre";
+    const apellido = usuario.datosPersonales
+      ? usuario.datosPersonales.apellido
+      : "Sin Apellido";
+
+    // Si queremos concatenar, usamos template literals (backticks `)
+    const label = `${nombre} ${apellido} (ID: ${usuario.id})`;
+    // const label = `${nombre} ${apellido}`;
+
+    return {
+      value: usuario.id,
+      label: label,
+    };
+  });
+
+  // console.log(listaDeUsuarios);
+
+  //  Función para obtener usuarios desde el backend
+  const obtenerUsuarios = () => {
+    fetchGeneral({
+      url: "http://localhost:8000/apiFtx/usuario/all",
+      method: "GET",
+      onSuccess: (data) => setUsuarios(data),
+      //mostrarModal, // solo muestra modal si hay error
+      showModal, // para mostrar errores críticos
+    });
+  };
 
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.usuarioId || isNaN(formData.usuarioId) || formData.usuarioId <= 0) {
-      newErrors.usuarioId = 'El ID del usuario debe ser un número válido';
+    if (
+      !formData.usuarioId ||
+      isNaN(formData.usuarioId) ||
+      formData.usuarioId <= 0
+    ) {
+      newErrors.usuarioId = "El ID del usuario debe ser un número válido";
     }
 
-    if (!formData.monto || isNaN(formData.monto) || parseFloat(formData.monto) <= 0) {
-      newErrors.monto = 'El monto debe ser un número positivo';
+    if (
+      !formData.monto ||
+      isNaN(formData.monto) ||
+      parseFloat(formData.monto) <= 0
+    ) {
+      newErrors.monto = "El monto debe ser un número positivo";
     }
 
-    if (!formData.diasAdicionales || isNaN(formData.diasAdicionales) || parseInt(formData.diasAdicionales) <= 0) {
-      newErrors.diasAdicionales = 'Los días adicionales deben ser un número positivo';
+    if (
+      !formData.diasAdicionales ||
+      isNaN(formData.diasAdicionales) ||
+      parseInt(formData.diasAdicionales) <= 0
+    ) {
+      newErrors.diasAdicionales =
+        "Los días adicionales deben ser un número positivo";
     }
 
     if (!formData.metodoDePago) {
-      newErrors.metodoDePago = 'El método de pago es requerido';
+      newErrors.metodoDePago = "El método de pago es requerido";
     }
 
     if (!formData.fechaPago) {
-      newErrors.fechaPago = 'La fecha de pago es requerida';
+      newErrors.fechaPago = "La fecha de pago es requerida";
     }
 
     if (!formData.external_reference.trim()) {
-      newErrors.external_reference = 'La referencia externa es requerida';
+      newErrors.external_reference = "La referencia externa es requerida";
     }
 
     setErrors(newErrors);
@@ -58,16 +113,16 @@ const PagoManualForm = ({ onSubmit, onCancel }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
 
     if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setIsSubmitting(true);
@@ -80,22 +135,21 @@ const PagoManualForm = ({ onSubmit, onCancel }) => {
         metodoDePago: formData.metodoDePago,
         estado: formData.estado,
         fechaPago: formData.fechaPago,
-        external_reference: formData.external_reference.trim()
+        external_reference: formData.external_reference.trim(),
       };
-      
-      console.log('📤 Enviando pago manual:', dataToSend);
-      
+
+      console.log("📤 Enviando pago manual:", dataToSend);
+
       // ✨ Usar Axios - mucho más simple!
       const result = await PagosService.registrarPagoManual(dataToSend);
-      
-      console.log('✅ Respuesta del servidor:', result);
-      
+
+      console.log("✅ Respuesta del servidor:", result);
+
       if (onSubmit) {
         onSubmit(result);
       }
-      
     } catch (error) {
-      console.error('❌ Error al procesar el pago:', error);
+      console.error("❌ Error al procesar el pago:", error);
       // alert(`❌ Error: ${error.message}`);
     } finally {
       setIsSubmitting(false);
@@ -105,7 +159,7 @@ const PagoManualForm = ({ onSubmit, onCancel }) => {
   return (
     <form onSubmit={handleSubmit} className="pago-manual-form">
       <div className="form-grid">
-        <FormField
+        {/* <FormField
           label="ID del Usuario"
           type="number"
           name="usuarioId"
@@ -113,6 +167,18 @@ const PagoManualForm = ({ onSubmit, onCancel }) => {
           onChange={handleInputChange}
           error={errors.usuarioId}
           placeholder="Ej: 1"
+          required
+        /> */}
+
+          <FormField
+          label="Nombre de Cliente"
+          type="select"
+          name="usuarioId"
+          value={formData.usuarioId}
+          onChange={handleInputChange}
+          error={errors.usuarioId}
+          options={listaDeUsuarios}
+          placeholder="Selecciona un cliente"
           required
         />
 
@@ -128,7 +194,7 @@ const PagoManualForm = ({ onSubmit, onCancel }) => {
           required
         />
 
-        <FormField
+        {/* <FormField
           label="Días Adicionales"
           type="number"
           name="diasAdicionales"
@@ -137,7 +203,7 @@ const PagoManualForm = ({ onSubmit, onCancel }) => {
           error={errors.diasAdicionales}
           placeholder="Ej: 30"
           required
-        />
+        /> */}
 
         <FormField
           label="Método de Pago"

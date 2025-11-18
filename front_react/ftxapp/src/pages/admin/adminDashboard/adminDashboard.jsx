@@ -65,13 +65,13 @@ const AdminDashboard = () => {
       description: 'Editar Planes de entrenamiento',
       onClick: () => navigate("/admin/rutinas")
     },
-    {
-      id: 'clientes',
-      icon: '👥',
-      title: 'Listado de Clientes',
-      description: 'lista los clientes con su historial de pago',
-      onClick: () => navigate("/admin/clientes")
-    },
+    // {
+    //   id: 'clientes',
+    //   icon: '👥',
+    //   title: 'Listado de Clientes',
+    //   description: 'lista los clientes con su historial de pago',
+    //   onClick: () => navigate("/admin/clientes")
+    // },
     {
       id: 'precios',
       icon: '💰',
@@ -105,7 +105,7 @@ const AdminDashboard = () => {
   return (
 
     <div className="container">
-      <HeaderCrud title="Perfil de Usuario" widthPercent={100} />
+      <HeaderCrud title=" Gestion Admnistrador" widthPercent={100} MostrarCerrarSesion={true} />
 
     <div className="admin-dashboard">
       {/* <HeaderAdmin 
