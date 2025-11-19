@@ -26,8 +26,13 @@ export class DatosPersonalesRtaDto {
 
     if (value == null) return null;               // null | undefined
     if (typeof value === 'string') {
-      const d = new Date(value);
-      return !isNaN(d.getTime()) ? format(d, 'dd/MM/yyyy') : value;
+      if (/^\d{4}[-/]\d{2}[-/]\d{2}$/.test(value)) {
+        return value
+      } else {
+        const d = new Date(value);
+        return !isNaN(d.getTime()) ? format(d, 'dd/MM/yyyy') : value;
+      }
+
     }
     if (value instanceof Date && !isNaN(value.getTime())) {
 
