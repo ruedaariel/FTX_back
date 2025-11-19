@@ -23,14 +23,16 @@ export class DatosPersonalesRtaDto {
   plan: PlanRtaDto;
   @Expose()
   @Transform(({ value }) => {
-
+    console.log("Valor en transform fecha", value);
     if (value == null) return null;               // null | undefined
     if (typeof value === 'string') {
+
       const d = new Date(value);
+      console.log("Valor en if ", d);
       return !isNaN(d.getTime()) ? format(d, 'dd/MM/yyyy') : value;
     }
     if (value instanceof Date && !isNaN(value.getTime())) {
-
+      
       return format(value, 'dd/MM/yyyy');
     }
     if (typeof value === 'number') {               // timestamp
