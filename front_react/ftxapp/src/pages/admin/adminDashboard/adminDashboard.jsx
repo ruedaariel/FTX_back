@@ -72,13 +72,13 @@ const AdminDashboard = () => {
     //   description: 'lista los clientes con su historial de pago',
     //   onClick: () => navigate("/admin/clientes")
     // },
-    {
-      id: 'precios',
-      icon: '💰',
-      title: 'Lista de Precios',
-      description: 'Modificar precio de los planes vigentes.',
-      onClick: () => navigate("/admin/precios")
-    },
+    // {
+    //   id: 'precios',
+    //   icon: '💰',
+    //   title: 'Lista de Precios',
+    //   description: 'Modificar precio de los planes vigentes.',
+    //   onClick: () => navigate("/admin/precios")
+    // },
     {
       id: 'ejercicios',
       icon: '🏋️',

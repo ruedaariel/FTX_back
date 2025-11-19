@@ -15,6 +15,8 @@ import LoginPage from "../../pages/public/loginPage/LoginPage";
 import UsuarioEstadistica from "../../pages/usuario/usuarioEstadistica/usuarioEstadistica";
 import Planes from "../../pages/public/planes";
 import RegistroUsuario from "../../pages/public/registro/RegistroUsuario";
+import AdminEditorPlanes from "../../pages/admin/adminPLanes/AdminEditorPLanes";
+import VistaPagos from "../../pages/usuario/usuarioPagos/VistaPagos";
 
 
 //import {   ReseteoPassword } from '../../pages/public/login/logins';
@@ -22,6 +24,7 @@ import RegistroUsuario from "../../pages/public/registro/RegistroUsuario";
 import PagosAdmin from '../../pages/admin/adminPagos/pagosAdmin'
 import ResetPasswordPage from "../../pages/public/passwordReset/ResetePasswordPage";
 import PrimerCambioPasswordPage from "../../pages/public/PrimerCambioPasswordPage/PrimerCambioPasswordPage";
+
 
 /* import Rutina from "../pages/Rutina";
 import Usuarios from "../pages/Usuarios";
@@ -33,10 +36,11 @@ const AppRutas = () => {
       <Route path="/" element={<LandingPage />} />
       
       <Route path="/contacto" element={<Contacto />} />
-      <Route path="/admin/planes" element={<Planes />} />
+      {/* <Route path="/admin/planes" element={<Planes />} /> */}
       <Route path="/admin" element={<AdminDashboard />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/public/registro" element={<RegistroUsuario />} />
+      <Route path="/public/planes" element={<Planes />} />
       <Route path="/public/passwordReset" element={<ResetPasswordPage />} />
        <Route path="/public/primerCambioPassword" element={<PrimerCambioPasswordPage />} />
       {/* <Route path="/login2" element={<LoginBasico />} /> 
@@ -47,11 +51,13 @@ const AppRutas = () => {
       <Route path="/admin/rutinas" element={<InicioRutina />} />
 
       <Route path="/admin/clientes" element={<PantallaClientes />} />
+      <Route path="/admin/planes" element={<AdminEditorPlanes />} />
       <Route path="/admin/pagos" element={<PagosAdmin />} /> 
       <Route path="/admin/ejercicios" element={<PaginaEjercicios />} />
       <Route path="/usuario/rutina" element={<UsuarioRutina />} />
       <Route path="/usuario/perfil" element={<PerfilUsuario />} />
       <Route path="/usuario/estadistica" element={<UsuarioEstadistica />} />
+      <Route path="/usuario/pagos" element={<VistaPagos />} />
       <Route path="*" element={<EnContruccion />} />
 
       {/*   <Route path="/rutina" element={<Rutina />} />

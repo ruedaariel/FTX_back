@@ -138,15 +138,16 @@ const UsuarioDashboard = () => {
       id: "Pagos",
       icon: "💳",
       title: "Pagos",
-      description: "Gestiona tus pagos",
-      onClick: () => navigate("/usuario/pagos"),
+      description: "Historial de pagos",
+      onClick: () => navigate("/usuario/pagos", { state: { usuario } }),
     },
     {
       id: "Planes",
       icon: "📋",
       title: "Planes",
       description: "Quieres ver los planes?",
-      onClick: () => navigate("/admin/planes"),
+      onClick: () => navigate("/public/planes"),
+      
     },
   ];
 
@@ -180,6 +181,7 @@ const UsuarioDashboard = () => {
                 description={item.description}
                 onClick={item.onClick}
                 variant="default"
+                
               />
             ))}
           </DashboardGrid>
