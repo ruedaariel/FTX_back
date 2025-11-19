@@ -118,7 +118,6 @@ export class CreatePagoDto {
   @IsString()
   pagoId?: string; // payment_id de MercadoPago si existe
 
-  @IsOptional()
   @IsString()
   external_reference?: string; // referencia externa
 }
