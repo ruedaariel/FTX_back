@@ -42,7 +42,7 @@ function PerfilUsuario() {
    const location = useLocation();
   const usuario = location.state?.usuario;
 
-  // console.log("usuario",usuario);
+   console.log("usuario",usuario);
 
   const {
     register,
@@ -100,13 +100,14 @@ function PerfilUsuario() {
     // console.log("datostransformados",datosTransformados);
     
 
-    // console.log("cambios-----",cambios);
+     console.log("cambios-----",cambios);
 
     // Normaliza fecha si fue modificada
     if (cambios.datosPersonales?.fNacimiento)  {
       cambios.datosPersonales.fNacimiento = normalizarFechaParaBackend(cambios.datosPersonales.fNacimiento);
     }
 
+     console.log("cambios despues de normalizar fecha",cambios);
 
     // Enviar al backend
     await fetchGeneral({
