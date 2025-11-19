@@ -26,9 +26,9 @@ export class DatosPersonalesRtaDto {
     console.log("Valor en transform fecha", value);
     if (value == null) return null;               // null | undefined
     if (typeof value === 'string') {
-      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+      if (/^\d{4}[-/]\d{2}[-/]\d{2}$/.test(value)) {
         const [yyyy, mm, dd] = value.split('-');
-        return `${dd}-${mm}-${yyyy}`; 
+        return `${dd}/${mm}/${yyyy}`; 
       } else {
         return value;
         /*  const d = new Date(value);
