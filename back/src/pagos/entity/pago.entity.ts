@@ -34,6 +34,9 @@ export class PagoEntity {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   monto: number;
 
+  @Column({ type: 'varchar' })
+  referencia: string; // referencia externa del pago
+
    @Column({ type: 'int', name: 'usuarioId' })
   usuarioId: number;
 

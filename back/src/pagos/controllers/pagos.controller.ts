@@ -1,8 +1,10 @@
-import { Body, Controller, Post, Get, Delete, Param } from '@nestjs/common';
+import { Body, Controller, Post, Get, Delete, Param, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { PagosService } from '../services/pagos.service';
 import { CreatePagoDto, IniciarPagoDto } from '../dto/create-pago.dto';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('pagos')
+@UseGuards(AuthGuard)
 export class PagosController {
   constructor(private readonly pagosService: PagosService) {}
 
@@ -31,8 +33,8 @@ export class PagosController {
 
   //obtener pagos por id
   @Get(':id')
-  async obtenerPagoPorId(@Param('id') id: number) {
-    return await this.pagosService.obtenerPagoPorId(+id);
+  async obtenerPagoPorId(@Param('id', ParseIntPipe) id: number) {
+    return await this.pagosService.findPagosxId(id);
   }
 
   //eliminar pago por id
