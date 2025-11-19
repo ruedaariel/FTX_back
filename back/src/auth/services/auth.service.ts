@@ -13,6 +13,7 @@ import { Repository } from 'typeorm';
 import { IpayloadToken } from 'src/interfaces/auth.interface';
 import { PagoEntity } from 'src/pagos/entity/pago.entity';
 import { toLocalDateOnly } from 'src/utils/transformar-fecha';
+import { DIAS_PROXIMOS, PLAN_MENOR_LEVEL } from 'src/constantes/ctes-login';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +25,7 @@ export class AuthService {
   
 
     public async loginUsuario(body: LoginDto): Promise<LoginRtaDto> { //retorna null si no encuentra el mail para crear unnuevo ususario
-         const diasProximos = 3;
+         
        
         try {
 
@@ -88,7 +89,7 @@ export class AuthService {
                         message = message + " impago ,"
                     } else {
                         const fProxima = new Date(fVencimientoDateOnly.getTime());
-                        fProxima.setDate(fProxima.getDate() - diasProximos);
+                        fProxima.setDate(fProxima.getDate() - DIAS_PROXIMOS);
 
                         if (fProxima.getTime() < hoyDateOnly.getTime()) {
                             message = message + " proximo a vencer ,"
@@ -96,7 +97,7 @@ export class AuthService {
                     }
                 }
                 if (unUsuario.level === 0) {
-                    unUsuario.level = unUsuario.datosPersonales?.plan?.level ? unUsuario.datosPersonales?.plan?.level : 10; //o el nivel mas basico definido
+                    unUsuario.level = unUsuario.datosPersonales?.plan?.level ? unUsuario.datosPersonales?.plan?.level : PLAN_MENOR_LEVEL; //o el nivel mas basico definido
                     message = message + " primera vez , ";
                 }
             }
