@@ -23,7 +23,7 @@ export class DatosPersonalesRtaDto {
   plan: PlanRtaDto;
   @Expose()
   @Transform(({ value }) => {
-
+    console.log("Valor en transform fecha", value);
     if (value == null) return null;               // null | undefined
     if (typeof value === 'string') {
       if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
@@ -36,6 +36,7 @@ export class DatosPersonalesRtaDto {
          console.log(d.getTime() ? format(d, 'dd-MM-yyyy') : value);
          return !isNaN(d.getTime()) ? format(d, 'dd-MM-yyyy') : value; */
       }
+
 
     }
     if (value instanceof Date && !isNaN(value.getTime())) {

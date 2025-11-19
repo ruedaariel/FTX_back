@@ -94,6 +94,7 @@ const UsuarioDashboard = () => {
         url: `http://localhost:8000/apiFtx/usuario/${tokenUsuario.sub}`,
         method: "GET",
         onSuccess: (data) => setUsuario(data),
+        
         showModal,
         onError: () => {
           sessionStorage.removeItem("ftx_token");
@@ -101,6 +102,7 @@ const UsuarioDashboard = () => {
         },
       });
     }
+    
   }, [tokenUsuario]);
 
   // Items del dashboard
