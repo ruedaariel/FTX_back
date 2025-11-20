@@ -5,6 +5,7 @@ import PagoManualForm from '../../../components/pagoManualForm/pagoManualForm';
 import Button from '../../../components/form/button/button';
 import HeaderCrud from '../../../components/componentsShare/header/HeaderCrud';
 import { useModal } from "../../../context/ModalContext";
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -13,6 +14,7 @@ const PagosAdmin = () => {
   const [loading, setLoading] = useState(false);
 
   const { showModal } = useModal();
+  const navigate = useNavigate();
 
   const handleOpenModal = () => {
     console.log("voy a abrir modal");
@@ -78,7 +80,7 @@ const PagosAdmin = () => {
           </div>
 
           {/* Placeholder para futuras funcionalidades */}
-          <div className="action-card disabled">
+          <div className="action-card ">
             <div className="card-icon">📊</div>
             <div className="card-content">
               <h3 className="card-title">Historial de Pagos</h3>
@@ -86,12 +88,30 @@ const PagosAdmin = () => {
                 Consulta y filtra el historial completo de pagos de todos los usuarios
               </p>
               <Button
-                variant="outline"
+                variant="primary"
                 size="medium"
-                disabled
+                onClick={ () => navigate("/admin/historialPagos") }
                 className="action-button"
               >
-                Próximamente
+                Historial de Pagos
+              </Button>
+            </div>
+          </div>
+
+          <div className="action-card ">
+            <div className="card-icon">📊</div>
+            <div className="card-content">
+              <h3 className="card-title">Historial de Impagos</h3>
+              <p className="card-description">
+                Consulta y filtra el historial completo de pagos de todos los usuarios
+              </p>
+              <Button
+                variant="primary"
+                size="medium"
+                onClick={ () => navigate("/admin/historialImpagos") }
+                className="action-button"
+              >
+                Historial de ImPagos
               </Button>
             </div>
           </div>
