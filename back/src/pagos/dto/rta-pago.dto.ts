@@ -2,6 +2,7 @@ import { Exclude, Expose, Transform, Type } from "class-transformer";
 import { METODODEPAGO } from "../entity/pago.entity";
 import { formatToDdMmYy } from "src/utils/transformar-fecha";
 import { UsuarioRtaDto } from "src/usuario/dto/usuario-rta.dto";
+import { ESTADO } from "src/constantes/estado.enum";
 
 export class RtaPagoDto {
     @Expose()
@@ -12,7 +13,7 @@ export class RtaPagoDto {
     fechaPago: Date | null;
 
     @Expose()
-     @Transform(({ value }) => formatToDdMmYy(value))
+    @Transform(({ value }) => formatToDdMmYy(value))
     fechaVencimiento: Date | null;
 
     @Exclude()
@@ -33,7 +34,17 @@ export class RtaPagoDto {
     @Exclude()
     createdAt: Date;
 
+    //como se usa en 2 metodos, en uno vienen estyos 3 datos y en el otro, no, por eso pregunta 
+    //por value (si viene algo) y luego analiza el objeto
     @Expose()
-    @Type(()=>UsuarioRtaDto)
-    usuario?:UsuarioRtaDto;
+    @Transform(({ value, obj }) => value ?? obj.usuario?.estado ?? undefined, { toClassOnly: true })
+    estadoUsuario?: ESTADO;
+
+    @Expose()
+    @Transform(({ value, obj }) => value ?? obj.usuario?.datosPersonales?.nombre ?? undefined, { toClassOnly: true })
+    nombre?: string;
+
+    @Expose()
+    @Transform(({ value, obj }) => value ?? obj.usuario?.datosPersonales?.apellido ?? undefined, { toClassOnly: true })
+    apellido?: string;
 }
