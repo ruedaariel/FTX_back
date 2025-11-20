@@ -10,14 +10,14 @@ import { DatosPersonalesEntity } from '../../usuario-datos-personales/entities/d
 import { DatosFisicosEntity } from '../../usuario-datos-fisicos/entities/datos-fisicos.entity';
 import { PlanService } from '../../plan/services/plan.service';
 import { ESTADO } from '../../constantes/estado.enum';
-import { ESTADORUTINA, RutinaEntity } from '../../rutina/entities/rutina.entity';
+import { RutinaEntity } from '../../rutina/entities/rutina.entity';
 import * as bcrypt from 'bcrypt';
 import { EmailService } from '../../shared/email/email.service';
 import { generateRandomPassword } from '../../utils/random-password';
 /* import { LoginDto } from '../../auth/dto/login.dto';
 import { LoginRtaDto } from '../../auth/dto/login-rta.dto'; */
 import { UsuarioRtaDto } from '../dto/usuario-rta.dto';
-import { format } from 'date-fns';
+//import { format } from 'date-fns';
 import { plainToInstance } from 'class-transformer';
 import { FileImgService } from '../../shared/file-img/file-img.service';
 import { transformarFecha } from '../../utils/transformar-fecha';
@@ -33,13 +33,13 @@ export class UsuarioService {
 
   constructor(
     @InjectRepository(UsuarioEntity) private readonly usuarioRepository: Repository<UsuarioEntity>,
-    @InjectRepository(DatosPersonalesEntity)
-    private readonly datosPersonalesRepository: Repository<DatosPersonalesEntity>,
-    @InjectRepository(DatosFisicosEntity)
-    private readonly datosFisicosRepository: Repository<DatosFisicosEntity>,
-    @InjectRepository(RutinaEntity) private readonly rutinaRepository: Repository<RutinaEntity>,
+    /*   @InjectRepository(DatosPersonalesEntity)
+      private readonly datosPersonalesRepository: Repository<DatosPersonalesEntity>, */
+    /*  @InjectRepository(DatosFisicosEntity)
+     private readonly datosFisicosRepository: Repository<DatosFisicosEntity>, */
+    /*  @InjectRepository(RutinaEntity) private readonly rutinaRepository: Repository<RutinaEntity>, */
     @InjectEntityManager() private readonly entityManager: EntityManager,
-    @InjectRepository(PlanEntity) private readonly planRepository: Repository<PlanEntity>,
+    /*   @InjectRepository(PlanEntity) private readonly planRepository: Repository<PlanEntity>, */
     private readonly dataSource: DataSource,
     private readonly emailService: EmailService,
     private readonly planService: PlanService,
@@ -54,7 +54,8 @@ export class UsuarioService {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
-
+    //Estas 3 instrucciones hay que ponerlas inmediatamente antes de const usuarioBasico = this.usuarioRepository.create({ ...body.datosBasicos, password: contrasenaHasheada }); 
+    //HACERLO CON TIEMPO
     try {
       //validar la existencia del plan, se llama al metodo de Plan.service. Devuelve null si no lo encuentra
       let unPlan: PlanEntity | null = null;
@@ -184,7 +185,7 @@ export class UsuarioService {
 
   //encuentra un usuario por id ( datos basicos, datos personales, datos fisicos y plan)
   //VER SI CONTROLO ACA SI ESTA BORRADO
-  public async findUsuarioById(id: number): Promise<UsuarioRtaDto> {
+  public async findUsuarioById(id: number): Promise<UsuarioEntity> {
     try {
       const unUsuario = await this.usuarioRepository.findOne({
         where: { id: id },
@@ -193,9 +194,9 @@ export class UsuarioService {
       if (!unUsuario) {
         throw new ErrorManager("NOT_FOUND", `Usuario con id ${id} no encontrado`)
       }
-      const usuarioRtaDto = plainToInstance(UsuarioRtaDto, unUsuario);
 
-      return usuarioRtaDto
+
+      return unUsuario
     } catch (err) { throw ErrorManager.handle(err) }
   }
 
@@ -228,39 +229,16 @@ export class UsuarioService {
         estadoRutina: r.estadoRutina
 
       }))
-      console.log(rutinasDto);
+
       return rutinasDto
 
 
     } else return null
 
   }
-  //Se llama desde el login (valida mail y contraseña)
-  /* public async loginUsuario(body: LoginDto): Promise<LoginRtaDto> { //retorna null si no encuentra el mail para crear unnuevo ususario
-    try {
-
-      const unUsuario = await this.usuarioRepository.findOneBy({ email: body.email }); //necesito el null para usarlo en el createUsuario
-
-      if (!unUsuario || unUsuario.estado === ESTADO.ARCHIVADO) {
-        throw new ErrorManager('UNAUTHORIZED', 'Email incorrecto');
-      }
-
-      const passwordValida = await bcrypt.compare(body.password, unUsuario.password);
-      if (!passwordValida) {
-        throw new ErrorManager('UNAUTHORIZED', 'password incorrecta');
-      }
-      const usuarioRtaDto = plainToInstance(LoginRtaDto, unUsuario);
-      //FALTA GENERAR EL TOKEN -
-
-
-      return usuarioRtaDto;
-    } catch (err) { throw ErrorManager.handle(err) }
-  } */
-
+  
   //Actualiza todos los datos de un usuario.
   //se llama: desde perfil_usuario
-
-
   public async updateUsuario(id: number, body: UpdateUsuarioDto): Promise<Boolean> {
     try {
       const usuarioGuardado = await this.usuarioRepository.findOne({
@@ -274,10 +252,9 @@ export class UsuarioService {
         throw new ErrorManager("BAD_REQUEST", "El usuario esta dado de baja");
       }
 
-      console.log("body", body);
       if (body.datosBasicos && Object.keys(body.datosBasicos).length > 0) { //que no sea null o undefined y que no sea vacio
         if (body.datosBasicos.password) {
-          console.log("password nuevo",body.datosBasicos.password);
+          console.log("password nuevo", body.datosBasicos.password);
           usuarioGuardado.password = await bcrypt.hash(body.datosBasicos.password, +process.env.HASH_SALT);
 
           delete body.datosBasicos.password;
@@ -431,7 +408,6 @@ export class UsuarioService {
             usuarioGuardado.estado = body.estado;
 
           }
-
 
           // Object.assign(usuarioGuardado, body);
 

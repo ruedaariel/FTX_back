@@ -3,12 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePagoDto, IniciarPagoDto } from '../dto/create-pago.dto';
 import { PagoEntity, METODODEPAGO } from '../entity/pago.entity';
-import { UsuarioEntity } from '../../usuario/entities/usuario.entity';
+//import { UsuarioEntity } from '../../usuario/entities/usuario.entity';
 import { MercadoPagoService } from './mercadopago.service';
 import { calcularFechaVencimiento } from '../../utils/transformar-fecha';
 import { ErrorManager } from 'src/config/error.manager';
 import { RtaPagoDto } from '../dto/rta-pago.dto';
 import { plainToInstance } from 'class-transformer';
+import { UsuarioService } from 'src/usuario/services/usuario.service';
 
 @Injectable()
 export class PagosService {
@@ -16,8 +17,9 @@ export class PagosService {
     private readonly mpService: MercadoPagoService,
     @InjectRepository(PagoEntity)
     private readonly pagoRepository: Repository<PagoEntity>,
-    @InjectRepository(UsuarioEntity)
-    private readonly usuarioRepository: Repository<UsuarioEntity>,
+    private readonly usuarioService: UsuarioService
+   /*  @InjectRepository(UsuarioEntity)
+    private readonly usuarioRepository: Repository<UsuarioEntity>, */
   ) { }
 
   async iniciarPago(iniciarPagoDto: IniciarPagoDto) {
@@ -52,9 +54,7 @@ export class PagosService {
 
   private async guardarPago(createPagoDto: CreatePagoDto): Promise<PagoEntity> {
     // Buscar el usuario para la relación
-    const usuario = await this.usuarioRepository.findOne({
-      where: { id: createPagoDto.usuarioId },
-    });
+    const usuario = await this.usuarioService.findUsuarioById(createPagoDto.usuarioId );
 
     if (!usuario) {
       throw new Error(
@@ -75,7 +75,6 @@ export class PagosService {
       referencia: createPagoDto.external_reference,
       usuario: usuario,
     });
-    console.log("pago", pago);
     return await this.pagoRepository.save(pago);
   }
 
@@ -150,10 +149,10 @@ export class PagosService {
     throw new Error(`Pago no encontrado para los datos de MercadoPago`);
   }
 
-  public async findPagosxId(id: number): Promise<RtaPagoDto[]> {
+  public async findPagosxId(id: number): Promise<PagoEntity[]> {
     try {
 
-      const unUsuario = await this.usuarioRepository.findOneBy({ id });
+      const unUsuario = await this.usuarioService.findUsuarioById( id );
       if (!unUsuario) {
         throw new ErrorManager("BAD_REQUEST", "Usuario inexistente");
       }
@@ -167,8 +166,8 @@ export class PagosService {
         order: { fechaPago: 'DESC' } // o la columna que define "último"
       });
 
-      const pagosDto = plainToInstance(RtaPagoDto, pagos);
-      return pagosDto
+     
+      return pagos
     } catch (error) {
       throw ErrorManager.handle(error)
     }

@@ -13,6 +13,9 @@ import { AdminAccess } from 'src/auth/decorators/admin.decorator';
 import { AccessLevelGuard } from 'src/auth/guards/access-level.guard';
 import { AccessLevel } from 'src/auth/decorators/access-level.decorator';
 import { PublicAccess } from 'src/auth/decorators/public.decorator';
+import { RtaPagoDto } from 'src/pagos/dto/rta-pago.dto';
+import { plainToInstance } from 'class-transformer';
+import { UsuarioRtaDto } from '../dto/usuario-rta.dto';
 
 //@AccessLevel(30)
 
@@ -36,7 +39,10 @@ export class UsuarioController {
 
   @Get(':id') //si en @Param no uso 'id', la variable id:number lo toma como objeto y se debe desestructurar en el curpo del controller
   public async findUsuarioById(@Param('id', ParseIntPipe) id: number) { //controla si llega un entero y lanza el error
-    return await this.usuarioService.findUsuarioById(id);
+    
+    const unUsuario = await this.usuarioService.findUsuarioById(id);
+     const usuarioRtaDto = plainToInstance(UsuarioRtaDto, unUsuario);
+    return usuarioRtaDto
   }
 
   //se usa en usuario/rutinas y usuario/estadisticas
@@ -46,7 +52,7 @@ export class UsuarioController {
     return await this.usuarioService.findRutinasxId(id);
   }
 
-  //ver si esta bien comentariado
+  //se usa internamente
   /*  @Get('email/:mail')
    public async findUsuarioByMail(@Param('mail') mail: string) {
      return await this.usuarioService.findUsuarioByMail(mail);
