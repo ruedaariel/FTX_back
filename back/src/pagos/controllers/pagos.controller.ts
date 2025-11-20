@@ -2,11 +2,13 @@ import { Body, Controller, Post, Get, Delete, Param, UseGuards, ParseIntPipe } f
 import { PagosService } from '../services/pagos.service';
 import { CreatePagoDto, IniciarPagoDto } from '../dto/create-pago.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { plainToInstance } from 'class-transformer';
+import { RtaPagoDto } from '../dto/rta-pago.dto';
 
 @Controller('pagos')
 @UseGuards(AuthGuard)
 export class PagosController {
-  constructor(private readonly pagosService: PagosService) {}
+  constructor(private readonly pagosService: PagosService) { }
 
   @Post('iniciar')
   async iniciarPago(@Body() iniciarPagoDto: IniciarPagoDto) {
@@ -21,7 +23,8 @@ export class PagosController {
       await this.pagosService.guardarPagoManual(createPagoDto);
     return {
       message: 'Pago manual registrado exitosamente',
-      pago: pagoGuardado,
+      //pago: pagoGuardado,
+      pago: true,
     };
   }
 
@@ -34,7 +37,9 @@ export class PagosController {
   //obtener pagos por id
   @Get(':id')
   async obtenerPagoPorId(@Param('id', ParseIntPipe) id: number) {
-    return await this.pagosService.findPagosxId(id);
+    const pagos = await this.pagosService.findPagosxId(id);
+    const pagosDto = plainToInstance(RtaPagoDto, pagos);
+    return pagosDto
   }
 
   //eliminar pago por id

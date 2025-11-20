@@ -7,35 +7,42 @@ import { ErrorManager } from '../../config/error.manager';
 import { plainToInstance } from 'class-transformer';
 import * as jwt from 'jsonwebtoken';
 //import type { JwtPayload, Secret, SignOptions } from 'jsonwebtoken';
-import { InjectRepository } from '@nestjs/typeorm';
+//import { InjectRepository } from '@nestjs/typeorm';
 import { UsuarioEntity } from 'src/usuario/entities/usuario.entity';
-import { Repository } from 'typeorm';
-import { IpayloadToken } from 'src/interfaces/auth.interface';
-import { PagoEntity } from 'src/pagos/entity/pago.entity';
+//import { Repository } from 'typeorm';
+//import { IpayloadToken } from 'src/interfaces/auth.interface';
+//import { PagoEntity } from 'src/pagos/entity/pago.entity';
 import { toLocalDateOnly } from 'src/utils/transformar-fecha';
 import { DIAS_PROXIMOS, PLAN_MENOR_LEVEL } from 'src/constantes/ctes-login';
+import { UsuarioService } from 'src/usuario/services/usuario.service';
+import { PagosService } from 'src/pagos/services/pagos.service';
+import { IpayloadToken } from 'src/interfaces/auth.interface';
 
 @Injectable()
 export class AuthService {
-    constructor(@InjectRepository(UsuarioEntity)
-    private readonly usuarioRepository: Repository<UsuarioEntity>,
-        @InjectRepository(PagoEntity)
-        private readonly pagoRepository: Repository<PagoEntity>) { }
+    constructor(
+        private readonly usuarioService: UsuarioService,
+        private readonly pagoService: PagosService) { }
+    //@InjectRepository(UsuarioEntity)
+    //private readonly usuarioRepository: Repository<UsuarioEntity>,
+    /*   @InjectRepository(PagoEntity)
+      private readonly pagoRepository: Repository<PagoEntity>) { } */
 
-  
+
 
     public async loginUsuario(body: LoginDto): Promise<LoginRtaDto> { //retorna null si no encuentra el mail para crear unnuevo ususario
-         
-       
+
+
         try {
 
             //no uso em metodo del service porque tengo que impoertar tooodo del usuario :(
-            const unUsuario = await this.usuarioRepository.findOne({
-                where: { email: body.email },
-                relations: ['datosPersonales', 'datosPersonales.plan']
-            }
-            );
+            /*   const unUsuario = await this.usuarioRepository.findOne({
+                  where: { email: body.email },
+                  relations: ['datosPersonales', 'datosPersonales.plan']
+              }
+              ); */
 
+            const unUsuario = await this.usuarioService.findUsuarioByMail(body.email);
 
             if (!unUsuario) {
                 throw new ErrorManager('UNAUTHORIZED', 'Email incorrecto');
@@ -56,33 +63,22 @@ export class AuthService {
                    rol: unUsuario.rol,
                }; */
             const token = await this.generateJWT(unUsuario);
-            // REVISAR LOS PAGOS y ver si pago o no y agregar a message
 
             let message = "";
             if (unUsuario.rol === "usuario") {
-                console.log("entro a usuario", unUsuario.id);
+                //             console.log("entro a usuario", unUsuario.id);
 
-                const ultimoPago = await this.pagoRepository.findOne({
-                    where: { usuarioId: unUsuario.id },
-                    order: { fechaPago: 'DESC' } // o la columna que define "último"
-                });
-
-                /* 
-                const ultimoPago = await this.pagoRepository
-                  .createQueryBuilder('p')
-                  .where('p.usuarioId = :id', { id: unUsuario.id })
-                  .orderBy('p.fechaPago', 'DESC')
-                  .limit(1)
-                  .getOne();
-                 */
+                const ultimosPagos = await this.pagoService.findPagosxId(unUsuario.id);
+                /*    const ultimoPago = await this.pagoRepository.findOne({
+                       where: { usuarioId: unUsuario.id },
+                       order: { fechaPago: 'DESC' } // o la columna que define "último"
+                   }); */
 
 
-
-                
-                if (!ultimoPago) {
+                if (!ultimosPagos || ultimosPagos.length === 0) {
                     message = message + " impago ,"
                 } else {
-                    const fVencimientoDateOnly = toLocalDateOnly(ultimoPago.fechaVencimiento);  
+                    const fVencimientoDateOnly = toLocalDateOnly(ultimosPagos[0].fechaVencimiento);
                     const hoyDateOnly = toLocalDateOnly(new Date()); //hoy
 
                     if (fVencimientoDateOnly.getTime() < hoyDateOnly.getTime()) {
@@ -93,7 +89,7 @@ export class AuthService {
 
                         if (fProxima.getTime() < hoyDateOnly.getTime()) {
                             message = message + " proximo a vencer ,"
-                         }
+                        }
                     }
                 }
                 if (unUsuario.level === 0) {
