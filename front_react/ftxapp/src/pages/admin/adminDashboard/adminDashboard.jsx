@@ -65,13 +65,13 @@ const AdminDashboard = () => {
       description: 'Editar Planes de entrenamiento',
       onClick: () => navigate("/admin/rutinas")
     },
-    // {
-    //   id: 'clientes',
-    //   icon: '👥',
-    //   title: 'Listado de Clientes',
-    //   description: 'lista los clientes con su historial de pago',
-    //   onClick: () => navigate("/admin/clientes")
-    // },
+    {
+      id: 'clientes',
+      icon: '👥',
+      title: 'Listado de Clientes',
+      description: 'lista los clientes con su historial de pago',
+      onClick: () => navigate("/admin/clientes")
+    },
     // {
     //   id: 'precios',
     //   icon: '💰',

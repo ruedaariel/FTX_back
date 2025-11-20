@@ -17,6 +17,8 @@ import Planes from "../../pages/public/planes";
 import RegistroUsuario from "../../pages/public/registro/RegistroUsuario";
 import AdminEditorPlanes from "../../pages/admin/adminPLanes/AdminEditorPLanes";
 import VistaPagos from "../../pages/usuario/usuarioPagos/VistaPagos";
+import AdminHistorialPagos from "../../pages/admin/adminHistorialPagos/adminHistorialPagos";
+import AdminHistorialImpagos from "../../pages/admin/adminHistorialImpagos/adminHistorialImpagos";
 
 
 //import {   ReseteoPassword } from '../../pages/public/login/logins';
@@ -53,6 +55,8 @@ const AppRutas = () => {
       <Route path="/admin/clientes" element={<PantallaClientes />} />
       <Route path="/admin/planes" element={<AdminEditorPlanes />} />
       <Route path="/admin/pagos" element={<PagosAdmin />} /> 
+      <Route path="/admin/historialPagos" element={<AdminHistorialPagos />} /> 
+      <Route path="/admin/historialImpagos" element={<AdminHistorialImpagos />} />
       <Route path="/admin/ejercicios" element={<PaginaEjercicios />} />
       <Route path="/usuario/rutina" element={<UsuarioRutina />} />
       <Route path="/usuario/perfil" element={<PerfilUsuario />} />
