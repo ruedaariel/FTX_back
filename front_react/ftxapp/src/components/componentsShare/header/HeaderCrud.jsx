@@ -20,6 +20,7 @@ function HeaderCrud({
 
   const cerrarSesion = () => {
     sessionStorage.removeItem("ftx_token"); // o localStorage según tu flujo
+    sessionStorage.removeItem("mensajeMostrado"); // o localStorage según tu flujo
     navigate('/');
   };
 

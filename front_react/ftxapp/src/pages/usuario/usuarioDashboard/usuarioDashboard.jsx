@@ -17,11 +17,13 @@ const UsuarioDashboard = () => {
   const { showModal } = useModal();
 
   // Estados principales
-  const [tokenUsuario, setTokenUsuario] = useState(null);   // token decodificado
-  const [usuario, setUsuario] = useState(null);             // datos del usuario desde backend
+  const [tokenUsuario, setTokenUsuario] = useState(null); // token decodificado
+  const [usuario, setUsuario] = useState(null); // datos del usuario desde backend
   const [validarUsuario, setValidarUsuario] = useState(null); // datos del usuario desde sessionStorage
 
-  // Función para validar expiración del token
+  //   sessionStorage.setItem("mensajeMostrado", "false"); // para controlar mensajes únicos
+  //  console.log("yaMostrado", sessionStorage.getItem("mensajeMostrado"));
+
   function isTokenExpired(token) {
     if (!token?.exp) return true;
     const now = Math.floor(Date.now() / 1000);
@@ -41,22 +43,36 @@ const UsuarioDashboard = () => {
   // Muestro mensajes de aviso (solo una vez por sesión)
   useEffect(() => {
     const yaMostrado = sessionStorage.getItem("mensajeMostrado");
-    if (yaMostrado) return; // si ya se mostró, no repetir
+    console.log("yaMostrado en useEffect", yaMostrado);
+    if (yaMostrado === "true") return; // si ya se mostró, no repetir
 
     if (validarUsuario?.message?.includes("primera")) {
-      showModal("Este es tu primer Ingreso. Debes cambiar la contraseña", "info", 0, true);
+      showModal(
+        "Este es tu primer Ingreso. Debes cambiar la contraseña",
+        "info",
+        0,
+        true
+      );
       navigate("/public/primerCambioPassword");
       sessionStorage.setItem("mensajeMostrado", "true");
+      return;
     }
 
     if (validarUsuario?.message?.includes("proximo")) {
-      showModal("Tu plan está próximo a vencer. Contacta a tu Trainer.", "info", 0, true);
+      showModal(
+        "Tu plan está próximo a vencer. Contacta a tu Trainer.",
+        "info",
+        0,
+        true
+      );
       sessionStorage.setItem("mensajeMostrado", "true");
+      return;
     }
 
     if (validarUsuario?.message?.includes("impago")) {
       showModal("Tu plan está impago. Contacta a tu Trainer.", "info", 0, true);
       sessionStorage.setItem("mensajeMostrado", "true");
+      return;
     }
   }, [validarUsuario]);
 
@@ -74,14 +90,22 @@ const UsuarioDashboard = () => {
 
       if (isTokenExpired(datos)) {
         sessionStorage.removeItem("ftx_token");
-        showModal("Tu sesión ha expirado. Inicia sesión nuevamente.", "info", 3000);
+        showModal(
+          "Tu sesión ha expirado. Inicia sesión nuevamente.",
+          "info",
+          3000
+        );
         setTimeout(() => navigate("/login"), 3000);
         return;
       }
 
       setTokenUsuario(datos);
     } else {
-      showModal("Tu sesión ha expirado. Inicia sesión nuevamente.", "info", 3000);
+      showModal(
+        "Tu sesión ha expirado. Inicia sesión nuevamente.",
+        "info",
+        3000
+      );
       setTimeout(() => navigate("/login"), 3000);
       navigate("/login");
     }
@@ -94,7 +118,7 @@ const UsuarioDashboard = () => {
         url: `http://localhost:8000/apiFtx/usuario/${tokenUsuario.sub}`,
         method: "GET",
         onSuccess: (data) => setUsuario(data),
-        
+
         showModal,
         onError: () => {
           sessionStorage.removeItem("ftx_token");
@@ -102,7 +126,6 @@ const UsuarioDashboard = () => {
         },
       });
     }
-    
   }, [tokenUsuario]);
 
   // Items del dashboard
@@ -147,26 +170,37 @@ const UsuarioDashboard = () => {
       title: "Planes",
       description: "Quieres ver los planes?",
       onClick: () => navigate("/public/planes"),
-      
     },
   ];
 
   return (
     <div className="container">
       {/* Header con botón de cerrar sesión */}
-      <HeaderCrud title="Perfil de Usuario" widthPercent={100} MostrarCerrarSesion={true} />
+      <HeaderCrud
+        title="Perfil de Usuario"
+        widthPercent={100}
+        MostrarCerrarSesion={true}
+      />
 
       {/* Avisos legales según estado del usuario */}
-      {validarUsuario?.message?.includes("proximo") && (
+      {/* {validarUsuario?.message?.includes("proximo") && (
         <div className="aviso-legal">
+          <p>Tu plan está próximo a vencer. Contacta a tu Trainer.</p>
+        </div>
+      )} */}
+      {validarUsuario?.message?.includes("proximo") && (
+        <div className="aviso-legal-marquee">
           <p>Tu plan está próximo a vencer. Contacta a tu Trainer.</p>
         </div>
       )}
 
       {validarUsuario?.message?.includes("impago") && (
-        <div className="aviso-legal">
+        <div className="aviso-legal-marquee">
           <p>Pagos atrasados. Algunas características no estarán disponibles. Contacta a tu Trainer.</p>
         </div>
+        // <div className="aviso-legal">
+        //   <p>Pagos atrasados. Algunas características no estarán disponibles. Contacta a tu Trainer.</p>
+        // </div>
       )}
 
       {/* Dashboard principal */}
@@ -181,7 +215,6 @@ const UsuarioDashboard = () => {
                 description={item.description}
                 onClick={item.onClick}
                 variant="default"
-                
               />
             ))}
           </DashboardGrid>

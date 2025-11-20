@@ -32,7 +32,7 @@ const VistaPagos = () => {
   return (
   
     <div className="container">
-      <HeaderCrud title={`${usuario.datosPersonales.nombre}, este es tu historial de pagos`} widthPercent={100} MostrarCerrarSesion={false} /> 
+      <HeaderCrud title= "Historial de Pagos" widthPercent={100} MostrarCerrarSesion={false} /> 
   <PagosListados pagos={pagos} />;
     </div>
   )
