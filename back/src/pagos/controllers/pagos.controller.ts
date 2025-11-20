@@ -31,6 +31,7 @@ export class PagosController {
   //obtener todos los pagos
   @Get()
   async obtenerTodosLosPagos() {
+         console.log("paso controller pagos");
     return await this.pagosService.obtenerTodosLosPagos();
   }
 
@@ -38,7 +39,7 @@ export class PagosController {
   @Get(':id')
   async obtenerPagoPorId(@Param('id', ParseIntPipe) id: number) {
     const pagos = await this.pagosService.findPagosxId(id);
-    const pagosDto = plainToInstance(RtaPagoDto, pagos);
+    const pagosDto = plainToInstance(RtaPagoDto, pagos, { excludeExtraneousValues: true }) ;
     return pagosDto
   }
 

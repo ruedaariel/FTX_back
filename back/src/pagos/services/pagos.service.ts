@@ -97,9 +97,10 @@ export class PagosService {
 
   //obtener todos los pagos
   async obtenerTodosLosPagos(): Promise<RtaPagoDto[]> {
-    const pagos = await this.pagoRepository.find({ relations: ['usuario'] ,order: { fechaPago: 'DESC' }});
-    const pagosDto = plainToInstance(RtaPagoDto, pagos);
-    
+    const pagos = await this.pagoRepository.find({ relations: ['usuario', 'usuario.datosPersonales'] ,order: { fechaPago: 'DESC' }});
+    console.log("entro a obtener todos los pagos");
+    const pagosDto = plainToInstance(RtaPagoDto, pagos, { excludeExtraneousValues: true });
+      console.log("paso plaintoinstance en pagos");
     return pagosDto;
   }
 
