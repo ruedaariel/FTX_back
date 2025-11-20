@@ -1,5 +1,6 @@
 // front_react/ftxapp/src/services/planService.js
 import axios from "axios";
+import { getToken } from "../auth/token";
 
 // Configurar instancia de axios
 const api = axios.create({
@@ -9,6 +10,19 @@ const api = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+// Interceptor para incluir token
+api.interceptors.request.use(
+  (config) => {
+    const token = getToken();
+    if (token) {
+      // config.headers.Authorization = `ftx_token ${token}`;
+      config.headers['ftx_token'] = token;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 // Interceptor para manejar errores globalmente
 api.interceptors.response.use(
@@ -65,6 +79,7 @@ export class PlanService {
 
   // Actualizar plan (admin)
   static async actualizarPlan(id, planData) {
+    console.log("planData en service:", planData);
     try {
       const response = await api.patch(`/plan/update/${id}`, planData);
       return response.data;
