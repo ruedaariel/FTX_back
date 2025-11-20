@@ -106,7 +106,12 @@ export class PagosService {
   }
 
   async obtenerImpagos(): Promise<RtaImpagosDto[]> {
-    const cutoff = new Date();
+    const fechaFin = new Date();
+    fechaFin.setHours(0,0,0,0);
+    const fechaInicio = new Date(fechaFin);
+    fechaInicio.setFullYear(fechaInicio.getFullYear()-1);
+
+    
     const subQ = this.pagoRepository.createQueryBuilder('p_sub')
       .select('p_sub.usuarioId', 'usuarioId') //selecciona la columna usuarioId y la renombra
       .addSelect('MAX(p_sub.fechaVencimiento)', 'lastVencimiento') //selecciona la ultima fechaVencimiento y la renombra
@@ -124,14 +129,14 @@ export class PagosService {
       // unir con datosPersonales (1:1)
       .leftJoin('u.datosPersonales', 'dp')
       .setParameters(subQ.getParameters())
-      .where('t.lastVencimiento < :cutoff', { cutoff })
+      .where('t.lastVencimiento >= :fechaInicio AND t.lastVencimiento < :fechaFin', { fechaInicio, fechaFin })
       .andWhere('u.rol = :rol', { rol: 'usuario' })
       .select([
         'u.id AS usuarioId',
         'u.estado AS estadoUsuario',
         'dp.nombre AS nombre',
         'dp.apellido AS apellido',
-        'p.idPagos AS pagoId',
+        'p.idPagos AS idPagos',
         'p.fechaPago AS fechaPago',
         'p.fechaVencimiento AS fechaVencimiento',
         'p.metodoDePago AS metodoDePago',
@@ -150,7 +155,7 @@ export class PagosService {
         'u.estado AS estadoUsuario',
         'dp.nombre AS nombre',
         'dp.apellido AS apellido',
-        'NULL AS pagoId',
+        'NULL AS idPagos',
         'NULL AS fechaPago',
         'NULL AS fechaVencimiento',
         'NULL AS metodoDePago',
