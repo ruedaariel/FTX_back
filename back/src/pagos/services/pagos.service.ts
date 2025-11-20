@@ -128,13 +128,13 @@ export class PagosService {
       .andWhere('u.rol = :rol', { rol: 'usuario' })
       .select([
         'u.id AS usuarioId',
-        'u.estado AS estado',
+        'u.estado AS estadoUsuario',
         'dp.nombre AS nombre',
         'dp.apellido AS apellido',
         'p.idPagos AS pagoId',
         'p.fechaPago AS fechaPago',
         'p.fechaVencimiento AS fechaVencimiento',
-        'p.metodoDePago AS metodoPago',
+        'p.metodoDePago AS metodoDePago',
         'p.monto AS monto'
       ]).getRawMany();//Ejecuta la consulta y devuelve filas
 
@@ -147,13 +147,13 @@ export class PagosService {
       .andWhere('u.rol = :rol', { rol: 'usuario' })
       .select([
         'u.id AS usuarioId',
-        'u.estado AS estado',
+        'u.estado AS estadoUsuario',
         'dp.nombre AS nombre',
         'dp.apellido AS apellido',
         'NULL AS pagoId',
         'NULL AS fechaPago',
         'NULL AS fechaVencimiento',
-        'NULL AS metodoPago',
+        'NULL AS metodoDePago',
         'NULL AS monto'
       ])
       .getRawMany();
