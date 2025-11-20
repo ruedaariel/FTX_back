@@ -31,10 +31,15 @@ export class PagosController {
   //obtener todos los pagos
   @Get()
   async obtenerTodosLosPagos() {
-         console.log("paso controller pagos");
     return await this.pagosService.obtenerTodosLosPagos();
   }
 
+    @Get('/impagos')
+  async obtenerImpagos() {
+    return await this.pagosService.obtenerImpagos();
+  }
+
+  
   //obtener pagos por id
   @Get(':id')
   async obtenerPagoPorId(@Param('id', ParseIntPipe) id: number) {
