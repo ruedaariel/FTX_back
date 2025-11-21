@@ -42,11 +42,12 @@ export class RolesGuard implements CanActivate {
             }
         }
 
-        if (rolUser.toUpperCase() === ROL.ADMIN) {
+      
+        if (rolUser.toUpperCase() === ROL.ADMIN || rolUser === ROL.ADMIN) {
             return true
         }
 
-        const isAuth = roles.some(rol => rol === rolUser.toUpperCase());
+        const isAuth = roles.some(rol => rol === rolUser.toUpperCase() || rol === rolUser);
 
         if (!isAuth) {
             throw new UnauthorizedException('No tienes permisos para este acceder a esta operación')

@@ -19,7 +19,7 @@ import { UsuarioRtaDto } from '../dto/usuario-rta.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 //@AccessLevel(30)
-@ApiTags('usuario')
+//@ApiTags('usuario')
 @Controller('usuario')
 @UseGuards(AuthGuard, RolesGuard, AccessLevelGuard)
 export class UsuarioController {
