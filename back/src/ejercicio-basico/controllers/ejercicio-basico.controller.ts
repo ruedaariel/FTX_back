@@ -13,8 +13,8 @@ import { Rol } from 'src/auth/decorators/roles.decorator';
 @UseGuards(AuthGuard, RolesGuard)
 export class EjercicioBasicoController {
   constructor(private readonly ejercicioBasicoService: EjercicioBasicoService) { }
-  
-   @Rol('ADMIN')
+
+  @Rol('ADMIN')
   @Post('register')
   @UseInterceptors(imagenEjercicioInterceptor()) //ver src/interceptors/imagen-interceptor
   async createEjercicioBasico(
@@ -31,23 +31,23 @@ export class EjercicioBasicoController {
     return this.ejercicioBasicoService.findAll();
   }
 
-/*   @Rol('ADMIN')
-    @Get('allnames')
-  findAllNames() {
-    return this.ejercicioBasicoService.findAllNames();
-  } */
+  /*   @Rol('ADMIN')
+      @Get('allnames')
+    findAllNames() {
+      return this.ejercicioBasicoService.findAllNames();
+    } */
 
- /*  @Rol('ADMIN')
-  @Get(':id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.ejercicioBasicoService.findOne(+id);
-  } */
+  /*  @Rol('ADMIN')
+   @Get(':id')
+   findOne(@Param('id', ParseIntPipe) id: number) {
+     return this.ejercicioBasicoService.findOne(+id);
+   } */
 
   @Rol('ADMIN')
   @Patch('update/:id')
   @UseInterceptors(imagenEjercicioInterceptor()) //ver src/interceptors/imagen-interceptor
   update(
-    @Param('id',ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateEjercicioBasicoDto: UpdateEjercicioBasicoDto,
     @UploadedFile() file: Express.Multer.File
   ) {
@@ -63,17 +63,17 @@ export class EjercicioBasicoController {
     return this.ejercicioBasicoService.remove(id);
   }
 
- /*  @Rol('ADMIN')
-  @Get('name/:name')
-  findByName(@Param('name') nombreEj: string) {
-    return this.ejercicioBasicoService.findByName(nombreEj);
-  } */
+  /*  @Rol('ADMIN')
+   @Get('name/:name')
+   findByName(@Param('name') nombreEj: string) {
+     return this.ejercicioBasicoService.findByName(nombreEj);
+   } */
 
- /*  @Rol('ADMIN')
-  @Get('existName/:name')
-  existName(@Param('name') nombreEj: string) {
-    return this.ejercicioBasicoService.existName(nombreEj);
-  }
- */
+  /*  @Rol('ADMIN')
+   @Get('existName/:name')
+   existName(@Param('name') nombreEj: string) {
+     return this.ejercicioBasicoService.existName(nombreEj);
+   }
+  */
 
 }
