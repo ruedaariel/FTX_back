@@ -16,9 +16,10 @@ import { PublicAccess } from 'src/auth/decorators/public.decorator';
 //import { RtaPagoDto } from 'src/pagos/dto/rta-pago.dto';
 import { plainToInstance } from 'class-transformer';
 import { UsuarioRtaDto } from '../dto/usuario-rta.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 //@AccessLevel(30)
-
+@ApiTags('usuario')
 @Controller('usuario')
 @UseGuards(AuthGuard, RolesGuard, AccessLevelGuard)
 export class UsuarioController {

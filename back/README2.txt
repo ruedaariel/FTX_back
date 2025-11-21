@@ -72,3 +72,7 @@ npm install framer-motion
 
 //para iconos en React
 npm install lucide-react
+
+//swagger para documentacion
+npm install --save @nestjs/swagger
+

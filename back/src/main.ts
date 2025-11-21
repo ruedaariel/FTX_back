@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { CORS } from './constantes';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import * as express from 'express';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 //import 'reflect-metadata';
 
 /* import { Logger } from '@nestjs/common';
@@ -46,9 +47,17 @@ async function bootstrap() {
   app.enableCors(CORS);
   // Habilitar CORS
 
-  
   //establece un prefijo para toda la aplicacion y evita que se mezclen rutas de be y fe
   app.setGlobalPrefix('apiFtx');
+
+    //Swagger para documentacion
+  const config = new DocumentBuilder()
+    .setTitle('FTX API')
+    .setDescription('Aplicacion de gestion para personal Trainner y sus clientes')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app,config);
+  SwaggerModule.setup('docs',app, document);
 
   //busca la carpeta uploads y lo sirve como contenido estatico (imagnes, pdf, css, etc), permite el acceso desde el front
   app.use('/uploads', express.static('uploads'));
