@@ -71,6 +71,51 @@ box-sizing: border-box;
 }
 
 
+/* conservar tu estilo actual y añadir lo siguiente */
+
+.btn-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  background-color: var(--color-primario-naranja);
+  color: var(--color-texto-claro);
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border 0.2s ease;
+}
+
+/* icon container: tamaño y centrado */
+.btn-logout .btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  line-height: 0;
+}
+
+/* texto visible por defecto */
+.btn-logout .btn-text {
+  display: inline-block;
+}
+
+/* hover (mantener tu comportamiento) */
+.btn-logout:hover {
+  background-color: var(--gradiente-boton-hover);
+  border: 2px solid var(--color-primario-naranja);
+}
+
+/* focus visible accesible */
+.btn-logout:focus-visible {
+  outline: 2px solid #00000033;
+  outline-offset: 2px;
+}
+
+
+
 
 
 /* Estilos para Desktop (min-width: 768px) */
@@ -92,5 +137,18 @@ box-sizing: border-box;
   .close-app {
     font-size: 1.8rem;
     padding-right: 20px;
+  }
+}
+
+/* MOBILE: ocultar texto y dejar solo icono (ajusta breakpoint si necesitas) */
+@media (max-width: 767px) {
+  .btn-logout {
+    padding: 8px;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+  }
+  .btn-logout .btn-text {
+    display: none;
   }
 }

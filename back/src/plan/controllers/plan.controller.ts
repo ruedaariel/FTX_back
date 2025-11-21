@@ -7,6 +7,7 @@ import { PlanRtaCompletaDto } from '../dto/plan-rta-completa.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Rol } from 'src/auth/decorators/roles.decorator';
+import { PublicAccess } from 'src/auth/decorators/public.decorator';
 
 
 @Controller('plan')
@@ -20,7 +21,7 @@ export class PlanController {
     return this.planService.create(createPlanDto);
   }
 
-  @Rol('ADMIN')
+  @PublicAccess()
   @Get('all')
   findAll() {
     return this.planService.findAll();
