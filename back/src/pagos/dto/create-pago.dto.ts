@@ -1,6 +1,7 @@
 import { IsEnum, IsInt, IsNumber, IsOptional, IsString, IsEmail, ValidateNested, IsObject } from 'class-validator';
 import { Type } from 'class-transformer';
 import { METODODEPAGO } from '../entity/pago.entity';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 
 // Sub-DTO para información del pagador
@@ -91,33 +92,42 @@ export class IniciarPagoDto {
 
 // DTO para datos que vienen de MERCADOPAGO (para guardar en BD)
 export class CreatePagoDto {
+  @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   fechaPago?: string; // date_created de MercadoPago
 
+  @ApiProperty()
   @IsString()
   estado: string; // status de MercadoPago
 
+  @ApiPropertyOptional()
   @IsInt()
-  diasAdicionales: number; // del frontend original
+  diasAdicionales?: number; // del frontend original
 
+  @ApiProperty()
   @IsEnum(METODODEPAGO)
   metodoDePago: METODODEPAGO; // del frontend original
 
+  @ApiProperty()
   @IsNumber({ maxDecimalPlaces: 2 })
   monto: number; // transaction_amount de MercadoPago
 
+  @ApiProperty()
   @IsInt()
   usuarioId: number; // del frontend original
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   preferenciaId?: string; // id de MercadoPago
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   pagoId?: string; // payment_id de MercadoPago si existe
 
+  @ApiProperty()
   @IsString()
   external_reference?: string; // referencia externa
 }

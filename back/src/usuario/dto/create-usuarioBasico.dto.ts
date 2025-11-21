@@ -1,8 +1,10 @@
+import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsEnum, IsNotEmpty, Matches } from "class-validator";
 import { ROL } from "src/constantes/rol";
 
 
 export class CreateUsuarioBasicoDto {
+    @ApiProperty()
     @IsNotEmpty({ message: 'El correo no puede ser vacio' })
     @IsEmail({}, { message: 'El correo no es valido' })
     email: string;
@@ -12,9 +14,9 @@ export class CreateUsuarioBasicoDto {
     //     message: 'La contraseña debe tener mínimo 8 caracteres, una mayúscula, una minúscula y un número',
     // })
     // password: string;
-
+    @ApiProperty()
     @IsNotEmpty({ message: 'El rol no puede ser vacio' })
     @IsEnum(ROL, { message: 'tipo de usuario invalido, debe ser usuario o admin (enumerado)' })
-    rol:ROL;
+    rol: ROL;
 
 }
