@@ -11,7 +11,7 @@ import { Rol } from 'src/auth/decorators/roles.decorator';
 export class EjercicioRutinaController {
   constructor(private readonly ejercicioRutinaService: EjercicioRutinaService) { }
 
-  @Rol('ADMIN')
+  @Rol('USUARIO')
   @Patch('update/:id')
   update(@Param('id', ParseIntPipe) id: number, @Body() body: { ejercicioHecho: boolean }) {
     return this.ejercicioRutinaService.updateEjHecho(id, body.ejercicioHecho);

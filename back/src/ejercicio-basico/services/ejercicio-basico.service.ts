@@ -150,7 +150,6 @@ console.log("ejercicio Creado --->", ejercicioCreado);
     try {
       const ejercicios = await this.ejercicioBasicoRepository.find();
       //ojo, recordar que estoy modificando el campo imagenLink, aunque NO en la b/d
-     //VER SI ANDA CON EL TRANSFORM DEL DTO
       // ejercicios.forEach(ej => { ej.imagenLink = this.fileImgService.construirUrlImagen(ej.imagenLink, "ejercicios"); });
      const rtaEjerciciosDto = plainToInstance(RtaEjercicioBasicoDto, ejercicios, { excludeExtraneousValues: true });
       return rtaEjerciciosDto;

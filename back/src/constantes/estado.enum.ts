@@ -1,3 +1,4 @@
+//estado del usuario
 
 export enum ESTADO {
     ACTIVO = 'activo',

@@ -9,11 +9,11 @@ import { UpdateUsuarioAdmDto } from '../dto/update-Usuario-adm.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { Rol } from 'src/auth/decorators/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { AdminAccess } from 'src/auth/decorators/admin.decorator';
+//import { AdminAccess } from 'src/auth/decorators/admin.decorator';
 import { AccessLevelGuard } from 'src/auth/guards/access-level.guard';
-import { AccessLevel } from 'src/auth/decorators/access-level.decorator';
+//import { AccessLevel } from 'src/auth/decorators/access-level.decorator';
 import { PublicAccess } from 'src/auth/decorators/public.decorator';
-import { RtaPagoDto } from 'src/pagos/dto/rta-pago.dto';
+//import { RtaPagoDto } from 'src/pagos/dto/rta-pago.dto';
 import { plainToInstance } from 'class-transformer';
 import { UsuarioRtaDto } from '../dto/usuario-rta.dto';
 
@@ -37,11 +37,12 @@ export class UsuarioController {
     return await this.usuarioService.findAllUsuarios();
   }
 
+  @Rol('USUARIO')
   @Get(':id') //si en @Param no uso 'id', la variable id:number lo toma como objeto y se debe desestructurar en el curpo del controller
   public async findUsuarioById(@Param('id', ParseIntPipe) id: number) { //controla si llega un entero y lanza el error
-    
+
     const unUsuario = await this.usuarioService.findUsuarioById(id);
-     const usuarioRtaDto = plainToInstance(UsuarioRtaDto, unUsuario);
+    const usuarioRtaDto = plainToInstance(UsuarioRtaDto, unUsuario);
     return usuarioRtaDto
   }
 
@@ -52,6 +53,11 @@ export class UsuarioController {
     return await this.usuarioService.findRutinasxId(id);
   }
 
+  @Rol('USUARIO')
+  @Get('rutinasEstadistica/:id')
+  public async findRutinasxIdEstadistica(@Param('id', ParseIntPipe) id: number) {
+    return await this.usuarioService.findRutinasxId(id);
+  }
   //se usa internamente
   /*  @Get('email/:mail')
    public async findUsuarioByMail(@Param('mail') mail: string) {

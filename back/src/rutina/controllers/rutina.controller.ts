@@ -6,10 +6,13 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Rol } from 'src/auth/decorators/roles.decorator';
 import { EstadoDto } from '../dto/estado.dto';
+import { AccessLevelGuard } from 'src/auth/guards/access-level.guard';
+import { AccessLevel } from 'src/auth/decorators/access-level.decorator';
+import { PLAN_MAYOR_LEVEL } from 'src/constantes/levels-plan';
 
 
 @Controller('rutina')
-@UseGuards(AuthGuard, RolesGuard)
+@UseGuards(AuthGuard, RolesGuard, AccessLevelGuard)
 export class RutinaController {
   constructor(private readonly rutinaService: RutinaService) { }
 
@@ -24,18 +27,24 @@ export class RutinaController {
   public async findAllRutinas() {
     return this.rutinaService.findAllRutinas();
   }
-
+///////////////// VER EN DONDE SE LLAMA ////////////////////////
+  @Rol('USUARIO')
   @Get(':id')
   public async findRutinaById(@Param('id', ParseIntPipe) id: number) {
     return this.rutinaService.findRutinaById(id);
   }
-
+ //////////////// ver si es aca o en USUARIO /////////////////
+ /*  @AccessLevel(PLAN_MAYOR_LEVEL)
+  @Get('estadistica/:id')
+  public async findRutinaByIdEstadistica(@Param('id', ParseIntPipe) id: number) {
+    return this.rutinaService.findRutinaById(id);
+  } */
   /// ??????????????????????????????????????????????????
-  @Rol('ADMIN')
+/*   @Rol('ADMIN')
   @Get('name/:nombre')
   public async findRutinaByName(@Param('nombre') nombre: string) {
     return await this.rutinaService.findRutinaByName(nombre);
-  }
+  } */
 
   @Rol('ADMIN')
   @Put('update/:id')
@@ -53,7 +62,6 @@ export class RutinaController {
   @Rol('USUARIO')
   @Put('updateEstado/:id')
   public async updateEstado(@Param('id', ParseIntPipe) id: number, @Body() body: EstadoDto) {
-    //uso CreateRutinaDto para obligar a que traiga todos los campos como si estuviera creando una nueva rutina
     return this.rutinaService.updateEstado(id, body);
   }
 }

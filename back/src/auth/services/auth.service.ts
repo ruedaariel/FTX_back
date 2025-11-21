@@ -6,17 +6,13 @@ import * as bcrypt from 'bcrypt';
 import { ErrorManager } from '../../config/error.manager';
 import { plainToInstance } from 'class-transformer';
 import * as jwt from 'jsonwebtoken';
-//import type { JwtPayload, Secret, SignOptions } from 'jsonwebtoken';
-//import { InjectRepository } from '@nestjs/typeorm';
 import { UsuarioEntity } from 'src/usuario/entities/usuario.entity';
-//import { Repository } from 'typeorm';
-//import { IpayloadToken } from 'src/interfaces/auth.interface';
-//import { PagoEntity } from 'src/pagos/entity/pago.entity';
 import { toLocalDateOnly } from 'src/utils/transformar-fecha';
-import { DIAS_PROXIMOS, PLAN_MENOR_LEVEL } from 'src/constantes/ctes-login';
+import { DIAS_PROXIMOS } from 'src/constantes/ctes-login';
 import { UsuarioService } from 'src/usuario/services/usuario.service';
 import { PagosService } from 'src/pagos/services/pagos.service';
 import { IpayloadToken } from 'src/interfaces/auth.interface';
+import { PLAN_MENOR_LEVEL } from 'src/constantes/levels-plan';
 
 @Injectable()
 export class AuthService {
@@ -29,18 +25,8 @@ export class AuthService {
       private readonly pagoRepository: Repository<PagoEntity>) { } */
 
 
-
     public async loginUsuario(body: LoginDto): Promise<LoginRtaDto> { //retorna null si no encuentra el mail para crear unnuevo ususario
-
-
         try {
-
-            //no uso em metodo del service porque tengo que impoertar tooodo del usuario :(
-            /*   const unUsuario = await this.usuarioRepository.findOne({
-                  where: { email: body.email },
-                  relations: ['datosPersonales', 'datosPersonales.plan']
-              }
-              ); */
 
             const unUsuario = await this.usuarioService.findUsuarioByMail(body.email);
 
@@ -66,14 +52,9 @@ export class AuthService {
 
             let message = "";
             if (unUsuario.rol === "usuario") {
-                //             console.log("entro a usuario", unUsuario.id);
-
+             
+                //ultimo pago del usuario ordenado por fecha (el primero es el mas reciente)
                 const ultimosPagos = await this.pagoService.findPagosxId(unUsuario.id);
-                /*    const ultimoPago = await this.pagoRepository.findOne({
-                       where: { usuarioId: unUsuario.id },
-                       order: { fechaPago: 'DESC' } // o la columna que define "último"
-                   }); */
-
 
                 if (!ultimosPagos || ultimosPagos.length === 0) {
                     message = message + " impago ,"
@@ -99,7 +80,7 @@ export class AuthService {
             }
 
             const usuarioRtaDto = plainToInstance(LoginRtaDto, {
-                ...unUsuario, token, message  // agregás el token al DTO
+                ...unUsuario, token, message  // agregás el token y message al DTO
             }, { excludeExtraneousValues: true })
 
             return usuarioRtaDto;
@@ -111,7 +92,7 @@ export class AuthService {
     }
 
 
-    public async generateJWT(usuario: UsuarioEntity): Promise<string> {
+    private async generateJWT(usuario: UsuarioEntity): Promise<string> {
 
         const payload: IpayloadToken = {
             sub: usuario.id,
