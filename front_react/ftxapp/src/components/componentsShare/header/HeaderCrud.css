@@ -141,13 +141,46 @@ box-sizing: border-box;
 }
 
 /* MOBILE: ocultar texto y dejar solo icono (ajusta breakpoint si necesitas) */
+/* @media (max-width: 767px) {
+ .btn-logout .btn-icon svg {
+   color : var(--color-secundario-naranja);
+  }
+
+  .btn-logout .btn-text {
+    display: none;
+  }
+} */
+
 @media (max-width: 767px) {
   .btn-logout {
     padding: 8px;
     width: 40px;
     height: 40px;
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
   }
+
+  /* aplicar color al contenedor para que el SVG herede */
+  .btn-logout .btn-icon {
+    color: var(--color-secundario-naranja);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+  }
+
+  /* asegurar que SVG herede color (stroke o fill según tu icono) */
+  .btn-logout .btn-icon svg {
+    width: 100%;
+    height: 100%;
+    /* para íconos con stroke */
+    stroke: currentColor;
+    /* para íconos con fill (si aplica) */
+    fill: currentColor;
+  }
+
   .btn-logout .btn-text {
     display: none;
   }
