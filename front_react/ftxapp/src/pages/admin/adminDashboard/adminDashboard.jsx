@@ -10,6 +10,7 @@ import { getToken } from "../../../auth/token";
 import { decodeToken } from "../../../auth/jwt";
 import { useModal } from "../../../context/ModalContext";
 import HeaderCrud from '../../../components/componentsShare/header/HeaderCrud';
+import { FcStatistics } from "react-icons/fc";
 
 
 const AdminDashboard = () => {
@@ -99,7 +100,15 @@ const AdminDashboard = () => {
       title: 'Pagos',
       description: 'Gestionar pagos y métodos de pago de los clientes',
       onClick: () => navigate("/admin/pagos")
+    },
+    {
+      id: 'seguimiento',
+      icon: <FcStatistics />,
+      title: 'Seguimiento de Rutinas',
+      description: 'Ver y gestionar el progreso de los clientes',
+      onClick: () => navigate("/admin/seguimiento")
     }
+
   ];
 
   return (
