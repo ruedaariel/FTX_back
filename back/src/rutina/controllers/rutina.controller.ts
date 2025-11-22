@@ -40,7 +40,7 @@ export class RutinaController {
   }
 
   @Rol('ADMIN')
-  @Get('estadistica/:id')
+  @Get('seguimiento/:id')
   public async findRutinaByIdEstadistica(@Param('id', ParseIntPipe) id: number) {
     const unaRutina = this.rutinaService.findRutinaById(id);
     const unaRutinaDto = plainToInstance(RtaRutinaEstadisticaDto, unaRutina, { excludeExtraneousValues: true });
