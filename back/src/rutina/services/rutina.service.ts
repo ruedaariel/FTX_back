@@ -101,7 +101,7 @@ export class RutinaService {
   }
 
 
-  public async findRutinaById(id: number): Promise<RtaRutinaDto> {
+  public async findRutinaById(id: number): Promise<RutinaEntity> {
     try {
       //no se puede usar findOneBy pq tengo relaciones anidadas
       const rutina = await this.rutinaRepository.findOne({
@@ -131,7 +131,7 @@ export class RutinaService {
          })
        }) */
       console.log("rutina.usuario.id", rutina.usuario?.id);
-      return plainToInstance(RtaRutinaDto, rutina, { excludeExtraneousValues: true });
+      return rutina
       //return rutina; //tambien puede ser null
     }
     catch (err) {
@@ -253,6 +253,8 @@ export class RutinaService {
 
   }
 
+  //Cambio de estado: proxima --> activa
+  //                  activa --> finalizada
   public async updateEstado(id: number, body: EstadoDto): Promise<Boolean> {
 
     const unaRutina = await this.rutinaRepository.findOneBy({ idRutina: id });

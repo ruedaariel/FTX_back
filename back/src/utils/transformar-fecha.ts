@@ -105,3 +105,31 @@ export function formatToDdMmYy(value: unknown): string | null {
 
   return null;
 }
+
+export function transforma_a_DDMMYY(value: unknown): string | null | unknown {
+    console.log("Valor en transform fecha", value);
+    if (value == null) return null;               // null | undefined
+    if (typeof value === 'string') {
+      if (/^\d{4}[-/]\d{2}[-/]\d{2}$/.test(value)) {
+        const [yyyy, mm, dd] = value.split('-');
+        return `${dd}/${mm}/${yyyy}`; 
+      } else {
+        return value;
+        /*  const d = new Date(value);
+         console.log("en string sin formato", d);
+         console.log(d.getTime() ? format(d, 'dd-MM-yyyy') : value);
+         return !isNaN(d.getTime()) ? format(d, 'dd-MM-yyyy') : value; */
+      }
+
+
+    }
+    if (value instanceof Date && !isNaN(value.getTime())) {
+
+      return formatToDdMmYy(value);
+    }
+    if (typeof value === 'number') {               // timestamp
+      const d = new Date(value);
+      if (!isNaN(d.getTime())) return formatToDdMmYy(d);
+    }
+    return null;
+  } //transforma a string con formato y tambien acepta null
