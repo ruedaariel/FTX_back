@@ -1,49 +1,36 @@
 import React, { useEffect, useState } from "react";
 
-import { fetchGeneral } from "../../../components/componentsShare/utils/fetchGeneral";
-import { useModal } from "../../../context/ModalContext";
-import HeaderCrud from "../../../components/componentsShare/header/HeaderCrud";
-import GrupoRadios from "../../../components/componentsShare/grupoRadios/grupoRadios";
-import ListasPagosHistorial from "../adminHistorialPagos/listadosHistorialPagos.jsx/listadosHistorialPagos";
-import SelectNombres from "../adminHistorialPagos/SelectorNombres/SelectorNombres";
+import { fetchGeneral } from "../../../../components/componentsShare/utils/fetchGeneral";
+import { useModal } from "../../../../context/ModalContext";
+import HeaderCrud from "../../../../components/componentsShare/header/HeaderCrud";
+import GrupoRadios from "../../../../components/componentsShare/grupoRadios/grupoRadios";
+import ListasPagosHistorial from "../components/listadosHistorialPagos/listadosHistorialPagos";
+import SelectNombres from "../components/SelectorNombres/SelectorNombres";
+import { leerPagosDesdeURL } from "../components/utils/leerPagosDesdeURL";
 import "../adminHistorialPagos/adminHistorialPagos.css";
+import { normalizarPagos } from "../components/utils/normalizarPagos";
 
 const VistaPagos = () => {
   const [pagos, setPagos] = useState([]);
   const { showModal } = useModal();
-  const [filtrarListado, setFiltrarListado] = useState("Mes Actual");
+  const [filtrarListado, setFiltrarListado] = useState("Todos");
   const [metodoSeleccionado, setMetodoSeleccionado] = useState("");
   // Estado para el nombre seleccionado
   const [nombreSeleccionado, setNombreSeleccionado] = useState("");
+ 
 
   useEffect(() => {
-    fetchGeneral({
-      url: `http://localhost:8000/apiFtx/pagos/impagos`, // ajustá según tu endpoint real
-      method: "GET",
-      onSuccess: (data) => {
-        const pagosNormalizados = normalizarPagos(data);
-        setPagos(pagosNormalizados);
-      },
-      onError: () => {
-        showModal("Error al cargar los pagos", "error", 3000);
-      },
-      showModal,
-    });
-  }, []);
+  leerPagosDesdeURL(
+    "http://localhost:8000/apiFtx/pagos/impagos",
+    setPagos,
+    showModal,
+    normalizarPagos // opcional
+  );
+}, []);
 
   // funcion que revisa lo recibido y elimina los null o undefined
 
-  function normalizarPagos(pagos) {
-    return pagos.map((pago) => {
-      return {
-        ...pago,
-        fechaPago: pago.fechaPago ?? "sFecha",
-        fechaVencimiento: pago.fechaVencimiento ?? "sFecha",
-        metodoDePago: pago.metodoDePago ?? "sDatos",
-        monto: pago.monto ?? "0.0",
-      };
-    });
-  }
+  
 
   const metodosUnicos = [...new Set(pagos.map((p) => p.metodoDePago))];
   const estadosUnicos = [...new Set(pagos.map((p) => p.estadoUsuario))];
@@ -110,15 +97,20 @@ const VistaPagos = () => {
 
       // Métodos de pago (efectivo, transferencia, etc.)
       // Métodos de pago o estado de usuario
-    return (
-      pago.metodoDePago === criterio ||
-      pago.estadoUsuario === criterio
-    );
-    
+    // Filtrar por método
+    if (metodosUnicos.includes(criterio)) {
+      return pago.metodoDePago === criterio;
+    }
+
+    // Filtrar por estado
+    if (estadosUnicos.includes(criterio)) {
+      return pago.estadoUsuario === criterio;
+    }
+
     });
   }
 
-  console.log("Pagos cargados:", pagos);
+  console.log("Pagos cargados sin null:", pagos);
   //   console.log("Filtrar listado:", filtrarListado);
   return (
     <div className="container">

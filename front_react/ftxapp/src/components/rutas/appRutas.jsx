@@ -17,8 +17,10 @@ import Planes from "../../pages/public/planes";
 import RegistroUsuario from "../../pages/public/registro/RegistroUsuario";
 import AdminEditorPlanes from "../../pages/admin/adminPLanes/AdminEditorPLanes";
 import VistaPagos from "../../pages/usuario/usuarioPagos/VistaPagos";
-import AdminHistorialPagos from "../../pages/admin/adminHistorialPagos/adminHistorialPagos";
-import AdminHistorialImpagos from "../../pages/admin/adminHistorialImpagos/adminHistorialImpagos";
+import AdminHistorialPagos from "../../pages/admin/adminPagos/adminHistorialPagos/adminHistorialPagos";
+import AdminHistorialImpagos from "../../pages/admin/adminPagos/adminHistorialImpagos/adminHistorialImpagos";
+import AdminReportes from "../../pages/admin/adminReportes/adminReportes"
+import SeguimientoRutinas from "../../pages/admin/adminSeguimiento/SeguimientoRutinas";
 
 
 //import {   ReseteoPassword } from '../../pages/public/login/logins';
@@ -51,10 +53,12 @@ const AppRutas = () => {
                 <Route path="/reseteo-password" element={<ReseteoPassword />} />*/}
       <Route path="/usuario" element={<UsuarioDashboard />} />
       <Route path="/admin/rutinas" element={<InicioRutina />} />
-
+      <Route path="/admin/seguimiento" element={<SeguimientoRutinas />} />
       <Route path="/admin/clientes" element={<PantallaClientes />} />
       <Route path="/admin/planes" element={<AdminEditorPlanes />} />
       <Route path="/admin/pagos" element={<PagosAdmin />} /> 
+      <Route path="/admin/reportes" element={<AdminReportes />} />
+   
       <Route path="/admin/historialPagos" element={<AdminHistorialPagos />} /> 
       <Route path="/admin/historialImpagos" element={<AdminHistorialImpagos />} />
       <Route path="/admin/ejercicios" element={<PaginaEjercicios />} />

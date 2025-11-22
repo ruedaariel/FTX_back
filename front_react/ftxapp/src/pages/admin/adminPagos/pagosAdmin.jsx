@@ -103,7 +103,7 @@ const PagosAdmin = () => {
             <div className="card-content">
               <h3 className="card-title">Historial de Impagos</h3>
               <p className="card-description">
-                Consulta y filtra el historial completo de pagos de todos los usuarios
+                Consulta y filtra el historial completo de Impagos de todos los usuarios
               </p>
               <Button
                 variant="primary"
@@ -124,12 +124,12 @@ const PagosAdmin = () => {
                 Genera reportes detallados de ingresos y estadísticas de pagos
               </p>
               <Button
-                variant="outline"
+                variant="primary"
                 size="medium"
-                disabled
+                onClick={ () => navigate("/admin/reportes") }
                 className="action-button"
               >
-                Próximamente
+                Reportes
               </Button>
             </div>
           </div>

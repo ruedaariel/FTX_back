@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 
-import { fetchGeneral } from "../../../components/componentsShare/utils/fetchGeneral";
-import { useModal } from "../../../context/ModalContext";
-import HeaderCrud from "../../../components/componentsShare/header/HeaderCrud";
-import GrupoRadios from "../../../components/componentsShare/grupoRadios/grupoRadios";
-import ListasPagosHistorial from "./listadosHistorialPagos.jsx/listadosHistorialPagos";
-import SelectNombres from "./SelectorNombres/SelectorNombres";
+import { fetchGeneral } from "../../../../components/componentsShare/utils/fetchGeneral";
+import { useModal } from "../../../../context/ModalContext";
+import HeaderCrud from "../../../../components/componentsShare/header/HeaderCrud";
+import GrupoRadios from "../../../../components/componentsShare/grupoRadios/grupoRadios";
+import ListasPagosHistorial from "../components/listadosHistorialPagos/listadosHistorialPagos";
+import SelectNombres from "../components/SelectorNombres/SelectorNombres";
+import { leerPagosDesdeURL } from "../components/utils/leerPagosDesdeURL";
 import "./adminHistorialPagos.css";
 
 const VistaPagos = () => {
@@ -16,19 +17,17 @@ const VistaPagos = () => {
   // Estado para el nombre seleccionado
   const [nombreSeleccionado, setNombreSeleccionado] = useState("");
 
+  
+
   useEffect(() => {
-    fetchGeneral({
-      url: `http://localhost:8000/apiFtx/pagos`, // ajustá según tu endpoint real
-      method: "GET",
-      onSuccess: (data) => {
-        setPagos(data);
-      },
-      onError: () => {
-        showModal("Error al cargar los pagos", "error", 3000);
-      },
-      showModal,
-    });
-  }, []);
+  leerPagosDesdeURL(
+    "http://localhost:8000/apiFtx/pagos",
+    setPagos,
+    showModal,
+    
+  );
+}, []);
+
 
   const metodosUnicos = [...new Set(pagos.map((p) => p.metodoDePago))];
   console.log("Métodos únicos:", metodosUnicos);

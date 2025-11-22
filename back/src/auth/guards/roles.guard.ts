@@ -38,10 +38,11 @@ export class RolesGuard implements CanActivate {
             } else if (admin && rolUser.toUpperCase() === 'ADMIN') {
                 return true
             } else {
-                throw new UnauthorizedException('No tienes permisos para este acceder a este servicio')
+                throw new UnauthorizedException('No tienes permisos para acceder a este servicio')
             }
         }
 
+    
       
         if (rolUser.toUpperCase() === ROL.ADMIN || rolUser === ROL.ADMIN) {
             return true
@@ -50,7 +51,7 @@ export class RolesGuard implements CanActivate {
         const isAuth = roles.some(rol => rol === rolUser.toUpperCase() || rol === rolUser);
 
         if (!isAuth) {
-            throw new UnauthorizedException('No tienes permisos para este acceder a esta operación')
+            throw new UnauthorizedException('No tienes permisos para acceder a esta operación')
         }
         return true;
     }
