@@ -9,6 +9,9 @@ import { EstadoDto } from '../dto/estado.dto';
 import { AccessLevelGuard } from 'src/auth/guards/access-level.guard';
 import { AccessLevel } from 'src/auth/decorators/access-level.decorator';
 import { PLAN_MAYOR_LEVEL } from 'src/constantes/levels-plan';
+import { plainToInstance } from 'class-transformer';
+import { RtaRutinaDto } from '../dto/rta-rutina.dto';
+import { RtaRutinaEstadisticaDto } from '../dto/rta-rutina-estadistica.dto';
 
 
 @Controller('rutina')
@@ -27,24 +30,28 @@ export class RutinaController {
   public async findAllRutinas() {
     return this.rutinaService.findAllRutinas();
   }
-///////////////// VER EN DONDE SE LLAMA ////////////////////////
+  ///////////////// VER EN DONDE SE LLAMA ////////////////////////
   @Rol('USUARIO')
   @Get(':id')
   public async findRutinaById(@Param('id', ParseIntPipe) id: number) {
-    return this.rutinaService.findRutinaById(id);
+    const unaRutina = this.rutinaService.findRutinaById(id);
+    const unaRutinaDto = plainToInstance(RtaRutinaDto, unaRutina, { excludeExtraneousValues: true });
+    return unaRutinaDto
   }
- //////////////// ver si es aca o en USUARIO /////////////////
- /*  @AccessLevel(PLAN_MAYOR_LEVEL)
+
+  @Rol('ADMIN')
   @Get('estadistica/:id')
   public async findRutinaByIdEstadistica(@Param('id', ParseIntPipe) id: number) {
-    return this.rutinaService.findRutinaById(id);
-  } */
+    const unaRutina = this.rutinaService.findRutinaById(id);
+    const unaRutinaDto = plainToInstance(RtaRutinaEstadisticaDto, unaRutina, { excludeExtraneousValues: true });
+    return unaRutinaDto
+  }
   /// ??????????????????????????????????????????????????
-/*   @Rol('ADMIN')
-  @Get('name/:nombre')
-  public async findRutinaByName(@Param('nombre') nombre: string) {
-    return await this.rutinaService.findRutinaByName(nombre);
-  } */
+  /*   @Rol('ADMIN')
+    @Get('name/:nombre')
+    public async findRutinaByName(@Param('nombre') nombre: string) {
+      return await this.rutinaService.findRutinaByName(nombre);
+    } */
 
   @Rol('ADMIN')
   @Put('update/:id')

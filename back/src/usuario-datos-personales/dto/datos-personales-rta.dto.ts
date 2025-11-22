@@ -3,6 +3,7 @@ import { GENERO } from "../entities/datos-personales.entity";
 import { Exclude, Expose, Transform, Type } from "class-transformer";
 import { ESTADO } from "../../constantes/estado.enum";
 import { PlanRtaDto } from "../../plan/dto/plan-rta.dto";
+import { transforma_a_DDMMYY } from "src/utils/transformar-fecha";
 
 
 export class DatosPersonalesRtaDto {
@@ -22,7 +23,8 @@ export class DatosPersonalesRtaDto {
   @Type(() => PlanRtaDto)
   plan: PlanRtaDto;
   @Expose()
-  @Transform(({ value }) => {
+/*   @Transform(({ value }) =>
+     {
     console.log("Valor en transform fecha", value);
     if (value == null) return null;               // null | undefined
     if (typeof value === 'string') {
@@ -31,10 +33,7 @@ export class DatosPersonalesRtaDto {
         return `${dd}/${mm}/${yyyy}`; 
       } else {
         return value;
-        /*  const d = new Date(value);
-         console.log("en string sin formato", d);
-         console.log(d.getTime() ? format(d, 'dd-MM-yyyy') : value);
-         return !isNaN(d.getTime()) ? format(d, 'dd-MM-yyyy') : value; */
+      
       }
 
 
@@ -48,8 +47,10 @@ export class DatosPersonalesRtaDto {
       if (!isNaN(d.getTime())) return format(d, 'dd/MM/yyyy');
     }
     return null;
-  }) //transforma a string con formato y tambien acepta null
+  }) //transforma a string con formato y tambien acepta null */
+   @Transform(({ value } ) => transforma_a_DDMMYY(value))
   fNacimiento: string;
+  
   @Expose()
   @Transform(({ value }) => {
     const port = process.env.PORT || '8000';
