@@ -21,6 +21,8 @@ import AdminHistorialPagos from "../../pages/admin/adminPagos/adminHistorialPago
 import AdminHistorialImpagos from "../../pages/admin/adminPagos/adminHistorialImpagos/adminHistorialImpagos";
 import AdminReportes from "../../pages/admin/adminReportes/adminReportes"
 import SeguimientoRutinas from "../../pages/admin/adminSeguimiento/SeguimientoRutinas";
+import InformarPago from "../../pages/usuario/usuarioPagos/informarPago/informarPago";
+import AdminPassword from "../../pages/admin/adminPassword/adminPassword";
 
 
 //import {   ReseteoPassword } from '../../pages/public/login/logins';
@@ -62,10 +64,12 @@ const AppRutas = () => {
       <Route path="/admin/historialPagos" element={<AdminHistorialPagos />} /> 
       <Route path="/admin/historialImpagos" element={<AdminHistorialImpagos />} />
       <Route path="/admin/ejercicios" element={<PaginaEjercicios />} />
+      <Route path="/admin/password" element={<AdminPassword />} />
       <Route path="/usuario/rutina" element={<UsuarioRutina />} />
       <Route path="/usuario/perfil" element={<PerfilUsuario />} />
       <Route path="/usuario/estadistica" element={<UsuarioEstadistica />} />
       <Route path="/usuario/pagos" element={<VistaPagos />} />
+      <Route path="/usuario/informarpago" element={<InformarPago />} />
       <Route path="*" element={<EnContruccion />} />
 
       {/*   <Route path="/rutina" element={<Rutina />} />

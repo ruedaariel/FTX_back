@@ -10,7 +10,9 @@ import { getToken } from "../../../auth/token";
 import { decodeToken } from "../../../auth/jwt";
 import { useModal } from "../../../context/ModalContext";
 import HeaderCrud from '../../../components/componentsShare/header/HeaderCrud';
+import { fetchGeneral } from '../../../components/componentsShare/utils/fetchGeneral';
 import { FcStatistics } from "react-icons/fc";
+import { TbPasswordUser } from "react-icons/tb";
 
 
 const AdminDashboard = () => {
@@ -23,6 +25,7 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [tokenUsuario, setTokenUsuario] = useState(null);
   const { showModal } = useModal();
+  const [usuario, setUsuario] = useState(null); // datos del usuario desde backend
 
 
     function isTokenExpired(token) {
@@ -57,6 +60,22 @@ const AdminDashboard = () => {
     }
   }, []);
   
+  // Busco usuario en backend cuando tengo token válido
+    useEffect(() => {
+      if (tokenUsuario?.sub) {
+        fetchGeneral({
+          url: `http://localhost:8000/apiFtx/usuario/${tokenUsuario.sub}`,
+          method: "GET",
+          onSuccess: (data) => setUsuario(data),
+  
+          showModal,
+          onError: () => {
+            sessionStorage.removeItem("ftx_token");
+            navigate("/login");
+          },
+        });
+      }
+    }, [tokenUsuario]);
   
   const dashboardItems = [
     {
@@ -107,6 +126,13 @@ const AdminDashboard = () => {
       title: 'Seguimiento de Rutinas',
       description: 'Ver y gestionar el progreso de los clientes',
       onClick: () => navigate("/admin/seguimiento")
+    },
+    {
+      id: 'password',
+      icon: <TbPasswordUser />,
+      title: 'Password',
+      description: 'cambiar password',
+      onClick: () => navigate("/admin/password", { state: { usuario } })
     }
 
   ];

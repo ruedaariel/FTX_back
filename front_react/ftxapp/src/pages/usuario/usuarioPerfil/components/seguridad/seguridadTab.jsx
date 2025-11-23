@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { useFormContext } from "react-hook-form";
 import "./seguridadTab.css";
 
-const SeguridadTab = ({ register, errors, watch }) => {
+const SeguridadTab = () => {
+  const { register, watch, formState: { errors } } = useFormContext();
+
   const [showActual, setShowActual] = useState(false);
   const [showNueva, setShowNueva] = useState(false);
   const [showConfirmar, setShowConfirmar] = useState(false);
@@ -53,7 +56,7 @@ const SeguridadTab = ({ register, errors, watch }) => {
             {...register("datosPersonales.passwordNueva", {
               required: "La nueva contraseña es obligatoria",
               pattern: {
-                value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/,
+                value: passwordRegex,
                 message:
                   "Debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número",
               },
@@ -111,5 +114,6 @@ const SeguridadTab = ({ register, errors, watch }) => {
 };
 
 export default SeguridadTab;
+
 
 

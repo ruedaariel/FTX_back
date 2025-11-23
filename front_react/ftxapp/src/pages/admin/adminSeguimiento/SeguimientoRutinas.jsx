@@ -15,14 +15,12 @@ const SeguimientoRutinas = () => {
   const handleUsuarioChange = (usuario) => {
     console.log("Usuario seleccionado:", usuario);
     setUsuarioSeleccionado(usuario);
-    setRutinaABuscar(null);   // cambia usuario se resetea
+    //setRutinaABuscar(null);   // cambia usuario se resetea
     //setRutinaUsuario(null);   // para recargar rutina
   };
 
   const handleRutinaChange = (rutina) => {
     console.log("Rutina seleccionada:", rutina);
-    
-
     setRutinaABuscar(rutina);
     //setRutinaUsuario(null);
     

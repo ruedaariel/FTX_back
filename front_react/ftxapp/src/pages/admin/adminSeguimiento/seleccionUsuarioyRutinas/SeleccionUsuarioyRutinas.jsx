@@ -3,14 +3,17 @@ import "./SeleccionUsuariosyRutinas.css";
 import { fetchGeneral } from "../../../../components/componentsShare/utils/fetchGeneral";
 import { useModal } from "../../../../context/ModalContext";
 
+// Componente que permite seleccionar un usuario y una rutina asociada,
+// y muestra los datos estadísticos de la rutina seleccionada
 const SeguimientoRutinas = ({ onUsuarioChange, onRutinaChange }) => {
   const [usuarios, setUsuarios] = useState([]);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
   const [rutinasUsuario, setRutinasUsuario] = useState([]);
   const [rutinaSeleccionada, setRutinaSeleccionada] = useState(null);
+  const [datosRutinaSeleccionada, setDatosRutinaSeleccionada] = useState(null);
   const { showModal } = useModal();
 
-  // Cargar usuarios al montar
+  // Cargar lista de usuarios al montar el componente
   useEffect(() => {
     fetchGeneral({
       url: "http://localhost:8000/apiFtx/usuario/all",
@@ -20,33 +23,37 @@ const SeguimientoRutinas = ({ onUsuarioChange, onRutinaChange }) => {
   }, []);
 
   // Cargar rutinas del usuario seleccionado
-//   console.log("Buscando rutinas para usuario:", usuarioSeleccionado?.id);
   useEffect(() => {
     if (!usuarioSeleccionado) return;
-    
-   
+
     fetchGeneral({
       url: `http://localhost:8000/apiFtx/usuario/rutinas/${usuarioSeleccionado.id}`,
       method: "GET",
-      onSuccess: (data) => {
-        setRutinasUsuario(data);
-        // console.log("Rutinas recibidas:", data);
-      },
+      onSuccess: (data) => setRutinasUsuario(data),
       showModal,
     });
   }, [usuarioSeleccionado]);
 
-  //   console.log("Usuario Seleccionado:", usuarioSeleccionado);
-  //   console.log("Usuario id:", usuarioSeleccionado.rol);
+  // Cargar datos estadísticos de la rutina seleccionada
+  useEffect(() => {
+    if (!rutinaSeleccionada) return;
 
-  // Avisar al padre cuando cambia usuario
+    fetchGeneral({
+      url: `http://localhost:8000/apiFtx/rutina/seguimiento/${rutinaSeleccionada.idRutina}`,
+      method: "GET",
+      onSuccess: (data) => setDatosRutinaSeleccionada(data),
+      showModal,
+    });
+  }, [rutinaSeleccionada]);
+
+  // Notificar al componente padre cuando cambia el usuario
   useEffect(() => {
     if (onUsuarioChange) {
       onUsuarioChange(usuarioSeleccionado);
     }
   }, [usuarioSeleccionado, onUsuarioChange]);
 
-  // Avisar al padre cuando cambia rutina
+  // Notificar al componente padre cuando cambia la rutina
   useEffect(() => {
     if (onRutinaChange) {
       onRutinaChange(rutinaSeleccionada);
@@ -54,10 +61,9 @@ const SeguimientoRutinas = ({ onUsuarioChange, onRutinaChange }) => {
   }, [rutinaSeleccionada, onRutinaChange]);
 
   return (
-    <div className=" seleccion-usuario-rutina">
-          {/* Select de usuarios */}
+    <div className="seleccion-usuario-rutina">
+      {/* Selector de usuarios */}
       <div className="form-group-seleccion-usuario-rutina">
-        
         <label>Seleccionar Usuario:</label>
         <select
           id="usuarioSelect"
@@ -67,23 +73,22 @@ const SeguimientoRutinas = ({ onUsuarioChange, onRutinaChange }) => {
               (u) => String(u.id) === e.target.value
             );
             setUsuarioSeleccionado(userObj || null);
-            setRutinaSeleccionada(null); // reset rutina al cambiar usuario
+            setRutinaSeleccionada(null); // Resetear rutina al cambiar usuario
           }}
         >
           <option value="">-- Seleccione un usuario --</option>
           {usuarios.map((usuario) => (
             <option key={usuario.id} value={usuario.id}>
-              {usuario.datosPersonales?.nombre}{" "}
-              {usuario.datosPersonales?.apellido}
+              {usuario.datosPersonales?.nombre} {usuario.datosPersonales?.apellido}
             </option>
           ))}
         </select>
       </div>
 
-      {/* Select de rutinas */}
+      {/* Selector de rutinas */}
       {usuarioSeleccionado && (
         <div className="form-group-seleccion-usuario-rutina">
-          <label >Seleccionar Rutina:</label>
+          <label>Seleccionar Rutina:</label>
           <select
             id="rutinaSelect"
             value={rutinaSeleccionada ? rutinaSeleccionada.idRutina : ""}
@@ -103,8 +108,35 @@ const SeguimientoRutinas = ({ onUsuarioChange, onRutinaChange }) => {
           </select>
         </div>
       )}
+
+      {/* Visualización de datos de la rutina seleccionada */}
+      {rutinaSeleccionada && datosRutinaSeleccionada && (
+        <div className="datos-rutina-seleccionada">
+          <div className="datos-rutina-pra-linea">
+            <div className="datos-columna">
+              <p className="rotulo-datos">Rutina:</p>
+              <p>{datosRutinaSeleccionada.nombreRutina}</p>
+            </div>
+            <div className="datos-columna">
+              <p className="rotulo-datos">Estado:</p>
+              <p>{datosRutinaSeleccionada.estadoRutina}</p>
+            </div>
+          </div>
+          <div className="datos-rutina-sda-linea">
+            <div className="datos-columna">
+              <p className="rotulo-datos">Fecha Creación:</p>
+              <p>{datosRutinaSeleccionada.fCreacionRutina}</p>
+            </div>
+            <div className="datos-columna">
+              <p className="rotulo-datos">Fecha Último Acceso:</p>
+              <p>{datosRutinaSeleccionada.fUltimoAccesoRutina}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default SeguimientoRutinas;
+
