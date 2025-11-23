@@ -52,12 +52,12 @@ const PagosAdmin = () => {
     <div className="container">
       <HeaderCrud title="Gestion de Pagos" widthPercent={100} />
     <div className="pagos-admin">
-      <div className="pagos-admin-header">
+      {/* <div className="pagos-admin-header">
         <h1 className="page-title">Gestión de Pagos</h1>
         <p className="page-subtitle">
           Administra los pagos manuales y consulta el historial de transacciones
         </p>
-      </div>
+      </div> */}
 
       <div className="pagos-admin-content">
         <div className="actions-section">
@@ -116,7 +116,7 @@ const PagosAdmin = () => {
             </div>
           </div>
 
-          <div className="action-card disabled">
+          <div className="action-card">
             <div className="card-icon">📈</div>
             <div className="card-content">
               <h3 className="card-title">Reportes</h3>

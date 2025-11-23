@@ -11,6 +11,7 @@ import { fetchGeneral } from "../../../components/componentsShare/utils/fetchGen
 import { getToken } from "../../../auth/token";
 import { decodeToken } from "../../../auth/jwt";
 import { storageService } from "../../public/loginPage/components/utils/storageService";
+import { FaMoneyBill1Wave } from "react-icons/fa6";
 
 const UsuarioDashboard = () => {
   const navigate = useNavigate();
@@ -78,7 +79,7 @@ const UsuarioDashboard = () => {
 
   // Función para habilitar/deshabilitar funcionalidades
   const habilitarFunciones = () =>
-    validarUsuario?.message?.includes("impago") ? true : false;
+    validarUsuario?.message?.includes("proximo") ? true : false;
 
   // Valido token al montar
   useEffect(() => {
@@ -163,6 +164,13 @@ const UsuarioDashboard = () => {
       title: "Pagos",
       description: "Historial de pagos",
       onClick: () => navigate("/usuario/pagos", { state: { usuario } }),
+    },
+    {
+      id: "Informar Pago",
+      icon: <FaMoneyBill1Wave />,
+      title: "Informar Pago",
+      description: "Avisar al trainer de un pago realizado",
+      onClick: () => navigate("/usuario/informarpago", { state: { usuario } }),
     },
     {
       id: "Planes",

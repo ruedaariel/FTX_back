@@ -2,46 +2,46 @@ import React from "react";
 import "./primerCambioPasswordPage.css";
 import logoNaranja from "../../../assets/Recursos/IconosLogos/logoSinLetrasNaranja.png";
 import ftxImage13 from "../../../assets/Recursos/Imagenes/FTX_13.jpg";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { useModal } from "../../../context/ModalContext";
 import SeguridadTab from "../../usuario/usuarioPerfil/components/seguridad/seguridadTab"; 
+import { fetchGeneral } from "../../../components/componentsShare/utils/fetchGeneral";
 
 const PrimerCambioPasswordPage = ({ usuario }) => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm({ mode: "onBlur" }); // podés usar "onChange" si querés validar mientras escribe
-
+  const methods = useForm({ mode: "onBlur" }); // podés usar "onChange" si querés validar mientras escribe
   const { showModal } = useModal();
 
   const onSubmit = async (data) => {
     const payload = {
       usuario,
-      passwordActual: data.datosPersonales.passwordActual,
-      passwordNueva: data.datosPersonales.passwordNueva,
-      passwordConfirmar: data.datosPersonales.passwordConfirmar,
+      passwordActual: data.datosPersonales?.passwordActual,
+      passwordNueva: data.datosPersonales?.passwordNueva,
+      passwordConfirmar: data.datosPersonales?.passwordConfirmar,
     };
 
-    console.log("Enviando cambio de contraseña:", payload);
+    // Construir datosBasicos para enviar al backend
+  const datosBasicos = {
+    
+    password: data.datosPersonales?.passwordNueva // asegurarse que venga desde algún input
+  };
 
-    try {
-      // await api.post("/usuarios/cambiar-password", payload);
-      showModal(
+  
+  console.log("datosBasicos en perfilutils", datosBasicos);
+      await fetchGeneral({
+          url: `http://localhost:8000/apiFtx/usuario/update/${usuario.id}`,
+          method: "PATCH",
+          body: cambios,
+          showModal,
+          onSuccess: () => {
+            showModal(
         "Contraseña actualizada correctamente. Iniciá sesión con tu nueva clave.",
         "success",
         0,
         true
       );
-    } catch (error) {
-      showModal(
-        "Hubo un error al actualizar la contraseña. Verificá los datos e intentá nuevamente.",
-        "error",
-        0,
-        true
-      );
-    }
+          },
+        });
+        
   };
 
   return (
@@ -63,28 +63,24 @@ const PrimerCambioPasswordPage = ({ usuario }) => {
           <p>Completá los campos para actualizar tu clave de acceso.</p>
 
           {/* Formulario con validaciones */}
-          <form
-            className="reset-form-primer-cambio"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <SeguridadTab register={register} errors={errors} watch={watch} />
+          <FormProvider {...methods}>
+            <form
+              className="reset-form-primer-cambio"
+              onSubmit={methods.handleSubmit(onSubmit)}
+            >
+              <SeguridadTab />
 
-            {/* Botón único dentro del form */}
-            <div className="reset-links">
-              <button className="actualizar-button" type="submit">
-              Actualizar contraseña
-            </button>
-            <button className="actualizar-button" >
-              Ir a Login
-            </button>
-            {/* <a href="/login">← Volver al login</a> */}
-          </div>
-            
-          </form>
-
-          {/* <div className="reset-links">
-            <a href="/login">← Volver al login</a>
-          </div> */}
+              {/* Botón único dentro del form */}
+              <div className="reset-links">
+                <button className="actualizar-button" type="submit">
+                  Actualizar contraseña
+                </button>
+                <button className="actualizar-button">
+                  Ir a Login
+                </button>
+              </div>
+            </form>
+          </FormProvider>
         </div>
       </div>
     </div>
@@ -92,4 +88,5 @@ const PrimerCambioPasswordPage = ({ usuario }) => {
 };
 
 export default PrimerCambioPasswordPage;
+
 

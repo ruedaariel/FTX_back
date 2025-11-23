@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
+import { useFormContext } from "react-hook-form";
 import "./datosImagenSuscripcion.css";
 import { fetchGeneral } from "../../../../../components/componentsShare/utils/fetchGeneral";
 import { useModal } from "../../../../../context/ModalContext";
 import { extraerMensajeError } from "../../../../../components/componentsShare/utils/extraerMensajeError";
 
-const ImagenTab = ({ register, setValue, watch, errors }) => {
+const ImagenTab = () => {
+  const { register, setValue, watch, formState: { errors } } = useFormContext();
+
   // Estado para la imagen de perfil
   const [previewImagen, setPreviewImagen] = useState(
     watch("datosPersonales.imagenPerfil")
@@ -24,7 +27,7 @@ const ImagenTab = ({ register, setValue, watch, errors }) => {
 
   // Buscar el plan actual en la lista de planes disponibles, o usar el que viene del backend
   const planActual =
-    planesDisponibles.find((p) => p.idPlan === parseInt(idPlanActual)) || plan;
+    planesDisponibles.find((p) => p.idPlan === parseInt(idPlanActual)) || plan || {};
 
   // Cargar los planes disponibles desde el backend al montar el componente
   useEffect(() => {
@@ -38,9 +41,6 @@ const ImagenTab = ({ register, setValue, watch, errors }) => {
     });
   }, []);
 
-  //showModal("Guardado exitoso", "success", 3000); // temporizado
-  //showModal("Error al guardar", "error", 0, true); // persistente
-
   // Manejar el cambio de imagen de perfil
   const handleImagenChange = async (e) => {
     const file = e.target.files[0];
@@ -50,12 +50,7 @@ const ImagenTab = ({ register, setValue, watch, errors }) => {
     const tamañoMaximo = 5 * 1024 * 1024; // 5MB
 
     if (!tiposPermitidos.includes(file.type)) {
-      showModal(
-        "Formato inválido. Solo se permiten imágenes JPG o PNG.",
-        "error",
-        0,
-        true
-      );
+      showModal("Formato inválido. Solo se permiten imágenes JPG o PNG.", "error", 0, true);
       return;
     }
 
@@ -71,15 +66,12 @@ const ImagenTab = ({ register, setValue, watch, errors }) => {
     setValue("datosPersonales.imagenPerfil", previewURL);
 
     const idUsuario = watch("datosBasicos.idUsuario");
-    console.log(" typeoff de idUsuario", typeof idUsuario, idUsuario);
 
     const url = `http://localhost:8000/apiFtx/usuario/${idUsuario}/imagen-perfil`;
     const method = "PATCH";
 
     const formData = new FormData();
     formData.append("imagenPerfil", file);
-
-    console.log("Enviando imagen al backend...", file.name);
 
     await fetchGeneral({
       url,
@@ -92,36 +84,9 @@ const ImagenTab = ({ register, setValue, watch, errors }) => {
       onError: (err) => {
         const mensaje = extraerMensajeError(err);
         console.error("Error al guardar Imagen:", mensaje);
-        // showModal("error", mensaje);
       },
     });
   };
-
-  // Enviar imagen al backend
-  // const handleGuardarImagen = async () => {
-  //   if (!imagenSeleccionada) return;
-
-  //   const idUsuario = watch("datosPersonales.idUsuario");
-  //   const url = `http://localhost:8000/apiFtx/usuario/${idUsuario}/imagen-perfil`;
-  //   const method = "PATCH";
-
-  //   const formData = new FormData();
-  //   formData.append("imagenPerfil", imagenSeleccionada);
-
-  //   await fetchGeneral({
-  //     url,
-  //     method,
-  //     body: formData,
-  //     showModal,
-  //     onSuccess: (data) => {
-  //       // Imagen guardada exitosamente
-  //     },
-  //     onError: (err) => {
-  //       const mensaje = extraerMensajeError(err);
-  //       console.error("Error al guardar Imagen:", mensaje);
-  //     },
-  //   });
-  // };
 
   return (
     <div className="imagen-tab">
@@ -141,11 +106,10 @@ const ImagenTab = ({ register, setValue, watch, errors }) => {
                 />
                 Seleccionar archivo
               </label>
-                       <p className="formato-imagen">
-              Seleccionar imagen con formato JPG, PNG. Máx: 5MB
-            </p>     
+              <p className="formato-imagen">
+                Seleccionar imagen con formato JPG, PNG. Máx: 5MB
+              </p>
             </div>
-            
           </div>
         </div>
 
@@ -159,16 +123,14 @@ const ImagenTab = ({ register, setValue, watch, errors }) => {
               </p>
             </div>
             <div className="precio">
-              <h1>${parseFloat(planActual.precio).toLocaleString("es-AR")}</h1>
+              <h1>${parseFloat(planActual.precio || 0).toLocaleString("es-AR")}</h1>
               <p>por mes</p>
             </div>
           </div>
 
           {/* Selector de nuevo plan */}
           <div className="selector-plan">
-            <label className="label-selector-plan">
-              Selecciona tu nuevo plan:
-            </label>
+            <label className="label-selector-plan">Selecciona tu nuevo plan:</label>
             <select
               id="plan"
               className="dropdown-plan"
@@ -177,9 +139,7 @@ const ImagenTab = ({ register, setValue, watch, errors }) => {
                 const id = parseInt(e.target.value);
                 setPlanSeleccionado(id);
 
-                const nuevoPlan = planesDisponibles.find(
-                  (p) => p.idPlan === id
-                );
+                const nuevoPlan = planesDisponibles.find((p) => p.idPlan === id);
                 if (nuevoPlan) {
                   setValue("datosPersonales.plan", nuevoPlan);
                 }
@@ -188,9 +148,7 @@ const ImagenTab = ({ register, setValue, watch, errors }) => {
               <option value="">-- Elegí un plan --</option>
               {planesDisponibles.map((plan) => (
                 <option key={plan.idPlan} value={plan.idPlan}>
-                  {`${plan.nombrePlan}  <->   $ ${parseFloat(
-                    plan.precio
-                  ).toLocaleString("es-AR")}`}
+                  {`${plan.nombrePlan}  <->   $ ${parseFloat(plan.precio).toLocaleString("es-AR")}`}
                 </option>
               ))}
             </select>
@@ -220,3 +178,4 @@ const ImagenTab = ({ register, setValue, watch, errors }) => {
 };
 
 export default ImagenTab;
+

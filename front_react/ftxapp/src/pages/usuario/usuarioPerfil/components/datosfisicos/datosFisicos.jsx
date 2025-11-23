@@ -1,30 +1,27 @@
-// Importación de React y los estilos específicos del tab de datos físicos
 import React from "react";
+import { useFormContext } from "react-hook-form";
 import "./datosFisicos.css";
 
-// Componente que representa la pestaña "Datos Físicos"
-// Recibe props desde el formulario global: register (para vincular campos) y errors (para mostrar validaciones)
-const DatosFisicosTab = ({ register, errors }) => {
+const DatosFisicosTab = () => {
+  const { register, formState: { errors } } = useFormContext();
+
   return (
     <div className="formulario-fisicos">
       {/* Sección: Estatura y Peso */}
       <div className="peso-estatura">
         <div className="campo-form">
           <label>Estatura (cm)</label>
-          {/* Campo vinculado al formulario global con validación requerida */}
           <input
             type="number"
+            placeholder="Ej: 170"
             {...register("datosFisicos.estatura", {
               required: "Campo obligatorio",
               min: { value: 50, message: "Mínimo 50 cm" },
               max: { value: 250, message: "Máximo 250 cm" },
             })}
           />
-          {/* Mensaje de error si el campo está vacío */}
           {errors?.datosFisicos?.estatura && (
-            <span className="error">
-              {errors.datosFisicos.estatura.message}
-            </span>
+            <span className="error">{errors.datosFisicos.estatura.message}</span>
           )}
         </div>
 
@@ -33,6 +30,7 @@ const DatosFisicosTab = ({ register, errors }) => {
           <input
             type="number"
             step="0.1"
+            placeholder="Ej: 65.5"
             {...register("datosFisicos.peso", {
               required: "Campo obligatorio",
               min: { value: 30, message: "Mínimo 30 kg" },
@@ -49,18 +47,12 @@ const DatosFisicosTab = ({ register, errors }) => {
       <div className="actividad-metas">
         <div className="campo-form">
           <label>Actividad diaria</label>
-          {/* Campo libre para describir la frecuencia o tipo de actividad física */}
           <input
+            placeholder="Ej: Caminatas diarias, gimnasio 3 veces por semana"
             {...register("datosFisicos.actividadDiaria", {
               required: "Este campo es obligatorio",
-              minLength: {
-                value: 1,
-                message: "Debe tener al menos 1 caracteres",
-              },
-              maxLength: {
-                value: 100,
-                message: "No puede superar los 100 caracteres",
-              },
+              minLength: { value: 1, message: "Debe tener al menos 1 caracteres" },
+              maxLength: { value: 100, message: "No puede superar los 100 caracteres" },
               pattern: {
                 value: /^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ.,]+$/,
                 message: "Solo se permiten letras, números y espacios",
@@ -68,22 +60,18 @@ const DatosFisicosTab = ({ register, errors }) => {
             })}
           />
           {errors?.datosFisicos?.actividadDiaria && (
-            <span className="error">
-              {errors.datosFisicos.actividadDiaria.message}
-            </span>
+            <span className="error">{errors.datosFisicos.actividadDiaria.message}</span>
           )}
         </div>
 
         <div className="campo-form">
           <label>Metas</label>
-          {/* Selector con opciones predefinidas de objetivos físicos */}
           <select {...register("datosFisicos.metas", { required: true })}>
+            <option value="">-- Seleccione una meta --</option>
             <option value="Perder Peso">Perder Peso</option>
             <option value="Ganar masa muscular">Ganar masa muscular</option>
             <option value="Resistencia Aeróbica">Resistencia Aeróbica</option>
-            <option value="Mantener Estado Fisico">
-              Mantener Estado Fisico
-            </option>
+            <option value="Mantener Estado Fisico">Mantener Estado Fisico</option>
           </select>
           {errors?.datosFisicos?.metas && (
             <span className="error">Campo obligatorio</span>
@@ -95,17 +83,15 @@ const DatosFisicosTab = ({ register, errors }) => {
       <div className="observaciones-boton">
         <div className="campo-form">
           <label>Observaciones</label>
-          {/* Campo opcional para comentarios o aclaraciones del usuario */}
           <textarea
+            placeholder="Ej: enfermedades preexistentes, lesiones, sino indicar lo contrario"
             {...register("datosFisicos.observaciones", {
-              maxLength: {
-                value: 300,
-                message: "Máximo 300 caracteres",
-              },
+              required: "Este campo es obligatorio",
+              maxLength: { value: 300, message: "Máximo 300 caracteres" },
               validate: (value) => {
-                if (value === "") return true; // vacío es válido
+                if (value === "") return true;
                 if (value.length < 10)
-                  return "Debe tener al menos 10 caracteres si se completa";
+                  return "Debe tener al menos 3 caracteres";
                 if (!/^[a-zA-Z0-9\sáéíóúÁÉÍÓÚñÑ.,()\-]+$/.test(value)) {
                   return "Solo se permiten letras, números y signos básicos";
                 }
@@ -113,11 +99,8 @@ const DatosFisicosTab = ({ register, errors }) => {
               },
             })}
           />
-          
           {errors?.datosFisicos?.observaciones && (
-            <span className="error">
-              {errors.datosFisicos.observaciones.message}
-            </span>
+            <span className="error">{errors.datosFisicos.observaciones.message}</span>
           )}
         </div>
       </div>
@@ -126,3 +109,5 @@ const DatosFisicosTab = ({ register, errors }) => {
 };
 
 export default DatosFisicosTab;
+
+
