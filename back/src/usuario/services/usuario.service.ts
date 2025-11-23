@@ -27,6 +27,9 @@ import { PlanEntity } from '../../plan/entities/plan.entity';
 import { RutinasUsuarioRtaDto } from '../dto/rutinasUsuarioRtaDto';
 import { UpdateUsuarioAdmRtaDto } from '../dto/update-Usuario-adm-rta.dto';
 import { ROL } from '../../constantes/rol';
+import { CreatePagoDto } from 'src/pagos/dto/create-pago.dto';
+import { METODODEPAGO, PagoEntity } from 'src/pagos/entity/pago.entity';
+import { PagosService } from 'src/pagos/services/pagos.service';
 
 @Injectable()
 export class UsuarioService {
@@ -114,6 +117,27 @@ export class UsuarioService {
 
         // Se guarda el objeto completo, las relaciones se actualizarán en cascada.
         const usuarioFinal = await queryRunner.manager.save(UsuarioEntity, usuarioCreado);
+
+
+        //Si el plan es gratis, creo un registro de pago con monto 0
+        if (unPlan?.idPlan === 1) {
+          const hoy = new Date();
+          const fechaVencimiento = new Date(hoy);
+          fechaVencimiento.setDate(fechaVencimiento.getDate() + 15);
+
+          const pago = queryRunner.manager.create(PagoEntity, {
+            fechaPago: hoy,
+            fechaVencimiento: fechaVencimiento,
+            estado: 'approved',
+            diasAdicionales: 0,
+            metodoDePago: METODODEPAGO.EFECTIVO,
+            monto: 0,
+            referencia: 'plan gratis',
+            usuario: usuarioFinal,
+          });
+
+          await queryRunner.manager.save(PagoEntity, pago);
+        }
 
 
         //confirma la transaccion
@@ -236,7 +260,7 @@ export class UsuarioService {
     } else return null
 
   }
-  
+
   //Actualiza todos los datos de un usuario.
   //se llama: desde perfil_usuario
   public async updateUsuario(id: number, body: UpdateUsuarioDto): Promise<Boolean> {
