@@ -10,7 +10,7 @@ export enum METODODEPAGO {
 }
 
 
-@Entity({ name: 'Pagos' })
+@Entity({ name: 'pago' })
 @Index('idx_pagos_usuario_fecha', ['usuarioId', 'fechaPago'])
 export class PagoEntity {
   @PrimaryGeneratedColumn()

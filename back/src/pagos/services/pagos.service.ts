@@ -53,7 +53,7 @@ export class PagosService {
     };
   }
 
-  private async guardarPago(createPagoDto: CreatePagoDto): Promise<PagoEntity> {
+  public async guardarPago(createPagoDto: CreatePagoDto): Promise<PagoEntity> {
     // Buscar el usuario para la relación
     const usuario = await this.usuarioService.findUsuarioById(createPagoDto.usuarioId);
 
@@ -64,8 +64,12 @@ export class PagosService {
     }
     const fPago = createPagoDto.fechaPago
       ? new Date(createPagoDto.fechaPago)
-      : new Date()
+      : new Date();
     const fVencimiento = calcularFechaVencimiento(fPago, true); /*fechaPagoEsDateOnly=*/
+   //es un plan gratis, el vencimiento es a 15 dias
+    if (createPagoDto.monto === 0) {
+      fVencimiento.setDate(fPago.getDate()+15)
+    }
     const pago = this.pagoRepository.create({
       fechaPago: fPago,
       fechaVencimiento: fVencimiento,
