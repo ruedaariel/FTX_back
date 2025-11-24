@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectDataSource, InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { UsuarioEntity } from '../entities/usuario.entity';
 import { CreateUsuarioDto } from '../dto/create-usuario.dto';
-import { Repository, EntityManager, DataSource, Not } from 'typeorm';
+import { Repository, EntityManager, DataSource, Not, IsNull } from 'typeorm';
 import { ErrorManager } from '../../config/error.manager';
 import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
 import { DatosPersonalesEntity } from '../../usuario-datos-personales/entities/datos-personales.entity';
@@ -30,6 +30,11 @@ import { ROL } from '../../constantes/rol';
 import { CreatePagoDto } from 'src/pagos/dto/create-pago.dto';
 import { METODODEPAGO, PagoEntity } from 'src/pagos/entity/pago.entity';
 import { PagosService } from 'src/pagos/services/pagos.service';
+import { SemanaEntity } from 'src/semana/entities/semana.entity';
+import { DiaEntity } from 'src/dia/entities/dia.entity';
+import { EjercicioRutinaEntity } from 'src/ejercicio-rutina/entities/ejercicio-rutina.entity';
+import { PLAN_MENOR_LEVEL } from 'src/constantes/levels-plan';
+
 
 @Injectable()
 export class UsuarioService {
@@ -119,12 +124,17 @@ export class UsuarioService {
         const usuarioFinal = await queryRunner.manager.save(UsuarioEntity, usuarioCreado);
 
 
-        //Si el plan es gratis, creo un registro de pago con monto 0
+        //Si el plan es gratis, creo un registro de pago con monto 0 y una rutina basica
         if (unPlan?.idPlan === 1) {
+          //crea nueva rutina a partir de rutina basica
+          const usuarioSinRelaciones = await queryRunner.manager.findOneBy(UsuarioEntity, { id: usuarioFinal.id });
           const hoy = new Date();
           const fechaVencimiento = new Date(hoy);
           fechaVencimiento.setDate(fechaVencimiento.getDate() + 15);
 
+          if (!usuarioSinRelaciones) {
+            throw new ErrorManager("BAD_REQUEST", "No se creo el usuario")
+          }
           const pago = queryRunner.manager.create(PagoEntity, {
             fechaPago: hoy,
             fechaVencimiento: fechaVencimiento,
@@ -133,10 +143,35 @@ export class UsuarioService {
             metodoDePago: METODODEPAGO.EFECTIVO,
             monto: 0,
             referencia: 'plan gratis',
-            usuario: usuarioFinal,
+            usuario: usuarioSinRelaciones,
           });
 
           await queryRunner.manager.save(PagoEntity, pago);
+
+          let rutinaBasica = await queryRunner.manager.findOne(RutinaEntity, {
+            where: { nombreRutina: 'Rutina Basica' },
+            relations: ['semanas', 'semanas.dias', 'semanas.dias.ejerciciosRutina', 'semanas.dias.ejerciciosRutina.ejercicioBasico']
+          });
+
+          if (!rutinaBasica) {
+            rutinaBasica = await queryRunner.manager.findOne(RutinaEntity, {
+              where: { usuario: IsNull() },
+              relations: ['semanas', 'semanas.dias', 'semanas.dias.ejerciciosRutina']
+            });
+          }
+
+          console.log("usuario sin relaciones ------> ", usuarioSinRelaciones);
+          if (!rutinaBasica) {
+            throw new ErrorManager("CONFLICT", "No se encontró la rutina \n Contactate con tu trainer")
+          }
+          console.log("antes de entrar a rutina gratis", rutinaBasica);
+          const nuevaRutina = await clonarRutinaParaUsuario(
+            rutinaBasica,
+            `Rutina Básica // ${usuarioFinal.id}`, // nuevo nombre
+            usuarioSinRelaciones,
+            queryRunner.manager
+          );
+          console.log("nuevaRutina", nuevaRutina);
         }
 
 
@@ -265,6 +300,7 @@ export class UsuarioService {
   //se llama: desde perfil_usuario
   public async updateUsuario(id: number, body: UpdateUsuarioDto): Promise<Boolean> {
     try {
+     
       const usuarioGuardado = await this.usuarioRepository.findOne({
         where: { id },
         relations: ['datosPersonales', 'datosFisicos', 'datosPersonales.plan'],
@@ -278,20 +314,24 @@ export class UsuarioService {
 
       if (body.datosBasicos && Object.keys(body.datosBasicos).length > 0) { //que no sea null o undefined y que no sea vacio
         if (body.datosBasicos.password) {
-          console.log("password nuevo", body.datosBasicos.password);
+          
           usuarioGuardado.password = await bcrypt.hash(body.datosBasicos.password, +process.env.HASH_SALT);
 
           delete body.datosBasicos.password;
+          const direccionEmail = usuarioGuardado.email;
           setImmediate(async () => {
             try {
-              await this.emailService.enviarCambioContrasena(usuarioGuardado.email);
+             
+              await this.emailService.enviarCambioContrasena(direccionEmail);
 
             } catch (error) {
               // acá solo logueás el error, no afecta al flujo
               console.error("Error enviando mail:", error.message);
             }
           });
-
+          if (usuarioGuardado.level === 0) {
+            usuarioGuardado.level = usuarioGuardado.datosPersonales?.plan?.level ?? PLAN_MENOR_LEVEL;
+          }
         }
         Object.assign(usuarioGuardado, body.datosBasicos);
       }
@@ -327,6 +367,8 @@ export class UsuarioService {
 
       //no uso update porque tengo relaciones que guardar
       const usuarioUpdate = await this.usuarioRepository.save(usuarioGuardado);
+
+      console.log("CONTROLAR USUARIO ANTES DE SALIR... ver lo que queda guardado", usuarioUpdate);
       if (!usuarioUpdate) {
         throw new ErrorManager("BAD_REQUEST", `No se pudo actualizar los datos del usuario ${usuarioGuardado.datosPersonales?.apellido.trim()}+${usuarioGuardado.datosPersonales?.nombre.trim()} `);
       }
@@ -506,5 +548,71 @@ export class UsuarioService {
   }
 
 
+  // Asume: rutinaBasica ya cargada con relaciones y usuarioFinal ya guardado
 
+
+}
+
+async function clonarRutinaParaUsuario(
+  rutinaBasica: RutinaEntity,
+  nuevoNombre: string,
+  usuarioFinal: UsuarioEntity,
+  manager: EntityManager // queryRunner.manager
+): Promise<RutinaEntity> {
+
+  // 1) Crear la nueva rutina (sin id)
+  const nuevaRutina = manager.create(RutinaEntity, {
+    nombreRutina: nuevoNombre,
+    estadoRutina: rutinaBasica.estadoRutina,
+    fCreacionRutina: new Date(),
+    fUltimoAccesoRutina: new Date(),
+    fBajaRutina: null,
+    usuario: usuarioFinal,
+    semanas: []
+  });
+  console.log("creo la entity rutina basica", nuevaRutina);
+  // Clonar semanas -> dias -> ejercicios
+  if (rutinaBasica.semanas && rutinaBasica.semanas.length > 0) {
+
+    nuevaRutina.semanas = await Promise.all( //si alguna promesa falla, fallan todas
+      //si semanas es undefined o null, usa el arreglo vacio
+      (rutinaBasica.semanas ?? []).map(async (semanaDto) => {
+        const nuevaSemana = Object.assign(new SemanaEntity(), semanaDto);
+
+        nuevaSemana.dias = await Promise.all(
+          (semanaDto.dias ?? []).map(async (diaDto) => {
+            const nuevoDia = Object.assign(new DiaEntity(), diaDto);
+
+            nuevoDia.ejerciciosRutina = await Promise.all(
+              (diaDto.ejerciciosRutina ?? []).map(async (ejercicioDto) => {
+
+                const nuevoEjercicio = Object.assign(new EjercicioRutinaEntity(), ejercicioDto);
+                console.log("nuevoejercicio antes de buscar", nuevoEjercicio);
+                console.log("nuevoejercicio antes de buscar", nuevoEjercicio.ejercicioBasico.idEjercicioBasico);
+                /*    const ejercicioBasico = await this.ejercicioBasicoRepository.findOneBy({ idEjercicioBasico: nuevoEjercicio.ejercicioBasico.idEjercicioBasico });
+ console.log("encontro el ejercicio basico !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                   if (!ejercicioBasico) {
+                     throw new ErrorManager("NOT_FOUND", `No se encontro los datos del ejercicio basico ${nuevoEjercicio.ejercicioBasico.idEjercicioBasico} `);
+                   }
+                   nuevoEjercicio.ejercicioBasico = ejercicioBasico;
+                   console.log("llego a ejercicio basico", nuevoEjercicio); */
+                return nuevoEjercicio;
+              })
+            );
+            console.log("llego a ejercicio dia", nuevoDia)
+            return nuevoDia;
+          })
+        );
+        console.log("llego a nueva semana", nuevaSemana)
+        return nuevaSemana;
+      })
+
+    );
+  }
+  console.log("antes de save nuevaRutina", nuevaRutina);
+  // Guardar la nueva rutina con el mismo manager
+  // esto se puede hacer porque SemanaEntity -> Dias y Dia -> Ejercicios tienen cascade: true, esto guardará todo.
+  const rutinaGuardada = await manager.save(RutinaEntity, nuevaRutina);
+  console.log("despues de save nuevaRutina");
+  return rutinaGuardada;
 }

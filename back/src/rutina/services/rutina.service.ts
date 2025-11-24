@@ -4,7 +4,7 @@ import { UpdateRutinaDto } from '../dto/update-rutina.dto';
 import { ESTADORUTINA, RutinaEntity } from '../entities/rutina.entity';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { UsuarioEntity } from '../../usuario/entities/usuario.entity';
-import { EntityManager, Not, Repository } from 'typeorm';
+import { EntityManager, Like, Not, Repository } from 'typeorm';
 import { ErrorManager } from '../../config/error.manager';
 import { SemanaEntity } from '../../semana/entities/semana.entity';
 import { DiaEntity } from '../../dia/entities/dia.entity';
@@ -86,8 +86,9 @@ export class RutinaService {
   }
 
   public async findAllRutinas(): Promise<RtaAllRutinasDto[]> {
-    //solo trae las rutinas con sus datos basicos y id y nombre/apellido del usuario
-    const rutinas = await this.rutinaRepository.find({ relations: ['usuario', 'usuario.datosPersonales'] });
+    //solo trae las rutinas con sus datos basicos y id y nombre/apellido del usuario - Omite las rutinas del plan gratis
+    const rutinas = await this.rutinaRepository.find( {where: { nombreRutina: Not(Like('Rutina Basica %')) },
+     relations: ['usuario', 'usuario.datosPersonales'] });
     const rtaDto = rutinas.map(r => plainToInstance(RtaAllRutinasDto, {
       idRutina: r.idRutina,
       nombreRutina: r.nombreRutina,

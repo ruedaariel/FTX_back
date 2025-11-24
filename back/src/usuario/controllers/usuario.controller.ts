@@ -17,6 +17,7 @@ import { PublicAccess } from 'src/auth/decorators/public.decorator';
 import { plainToInstance } from 'class-transformer';
 import { UsuarioRtaDto } from '../dto/usuario-rta.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { AccessLevel } from 'src/auth/decorators/access-level.decorator';
 
 //@AccessLevel(30)
 //@ApiTags('usuario')
@@ -54,7 +55,7 @@ export class UsuarioController {
     return await this.usuarioService.findRutinasxId(id);
   }
 
-  @Rol('USUARIO')
+  @AccessLevel(30)
   @Get('rutinasEstadistica/:id')
   public async findRutinasxIdEstadistica(@Param('id', ParseIntPipe) id: number) {
     return await this.usuarioService.findRutinasxId(id);

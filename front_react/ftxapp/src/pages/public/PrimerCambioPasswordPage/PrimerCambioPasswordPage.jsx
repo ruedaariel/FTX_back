@@ -15,6 +15,7 @@ const PrimerCambioPasswordPage = () => {
     const navigate = useNavigate()
   const location = useLocation();
   const usuario = location.state?.validarUsuario;
+  console.log("usuario ------->",location.state?.validarUsuario );
 
   const onSubmit = async (data) => {
     const payload = {
