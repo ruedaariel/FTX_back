@@ -138,7 +138,7 @@ const EjercicioRutina = ({
         ...ejerciciosDisponibles,
       ];
 
-      console.log("EjercicioRutina - Ejercicio recibido:", ejercicio);
+      // console.log("EjercicioRutina - Ejercicio recibido:", ejercicio);
 
 
   return (

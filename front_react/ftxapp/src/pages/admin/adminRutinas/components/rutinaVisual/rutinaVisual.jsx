@@ -90,7 +90,7 @@ const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange, onGuardarRuti
     }
 
     if (rutinaTiene4Semanas) {
-      setMostrarModalDecision(true);
+      // setMostrarModalDecision(true);
       showModal("Se alcanzó el límite de 4 semanas", "info");
       return;
     }
@@ -140,7 +140,7 @@ const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange, onGuardarRuti
 
     if (rutinaTiene4Semanas) {
       setRutinaEditable(nuevaRutina);
-      setMostrarModalDecision(true);
+      // setMostrarModalDecision(true);
       showModal("Se alcanzó el límite de 4 semanas", "info");
       return;
     }
@@ -202,7 +202,7 @@ const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange, onGuardarRuti
     //showModal("No hay semanas cargadas en la rutina. \nSeleccione otra rutina por favor", "error",0,true);
   }
 
-  console.log("RutinaEditable:", rutinaEditable);
+  // console.log("RutinaEditable:", rutinaEditable);
   // Render principal
   return (
     <div className="rutina-visual">

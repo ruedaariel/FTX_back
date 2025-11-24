@@ -46,7 +46,7 @@ const SemanaRutina = ({
     );
   });
 
-  console.log("SemanaRutina - Semana recibida:", semana);
+  // console.log("SemanaRutina - Semana recibida:", semana);
 
 
   return (
