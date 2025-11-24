@@ -15,7 +15,7 @@ const ResumenSemanasRutina = ({ rutina }) => {
             {semana.dias.map((dia) => {
               const cantidadEjercicios = dia.ejerciciosRutina?.length || 0;
               return (
-                <div key={dia.idDia} className="cuadro-dia-resumen" title={`Día ${dia.nroDia}`}>
+                <div key={`${semana.idSemana}-${dia.idDia}`} className="cuadro-dia-resumen" title={`Día ${dia.nroDia}`}>
                   {cantidadEjercicios}
                 </div>
               );

@@ -27,7 +27,7 @@ import AdminPassword from "../../pages/admin/adminPassword/adminPassword";
 
 //import {   ReseteoPassword } from '../../pages/public/login/logins';
 //import  LoginBasico  from '../../pages/public/login/LoginBasico';
-import PagosAdmin from '../../pages/admin/adminPagos/pagosAdmin'
+import PagosAdmin from '../../pages/admin/adminPagos/pagosAdminCard'
 import ResetPasswordPage from "../../pages/public/passwordReset/ResetePasswordPage";
 import PrimerCambioPasswordPage from "../../pages/public/PrimerCambioPasswordPage/PrimerCambioPasswordPage";
 

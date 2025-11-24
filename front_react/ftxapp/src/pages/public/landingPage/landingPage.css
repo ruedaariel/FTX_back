@@ -19,7 +19,7 @@ body {
 /* ------------------------- Navbar ------------------------------ */
 .mainNavbar-header {
     background-color: var(--color-fondo-mas-oscuro-con-transp);
-    border-bottom: 3px solid #ff6f00;
+    border-bottom: 3px solid var(--color-primario-naranja);
 }
 
 
@@ -133,7 +133,7 @@ body {
     transform: translate(-50%, -50%);
     width: 80%;
     text-align: center;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    text-shadow: 2px 2px 4px var(--color-fondo-mas-oscuro);
     padding: 20px;
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 5px;
@@ -173,7 +173,7 @@ body {
 .card-body-landing {
     /* background-color: var(--color-fondo-claro);*/
     background-color: var(--color-texto-claro-con-transp);
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
+    box-shadow: 5px 5px 15px var(--color-fondo-mas-oscuro);
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     border-radius: 8px;
     padding: 1rem;
@@ -182,11 +182,11 @@ body {
 .card-body-landing:hover {
     transform: translateY(-5px);
     /* Elevar ligeramente */
-    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.8);
+    box-shadow: 10px 10px 20px var(--color-fondo-mas-oscuro);
 }
 
 .card-title-landing {
-    color: #ff6f00;
+    color: var(--color-primario-naranja);
     font-size: clamp(1.3rem, 1.8vw, 1.8rem);
     font-weight: 700;
     /*margin: 0 0 0.5rem 0;*/
@@ -198,7 +198,7 @@ body {
 #entrenador {
     background-color: var(--color-fondo-mas-oscuro);
     color: var(--color-texto-secundario);
-    box-shadow: 0px -10px 20px rgba(0, 0, 0, 0.2),
+    box-shadow: 0px -10px 20px var(--color-fondo-mas-oscuro),
         /* Sombra superior */
         0px 10px 20px rgba(0, 0, 0, 0.2);
     /* Sombra inferior */
@@ -334,7 +334,7 @@ body {
     z-index: 1;
      background-color: var(--color-fondo-mas-oscuro);
     color: var(--color-texto-secundario);
-    box-shadow: 0px -10px 20px rgba(0, 0, 0, 0.2),
+    box-shadow: 0px -10px 20pxvar(--color-fondo-mas-oscuro),
         /* Sombra superior */
         0px 10px 20px rgba(0, 0, 0, 0.2);
 }
@@ -490,7 +490,7 @@ footer {
     text-align: center;
     padding: 30px 20px;
     margin-top: 60px;
-    border-top: 1px solid #495057;
+    border-top: 1px solid var(--color-fondo-claro);
 }
 
 footer .footer-a {
