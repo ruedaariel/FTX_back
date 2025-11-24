@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import DiaItem from "./DiaItem";
 import "./RutinaInteractiva.css";
 import {useModal} from "../../../../context/ModalContext";
+import { fetchGeneral } from '../../../../components/componentsShare/utils/fetchGeneral';
 
 
 const RutinaInteractiva = ({ rutina: rutinaInicial }) => {
@@ -21,6 +22,25 @@ const RutinaInteractiva = ({ rutina: rutinaInicial }) => {
   // Modal global para mensajes
     const { showModal } = useModal();
 
+
+  const actualizarEjercicioBackend = async (idEjercicio) => {
+    
+    const ejercicio = {ejercicioHecho:true};
+
+    await fetchGeneral({
+      url: `http://localhost:8000/apiFtx/ejrutina/update/${idEjercicio}`,
+      method: "PATCH",
+      body: ejercicio ,
+      // showModal,
+      // onSuccess: () => {
+      //   showModal("Perfil actualizado correctamente", "success", 2000, true);
+      // },
+    });
+  };
+
+
+
+
   const handleSeleccionEjercicio = (ejercicio) => {
     if (
       ejercicioSeleccionado?.idEjercicioRutina === ejercicio.idEjercicioRutina
@@ -33,6 +53,7 @@ const RutinaInteractiva = ({ rutina: rutinaInicial }) => {
 
 const handleToggleEjercicioHecho = (idEjercicioRutina) => {
 
+  console.log("%cIdEjercicio:", "color: yellow; font-weight: bold;", idEjercicioRutina);
 
 showModal(
       `¿Quieres marcar este ejercicio como hecho?`,
@@ -57,12 +78,14 @@ showModal(
         })),
       })),
     };
+    
     console.log("%cRutina actualizada:", "color: blue; font-weight: bold;", nuevaRutina);
     return nuevaRutina;
   });
       }
     );
     
+    actualizarEjercicioBackend(idEjercicioRutina);
 };
 
 
