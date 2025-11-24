@@ -58,8 +58,8 @@ const EjercicioRutina = ({
     // Validación de peso (entre 1 y 500 kg)
     if (field === "peso") {
       const pesoNum = parseFloat(value);
-      if (isNaN(pesoNum) || pesoNum <= 0 || pesoNum > 500) {
-        setErrorPeso("Peso inválido. Debe ser entre 1 y 500 kg");
+      if (isNaN(pesoNum) || pesoNum < 0 || pesoNum > 500) {
+        setErrorPeso("Peso inválido. Debe ser entre 0 y 500 kg");
       } else {
         setErrorPeso("");
       }
@@ -98,8 +98,8 @@ const EjercicioRutina = ({
       return;
     }
 
-    if (!peso || parseFloat(peso) <= 0) {
-      showModal("Ingresá un peso válido mayor a 0.", "error", 0, true);
+    if (!peso || parseFloat(peso) < 0) {
+      showModal("Ingresá un peso válido mayor o igual a 0.", "error", 0, true);
       return;
     }
 
@@ -183,7 +183,7 @@ const EjercicioRutina = ({
         <input
           id={`peso-${index}`}
           type="number"
-          value={ejercicio.peso || ""}
+          value={ejercicio.peso ?? ""}
           onChange={(e) => handleFieldChange("peso", e.target.value)}
           className={errorPeso ? "input-error" : ""}
         />

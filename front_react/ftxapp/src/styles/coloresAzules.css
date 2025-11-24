@@ -1,0 +1,49 @@
+/* --------------------------------------------------------------------------
+ * Variables CSS de Color Globales - Tema Azul
+ * Utilizado en: Todos los archivos
+ * -------------------------------------------------------------------------- */
+:root {
+    /* Colores de Fondo (se mantienen los grises) */
+    --color-fondo-body: #343434;
+    --color-fondo-gris-claro: #4a4a4a;
+    --color-fondo-mas-oscuro: #232323;
+    --color-fondo-contraste: #343a40;
+    --color-fondo-mas-oscuro-con-transp: rgba(35, 35, 35, 0.95);
+    --color-fondo-claro: #ddd1d1;
+    --color-fondo-gris-humo: #5c6370;
+
+    /* Colores de Texto */
+    --color-texto-claro: #ffffff;
+    --color-texto-claro-con-transp: rgba(255, 255, 255, 0.6);
+    --color-texto-gris-medio: #6c757d;
+    --color-texto-secundario: #b0b0b0;
+    --color-texto-negro-grafito: #1C1C1C;
+    --color-texto-negro-grafito-con-transp: rgba(28, 28, 28, 0.7);
+
+    /* Colores Primarios (Azul) */
+    --color-primario-azul: #1565c0;              /* Azul principal */
+    --color-primario-azul-claro: #42a5f5;        /* Azul claro */
+    --color-secundario-azul: #0d47a1;            /* Azul más oscuro */
+    --color-secundario-azul-claro: #64b5f6;      /* Azul secundario claro */
+    --color-marron-azul: #0a1a2f;                /* Azul muy oscuro/marrón azulado */
+
+    /* Colores de Bordes y Sombras */
+    --color-sombra-container: rgba(0, 0, 0, 0.4);
+    --color-borde: rgba(255, 255, 255, 0.2);
+    --color-borde-input: #555;
+    --color-borde-sombra-focus: rgba(211, 227, 255, 0.2);
+    --color-borde-focus: var(--color-primario-azul);
+    --color-sombra-focus: rgba(21, 101, 192, 0.4);
+    --color-sombra-focus-azul: rgba(13, 71, 161, 0.6);
+    --color-sombra-boton-hover: rgba(21, 101, 192, 0.3);
+
+    /* Gradientes */
+    --gradiente-boton: linear-gradient(to right, var(--color-primario-azul), var(--color-secundario-azul));
+    --gradiente-boton-hover: linear-gradient(to right, var(--color-secundario-azul), var(--color-primario-azul));
+
+    --gradiente-boton-blanco: linear-gradient(to right, #FFFFFF, #BBDEFB, var(--color-primario-azul));
+
+    /* Colores de Error (se mantienen en rojo) */
+    --color-error: #e74c3c;
+    --color-error-sombra: rgba(231, 76, 60, 0.3);
+}

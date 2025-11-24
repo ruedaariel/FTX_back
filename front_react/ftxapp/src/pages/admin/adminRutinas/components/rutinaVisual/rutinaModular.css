@@ -65,6 +65,8 @@
   margin: 0.2em;
   /* border: 1px solid var(--color-primario-naranja); */
   width: 45%;
+  padding-right: .5rem;
+  padding-top: .4rem;
 }
 .btn-guardar-rutina-visual {
   margin: 0.2rem auto;

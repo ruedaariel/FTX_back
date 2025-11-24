@@ -6,14 +6,19 @@
   padding: 0.3rem;
   border-radius: 8px;
   margin-bottom: 0.5rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+  
+  
 }
 
 .ejercicio-rutina-field {
   display: flex;
   flex-direction: column;
-  min-width: 100px;
-  flex: 1;
+  min-width: 150px;
+  /* flex: 1; */
+  /* border: 1px solid var(--color-primario-naranja); */
+
 }
 
 .ejercicio-rutina-field label {
@@ -22,8 +27,7 @@
   margin-bottom: 4px;
 }
 
-.ejercicio-rutina-field input,
-.ejercicio-rutina-field select,
+
 .ejercicio-rutina-field textarea {
   padding: 8px;
   border-radius: 8px;
@@ -31,7 +35,36 @@
   background-color: var(--color-fondo-gris-claro);
   color: var(--color-texto-claro);
   font-size: 0.95rem;
+  
+  
 }
+
+
+.ejercicio-rutina-field select {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--color-primario-naranja);
+  background-color: var(--color-fondo-gris-claro);
+  color: var(--color-texto-claro);
+  font-size: 0.95rem;
+  max-width: 200px;
+  
+  
+}
+
+.ejercicio-rutina-field input
+ {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid var(--color-primario-naranja);
+  background-color: var(--color-fondo-gris-claro);
+  color: var(--color-texto-claro);
+  font-size: 0.95rem;
+  max-width: 120px;
+  
+  
+}
+
 
 .observaciones textarea {
   min-height: 40px;
