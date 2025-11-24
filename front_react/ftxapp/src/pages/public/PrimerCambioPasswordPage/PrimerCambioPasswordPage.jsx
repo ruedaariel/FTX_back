@@ -4,12 +4,17 @@ import logoNaranja from "../../../assets/Recursos/IconosLogos/logoSinLetrasNaran
 import ftxImage13 from "../../../assets/Recursos/Imagenes/FTX_13.jpg";
 import { useForm, FormProvider } from "react-hook-form";
 import { useModal } from "../../../context/ModalContext";
-import SeguridadTab from "../../usuario/usuarioPerfil/components/seguridad/seguridadTab"; 
+import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import SeguridadTab from "../../usuario/usuarioPerfil/components/seguridad/seguridadTab";
 import { fetchGeneral } from "../../../components/componentsShare/utils/fetchGeneral";
 
-const PrimerCambioPasswordPage = ({ usuario }) => {
+const PrimerCambioPasswordPage = () => {
   const methods = useForm({ mode: "onBlur" }); // podés usar "onChange" si querés validar mientras escribe
   const { showModal } = useModal();
+    const navigate = useNavigate()
+  const location = useLocation();
+  const usuario = location.state?.validarUsuario;
 
   const onSubmit = async (data) => {
     const payload = {
@@ -20,39 +25,53 @@ const PrimerCambioPasswordPage = ({ usuario }) => {
     };
 
     // Construir datosBasicos para enviar al backend
-  const datosBasicos = {
-    
-    password: data.datosPersonales?.passwordNueva // asegurarse que venga desde algún input
-  };
+    const datos = {
+      datosBasicos: {
+        password: data.datosPersonales?.passwordNueva,
+      },
+    };
 
-  
-  console.log("datosBasicos en perfilutils", datosBasicos);
-      await fetchGeneral({
-          url: `http://localhost:8000/apiFtx/usuario/update/${usuario.id}`,
-          method: "PATCH",
-          body: cambios,
-          showModal,
-          onSuccess: () => {
-            showModal(
-        "Contraseña actualizada correctamente. Iniciá sesión con tu nueva clave.",
-        "success",
-        0,
-        true
-      );
-          },
-        });
-        
+    console.log("datosBasicos en payload", payload);
+    console.log("datos basicos", datos);
+
+    if (!usuario) {
+      console.log("sali prque no hay suuario");
+      return;
+    }
+
+    console.log("usarios id", usuario.id);
+    await fetchGeneral({
+      url: `http://localhost:8000/apiFtx/usuario/update/${usuario.id}`,
+      method: "PATCH",
+      body: datos,
+      showModal,
+      onSuccess: () => {
+        showModal(
+          "Contraseña actualizada correctamente. Iniciá sesión con tu nueva clave.",
+          "success",
+          0,
+          true
+        );
+        navigate("/login");
+      },
+    });
   };
 
   return (
     <div className="reset-container">
       {/* Lado izquierdo: imagen motivacional */}
       <div className="reset-left">
-        <img src={ftxImage13} alt="Imagen motivacional" className="reset-image" />
+        <img
+          src={ftxImage13}
+          alt="Imagen motivacional"
+          className="reset-image"
+        />
         <img src={logoNaranja} alt="Logo FTX" className="reset-logo" />
         <div className="reset-texto">
           <h2>Bienvenido a FTX</h2>
-          <p>Por seguridad, debés cambiar tu contraseña en tu primer ingreso.</p>
+          <p>
+            Por seguridad, debés cambiar tu contraseña en tu primer ingreso.
+          </p>
         </div>
       </div>
 
@@ -75,7 +94,11 @@ const PrimerCambioPasswordPage = ({ usuario }) => {
                 <button className="actualizar-button" type="submit">
                   Actualizar contraseña
                 </button>
-                <button className="actualizar-button">
+                <button
+                  className="actualizar-button"
+                  type="button"
+                  onClick={() => navigate("/login")} // 🔥 navega al login
+                >
                   Ir a Login
                 </button>
               </div>
@@ -88,5 +111,3 @@ const PrimerCambioPasswordPage = ({ usuario }) => {
 };
 
 export default PrimerCambioPasswordPage;
-
-

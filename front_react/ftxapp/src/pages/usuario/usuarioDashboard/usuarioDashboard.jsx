@@ -44,7 +44,7 @@ const UsuarioDashboard = () => {
   // Muestro mensajes de aviso (solo una vez por sesión)
   useEffect(() => {
     const yaMostrado = sessionStorage.getItem("mensajeMostrado");
-    console.log("yaMostrado en useEffect", yaMostrado);
+    // console.log("yaMostrado en useEffect", yaMostrado);
     if (yaMostrado === "true") return; // si ya se mostró, no repetir
 
     if (validarUsuario?.message?.includes("primera")) {
@@ -54,7 +54,9 @@ const UsuarioDashboard = () => {
         0,
         true
       );
-      navigate("/public/primerCambioPassword");
+
+      console.log("usuario en dashboard",validarUsuario);
+      navigate("/public/primerCambioPassword",{ state: { validarUsuario } } );
       sessionStorage.setItem("mensajeMostrado", "true");
       return;
     }
@@ -191,11 +193,7 @@ const UsuarioDashboard = () => {
       />
 
       {/* Avisos legales según estado del usuario */}
-      {/* {validarUsuario?.message?.includes("proximo") && (
-        <div className="aviso-legal">
-          <p>Tu plan está próximo a vencer. Contacta a tu Trainer.</p>
-        </div>
-      )} */}
+      
       {validarUsuario?.message?.includes("proximo") && (
         <div className="aviso-legal-marquee">
           <p>Tu plan está próximo a vencer. Contacta a tu Trainer.</p>
@@ -206,9 +204,7 @@ const UsuarioDashboard = () => {
         <div className="aviso-legal-marquee">
           <p>Pagos atrasados. Algunas características no estarán disponibles. Contacta a tu Trainer.</p>
         </div>
-        // <div className="aviso-legal">
-        //   <p>Pagos atrasados. Algunas características no estarán disponibles. Contacta a tu Trainer.</p>
-        // </div>
+        
       )}
 
       {/* Dashboard principal */}
