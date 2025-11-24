@@ -32,7 +32,7 @@ const PrimerCambioPasswordPage = () => {
     };
 
     console.log("datosBasicos en payload", payload);
-    console.log("datos basicos", datos);
+    console.log("usuario", usuario);
 
     if (!usuario) {
       console.log("sali prque no hay suuario");

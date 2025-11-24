@@ -55,13 +55,13 @@ export class AuthService {
              
                 //ultimo pago del usuario ordenado por fecha (el primero es el mas reciente)
                 const ultimosPagos = await this.pagoService.findPagosxId(unUsuario.id);
-
+                console.log("ultimos pagos",ultimosPagos);
                 if (!ultimosPagos || ultimosPagos.length === 0) {
                     message = message + " impago ,"
                 } else {
                     const fVencimientoDateOnly = toLocalDateOnly(ultimosPagos[0].fechaVencimiento);
                     const hoyDateOnly = toLocalDateOnly(new Date()); //hoy
-
+                    
                     if (fVencimientoDateOnly.getTime() < hoyDateOnly.getTime()) {
                         message = message + " impago ,"
                     } else {

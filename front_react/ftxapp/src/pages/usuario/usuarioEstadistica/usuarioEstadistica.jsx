@@ -38,8 +38,12 @@ function UsuarioRutina() {
   // Cargar rutinas desde backend con el id de usuario
   useEffect(() => {
     //  console.log("entre al useeffect");
+
+    let urlesta = `http://localhost:8000/apiFtx/usuario/rutinasEstadistica/`;
+    
     async function cargarRutinas() {
       const rutinas = await obtenerRutinasUsuario(
+        urlesta,
         usuario.id,
         showModal,
         navigate

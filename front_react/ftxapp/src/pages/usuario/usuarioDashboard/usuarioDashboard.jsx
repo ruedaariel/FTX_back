@@ -41,6 +41,8 @@ const UsuarioDashboard = () => {
     }
   }, []);
 
+  console.log("mensaje",validarUsuario?.message);
+
   // Muestro mensajes de aviso (solo una vez por sesión)
   useEffect(() => {
     const yaMostrado = sessionStorage.getItem("mensajeMostrado");
@@ -138,7 +140,7 @@ const UsuarioDashboard = () => {
       icon: "🏋️",
       title: "Rutina",
       description: "Mira tus rutinas de entrenamiento",
-      onClick: habilitarFunciones()
+      onClick: !habilitarFunciones()
         ? undefined
         : () => navigate("/usuario/rutina", { state: { usuario } }),
     },
@@ -147,7 +149,7 @@ const UsuarioDashboard = () => {
       icon: <IoPeopleSharp />,
       title: "Perfil",
       description: "Modifica tus datos de Perfil",
-      onClick: habilitarFunciones()
+      onClick: !habilitarFunciones()
         ? undefined
         : () => navigate("/usuario/perfil", { state: { usuario } }),
     },
@@ -156,7 +158,7 @@ const UsuarioDashboard = () => {
       icon: "📈",
       title: "Estadisticas",
       description: "Mira tus avances con las rutinas.",
-      onClick: habilitarFunciones()
+      onClick: !habilitarFunciones()
         ? undefined
         : () => navigate("/usuario/estadistica", { state: { usuario } }),
     },
