@@ -8,13 +8,18 @@ import { fetchGeneral } from "../../../../components/componentsShare/utils/fetch
  * @param {Function} navigate - Función de react-router para redirección
  * @returns {Promise<Array>} - Rutinas del usuario
  */
-export async function obtenerRutinasUsuario(idUsuario, showModal, navigate) {
+export async function obtenerRutinasUsuario(endpoint,idUsuario, showModal, navigate) {
   if (!idUsuario) return [];
 
+  const urlEstadistica = endpoint+`${idUsuario}`;
+  
+  
   let rutinas = [];
 
   await fetchGeneral({
-    url: `http://localhost:8000/apiFtx/usuario/rutinas/${idUsuario}`,
+
+    url: urlEstadistica,
+    // url: `http://localhost:8000/apiFtx/usuario/rutinas/${idUsuario}`,
     method: "GET",
     onSuccess: (data) => {
       if (Array.isArray(data) && data.length === 0) {
