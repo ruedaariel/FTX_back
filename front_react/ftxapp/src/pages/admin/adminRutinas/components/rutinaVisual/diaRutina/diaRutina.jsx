@@ -29,7 +29,8 @@ const DiaRutina = ({
       {/* Encabezado del día con foco y botón de guardar */}
       <div className="dia-header">
         <h4>
-          Día {nroDia} — Foco: {dia.focus}
+          {/* Día {nroDia} — Foco: {dia.focus} */}
+          Día {nroDia} 
         </h4>
         <button
           className="btn-guardar-dia"

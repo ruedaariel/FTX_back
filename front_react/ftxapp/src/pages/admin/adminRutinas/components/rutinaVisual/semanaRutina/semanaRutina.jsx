@@ -58,7 +58,8 @@ const SemanaRutina = ({
         style={{ cursor: "pointer" }}
       >
         <h3>
-          Semana {nroSemana} – {semana.estadoSemana}
+          {/* Semana {nroSemana} – {semana.estadoSemana} */}
+          Semana {nroSemana} 
         </h3>
 
         <div className="barra-semana">
