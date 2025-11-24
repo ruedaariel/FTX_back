@@ -98,7 +98,10 @@ const EjercicioRutina = ({
       return;
     }
 
-    if (!peso || parseFloat(peso) < 0) {
+     
+
+    if (peso === null || peso === undefined || peso === "" || parseFloat(peso) < 0) {
+        
       showModal("Ingresá un peso válido mayor o igual a 0.", "error", 0, true);
       return;
     }
