@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { PlanService } from "../../../../services/planService";
+import { useNavigate } from "react-router-dom";
 import {
   parsearBeneficios,
   formatearPrecio,
@@ -10,6 +11,7 @@ function Planes() {
   const [planes, setPlanes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     cargarPlanes();
@@ -45,7 +47,8 @@ function Planes() {
   const handleSelectPlan = (plan) => {
     console.log("Plan seleccionado:", plan);
     // Aquí puedes agregar lógica para navegar a registro
-    alert(`Has seleccionado el plan: ${plan.nombrePlan}`);
+    navigate("/public/registro");
+    // alert(`Has seleccionado el plan: ${plan.nombrePlan}`);
   };
 
   if (loading) {
