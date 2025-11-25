@@ -51,15 +51,14 @@ const UsuarioDashboard = () => {
 
     if (validarUsuario?.message?.includes("nuevo")) {
       showModal(
-        "Cuando se acredite el pago se habilitaran las opciones de tu plan.",
+        "Cuando se acredite tu pago se habilitaran las opciones de tu plan.",
         "info",
         0,
         true
       );
 
       console.log("usuario en dashboard", validarUsuario);
-      navigate("/public/primerCambioPassword", { state: { validarUsuario } });
-      sessionStorage.setItem("mensajeMostrado", "true");
+            
       return;
     }
 
