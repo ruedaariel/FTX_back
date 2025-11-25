@@ -87,7 +87,8 @@ export class RutinaService {
 
   public async findAllRutinas(): Promise<RtaAllRutinasDto[]> {
     //solo trae las rutinas con sus datos basicos y id y nombre/apellido del usuario - Omite las rutinas del plan gratis
-    const rutinas = await this.rutinaRepository.find( {where: { nombreRutina: Not(Like('Rutina Basica %')) },
+   // const rutinas = await this.rutinaRepository.find( {where: { nombreRutina: Not(Like('Rutina Basica %')) },
+     const rutinas = await this.rutinaRepository.find( {
      relations: ['usuario', 'usuario.datosPersonales'] });
     const rtaDto = rutinas.map(r => plainToInstance(RtaAllRutinasDto, {
       idRutina: r.idRutina,
