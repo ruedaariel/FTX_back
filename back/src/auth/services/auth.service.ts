@@ -64,9 +64,10 @@ export class AuthService {
                 if (!ultimosPagos || ultimosPagos.length === 0) {
                     const fecha = unUsuario.fCreacion instanceof Date ? unUsuario.fCreacion : new Date(unUsuario.fCreacion);
                     const limite = new Date(fecha.getTime());
-                    limite.setDate(limite.getDate() + 3);
+                    limite.setDate(limite.getDate() + 3); //3 dias para que pague un usuario nuevo
                     if (limite.getTime() >= Date.now()) {
                         message = "nuevo"
+                        console.log("un nuevo tiene 3 dias para pagar");
                     } else {
                         message = message + " impago ,"
                     }
