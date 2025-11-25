@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./adminPassword.css";
 import logoNaranja from "../../../assets/Recursos/IconosLogos/logoSinLetrasNaranja.png";
 import ftxImage13 from "../../../assets/Recursos/Imagenes/FTX_13.jpg";
@@ -13,7 +13,7 @@ const AdminPassword = () => {
   const navigate = useNavigate();
   const usuario = location.state?.usuario;
 
-  console.log("Usuario para cambiar contraseña:", usuario);
+  // console.log("Usuario para cambiar contraseña:", usuario);
 
   // Estados locales para los campos
   const [passwordActual, setPasswordActual] = useState("");
@@ -28,21 +28,23 @@ const AdminPassword = () => {
   // Regex: mínimo 8 caracteres, al menos una mayúscula, una minúscula y un número
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
+
   const validarPasswords = () => {
     if (!passwordActual || !passwordNueva || !passwordConfirmar) {
-      showModal("Todos los campos son obligatorios", "error", 3000);
+      showModal("Todos los campos son obligatorios", "error", 0,true);
       return false;
     }
     if (!passwordRegex.test(passwordNueva)) {
       showModal(
         "La nueva contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número",
         "error",
-        4000
+        0,true
       );
       return false;
     }
     if (passwordNueva !== passwordConfirmar) {
-      showModal("Las contraseñas no coinciden", "error", 3000);
+      
+      showModal("Las contraseñas no coinciden", "error", 0,true);
       return false;
     }
     return true;

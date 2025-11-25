@@ -1,32 +1,32 @@
 :root {
   /* Colores de Fondo */
-  --color-fondo-body: #343434;
-  --color-fondo-gris-claro: #4a4a4a;
-  --color-fondo-mas-oscuro: #232323;
-  --color-fondo-contraste: #343a40;
-  --color-fondo-mas-oscuro-con-transp: rgba(35, 35, 35, 0.95);
-  --color-fondo-claro: #ddd1d1;
-  --color-fondo-gris-humo: #5c6370;
+  --color-fondo-body: #2e2e2e;
+  --color-fondo-gris-claro: #3b3b2f; /* marrón grisáceo */
+  --color-fondo-mas-oscuro: #1f1f1f;
+  --color-fondo-contraste: #2f332a; /* verde oliva oscuro */
+  --color-fondo-mas-oscuro-con-transp: rgba(31, 31, 31, 0.95);
+  --color-fondo-claro: #d4d4c2; /* beige claro */
+  --color-fondo-gris-humo: #4e4e3f; /* gris verdoso */
 
   /* Colores de Texto */
   --color-texto-claro: #ffffff;
   --color-texto-claro-con-transp: rgba(255, 255, 255, 0.6);
-  --color-texto-gris-medio: #6c757d;
-  --color-texto-secundario: #b0b0b0;
+  --color-texto-gris-medio: #8a8a7a; /* gris cálido */
+  --color-texto-secundario: #b8b8a0; /* gris beige */
   --color-texto-negro-grafito: #1C1C1C;
   --color-texto-negro-grafito-con-transp: rgba(28, 28, 28, 0.7);
 
   /* Colores Primarios (Verde, manteniendo nombres naranja) */
-  --color-primario-naranja: #2e7d32;              /* Verde principal */
-  --color-primario-naranja-claro: #66bb6a;        /* Verde claro */
-  --color-secundario-naranja: #1b5e20;            /* Verde más oscuro */
-  --color-secundario-naranja-claro: #81c784;      /* Verde secundario claro */
-  --color-marron-naranja: #0d1f0d;                /* Verde muy oscuro/marrón verdoso */
+  --color-primario-naranja: #2e7d32;              /* verde principal */
+  --color-primario-naranja-claro: #66bb6a;        /* verde claro */
+  --color-secundario-naranja: #1b5e20;            /* verde oscuro */
+  --color-secundario-naranja-claro: #81c784;      /* verde secundario claro */
+  --color-marron-naranja: #2a3b07;                /* verde musgo/marrón verdoso */
 
   /* Colores de Bordes y Sombras */
   --color-sombra-container: rgba(0, 0, 0, 0.4);
   --color-borde: rgba(255, 255, 255, 0.2);
-  --color-borde-input: #555;
+  --color-borde-input: #4a4a3a;
   --color-borde-sombra-focus: rgba(211, 227, 211, 0.2);
   --color-borde-focus: var(--color-primario-naranja);
   --color-sombra-focus: rgba(46, 125, 50, 0.4);
@@ -42,4 +42,5 @@
   --color-error: #e74c3c;
   --color-error-sombra: rgba(231, 76, 60, 0.3);
 }
+
 

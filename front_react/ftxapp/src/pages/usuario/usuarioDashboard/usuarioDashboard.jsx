@@ -45,6 +45,10 @@ const UsuarioDashboard = () => {
 
   // Muestro mensajes de aviso (solo una vez por sesión)
   useEffect(() => {
+
+    if (validarUsuario?.message === undefined) {return;}
+      
+
     const yaMostrado = sessionStorage.getItem("mensajeMostrado");
     // console.log("yaMostrado en useEffect", yaMostrado);
     if (yaMostrado === "true") return; // si ya se mostró, no repetir
@@ -83,7 +87,7 @@ const UsuarioDashboard = () => {
 
   // Función para habilitar/deshabilitar funcionalidades
   const habilitarFunciones = () =>
-    validarUsuario?.message?.includes("proximo") ? true : false;
+    validarUsuario?.message?.includes("impago") ? false : true;
 
   // Valido token al montar
   useEffect(() => {
