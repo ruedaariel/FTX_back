@@ -554,6 +554,85 @@ export class UsuarioService {
 
 }
 
+export async function clonarRutinaParaUsuario(
+  rutinaBasica: RutinaEntity,
+  nuevoNombre: string,
+  usuarioFinal: UsuarioEntity,
+  manager: EntityManager
+): Promise<RutinaEntity> {
+
+  //  estructura base de la nueva rutina
+  const nuevaRutina = manager.create(RutinaEntity, {
+    nombreRutina: nuevoNombre,
+    estadoRutina: rutinaBasica.estadoRutina,
+    fCreacionRutina: new Date(),
+    fUltimoAccesoRutina: new Date(),
+    fBajaRutina: null,
+    usuario: usuarioFinal,
+    semanas: [] // Inicializamos el array
+  });
+
+  
+  if (rutinaBasica.semanas && rutinaBasica.semanas.length > 0) {
+    
+    nuevaRutina.semanas = rutinaBasica.semanas.map((semanaOriginal) => {
+      
+      // A) Clonar Semana
+      // Desestructuramos para separar el ID y los hijos, quedándonos con las props simples
+      const { idSemana, dias, rutina, ...propsSemana } = semanaOriginal;
+      
+      const nuevaSemana = manager.create(SemanaEntity, {
+        ...propsSemana, // Copia nroSemana, estadoSemana
+        dias: []
+      });
+
+      // B) Clonar Días de esa semana
+      if (dias && dias.length > 0) {
+        nuevaSemana.dias = dias.map((diaOriginal) => {
+          
+          const { idDia, semana, ejerciciosRutina, ...propsDia } = diaOriginal;
+
+          const nuevoDia = manager.create(DiaEntity, {
+            ...propsDia, // Copia nroDia, focus
+            ejerciciosRutina: []
+          });
+
+          // C) Clonar Ejercicios de ese día
+          if (ejerciciosRutina && ejerciciosRutina.length > 0) {
+            nuevoDia.ejerciciosRutina = ejerciciosRutina.map((ejercicioOriginal) => {
+              
+              const { idEjercicioRutina, dia, ...propsEjercicio } = ejercicioOriginal;
+
+             
+              // propsEjercicio ya contiene 'ejercicioBasico' (el objeto entero) 
+              const nuevoEjercicio = manager.create(EjercicioRutinaEntity, {
+                ...propsEjercicio,
+                ejercicioHecho: false, // Reseteamos el estado por si acaso la plantilla estaba marcada
+                // ejercicioBasico se copia automáticamente dentro de propsEjercicio
+              });
+
+              return nuevoEjercicio;
+            });
+          }
+
+          return nuevoDia;
+        });
+      }
+
+      return nuevaSemana;
+    });
+  }
+
+  console.log("Estructura clonada lista para guardar (sin IDs viejos):", nuevaRutina);
+
+  // Guarda en cascada (cascade = true)
+  const rutinaGuardada = await manager.save(RutinaEntity, nuevaRutina);
+  
+  return rutinaGuardada;
+}
+
+
+/* 
 async function clonarRutinaParaUsuario(
   rutinaBasica: RutinaEntity,
   nuevoNombre: string,
@@ -597,7 +676,7 @@ async function clonarRutinaParaUsuario(
                    }
                    nuevoEjercicio.ejercicioBasico = ejercicioBasico;
                    console.log("llego a ejercicio basico", nuevoEjercicio); */
-                return nuevoEjercicio;
+ /*                return nuevoEjercicio;
               })
             );
             console.log("llego a ejercicio dia", nuevoDia)
@@ -616,4 +695,4 @@ async function clonarRutinaParaUsuario(
   const rutinaGuardada = await manager.save(RutinaEntity, nuevaRutina);
   console.log("despues de save nuevaRutina");
   return rutinaGuardada;
-}
+} */ 
