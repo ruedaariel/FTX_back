@@ -13,12 +13,16 @@ import { UsuarioService } from 'src/usuario/services/usuario.service';
 import { PagosService } from 'src/pagos/services/pagos.service';
 import { IpayloadToken } from 'src/interfaces/auth.interface';
 import { PLAN_MENOR_LEVEL } from 'src/constantes/levels-plan';
+import { ResetDto } from '../dto/reset.dto';
+import { generateRandomPassword } from 'src/utils/random-password';
+import { EmailService } from 'src/shared/email/email.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private readonly usuarioService: UsuarioService,
-        private readonly pagoService: PagosService) { }
+        private readonly pagoService: PagosService,
+        private readonly emailService: EmailService) { }
     //@InjectRepository(UsuarioEntity)
     //private readonly usuarioRepository: Repository<UsuarioEntity>,
     /*   @InjectRepository(PagoEntity)
@@ -52,16 +56,16 @@ export class AuthService {
 
             let message = "";
             if (unUsuario.rol === "usuario") {
-             
+
                 //ultimo pago del usuario ordenado por fecha (el primero es el mas reciente)
                 const ultimosPagos = await this.pagoService.findPagosxId(unUsuario.id);
-                console.log("ultimos pagos",ultimosPagos);
+                console.log("ultimos pagos", ultimosPagos);
                 if (!ultimosPagos || ultimosPagos.length === 0) {
                     message = message + " impago ,"
                 } else {
                     const fVencimientoDateOnly = toLocalDateOnly(ultimosPagos[0].fechaVencimiento);
                     const hoyDateOnly = toLocalDateOnly(new Date()); //hoy
-                    
+
                     if (fVencimientoDateOnly.getTime() < hoyDateOnly.getTime()) {
                         message = message + " impago ,"
                     } else {
@@ -91,6 +95,37 @@ export class AuthService {
         }
     }
 
+    public async resetPassw(body: ResetDto): Promise<string> {
+        try {
+            let message: string = "";
+            const unUsuario = await this.usuarioService.findUsuarioByMail(body.email);
+
+            if (!unUsuario) {
+                return "Correo no válido para una cuenta activa. \n ¿Necesitás cambiarlo? Contactar a tu trainer."
+            }
+
+            if (unUsuario.estado === ESTADO.ARCHIVADO) {
+                return "Tu cuenta está archivada. \n Contactá a tu personal trainer para reactivar tu acceso."
+            }
+
+            //Generar contraseña y encriptar
+            const contrasenaGenerada = generateRandomPassword();
+            const contrasenaHasheada = await bcrypt.hash(contrasenaGenerada, +process.env.HASH_SALT);
+            const usuarioGuardado = await this.usuarioService.updateUsuario(unUsuario.id, { "datosBasicos": { "password": `${contrasenaGenerada}` } })
+            setImmediate(async () => {
+                try {
+                    await this.emailService.resetPassword(body.email, contrasenaGenerada);
+                } catch (error) {
+                    throw ErrorManager.handle(error);
+                }
+            });
+
+            return message
+        } catch (error) {
+            throw ErrorManager.handle(error);
+        }
+
+    }
 
     private async generateJWT(usuario: UsuarioEntity): Promise<string> {
 

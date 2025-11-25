@@ -42,6 +42,28 @@ export class EmailService {
         }
     }
 
+        async resetPassword(email: string, passwordGenerada: string) {
+        const mailOptions = {
+            from: 'usuarionuevo.ftx@gmail.com',
+            to: email,
+            subject: '¡Hola! Restablecé tu contraseña',
+            html: `<p>Hola,</p>
+             <p>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta.</p>
+             <p> Tu nueva contraseña es <strong>${passwordGenerada}</strong></p>
+             <p>Por favor, cámbiala en tu primer inicio de sesión.</p>
+             <p>Saludos,</p>
+             <p>Tu Equipo</p>`,
+        };
+
+        try {
+            await this.transporter.sendMail(mailOptions);
+            console.log(`Correo enviado a: ${email}`);
+        } catch (error) {
+            console.error(`Error al enviar el correo a ${email}:`, error);
+            throw new Error('No se pudo enviar el correo de bienvenida');
+        }
+    }
+
        async enviarCambioContrasena(email: string) {
         const mailOptions = {
             from: 'usuarionuevo.ftx@gmail.com',
