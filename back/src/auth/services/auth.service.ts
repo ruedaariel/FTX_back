@@ -59,9 +59,18 @@ export class AuthService {
 
                 //ultimo pago del usuario ordenado por fecha (el primero es el mas reciente)
                 const ultimosPagos = await this.pagoService.findPagosxId(unUsuario.id);
-                console.log("ultimos pagos", ultimosPagos);
+
+
                 if (!ultimosPagos || ultimosPagos.length === 0) {
-                    message = message + " impago ,"
+                    const fecha = unUsuario.fCreacion instanceof Date ? unUsuario.fCreacion : new Date(unUsuario.fCreacion);
+                    const limite = new Date(fecha.getTime());
+                    limite.setDate(limite.getDate() + 3);
+                    if (limite.getTime() >= Date.now()) {
+                        message = "nuevo"
+                    } else {
+                        message = message + " impago ,"
+                    }
+
                 } else {
                     const fVencimientoDateOnly = toLocalDateOnly(ultimosPagos[0].fechaVencimiento);
                     const hoyDateOnly = toLocalDateOnly(new Date()); //hoy
