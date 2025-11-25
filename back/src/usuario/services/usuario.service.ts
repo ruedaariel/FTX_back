@@ -316,8 +316,9 @@ export class UsuarioService {
         if (body.datosBasicos.password) {
           
           usuarioGuardado.password = await bcrypt.hash(body.datosBasicos.password, +process.env.HASH_SALT);
-
+          usuarioGuardado.passwordChangedAt = new Date();
           delete body.datosBasicos.password;
+
           const direccionEmail = usuarioGuardado.email;
           setImmediate(async () => {
             try {

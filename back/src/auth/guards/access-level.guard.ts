@@ -45,7 +45,7 @@ export class AccessLevelGuard implements CanActivate {
                 } else if (admin && rolUser.toUpperCase() === 'ADMIN') {
                     return true
                 } else {
-                    throw new UnauthorizedException('No tienes permisos para este acceder a este servicio')
+                    throw new UnauthorizedException('No tienes permisos para este servicio');
                 }
             }
         }
@@ -65,7 +65,7 @@ export class AccessLevelGuard implements CanActivate {
         }
 
         if (accessLevel > unUsuario.level) { //si no funciona, cambiar a !==
-            throw new UnauthorizedException('No tienes permisos para este servicio')
+            throw new UnauthorizedException('No podés acceder con tu plan actual. \n Actualizá tu PLAN para desbloquear este servicio.')
         }
 
         return true;

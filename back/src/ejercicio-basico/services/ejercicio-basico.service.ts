@@ -148,7 +148,9 @@ console.log("ejercicio Creado --->", ejercicioCreado);
 
   public async findAll(): Promise<RtaEjercicioBasicoDto[]> {
     try {
-      const ejercicios = await this.ejercicioBasicoRepository.find();
+      const ejercicios = await this.ejercicioBasicoRepository.find({
+        order: {nombreEjercicio : 'ASC'}
+      });
       //ojo, recordar que estoy modificando el campo imagenLink, aunque NO en la b/d
       // ejercicios.forEach(ej => { ej.imagenLink = this.fileImgService.construirUrlImagen(ej.imagenLink, "ejercicios"); });
      const rtaEjerciciosDto = plainToInstance(RtaEjercicioBasicoDto, ejercicios, { excludeExtraneousValues: true });
