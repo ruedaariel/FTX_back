@@ -41,13 +41,27 @@ const UsuarioDashboard = () => {
     }
   }, []);
 
-  console.log("mensaje",validarUsuario?.message);
+  console.log("mensaje", validarUsuario?.message);
 
   // Muestro mensajes de aviso (solo una vez por sesión)
   useEffect(() => {
+    if (validarUsuario?.message === undefined) {
+      return;
+    }
 
-    if (validarUsuario?.message === undefined) {return;}
-      
+    if (validarUsuario?.message?.includes("nuevo")) {
+      showModal(
+        "Cuando se acredite el pago se habilitaran las opciones de tu plan.",
+        "info",
+        0,
+        true
+      );
+
+      console.log("usuario en dashboard", validarUsuario);
+      navigate("/public/primerCambioPassword", { state: { validarUsuario } });
+      sessionStorage.setItem("mensajeMostrado", "true");
+      return;
+    }
 
     const yaMostrado = sessionStorage.getItem("mensajeMostrado");
     // console.log("yaMostrado en useEffect", yaMostrado);
@@ -61,8 +75,8 @@ const UsuarioDashboard = () => {
         true
       );
 
-      console.log("usuario en dashboard",validarUsuario);
-      navigate("/public/primerCambioPassword",{ state: { validarUsuario } } );
+      console.log("usuario en dashboard", validarUsuario);
+      navigate("/public/primerCambioPassword", { state: { validarUsuario } });
       sessionStorage.setItem("mensajeMostrado", "true");
       return;
     }
@@ -86,8 +100,13 @@ const UsuarioDashboard = () => {
   }, [validarUsuario]);
 
   // Función para habilitar/deshabilitar funcionalidades
-  const habilitarFunciones = () =>
-    validarUsuario?.message?.includes("impago") ? false : true;
+  const habilitarFunciones = () => {
+    if (
+      validarUsuario?.message?.includes("impago") ||
+      validarUsuario?.message?.includes("nuevo")
+    ) {return  true; } // impago o nuevo (sin pago) deshabilita funciones
+  };
+  // validarUsuario?.message?.includes("impago" ) ? false : true;
 
   // Valido token al montar
   useEffect(() => {
@@ -145,7 +164,13 @@ const UsuarioDashboard = () => {
       title: "Rutina",
       description: "Mira tus rutinas de entrenamiento",
       onClick: !habilitarFunciones()
-        ? undefined
+        ? () =>
+            showModal(
+              "Opcion Deshabilitada. Contacta a tu Trainer.",
+              "info",
+              0,
+              true
+            )
         : () => navigate("/usuario/rutina", { state: { usuario } }),
     },
     {
@@ -154,7 +179,13 @@ const UsuarioDashboard = () => {
       title: "Perfil",
       description: "Modifica tus datos de Perfil",
       onClick: !habilitarFunciones()
-        ? undefined
+        ? () =>
+            showModal(
+              "Opcion Deshabilitada. Contacta a tu Trainer.",
+              "info",
+              0,
+              true
+            )
         : () => navigate("/usuario/perfil", { state: { usuario } }),
     },
     {
@@ -163,7 +194,13 @@ const UsuarioDashboard = () => {
       title: "Estadisticas",
       description: "Mira tus avances con las rutinas.",
       onClick: !habilitarFunciones()
-        ? undefined
+        ? () =>
+            showModal(
+              "Opcion Deshabilitada.\n Contacta a tu Trainer.",
+              "info",
+              0,
+              true
+            )
         : () => navigate("/usuario/estadistica", { state: { usuario } }),
     },
     {
@@ -199,7 +236,7 @@ const UsuarioDashboard = () => {
       />
 
       {/* Avisos legales según estado del usuario */}
-      
+
       {validarUsuario?.message?.includes("proximo") && (
         <div className="aviso-legal-marquee">
           <p>Tu plan está próximo a vencer. Contacta a tu Trainer.</p>
@@ -208,9 +245,11 @@ const UsuarioDashboard = () => {
 
       {validarUsuario?.message?.includes("impago") && (
         <div className="aviso-legal-marquee">
-          <p>Pagos atrasados. Algunas características no estarán disponibles. Contacta a tu Trainer.</p>
+          <p>
+            Pagos atrasados. Algunas características no estarán disponibles.
+            Contacta a tu Trainer.
+          </p>
         </div>
-        
       )}
 
       {/* Dashboard principal */}
