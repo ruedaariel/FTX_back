@@ -3,6 +3,7 @@ import "./resetPasswordPage.css";
 import logoNaranja from "../../../assets/Recursos/IconosLogos/logoSinLetrasNaranja.png";
 import ftxImage13 from "../../../assets/Recursos/Imagenes/FTX_13.jpg";
 import { useModal } from "../../../context/ModalContext";
+import { fetchGeneral } from "../../../components/componentsShare/utils/fetchGeneral";
 
 import { useForm } from "react-hook-form";
 
@@ -18,9 +19,31 @@ const ResetPasswordPage = () => {
   const onSubmit = async (data) => {
   // Aquí podrías enviar el email al backend
   console.log("Email para resetear:", data.email);
-
   // Ejemplo de feedback visual
   showModal("Verificaremos tu correo electrónico. Si es correcto recibiras instrucciones para el reseteo de tu contraseña.", "info",0,true);
+
+  // Construir body para enviar al backend
+    const datos = {
+      
+        password: data.mail
+      }
+    
+    // envio a backen el correo par resetear clave/apiFtx/auth/reset
+      
+        if (data.mail) {
+          fetchGeneral({
+            url: `http://localhost:8000/apiFtx//auth/reset`,
+            method: "POST",
+            body: datos,
+            onSuccess: (data) => setUsuario(data),
+    
+            showModal,
+            
+          });
+        }
+   
+
+
 };
 
 
