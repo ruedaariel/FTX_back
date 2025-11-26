@@ -1,94 +1,97 @@
 // ResumenPagos.js
-import React from 'react';
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { leerPagosDesdeURL } from "../../admin/adminPagos/components/utils/leerPagosDesdeURL";
 import { normalizarPagos } from "../../admin/adminPagos/components/utils/normalizarPagos";
 import { useModal } from "../../../context/ModalContext";
 import HeaderCrud from "../../../components/componentsShare/header/HeaderCrud";
-import { GoPeople } from "react-icons/go";
 import { IoPeople } from "react-icons/io5";
 import { FaMoneyBillTrendUp } from "react-icons/fa6";
-import GraficoPagosMensuales from "./components/GraficoPagosMensuales/GraficoPagosMensuales"; 
+import GraficoPagosMensuales from "./components/GraficoPagosMensuales/GraficoPagosMensuales";
 
+import "./adminReportes.css";
 
-import './adminReportes.css'; // Importa tu archivo de estilos
+// Helpers para fecha
+const obtenerAnioFiltro = () => {
+  const hoy = new Date();
+  return String(hoy.getFullYear()).slice(-2); // últimos 2 dígitos
+};
+
+const obtenerMesFiltro = () => {
+  const hoy = new Date();
+  const mes = String(hoy.getMonth() + 1).padStart(2, "0");
+  const anio = String(hoy.getFullYear()).slice(-2);
+  return `${mes}/${anio}`;
+};
 
 const ResumenPagos = ({ dataUsuarios, dataPagos }) => {
   const [pagos, setPagos] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
   const { showModal } = useModal();
-  // const [totalActivos, setTotalActivos] = useState(0); 
 
   useEffect(() => {
-  leerPagosDesdeURL(
-    "http://localhost:8000/apiFtx/pagos/impagos",
-    setUsuarios,
-    showModal,
-    normalizarPagos // opcional
-  );
-}, []);
+    leerPagosDesdeURL(
+      "http://localhost:8000/apiFtx/pagos/impagos",
+      setUsuarios,
+      showModal,
+      normalizarPagos
+    );
+  }, []);
 
   useEffect(() => {
-  leerPagosDesdeURL(
-    "http://localhost:8000/apiFtx/pagos",
-    setPagos,
-    showModal,
-    
-  );
-}, []);
+    leerPagosDesdeURL(
+      "http://localhost:8000/apiFtx/pagos",
+      setPagos,
+      showModal
+    );
+  }, []);
 
-const TotalPagos = [...pagos, ...usuarios];
+  const TotalPagos = [...pagos];
+  console.log(usuarios);
+  const usuariosUnicosImpagos = [...new Set(usuarios.map((p) => p.usuarioId))];
+  console.log("Usuarios UNicos",usuariosUnicosImpagos.length);
 
+  // Filtros dinámicos
+  const ANIO_FILTRO = obtenerAnioFiltro();
+  const MES_FILTRO = obtenerMesFiltro();
 
-// console.log("Usuarios :", usuarios);
- console.log("TotalPagos :", TotalPagos);
+  const calcularMetricas = (TotalPagos) => {
+    let totalActivos = 0;
+    let totalArchivados = 0;
+    let totalPagosMes = 0;
+    let totalPagosGeneral = 0;
 
-const calcularMetricas = (TotalPagos) => {
-  let totalActivos = 0;
-  let totalArchivados = 0;
+    TotalPagos.forEach((user) => {
+      if (user.estadoUsuario === "activo") {
+        totalActivos++;
+      } else if (
+        user.estadoUsuario === "archivado" ||
+        user.estadoUsuario === "inactivo"
+      ) {
+        totalArchivados++;
+      }
+    });
 
-  TotalPagos.forEach(user => {
-    if (user.estadoUsuario === 'activo') {
-      totalActivos++;
-    } else if (user.estadoUsuario === 'archivado' || user.estadoUsuario === 'inactivo') {
-      totalArchivados++;
-    }
-  });
+    TotalPagos.forEach((pago) => {
+      const monto = parseFloat(pago.monto);
+      totalPagosGeneral += monto;
 
-  // Continuación: Calcular Totales de Pagos
+      if (pago.fechaPago !== "sFecha" && pago.fechaPago.endsWith(MES_FILTRO)) {
+        totalPagosMes += monto;
+      }
+    });
 
-  // Usaremos el mes 11 (Noviembre) del año '25.
-  const MES_FILTRO = '11/25'; 
-  let totalPagosNov25 = 0;
-  let totalPagosGeneral = 0;
-
-  TotalPagos.forEach(pago => {
-    const monto = parseFloat(pago.monto);
-    totalPagosGeneral += monto; 
-
-   
-    // Totalizar pagos de un mes específico
-    if (pago.fechaPago != "sFecha" && pago.fechaPago.endsWith(MES_FILTRO)) {
-      totalPagosNov25 += monto;
-    }
-
-  });
-
-  console.log("Total Pagos Nov/25:", totalPagosNov25);
-  return {
-    totalActivos,
-    totalArchivados,
-    totalPagosNov25,
-    totalPagosGeneral,
+    return {
+      totalActivos,
+      totalArchivados,
+      totalPagosMes,
+      totalPagosGeneral,
+    };
   };
-};
 
-  //1. Lógica para calcular métricas (ver sección siguiente)
-  const { totalActivos, totalArchivados, totalPagosNov25, totalPagosGeneral } = calcularMetricas(TotalPagos);
+  const { totalActivos, totalArchivados, totalPagosMes, totalPagosGeneral } =
+    calcularMetricas(TotalPagos);
 
-  // 2. Renderizado del resumen
   return (
-
     <div className="container">
       <HeaderCrud
         title=" Reportes y Resúmenes"
@@ -96,35 +99,47 @@ const calcularMetricas = (TotalPagos) => {
         MostrarCerrarSesion={false}
       />
 
-    <div className="resumen-container">
-      {/* <h2>📊 Resumen de Usuarios y Pagos</h2> */}
-      
-      <div className="resumen-grid">
-        {/* Cuadro 1: Usuarios por Estado */}
-        <div className="resumen-card estado-card">
-          {/* <h3>👤 Estado de Usuarios</h3> */}
-          <h3> <IoPeople /> Estado de Usuarios</h3>
-          <div className="usuarios-estado-detalles">
-          <p>Activos: {totalActivos}</p>
-          <p>Archivados/Inactivos: {totalArchivados}</p>
+      <div className="resumen-container">
+        <div className="resumen-grid">
+          {/* Estado de Usuarios */}
+          <div className="resumen-card estado-card">
+            <h3>
+              <IoPeople /> Estado de Usuarios
+            </h3>
+            <div className="usuarios-estado-detalles">
+              <p className="usuarios-activos">Activos: {totalActivos}</p>
+              <p className="usuarios-inactivos">Archivados/Inactivos: {totalArchivados}</p>
+            </div>
+            <div className="usuarios-estado-detalles">
+              
+              <p className="usuarios-impagos">Activos sin pagar al dia de hoy: {usuariosUnicosImpagos.length}</p>
+            </div>
+            
+          </div>
+
+          {/* Total de Pagos del mes actual */}
+          <div className="resumen-card pagos-card">
+            <h3>
+              <FaMoneyBillTrendUp /> {`Pagos del mes: ${MES_FILTRO}`}
+            </h3>
+            <p className="monto-total">
+              Total: $ {totalPagosMes.toLocaleString("es-AR")}
+            </p>
+            <p className="nota-total">
+              Total de Pagos Registrados en este año:{" "}
+              {totalPagosGeneral.toLocaleString("es-AR")}
+            </p>
           </div>
         </div>
-
-        {/* Cuadro 2: Total de Pagos (Ejemplo: Nov/25) */}
-        <div className="resumen-card pagos-card">
-          <h3> <FaMoneyBillTrendUp /> Pagos Noviembre 2025</h3>
-          
-          <p className="monto-total">Total: $ {totalPagosNov25.toLocaleString('es-AR')}</p>
-          <p className="nota-total">Total de Pagos Registrados: {totalPagosGeneral.toLocaleString('es-AR')}</p>
-        </div>
       </div>
-    </div>
-    <div className="grafico-barras-pagos-mensuales">
-      <h2>📊 Resumen de Pagos</h2>
-      <GraficoPagosMensuales pagos={TotalPagos} year="25"/>
-    </div>
+
+      <div className="grafico-barras-pagos-mensuales">
+        <h2>📊 Resumen de Pagos</h2>
+        <GraficoPagosMensuales pagos={TotalPagos} year={ANIO_FILTRO} />
+      </div>
     </div>
   );
 };
 
 export default ResumenPagos;
+
