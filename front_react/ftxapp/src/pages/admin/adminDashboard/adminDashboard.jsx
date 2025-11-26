@@ -140,7 +140,7 @@ const AdminDashboard = () => {
   return (
 
     <div className="container">
-      <HeaderCrud title=" Gestion Admnistrador" widthPercent={100} MostrarCerrarSesion={true} />
+      <HeaderCrud title=" Gestion Administrador" widthPercent={100} MostrarCerrarSesion={true} />
 
     <div className="admin-dashboard">
       {/* <HeaderAdmin 

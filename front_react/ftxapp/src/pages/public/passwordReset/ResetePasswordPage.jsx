@@ -1,4 +1,6 @@
 import React from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./resetPasswordPage.css";
 import logoNaranja from "../../../assets/Recursos/IconosLogos/logoSinLetrasNaranja.png";
 import ftxImage13 from "../../../assets/Recursos/Imagenes/FTX_13.jpg";
@@ -12,41 +14,44 @@ const ResetPasswordPage = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
-   const { showModal } = useModal();
+  const { showModal } = useModal();
+  const [usuario, setUsuario] = useState("");
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-  // Aquí podrías enviar el email al backend
-  console.log("Email para resetear:", data.email);
-  // Ejemplo de feedback visual
-  showModal("Verificaremos tu correo electrónico. Si es correcto recibiras instrucciones para el reseteo de tu contraseña.", "info",0,true);
+    // Aquí podrías enviar el email al backend
+    console.log("Email para resetear:", data.email);
+    // Ejemplo de feedback visual
+    // showModal("Verificaremos tu correo electrónico. Si es correcto recibiras instrucciones para el reseteo de tu contraseña.", "info",0,true);
 
-  // Construir body para enviar al backend
+    // Construir body para enviar al backend
     const datos = {
-      
-        password: data.mail
-      }
-    
+      email: data.email,
+    };
+
+    console.log("datos", datos);
     // envio a backen el correo par resetear clave/apiFtx/auth/reset
-      
-        if (data.mail) {
-          fetchGeneral({
-            url: `http://localhost:8000/apiFtx//auth/reset`,
-            method: "POST",
-            body: datos,
-            onSuccess: (data) => setUsuario(data),
-    
-            showModal,
-            
-          });
-        }
-   
 
+    if (data.email) {
+      fetchGeneral({
+        url: `http://localhost:8000/apiFtx/auth/reset`,
+        method: "POST",
+        body: datos,
+        onSuccess: (data) => {
+          setUsuario(data);
+          navigate("/login");
+        },
 
-};
-
-
+        showModal,
+        onError: () => {
+          reset({ email: "" }); //  limpia el campo email
+        },
+      });
+    }
+  };
 
   return (
     <div className="reset-container">
@@ -96,7 +101,9 @@ const ResetPasswordPage = () => {
           </form>
 
           <div className="reset-links">
-            <a href="/login">← Volver al login</a>
+            <button onClick={() => navigate("/login")}>
+              ← Volver al login
+            </button>
           </div>
         </div>
       </div>

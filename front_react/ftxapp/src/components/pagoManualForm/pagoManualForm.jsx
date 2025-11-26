@@ -106,9 +106,9 @@ const PagoManualForm = ({ onSubmit, onCancel }) => {
       newErrors.fechaPago = "La fecha de pago es requerida";
     }
 
-    if (!formData.external_reference.trim()) {
-      newErrors.external_reference = "La referencia externa es requerida";
-    }
+    // if (!formData.external_reference.trim()) {
+    //   newErrors.external_reference = "La referencia externa es requerida";
+    // }
 
     // console.log("📋 Errores de validación:", newErrors);
     setErrors(newErrors);
@@ -240,7 +240,7 @@ const PagoManualForm = ({ onSubmit, onCancel }) => {
           onChange={handleInputChange}
           error={errors.external_reference}
           placeholder="Ej: pago-manual-001"
-          required
+          // required
         />
       </div>
 

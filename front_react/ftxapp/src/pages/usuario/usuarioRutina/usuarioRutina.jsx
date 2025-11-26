@@ -100,8 +100,8 @@ function UsuarioRutina() {
       const RutinaAFinalizada = obtenerIdRutinaActiva(rutinasUsuario);
       console.log("RutinaAFinalizada", RutinaAFinalizada);
 
-
-      if (rutinaAMostrar.estadoRutina === "proxima") {
+      // si tienen mas de una rutina
+      if (rutinaAMostrar.estadoRutina === "proxima" && rutinas.length() > 1) {
 
         
         showModal(
@@ -121,7 +121,7 @@ function UsuarioRutina() {
        
         
         // busco la rutina activa en rutinasUsuario y la paso a finalizada llamo al backend
-      } // si no es proxima no hago nada
+      } else {cambiarEstadoRutina(rutinaAMostrar.idRutina, "activa", showModal);}// si no es proxima no hago nada
     }
   }, [rutinaAMostrar]);
 
