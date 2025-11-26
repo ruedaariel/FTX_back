@@ -20,6 +20,7 @@ export class AuthController {
   @PublicAccess()
   @Post('reset')
   public async reset(@Body() body: ResetDto) {
+    
     return await this.authService.resetPassw(body);
   }
 }

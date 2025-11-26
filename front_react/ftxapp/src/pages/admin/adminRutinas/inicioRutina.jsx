@@ -123,7 +123,7 @@ function inicioRutina() {
           ? "Rutina copiada y guardada correctamente"
           : "Rutina editada correctamente";
 
-      showModal(mensaje, "success", 2000);
+      showModal(mensaje, "success", 1500);
       resetearInterfaz();
     }
     setMostrarResumenModal(false);

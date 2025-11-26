@@ -59,14 +59,15 @@ export class AuthService {
 
                 //ultimo pago del usuario ordenado por fecha (el primero es el mas reciente)
                 const ultimosPagos = await this.pagoService.findPagosxId(unUsuario.id);
-
+                console.log("ultimos pagos", ultimosPagos);
 
                 if (!ultimosPagos || ultimosPagos.length === 0) {
                     const fecha = unUsuario.fCreacion instanceof Date ? unUsuario.fCreacion : new Date(unUsuario.fCreacion);
                     const limite = new Date(fecha.getTime());
                     limite.setDate(limite.getDate() + 3); //3 dias para que pague un usuario nuevo
+                    console.log(limite.getTime(),"----",Date.now());
                     if (limite.getTime() >= Date.now()) {
-                        message = "nuevo"
+                        message = message + " nuevo ";
                         console.log("un nuevo tiene 3 dias para pagar");
                     } else {
                         message = message + " impago ,"
@@ -105,17 +106,17 @@ export class AuthService {
         }
     }
 
-    public async resetPassw(body: ResetDto): Promise<string> {
+    public async resetPassw(body: ResetDto): Promise<boolean> {
         try {
-            let message: string = "";
+           
             const unUsuario = await this.usuarioService.findUsuarioByMail(body.email);
-
+            console.log("correo usuario a resetear",unUsuario);
             if (!unUsuario) {
-                return "Correo no válido para una cuenta activa. \n ¿Necesitás cambiarlo? Contactar a tu trainer."
-            }
+                throw new ErrorManager("BAD_REQUEST", "Correo no válido para una cuenta activa. \n ¿Necesitás cambiarlo? Contactar a tu trainer."
+            )  }
 
             if (unUsuario.estado === ESTADO.ARCHIVADO) {
-                return "Tu cuenta está archivada. \n Contactá a tu personal trainer para reactivar tu acceso."
+                throw new ErrorManager("BAD_REQUEST", "Tu cuenta está archivada. \n Contactá a tu personal trainer para reactivar tu acceso.")
             }
 
             //Generar contraseña y encriptar
@@ -130,7 +131,7 @@ export class AuthService {
                 }
             });
 
-            return message
+            return true
         } catch (error) {
             throw ErrorManager.handle(error);
         }

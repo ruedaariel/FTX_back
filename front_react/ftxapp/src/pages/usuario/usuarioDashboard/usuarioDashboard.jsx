@@ -41,29 +41,20 @@ const UsuarioDashboard = () => {
     }
   }, []);
 
-  console.log("mensaje", validarUsuario?.message);
+  console.log("mensaje usuario", validarUsuario?.message);
+  console.log(validarUsuario?.message?.includes("primera"));
+  
 
   // Muestro mensajes de aviso (solo una vez por sesión)
   useEffect(() => {
-    if (validarUsuario?.message === undefined) {
+    if (validarUsuario?.message === undefined || validarUsuario?.message === "" ) {
       return;
     }
 
-    if (validarUsuario?.message?.includes("nuevo")) {
-      showModal(
-        "Cuando se acredite tu pago se habilitaran las opciones de tu plan.",
-        "info",
-        0,
-        true
-      );
-
-      console.log("usuario en dashboard", validarUsuario);
-            
-      return;
-    }
+    
 
     const yaMostrado = sessionStorage.getItem("mensajeMostrado");
-    // console.log("yaMostrado en useEffect", yaMostrado);
+    console.log("yaMostrado en useEffect", yaMostrado);
     if (yaMostrado === "true") return; // si ya se mostró, no repetir
 
     if (validarUsuario?.message?.includes("primera")) {
@@ -76,7 +67,7 @@ const UsuarioDashboard = () => {
 
       console.log("usuario en dashboard", validarUsuario);
       navigate("/public/primerCambioPassword", { state: { validarUsuario } });
-      sessionStorage.setItem("mensajeMostrado", "true");
+      // sessionStorage.setItem("mensajeMostrado", "true");
       return;
     }
 
@@ -96,6 +87,19 @@ const UsuarioDashboard = () => {
       sessionStorage.setItem("mensajeMostrado", "true");
       return;
     }
+
+    if (validarUsuario?.message?.includes("nuevo")) {
+      showModal(
+        "Cuando se acredite tu pago se habilitaran las opciones de tu plan.",
+        "info",
+        0,
+        true
+      );
+
+      console.log("usuario en dashboard", validarUsuario);
+            
+      return;
+    }
   }, [validarUsuario]);
 
   // Función para habilitar/deshabilitar funcionalidades
@@ -103,7 +107,8 @@ const UsuarioDashboard = () => {
     if (
       validarUsuario?.message?.includes("impago") ||
       validarUsuario?.message?.includes("nuevo")
-    ) {return  true; } // impago o nuevo (sin pago) deshabilita funciones
+    ) {return  false; } 
+    else {return true;}// impago o nuevo (sin pago) deshabilita funciones
   };
   // validarUsuario?.message?.includes("impago" ) ? false : true;
 
@@ -209,13 +214,13 @@ const UsuarioDashboard = () => {
       description: "Historial de pagos",
       onClick: () => navigate("/usuario/pagos", { state: { usuario } }),
     },
-    {
-      id: "Informar Pago",
-      icon: <FaMoneyBill1Wave />,
-      title: "Informar Pago",
-      description: "Avisar al trainer de un pago realizado",
-      onClick: () => navigate("/usuario/informarpago", { state: { usuario } }),
-    },
+    // {
+    //   id: "Informar Pago",
+    //   icon: <FaMoneyBill1Wave />,
+    //   title: "Informar Pago",
+    //   description: "Avisar al trainer de un pago realizado",
+    //   onClick: () => navigate("/usuario/informarpago", { state: { usuario } }),
+    // },
     {
       id: "Planes",
       icon: "📋",

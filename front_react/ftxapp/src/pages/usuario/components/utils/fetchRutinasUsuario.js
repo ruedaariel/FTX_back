@@ -23,7 +23,7 @@ export async function obtenerRutinasUsuario(endpoint,idUsuario, showModal, navig
     method: "GET",
     onSuccess: (data) => {
       if (Array.isArray(data) && data.length === 0) {
-        showModal("No tienes rutinas asignadas", "info", 2000);
+        showModal("No tienes rutinas asignadas.\n Contacta a tu trainer para tu rutina personalizada", "info", 4000);
         setTimeout(() => navigate("/usuario"), 2000);
       }
       rutinas = data; // guardamos la respuesta

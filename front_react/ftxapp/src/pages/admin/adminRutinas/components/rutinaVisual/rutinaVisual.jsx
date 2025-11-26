@@ -85,20 +85,20 @@ const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange, onGuardarRuti
 
     if (siguienteSemanaExiste) {
       setSemanaActivaIndex(semanaIndex + 1);
-      showModal("Semana completa, pasando a la siguiente", "success");
+      showModal("Semana completa, pasando a la siguiente", "success",1000);
       return;
     }
 
     if (rutinaTiene4Semanas) {
       // setMostrarModalDecision(true);
-      showModal("Se alcanzó el límite de 4 semanas", "info");
+      showModal("Se alcanzó el límite de 4 semanas", "info",1000);
       return;
     }
 
     const nuevaRutina = avanzarODuplicarSemana(rutinaEditable, semanaIndex);
     setRutinaEditable(nuevaRutina);
     setSemanaActivaIndex(semanaIndex + 1);
-    showModal("Semana completa, comenzando nueva semana", "success");
+    showModal("Semana completa, comenzando nueva semana", "success",1000);
   };
 
   // Guardar semana actual (estructura lista para backend)
@@ -134,7 +134,7 @@ const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange, onGuardarRuti
     if (siguienteSemanaExiste) {
       setRutinaEditable(nuevaRutina);
       setSemanaActivaIndex(semanaIndex + 1);
-      showModal("Pasando a la siguiente semana", "success");
+      showModal("Pasando a la siguiente semana", "success",1000);
       return;
     }
 
@@ -148,7 +148,7 @@ const RutinaVisual = ({ rutina, modoRutina, onRutinaEditadaChange, onGuardarRuti
     nuevaRutina = avanzarODuplicarSemana(nuevaRutina, semanaIndex);
     setRutinaEditable(nuevaRutina);
     setSemanaActivaIndex(semanaIndex + 1);
-    showModal("Nueva semana creada", "success");
+    showModal("Nueva semana creada", "success",1000);
   };
 
   // Actualizar un ejercicio específico
