@@ -129,7 +129,7 @@ export class PagosService {
         't.usuarioId = u.id' //join entre la subconsulta y la tabla usuario
       )
       // unir con la tabla pagos para traer la fila que coincide con lastVencimiento
-      .innerJoin('Pagos', 'p', 'p.usuarioId = t.usuarioId AND p.fechaVencimiento = t.lastVencimiento')
+      .innerJoin('pago', 'p', 'p.usuarioId = t.usuarioId AND p.fechaVencimiento = t.lastVencimiento')
       // unir con datosPersonales (1:1)
       .leftJoin('u.datosPersonales', 'dp')
       .setParameters(subQ.getParameters())
