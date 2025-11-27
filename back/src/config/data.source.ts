@@ -40,7 +40,7 @@ console.log('PASS:', process.env.MYSQLPASSWORD ? '********' : 'NULL (Falta)'); /
 console.log('PORT:', process.env.MYSQLPORT);
 console.log('DB NAME:', process.env.MYSQL_DATABASE || process.env.MYSQLDATABASE);
 console.log('-------------------------------');
-// --- FIN DEL DIAGNÓSTICO ---
+// --- FIN DEL DIAGNÓSTICO -------
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
