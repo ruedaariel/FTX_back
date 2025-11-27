@@ -1,0 +1,32 @@
+import { UsuarioEntity } from '../entities/usuario.entity';
+import { CreateUsuarioDto } from '../dto/create-usuario.dto';
+import { Repository, EntityManager, DataSource } from 'typeorm';
+import { UpdateUsuarioDto } from '../dto/update-usuario.dto';
+import { PlanService } from '../../plan/services/plan.service';
+import { RutinaEntity } from '../../rutina/entities/rutina.entity';
+import { EmailService } from '../../shared/email/email.service';
+import { UsuarioRtaDto } from '../dto/usuario-rta.dto';
+import { FileImgService } from '../../shared/file-img/file-img.service';
+import { UsuarioDatosCompletosRtaDto } from '../dto/usuario-datos-completos-rta.dto';
+import { UpdateUsuarioAdmDto } from '../dto/update-Usuario-adm.dto';
+import { RutinasUsuarioRtaDto } from '../dto/rutinasUsuarioRtaDto';
+import { UpdateUsuarioAdmRtaDto } from '../dto/update-Usuario-adm-rta.dto';
+export declare class UsuarioService {
+    private readonly usuarioRepository;
+    private readonly entityManager;
+    private readonly dataSource;
+    private readonly emailService;
+    private readonly planService;
+    private readonly fileImgService;
+    constructor(usuarioRepository: Repository<UsuarioEntity>, entityManager: EntityManager, dataSource: DataSource, emailService: EmailService, planService: PlanService, fileImgService: FileImgService);
+    createUsuario(body: CreateUsuarioDto): Promise<UsuarioRtaDto>;
+    findAllUsuarios(): Promise<UsuarioDatosCompletosRtaDto[]>;
+    findUsuarioById(id: number): Promise<UsuarioEntity>;
+    findUsuarioByMail(mail: string): Promise<UsuarioEntity | null>;
+    findRutinasxId(id: number): Promise<RutinasUsuarioRtaDto[] | null>;
+    updateUsuario(id: number, body: UpdateUsuarioDto): Promise<Boolean>;
+    updateImagenPerfil(id: number, fileName: string): Promise<boolean>;
+    updateUsuarioBasico(id: number, body: UpdateUsuarioAdmDto): Promise<UpdateUsuarioAdmRtaDto>;
+    deleteUsuario(id: number): Promise<boolean>;
+}
+export declare function clonarRutinaParaUsuario(rutinaBasica: RutinaEntity, nuevoNombre: string, usuarioFinal: UsuarioEntity, manager: EntityManager): Promise<RutinaEntity>;
