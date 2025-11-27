@@ -4,7 +4,7 @@
     "buildCommand": "npm install && npm run build" 
   },
   "deploy": {
-    "startCommand": "node dist/main" 
+    "startCommand": "node back/dist/main" 
   },
   "environment": {
     "providers": ["node"],
