@@ -15,6 +15,15 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    
+    // ----------- CONFIGURACIÓN DE RUTAS ABSOLUTAS (AÑADIR ESTO) -----------
+    "baseUrl": "./",
+    "paths": {
+      "src/*": [
+        "src/*"
+      ]
+    }
+    // ----------------------------------------------------------------------
   }
 }
