@@ -8,5 +8,10 @@
   },
   "environment": {
     "providers": ["node"] 
+  },
+  "plan": {
+    "node": {
+      "rootDir": "back" 
+    }
   }
 }
