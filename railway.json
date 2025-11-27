@@ -5,5 +5,8 @@
   },
   "deploy": {
     "startCommand": "node back/dist/main"
+  },
+  "environment": {
+    "providers": ["node"] 
   }
 }
