@@ -1,9 +1,0 @@
-{
-  "build": {
-    "builder": "NIXPACKS", 
-    "buildCommand": "cd back && npm install && npm run build"
-  },
-  "deploy": {
-    "startCommand": "node back/dist/main"
-  }
-}
