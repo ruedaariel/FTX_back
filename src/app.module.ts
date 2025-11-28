@@ -24,10 +24,14 @@ import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
-     ConfigModule.forRoot({
-      envFilePath: `.${process.env.MODE_ENV || 'develop'}.env`,
-      isGlobal: true,
-    }),
+    //  ConfigModule.forRoot({
+    //   envFilePath: `.${process.env.MODE_ENV || 'develop'}.env`,
+    //   isGlobal: true,
+    // }),
+    ConfigModule.forRoot({
+  isGlobal: true,
+}),
+
     //para acceder a las imagenes con la ruta completa
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'uploads'),

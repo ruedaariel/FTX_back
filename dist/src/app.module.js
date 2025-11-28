@@ -31,7 +31,6 @@ exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             config_1.ConfigModule.forRoot({
-                envFilePath: `.${process.env.MODE_ENV || 'develop'}.env`,
                 isGlobal: true,
             }),
             serve_static_1.ServeStaticModule.forRoot({

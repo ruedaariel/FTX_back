@@ -20,20 +20,29 @@ exports.DatabaseModule = DatabaseModule = __decorate([
             config_1.ConfigModule,
             typeorm_1.TypeOrmModule.forRootAsync({
                 inject: [config_1.ConfigService],
-                useFactory: (config) => ({
-                    type: 'mysql',
-                    host: config.get('DB_HOST'),
-                    port: config.get('DB_PORT') || 3306,
-                    username: config.get('DB_USER'),
-                    password: config.get('DB_PASS'),
-                    database: config.get('DB_NAME'),
-                    entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-                    migrations: [__dirname + '/../../migraciones/*{.ts,.js}'],
-                    synchronize: false,
-                    migrationsRun: true,
-                    logging: false,
-                    namingStrategy: new typeorm_naming_strategies_1.SnakeNamingStrategy(),
-                }),
+                useFactory: (config) => {
+                    console.log("***************************************");
+                    console.log('Conectando a DB:', {
+                        host: config.get('DB_HOST'),
+                        port: config.get('DB_PORT'),
+                        user: config.get('DB_USER'),
+                        db: config.get('DB_NAME'),
+                    });
+                    console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+                    return {
+                        type: 'mysql',
+                        host: config.get('DB_HOST'),
+                        port: config.get('DB_PORT') || 3306,
+                        username: config.get('DB_USER'),
+                        password: config.get('DB_PASS'),
+                        database: config.get('DB_NAME'),
+                        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+                        migrations: [__dirname + '/../../migraciones/*{.ts,.js}'],
+                        synchronize: false,
+                        migrationsRun: false,
+                        namingStrategy: new typeorm_naming_strategies_1.SnakeNamingStrategy(),
+                    };
+                }
             }),
         ],
     })
