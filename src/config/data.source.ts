@@ -63,35 +63,33 @@
 // });
 // src/config/data.source.ts
 // src/config/data.source.ts
-import { DataSource } from 'typeorm';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+
+
 import * as dotenv from 'dotenv';
 
-// Cargar variables de entorno si existen (aunque usaremos hardcodeados aquí)
-dotenv.config();
+// src/config/data.source.ts
+import { DataSource } from 'typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
-// --- VALORES HARDCODEADOS PARA PRUEBA ---
-// Estos valores han sido confirmados como funcionales desde Workbench.
-const HARDCODED_CONFIG = {
-  host: 'mysql.railway.internal', // Host público confirmado
-  port: 47529,                        // Puerto público confirmado
-  username: 'root',                   // Usuario confirmado
-  password: 'lknoMyWmMNixEDecDmZBuwzrJHNUOzfI', // Contraseña confirmada
-  database: 'railway',                // Asumiendo el nombre de la DB por defecto
-};
-// ----------------------------------------
+// Los console.log del diagnóstico deben seguir aquí para verificar el HOST/PORT
+console.log('--- DB CONFIG (FINAL ATTEMPT) ---');
+console.log('HOST:', process.env.MYSQLHOST); // Debería ser una IP interna (ej. 100.x.x.x)
+console.log('PORT:', process.env.MYSQLPORT);
+console.log('----------------------------------');
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
   
-  // *** USANDO VALORES HARDCODEADOS ***
-  host: HARDCODED_CONFIG.host,
-  port: HARDCODED_CONFIG.port,
-  username: HARDCODED_CONFIG.username,
-  password: HARDCODED_CONFIG.password,
-  database: HARDCODED_CONFIG.database,
+  // *** USAR VARIABLES DE ENTORNO PARA HOST/PORT ***
+  host: process.env.MYSQLHOST,     // Lee el HOST interno de Railway
+  port: +(process.env.MYSQLPORT || '3306'), // Lee el PORT interno de Railway
   
-  // La ruta de las entidades, la dejamos como estaba:
+  // *** MANTENER CREDENCIALES HARDCODEADAS (CONFIRMADAS) ***
+  username: 'root',
+  password: 'lknoMyWmMNixEDecDmZBuwzrJHNUOzfI', 
+  database: 'railway', // Ajusta si el nombre de tu DB es diferente
+  
+  // Resto de la configuración
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../../migraciones/*{.ts,.js}'],
   synchronize: false,
