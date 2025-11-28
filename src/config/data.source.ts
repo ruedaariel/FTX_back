@@ -83,4 +83,6 @@ export const AppDataSource = new DataSource({
   migrationsRun: true,
   logging: false,
   namingStrategy: new SnakeNamingStrategy(),
+
+  
 });
