@@ -62,27 +62,40 @@
 //   namingStrategy: new SnakeNamingStrategy(),
 // });
 // src/config/data.source.ts
+// src/config/data.source.ts
 import { DataSource } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import * as dotenv from 'dotenv';
 
-// --- INICIO DEL DIAGNÓSTICO: COMENTAR O ELIMINAR LOS CONSOLE.LOGS TEMPORALMENTE ---
+// Cargar variables de entorno si existen (aunque usaremos hardcodeados aquí)
+dotenv.config();
+
+// --- VALORES HARDCODEADOS PARA PRUEBA ---
+// Estos valores han sido confirmados como funcionales desde Workbench.
+const HARDCODED_CONFIG = {
+  host: 'mysql.railway.internal', // Host público confirmado
+  port: 47529,                        // Puerto público confirmado
+  username: 'root',                   // Usuario confirmado
+  password: 'lknoMyWmMNixEDecDmZBuwzrJHNUOzfI', // Contraseña confirmada
+  database: 'railway',                // Asumiendo el nombre de la DB por defecto
+};
+// ----------------------------------------
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
-  // --- VALORES HARDCODEADOS PARA PRUEBA ---
-  host: 'interchange.proxy.rlwy.net', // O el valor que Railway te da para MYSQLHOST
-  port: 47529,                        // O el valor que Railway te da para MYSQLPORT
-  username: 'root',                   // El valor de MYSQLUSER en Railway
-  password: 'lknoMyWmMNixEDecDmZBuwzrJHNUOzfI', // El valor de MYSQLPASSWORD en Railway
-  database: 'railway',                // El valor de MYSQLDATABASE en Railway
-  // ----------------------------------------
   
+  // *** USANDO VALORES HARDCODEADOS ***
+  host: HARDCODED_CONFIG.host,
+  port: HARDCODED_CONFIG.port,
+  username: HARDCODED_CONFIG.username,
+  password: HARDCODED_CONFIG.password,
+  database: HARDCODED_CONFIG.database,
+  
+  // La ruta de las entidades, la dejamos como estaba:
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../../migraciones/*{.ts,.js}'],
   synchronize: false,
   migrationsRun: true,
   logging: false,
   namingStrategy: new SnakeNamingStrategy(),
-
-  
 });
