@@ -2,7 +2,7 @@ import { CorsOptions } from "@nestjs/common/interfaces/external/cors-options.int
 
 export const CORS: CorsOptions = {
   // origin: true,
-  origin:['https://ftxfront-production.up.railway.app'],
+  origin:['https://ftx.up.railway.app'],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
   credentials: true,
   // 
