@@ -7,8 +7,8 @@ import * as express from 'express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 // arreglo para el error de crypto en railway
-import * as crypto from 'crypto';
-(global as any).crypto = crypto;
+import * as nodeCrypto from 'crypto';
+(global as any).crypto = { randomUUID: nodeCrypto.randomUUID };
 //import 'reflect-metadata';
 
 /* import { Logger } from '@nestjs/common';
