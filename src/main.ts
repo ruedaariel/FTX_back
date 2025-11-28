@@ -7,8 +7,11 @@ import * as express from 'express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 // arreglo para el error de crypto en railway
+// arreglo para Node 22: extender crypto en vez de sobrescribir
 import * as nodeCrypto from 'crypto';
-(global as any).crypto = { randomUUID: nodeCrypto.randomUUID };
+if (!(global as any).crypto?.randomUUID) {
+  (global as any).crypto.randomUUID = nodeCrypto.randomUUID;
+}
 //import 'reflect-metadata';
 
 /* import { Logger } from '@nestjs/common';
