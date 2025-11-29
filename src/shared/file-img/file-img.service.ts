@@ -31,9 +31,9 @@ public async borrarImagen(nombreArchivo: string, directorio:string): Promise<boo
 public construirUrlImagen(nombreArchivo: string,directorio:string): string {
     //para mandar al front, construyo la ruta+nombreArchivo
 
-    const port = this.configService.get<string>('PORT') || '8000';
-    const host = this.configService.get<string>('HOST') || 'localhost';
-    const baseUrl = `http://${host}:${port}/uploads/${directorio}/`;
+    // const port = this.configService.get<string>('PORT') || '8000';
+    // const host = this.configService.get<string>('HOST') || 'localhost';
+    const baseUrl = `${process.env.BACKEND_URL}/uploads/${directorio}/`;
     return nombreArchivo ? baseUrl + nombreArchivo : "";
   }
 

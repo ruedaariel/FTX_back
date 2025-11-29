@@ -13,12 +13,11 @@ export class RtaEjercicioBasicoDto {
 
     @Expose()
     @Transform(({ value }) => {
-        const port = process.env.PORT || '8000';
-        const host = process.env.HOST || 'localhost';
-        const baseUrl = `http://${host}:${port}/uploads/ejercicios/`;
+        
+        
+        const baseUrl = `${process.env.BACKEND_URL}/uploads/ejercicios/`;
         console.log("url de imagen", baseUrl);
-        console.log("PORT: ", process.env.PORT);
-        console.log("HOST: ", process.env.HOST);
+       
         if (!value) return "";
         if (value.startsWith(baseUrl)) return value;
         return baseUrl + value;

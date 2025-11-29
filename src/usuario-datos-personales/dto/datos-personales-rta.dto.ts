@@ -53,9 +53,8 @@ export class DatosPersonalesRtaDto {
   
   @Expose()
   @Transform(({ value }) => {
-    const port = process.env.PORT || '8000';
-    const host = process.env.HOST || 'localhost';
-    const baseUrl = `http://${host}:${port}/uploads/perfiles/`;
+    
+    const baseUrl = `${process.env.BACKEND_URL}/uploads/perfiles/`;
     if (!value) return "";
     if (value.startsWith(baseUrl)) return value;
     return baseUrl + value;
