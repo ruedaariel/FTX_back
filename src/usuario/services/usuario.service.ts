@@ -353,6 +353,7 @@ export class UsuarioService {
             throw new ErrorManager("NOT_FOUND", `No se encontro el plan ${body.datosPersonales.idPlan}`);
           }
           usuarioGuardado.datosPersonales.plan = planActualizado;
+          usuarioGuardado.level = planActualizado.level;
           delete body.datosPersonales.idPlan; //elimina idPlan del body por las dudas (que no interfiera con la relacion con plan)
         }
 

@@ -18,7 +18,7 @@ Leandro Rueda  --  Gladys Herrera  --  Ariel Rueda
 ***************************************************************************************
 link a drive del proyectoFTX
 
-https://drive.google.com/drive/folders/1gRBQRpgOXJlNu-QcXj1-HSOMC8tFN6AV?usp=drive_link
+https://drive.google.com/drive/folders/1IIcywfQIcg7TSjvEWzooir0hSReSqH9t?usp=drive_link
 ***************************************************************************************
 
 ***************************************************************************************
@@ -40,36 +40,122 @@ https://drive.google.com/drive/folders/15KrbbVwYZnNYGT89tFmmdOzP_D8HUAJw
 
 ***************************************************************************************
 
-***************************************************************************************
-se uso para el desarrollo:
 
-html - css -bootstrap - javascript
-***************************************************************************************
+# FTX:back
 
-***************************************************************************************
-Para Testeo
+Backend para la plataforma FTX, orientada a la gestión integral de entrenadores personales y sus clientes.
 
-usuario generico    usuario: mauricio@ejemplo.com  clave: Mauricio2025
+---
 
-usuario admin        usuario: admin@ejemplo.com    clave: Admin2025
-***************************************************************************************
+##  Descripción
 
+Este backend desarrollado con NestJS sirve como motor de operaciones para una plataforma frontend, realizando peticiones sobre una base de datos MySQL. Permite gestionar usuarios, rutinas, planes, pagos y autenticación, ofreciendo una API robusta para aplicaciones web y móviles.
 
+---
 
-Tareaas:
+##  Tecnologías utilizadas
 
-Deben ser equipos de 3 o 4 personas
-Deben tener un repositorio creado para el trabajo
-Crear un board en github/trello/jira donde se van a generar las user stories
-Crear un documento el google drive donde estarán las especificaciones del proyecto
-El readme del proyecto tiene que tener un link a una carpeta de drive donde se encuentre toda la documentación (docs, diagramas, etc)
-
-Crear Documento que contenga la idea general del proyecto, hablando de funcionalidades, experiencias de usuario, etc.
-Junto al profesor revisar el trabajo y definir el alcance del proyecto.
-Lo que quede fuera de scope, dejarlo en el documento como trabajo a futuro
+- NestJS
+- TypeORM
+- MySQL
+- JWT (autenticación)
+- Swagger (documentación de API)
+- Nodemailer
+- Multer
+- ESLint + Prettier
 
 
-Crear distintas épicas para trabajar en los flujos de la aplicación con sus respectivas stories (con detalles). Las stories no necesitan tener todos los detalles todavía.
+##  Requisitos previos
 
-Crear una Épica de Design que va a contener las stories para trabajar en los layouts de la aplicación (primer épica a trabajar).
-Hacer refinamiento de la épica de diseño y luego planning.
+- Node.js (v18+)
+- MySQL (local o remoto)
+- Railway (para despliegue)
+- Editor compatible con TypeScript (VSCode recomendado)
+
+---
+
+##  Instalación local
+
+> El proyecto ya está desplegado en Railway, pero para correrlo localmente:
+
+1. Clonar el repositorio:
+   
+   git clone https://github.com/ruedaariel/FTX-back.git
+   cd FTX-back
+
+##  Instalar dependencias
+
+    npm install
+
+##  Configurar variables de entorno en un archivo .env
+
+    PORT=8000
+    HOST=localhost
+    BACKEND_URL=http://localhost:8000
+    API_BASE_URL=/interchange.proxy.rlwy.net/apiFtx
+
+    DB_HOST=interchange.proxy.rlwy.net
+    DB_PORT=47529
+    DB_USER=root
+    DB_PASS=
+    DB_NAME=railway
+    DB_MIGRATIONS_RUN=false
+
+##  Ejecutar el servidor
+
+    npm run start:dev
+
+##  Autenticacion
+
+    El sistema utiliza JWT para login y protección de rutas privadas. Los tokens se generan al iniciar sesión y se validan en cada petición protegida.
+    la seguridad se maneja con JWT + Guards por rol/nivel, y el proyecto se apoya en Express para la capa HTTP y middlewares.
+
+##  Base de Datos
+
+    Motor: MySQL
+
+    ORM: TypeORM
+
+    Migraciones: habilitadas con scripts personalizados: npm run migration:generate
+    npm run migration:run
+
+##  Endpoints principales
+
+    ## Usuario
+    POST /apiFtx/usuario/register
+    GET /apiFtx/usuario/all
+    PATCH /apiFtx/usuario/update/{id}
+    DELETE /apiFtx/usuario/delete/{id}
+
+    ## Planes
+    POST /apiFtx/plan/register
+    GET /apiFtx/plan/all
+    PATCH /apiFtx/plan/update/{id}
+
+    ## Rutinas
+    POST /apiFtx/rutina/register
+    GET /apiFtx/rutina/all
+    PUT /apiFtx/rutina/update/{id}
+    DELETE /apiFtx/rutina/delete/{id}
+
+    ## Pagos
+    POST /apiFtx/pagos/manual
+    GET /apiFtx/pagos
+    GET /apiFtx/pagos/impagos
+
+    ##Autenticación
+    POST /apiFtx/auth/login
+    POST /apiFtx/auth/reset
+
+    También se incluyen DTOs para validación y estructuras de datos como CreateUsuarioDto, UpdatePlanDto, CreateRutinaDto, entre otros.
+
+##  Despliegue
+
+    El backend está desplegado en Railway, con conexión directa a una base de datos MySQL gestionada en la misma plataforma. Las variables de entorno están configuradas para producción
+
+
+##  Autores
+
+    Gladys Herrera
+    Leandro Rueda
+    Ariel Rueda
