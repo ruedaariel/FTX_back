@@ -272,6 +272,7 @@ let UsuarioService = class UsuarioService {
                         throw new error_manager_1.ErrorManager("NOT_FOUND", `No se encontro el plan ${body.datosPersonales.idPlan}`);
                     }
                     usuarioGuardado.datosPersonales.plan = planActualizado;
+                    usuarioGuardado.level = planActualizado.level;
                     delete body.datosPersonales.idPlan;
                 }
                 Object.assign(usuarioGuardado.datosPersonales, body.datosPersonales);

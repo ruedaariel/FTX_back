@@ -34,9 +34,8 @@ __decorate([
 __decorate([
     (0, class_transformer_1.Expose)(),
     (0, class_transformer_1.Transform)(({ value }) => {
-        const port = process.env.PORT || '8000';
-        const host = process.env.HOST || 'localhost';
-        const baseUrl = `http://${host}:${port}/uploads/ejercicios/`;
+        const baseUrl = `${process.env.BACKEND_URL}/uploads/ejercicios/`;
+        console.log("url de imagen", baseUrl);
         if (!value)
             return "";
         if (value.startsWith(baseUrl))

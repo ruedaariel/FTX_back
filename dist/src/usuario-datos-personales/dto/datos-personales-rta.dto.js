@@ -65,9 +65,7 @@ __decorate([
 __decorate([
     (0, class_transformer_1.Expose)(),
     (0, class_transformer_1.Transform)(({ value }) => {
-        const port = process.env.PORT || '8000';
-        const host = process.env.HOST || 'localhost';
-        const baseUrl = `http://${host}:${port}/uploads/perfiles/`;
+        const baseUrl = `${process.env.BACKEND_URL}/uploads/perfiles/`;
         if (!value)
             return "";
         if (value.startsWith(baseUrl))

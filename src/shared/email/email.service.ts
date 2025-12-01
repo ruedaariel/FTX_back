@@ -17,9 +17,9 @@ export class EmailService {
                 // vnlr mnaw wzcf lixj
                 pass: 'vnlr mnaw wzcf lixj' // password nuevo
             },
-            tls: {
-                rejectUnauthorized: false // <-- ignora el certificado (SOLO PARA ETAPA DE DESARROLLO }
-            }
+            // tls: {
+            //     rejectUnauthorized: false // <-- ignora el certificado (SOLO PARA ETAPA DE DESARROLLO }
+            // }
         });
     }
 

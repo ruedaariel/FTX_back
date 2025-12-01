@@ -35,9 +35,7 @@ let FileImgService = class FileImgService {
         return false;
     }
     construirUrlImagen(nombreArchivo, directorio) {
-        const port = this.configService.get('PORT') || '8000';
-        const host = this.configService.get('HOST') || 'localhost';
-        const baseUrl = `http://${host}:${port}/uploads/${directorio}/`;
+        const baseUrl = `${process.env.BACKEND_URL}/uploads/${directorio}/`;
         return nombreArchivo ? baseUrl + nombreArchivo : "";
     }
 };

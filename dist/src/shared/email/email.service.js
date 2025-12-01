@@ -19,11 +19,8 @@ let EmailService = class EmailService {
             service: 'gmail',
             auth: {
                 user: 'usuarionuevo.ftx@gmail.com',
-                pass: 'wxsw lyfa tyum ojuu'
+                pass: 'vnlr mnaw wzcf lixj'
             },
-            tls: {
-                rejectUnauthorized: false
-            }
         });
     }
     async enviarCredenciales(email, passwordGenerada) {
