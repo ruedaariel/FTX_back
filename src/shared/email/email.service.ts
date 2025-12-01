@@ -6,22 +6,40 @@ import * as nodemailer from 'nodemailer';
 export class EmailService {
     private transporter;
 
+    // constructor() {
+    //     // Configura el "transporter" de nodemailer con tus credenciales SMTP
+    //     // Por ejemplo, usando Gmail (para desarrollo, no para producción)
+    //     this.transporter = nodemailer.createTransport({
+    //         service: 'gmail',
+    //         auth: {
+    //             user: 'usuarionuevo.ftx@gmail.com',
+    //             // pass: 'wxsw lyfa tyum ojuu' 
+    //             // vnlr mnaw wzcf lixj
+    //             pass: 'vnlr mnaw wzcf lixj' // password nuevo
+    //         },
+    //         // tls: {
+    //         //     rejectUnauthorized: false // <-- ignora el certificado (SOLO PARA ETAPA DE DESARROLLO }
+    //         // }
+    //     });
+    // }
+
     constructor() {
-        // Configura el "transporter" de nodemailer con tus credenciales SMTP
-        // Por ejemplo, usando Gmail (para desarrollo, no para producción)
-        this.transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: 'usuarionuevo.ftx@gmail.com',
-                // pass: 'wxsw lyfa tyum ojuu' 
-                // vnlr mnaw wzcf lixj
-                pass: 'vnlr mnaw wzcf lixj' // password nuevo
-            },
-            // tls: {
-            //     rejectUnauthorized: false // <-- ignora el certificado (SOLO PARA ETAPA DE DESARROLLO }
-            // }
-        });
-    }
+    this.transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,               // STARTTLS
+      secure: false,           // Gmail negocia TLS automáticamente
+      auth: {
+        user: process.env.GMAIL_USER,   // usuarionuevo.ftx@gmail.com
+        pass: process.env.GMAIL_PASS,   // contraseña de aplicación (16 caracteres)
+      },
+      pool: true,
+      logger: true,
+      debug: true,
+      // ⚠️ Solo en desarrollo, si Railway sigue bloqueando certificados:
+      // tls: { rejectUnauthorized: false }
+    });
+  }
+
 
     async enviarCredenciales(email: string, passwordGenerada: string) {
         const mailOptions = {

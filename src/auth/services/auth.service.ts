@@ -122,14 +122,14 @@ export class AuthService {
             //Generar contraseña y encriptar
             const contrasenaGenerada = generateRandomPassword();
             const contrasenaHasheada = await bcrypt.hash(contrasenaGenerada, +process.env.HASH_SALT);
-            const usuarioGuardado = await this.usuarioService.updateUsuario(unUsuario.id, { "datosBasicos": { "password": `${contrasenaGenerada}` } })
-            setImmediate(async () => {
+            const usuarioGuardado = await this.usuarioService.updateUsuario(unUsuario.id, { "datosBasicos": { "password": `${contrasenaHasheada}` } })
+            // setImmediate(async () => {
                 try {
                     await this.emailService.resetPassword(body.email, contrasenaGenerada);
                 } catch (error) {
                     throw ErrorManager.handle(error);
                 }
-            });
+            // });
 
             return true
         } catch (error) {
