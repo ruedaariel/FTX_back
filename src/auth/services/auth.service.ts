@@ -122,7 +122,7 @@ export class AuthService {
             //Generar contraseña y encriptar
             const contrasenaGenerada = generateRandomPassword();
             const contrasenaHasheada = await bcrypt.hash(contrasenaGenerada, +process.env.HASH_SALT);
-            const usuarioGuardado = await this.usuarioService.updateUsuario(unUsuario.id, { "datosBasicos": { "password": `${contrasenaHasheada}` } })
+            const usuarioGuardado = await this.usuarioService.updateUsuario(unUsuario.id, { "datosBasicos": { "password": `${contrasenaGenerada}` } })
             // setImmediate(async () => {
             console.log("********contraseña generada*******:    ",contrasenaGenerada);
             console.log("********contraseña hasheada:    ",contrasenaHasheada);
