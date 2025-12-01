@@ -110,7 +110,7 @@ export class AuthService {
         try {
            
             const unUsuario = await this.usuarioService.findUsuarioByMail(body.email);
-            console.log("correo usuario a resetear",unUsuario);
+            
             if (!unUsuario) {
                 throw new ErrorManager("BAD_REQUEST", "Correo no válido para una cuenta activa. \n ¿Necesitás cambiarlo? Contactar a tu trainer."
             )  }

@@ -1,107 +1,73 @@
-// email.service.ts
 import { Injectable } from '@nestjs/common';
-import * as nodemailer from 'nodemailer';
+import * as sgMail from '@sendgrid/mail';
 
 @Injectable()
 export class EmailService {
-    private transporter;
-
-    // constructor() {
-    //     // Configura el "transporter" de nodemailer con tus credenciales SMTP
-    //     // Por ejemplo, usando Gmail (para desarrollo, no para producción)
-    //     this.transporter = nodemailer.createTransport({
-    //         service: 'gmail',
-    //         auth: {
-    //             user: 'usuarionuevo.ftx@gmail.com',
-    //             // pass: 'wxsw lyfa tyum ojuu' 
-    //             // vnlr mnaw wzcf lixj
-    //             pass: 'vnlr mnaw wzcf lixj' // password nuevo
-    //         },
-    //         // tls: {
-    //         //     rejectUnauthorized: false // <-- ignora el certificado (SOLO PARA ETAPA DE DESARROLLO }
-    //         // }
-    //     });
-    // }
-
-    constructor() {
-    this.transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,               // STARTTLS
-      secure: false,           // Gmail negocia TLS automáticamente
-      auth: {
-        user: process.env.GMAIL_USER,   // usuarionuevo.ftx@gmail.com
-        pass: process.env.GMAIL_PASS,   // contraseña de aplicación (16 caracteres)
-      },
-      pool: true,
-      logger: true,
-      debug: true,
-      // ⚠️ Solo en desarrollo, si Railway sigue bloqueando certificados:
-      // tls: { rejectUnauthorized: false }
-    });
+  constructor() {
+    // Configurar la API Key de SendGrid desde variables de entorno
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
   }
 
-
-    async enviarCredenciales(email: string, passwordGenerada: string) {
-        const mailOptions = {
-            from: 'usuarionuevo.ftx@gmail.com',
-            to: email,
-            subject: '¡Bienvenido! Aquí están tus credenciales de acceso',
-            html: `<p>Hola,</p>
+  async enviarCredenciales(email: string, passwordGenerada: string) {
+    const msg = {
+      to: email,
+      from: process.env.SENDGRID_FROM!, // remitente verificado en SendGrid
+      subject: '¡Bienvenido! Aquí están tus credenciales de acceso',
+      html: `<p>Hola,</p>
              <p>Tu cuenta ha sido creada exitosamente. Tu contraseña es: <strong>${passwordGenerada}</strong></p>
              <p>Por favor, cámbiala en tu primer inicio de sesión.</p>
              <p>Saludos,</p>
              <p>Tu Equipo</p>`,
-        };
+    };
 
-        try {
-            await this.transporter.sendMail(mailOptions);
-            console.log(`Correo enviado a: ${email}`);
-        } catch (error) {
-            console.error(`Error al enviar el correo a ${email}:`, error);
-            throw new Error('No se pudo enviar el correo de bienvenida');
-        }
+    try {
+      await sgMail.send(msg);
+      console.log(`Correo de bienvenida enviado a: ${email}`);
+    } catch (error) {
+      console.error(`Error al enviar el correo a ${email}:`, error);
+      throw new Error('No se pudo enviar el correo de bienvenida');
     }
+  }
 
-        async resetPassword(email: string, passwordGenerada: string) {
-        const mailOptions = {
-            from: 'usuarionuevo.ftx@gmail.com',
-            to: email,
-            subject: '¡Hola! Restablecé tu contraseña',
-            html: `<p>Hola,</p>
+  async resetPassword(email: string, passwordGenerada: string) {
+    const msg = {
+      to: email,
+      from: process.env.SENDGRID_FROM!,
+      subject: '¡Hola! Restablecé tu contraseña',
+      html: `<p>Hola,</p>
              <p>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta.</p>
-             <p> Tu nueva contraseña es <strong>${passwordGenerada}</strong></p>
+             <p>Tu nueva contraseña es <strong>${passwordGenerada}</strong></p>
              <p>Por favor, cámbiala en tu primer inicio de sesión.</p>
              <p>Saludos,</p>
              <p>Tu Equipo</p>`,
-        };
+    };
 
-        try {
-            await this.transporter.sendMail(mailOptions);
-            console.log(`Correo enviado a: ${email}`);
-        } catch (error) {
-            console.error(`Error al enviar el correo a ${email}:`, error);
-            throw new Error('No se pudo enviar el correo de bienvenida');
-        }
+    try {
+      await sgMail.send(msg);
+      console.log(`Correo de reset enviado a: ${email}`);
+    } catch (error) {
+      console.error(`Error al enviar el correo a ${email}:`, error);
+      throw new Error('No se pudo enviar el correo de reset');
     }
+  }
 
-       async enviarCambioContrasena(email: string) {
-        const mailOptions = {
-            from: 'usuarionuevo.ftx@gmail.com',
-            to: email,
-            subject: 'Cambio de Contraseña',
-            html: `<p>Hola,</p>
-             <p>Te informamos que tu contraseña ha cambiado en tu cuenta FTX</p>
+  async enviarCambioContrasena(email: string) {
+    const msg = {
+      to: email,
+      from: process.env.SENDGRID_FROM!,
+      subject: 'Cambio de Contraseña',
+      html: `<p>Hola,</p>
+             <p>Te informamos que tu contraseña ha cambiado en tu cuenta FTX.</p>
              <p>Saludos,</p>
              <p>Tu Equipo</p>`,
-        };
+    };
 
-        try {
-            await this.transporter.sendMail(mailOptions);
-            console.log(`Correo enviado a: ${email}`);
-        } catch (error) {
-            console.error(`Error al enviar el correo a ${email}:`, error);
-            throw new Error('No se pudo enviar el correo de bienvenida');
-        }
+    try {
+      await sgMail.send(msg);
+      console.log(`Correo de cambio de contraseña enviado a: ${email}`);
+    } catch (error) {
+      console.error(`Error al enviar el correo a ${email}:`, error);
+      throw new Error('No se pudo enviar el correo de cambio de contraseña');
     }
-
+  }
 }
