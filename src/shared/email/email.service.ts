@@ -13,7 +13,8 @@ export class EmailService {
             service: 'gmail',
             auth: {
                 user: 'usuarionuevo.ftx@gmail.com',
-                pass: 'wxsw lyfa tyum ojuu' // O usa una variable de entorno
+                // pass: 'wxsw lyfa tyum ojuu' 
+                pass: 'FTXOlavarria2025..' // O usa una variable de entorno
             },
             tls: {
                 rejectUnauthorized: false // <-- ignora el certificado (SOLO PARA ETAPA DE DESARROLLO }
