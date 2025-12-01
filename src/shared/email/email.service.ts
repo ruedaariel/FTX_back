@@ -9,6 +9,7 @@ export class EmailService {
   }
 
   async enviarCredenciales(email: string, passwordGenerada: string) {
+    console.log("entro en enviarcredenciales");
     const msg = {
       to: email,
       from: process.env.SENDGRID_FROM!, // remitente verificado en SendGrid
@@ -30,6 +31,7 @@ export class EmailService {
   }
 
   async resetPassword(email: string, passwordGenerada: string) {
+    console.log("entro en resetpassword");
     const msg = {
       to: email,
       from: process.env.SENDGRID_FROM!,
@@ -52,6 +54,7 @@ export class EmailService {
   }
 
   async enviarCambioContrasena(email: string) {
+    console.log("entro en enviarcontraseña");
     const msg = {
       to: email,
       from: process.env.SENDGRID_FROM!,

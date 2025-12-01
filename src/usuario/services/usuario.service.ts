@@ -178,8 +178,11 @@ export class UsuarioService {
         //confirma la transaccion
         await queryRunner.commitTransaction();
         const usuarioRtaDto = plainToInstance(UsuarioRtaDto, usuarioFinal);
+        
         // setImmediate(async () => {
           try {
+
+            console.log("antes de llmamar a email.service");
             await this.emailService.enviarCredenciales(usuarioFinal.email, contrasenaGenerada);
 
           } catch (error) {
