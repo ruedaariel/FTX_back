@@ -178,7 +178,7 @@ export class UsuarioService {
         //confirma la transaccion
         await queryRunner.commitTransaction();
         const usuarioRtaDto = plainToInstance(UsuarioRtaDto, usuarioFinal);
-        setImmediate(async () => {
+        // setImmediate(async () => {
           try {
             await this.emailService.enviarCredenciales(usuarioFinal.email, contrasenaGenerada);
 
@@ -186,7 +186,7 @@ export class UsuarioService {
             // acá solo logueás el error, no afecta al flujo
             console.error("Error enviando mail:", error.message);
           }
-        });
+        // });
         return usuarioRtaDto;
 
       } else { // Si el rol no es USUARIO, solo se devuelve el usuario creado

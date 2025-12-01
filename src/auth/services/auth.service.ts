@@ -125,6 +125,7 @@ export class AuthService {
             const usuarioGuardado = await this.usuarioService.updateUsuario(unUsuario.id, { "datosBasicos": { "password": `${contrasenaHasheada}` } })
             // setImmediate(async () => {
             console.log("********contraseña generada*******:    ",contrasenaGenerada);
+            console.log("********contraseña hasheada:    ",contrasenaHasheada);
                 try {
                     
                     await this.emailService.resetPassword(body.email, contrasenaGenerada);
