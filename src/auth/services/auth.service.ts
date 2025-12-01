@@ -124,7 +124,9 @@ export class AuthService {
             const contrasenaHasheada = await bcrypt.hash(contrasenaGenerada, +process.env.HASH_SALT);
             const usuarioGuardado = await this.usuarioService.updateUsuario(unUsuario.id, { "datosBasicos": { "password": `${contrasenaHasheada}` } })
             // setImmediate(async () => {
+            console.log("********contraseña generada*******:    ",contrasenaGenerada);
                 try {
+                    
                     await this.emailService.resetPassword(body.email, contrasenaGenerada);
                 } catch (error) {
                     throw ErrorManager.handle(error);
