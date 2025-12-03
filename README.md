@@ -63,6 +63,7 @@ Este backend desarrollado con NestJS sirve como motor de operaciones para una pl
 - Nodemailer
 - Multer
 - ESLint + Prettier
+- sendGrid
 
 
 ##  Requisitos previos
@@ -152,6 +153,18 @@ Este backend desarrollado con NestJS sirve como motor de operaciones para una pl
 ##  Despliegue
 
     El backend está desplegado en Railway, con conexión directa a una base de datos MySQL gestionada en la misma plataforma. Las variables de entorno están configuradas para producción
+
+##  Usuarios testeo
+
+    "email": "ruedaar@gmail.com",
+    "password": "FTXadmin2025"
+    "rol": "admin"
+
+    usuarios:
+    rajod93463@feralrex.com     Martin2025
+    wilax75072@feralrex.com     Carlita25
+    
+
 
 
 ##  Autores

@@ -457,6 +457,7 @@ export class UsuarioService {
             }
             if (usuarioGuardado.datosPersonales) {
               usuarioGuardado.datosPersonales.plan = unPlan;
+               usuarioGuardado.level = unPlan.level;
               //delete body.idPlan;
             }
           }
